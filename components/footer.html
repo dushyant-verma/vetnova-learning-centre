@@ -1,0 +1,139 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <img class="footer-logo" src="assets/vetnova-logo.png" alt="VetNova Logo" />
+        <p>Practical veterinary training, animal welfare education, and career-focused skill development. Learn.
+          Practice. Lead.</p>
+      </div>
+      <div>
+        <h4>Programs</h4>
+        <a href="programs.html#skill-up">For Veterinarians</a>
+        <a href="programs.html#foundation">For Students</a>
+        <a href="programs.html#foundation">Fresh Graduates</a>
+        <a href="programs.html#nurse">Vet Nurse Program</a>
+      </div>
+      <div>
+        <h4>Workshops</h4>
+        <a href="programs-single.html">Surgery Track</a>
+        <a href="programs-single.html">Radiology Track</a>
+        <a href="programs-single.html">Emergency Medicine</a>
+        <a href="programs-single.html">Pet First Aid</a>
+      </div>
+      <div>
+        <h4>Institute</h4>
+        <a href="about.html">About VetNova</a>
+        <a href="about.html#faculty">Expert Panel</a>
+        <a href="learning-centre.html">Learning Centre</a>
+        <a href="faq.html">FAQ</a>
+      </div>
+      <div>
+        <h4>Reach Out</h4>
+        <a href="tel:+919999999999"><i class="fa-solid fa-phone"></i> +91 99999 99999</a>
+        <a href="mailto:hello@vetnova.in"><i class="fa-solid fa-envelope"></i> hello@vetnova.in</a>
+        <a href="contact.html#campus-info" target="_blank"><i class="fa-solid fa-map-location-dot"></i> Gawadewadi –
+          Wagholi, Pune</a>
+        <!-- <a href="https://wa.me/919999999999" target="_blank" class="wa-footer-link"><i
+            class="fa-brands fa-whatsapp"></i> WhatsApp Enquiry</a> -->
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 VetNova Training Institute. All rights reserved.</span>
+      <span>Privacy Policy · Terms & Conditions</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Popup Enquiry Modal -->
+<div class="modal-overlay" id="enquiry-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="modal-close-btn" aria-label="Close modal">&times;</button>
+    <div class="modal-content">
+      <div class="modal-head">
+        <h3>Enquire Now</h3>
+        <p>Fill out the form below, and our academic counsellor will get in touch with you shortly.</p>
+      </div>
+      <form class="modal-form" id="modal-enquiry-form">
+        <div class="form-group">
+          <label for="modal-name">Full Name *</label>
+          <input type="text" id="modal-name" required placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label for="modal-phone">Phone Number *</label>
+          <div class="phone-input-wrap">
+            <select class="country-code" name="modal_country_code">
+              <option value="+91" selected>🇮🇳 +91</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+61">🇦🇺 +61</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+966">🇸🇦 +966</option>
+              <option value="+65">🇸🇬 +65</option>
+              <option value="+977">🇳🇵 +977</option>
+              <option value="+880">🇧🇩 +880</option>
+              <option value="+94">🇱🇰 +94</option>
+            </select>
+            <input type="tel" id="modal-phone" required placeholder="Enter your number">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modal-email">Email Address *</label>
+          <input type="email" id="modal-email" required placeholder="Enter your email address">
+        </div>
+        <div class="form-group">
+          <label for="modal-role">What is your current profile? *</label>
+          <select id="modal-role" required>
+            <option value="" disabled selected>Select your profile</option>
+            <option value="doctor">Early-Career Doctor (1-3 yrs experience)</option>
+            <option value="exp-doctor">Experienced Doctor (5-10 yrs experience)</option>
+            <option value="student">Final-Year Student</option>
+            <option value="graduate">Recently Passed Graduate</option>
+            <option value="parent">Pet Owner / Rescuer</option>
+            <option value="nurse">Vet Nurse / Assistant</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="modal-message">Your Message (Optional)</label>
+          <textarea id="modal-message" rows="3" placeholder="Tell us about your learning goals..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Submit Enquiry</button>
+      </form>
+      <!-- Success State -->
+      <div class="modal-success" id="modal-success-state" style="display: none;">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <h3>Enquiry Submitted!</h3>
+        <p>Thank you for reaching out. Our team will contact you shortly to guide you through the next steps.</p>
+        <button type="button" class="btn btn-primary" id="modal-success-close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Video Walkthrough Modal -->
+<div class="modal-overlay" id="video-modal" aria-hidden="true" role="dialog" aria-labelledby="video-modal-title">
+  <div class="modal-box video-modal-box">
+    <button class="modal-close" id="video-modal-close" aria-label="Close video player">&times;</button>
+    <div class="video-container">
+      <iframe id="video-iframe" src="" title="VetNova Institute Video Tour" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <div class="video-modal-footer">
+      <h3 id="video-modal-title">VetNova Practical Training Institute Overview</h3>
+      <p>Take a virtual tour of our 3,000 sq. ft. Wagholi Pune campus, surgical suite, and radiology setup.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Fixed/Float Interactions -->
+<a class="whatsapp" href="https://wa.me/919999999999" target="_blank" aria-label="Chat on WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- Mobile Sticky Call to Actions -->
+<div class="mobile-stick">
+  <a class="btn btn-outline" href="https://wa.me/919999999999" target="_blank"><i class="fa-brands fa-whatsapp"></i>
+    WhatsApp</a>
+  <a class="btn btn-primary btn-enquire-now" href="contact.html#contact-form-section"><i
+      class="fa-solid fa-envelope"></i> Enquire Now</a>
+</div>
