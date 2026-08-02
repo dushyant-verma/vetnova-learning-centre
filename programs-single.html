@@ -28,65 +28,88 @@
 
     <main id="main-content">
 
-      <!-- SECTION 1: Program Hero Banner -->
-      <section class="inner-hero" id="program-hero">
+      <!-- SECTION 1: Program Hero Banner (Redesigned High-Converting Hero) -->
+      <section class="inner-hero ps-hero-section" id="program-hero">
         <div class="container">
           <nav class="breadcrumb" aria-label="Breadcrumb navigation">
             <a href="index.html">Home</a>
             <i class="fa-solid fa-chevron-right"></i>
             <a href="programs.html">Programs</a>
             <i class="fa-solid fa-chevron-right"></i>
-            <span>Veterinary Skill-Up Program</span>
+            <span id="breadcrumb-program-name">Advanced Soft Tissue Surgery Track</span>
           </nav>
 
-          <div class="program-hero-grid">
-            <div class="inner-hero-copy">
-              <div class="audience-tags">
-                <span class="audience-tag">BVSc Interns</span>
-                <span class="audience-tag">Fresh Graduates</span>
-                <span class="audience-tag">Practicing Vets</span>
-              </div>
-              <span class="eyebrow"><i class="fa-solid fa-award"></i> FLAGSHIP CLINICAL TRACK</span>
-              <h1>Veterinary Skill-Up Program</h1>
-              <p>
-                A comprehensive 4-week hands-on clinical mastery module designed to transform theoretical veterinary
-                knowledge into confident, independent surgical execution, diagnostic radiograph interpretation, and
-                emergency patient management.
+          <div class="ps-hero-grid">
+            <!-- Left Side Copy & CTAs & Trust Stats -->
+            <div class="ps-hero-copy">
+              <span class="ps-hero-eyebrow"><i class="fa-solid fa-award"></i> ADVANCED PRACTICAL PROGRAM</span>
+              <h1 id="program-single-title" class="ps-hero-title">Advanced Soft Tissue Surgery &amp; Clinical Skills
+                Program</h1>
+              <p id="program-single-desc" class="ps-hero-desc">
+                Master real veterinary procedures through hands-on wet labs, live demonstrations, case-based learning,
+                and expert faculty guidance designed for veterinary professionals and final-year students.
               </p>
 
-              <!-- Floating Metrics Bar -->
-              <div class="program-hero-metrics">
-                <div class="metric-pill">
-                  <small>Duration</small>
-                  <strong>4 Weeks</strong>
-                </div>
-                <div class="metric-pill">
-                  <small>Seats Left</small>
-                  <strong style="color: #e11d48;">4 Seats Left</strong>
-                </div>
-                <div class="metric-pill">
-                  <small>Next Batch</small>
-                  <strong>15th Aug 2026</strong>
-                </div>
-                <div class="metric-pill">
-                  <small>Certificate</small>
-                  <strong>Verified Skills</strong>
-                </div>
+              <!-- Feature Highlights Bullet Grid -->
+              <ul class="ps-hero-features">
+                <li><i class="fa-solid fa-circle-check text-teal"></i> Live Practical Sessions</li>
+                <li><i class="fa-solid fa-circle-check text-teal"></i> Industry Recognized Certificate</li>
+                <li><i class="fa-solid fa-circle-check text-teal"></i> Small Batch Learning (Max 12)</li>
+                <li><i class="fa-solid fa-circle-check text-teal"></i> Expert Veterinary Faculty</li>
+                <li><i class="fa-solid fa-circle-check text-teal"></i> Career Guidance &amp; Placement Support</li>
+              </ul>
+
+              <!-- Action CTAs -->
+              <div class="ps-hero-actions">
+                <a class="btn btn-primary btn-enquire-now" href="contact.html#enquiry">Enroll Now <i
+                    class="fa-solid fa-arrow-right"></i></a>
+                <a class="btn btn-outline" href="contact.html#brochure"><i class="fa-solid fa-file-arrow-down"></i>
+                  Download Brochure</a>
               </div>
 
-              <div class="hero-ctas">
-                <a class="btn btn-primary btn-enquire-now" href="contact.html#enquiry">Apply For This Program <i
-                    class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html#enquiry"><i class="fa-solid fa-file-pdf"></i> Download
-                  Syllabus</a>
+              <!-- Trust Stats Row -->
+              <div class="ps-hero-trust-bar">
+                <div class="ps-trust-item">
+                  <strong>3000+</strong>
+                  <span>Students Trained</span>
+                </div>
+                <div class="ps-trust-item">
+                  <strong>20+</strong>
+                  <span>Expert Faculty</span>
+                </div>
+                <div class="ps-trust-item">
+                  <strong>95%</strong>
+                  <span>Practical Sessions</span>
+                </div>
+                <div class="ps-trust-item">
+                  <strong>4.9★</strong>
+                  <span>Learner Rating</span>
+                </div>
               </div>
             </div>
 
-            <div class="inner-hero-image" style="height: 420px;">
-              <img
-                src="https://images.pexels.com/photos/6234607/pexels-photo-6234607.jpeg?auto=compress&cs=tinysrgb&w=800"
-                alt="Veterinary Skill-Up Program practical lab session at VetNova Pune" loading="lazy"
-                decoding="async" />
+            <!-- Right Side Image Frame + 4 Floating Badges -->
+            <div class="ps-hero-media-wrapper">
+              <div class="ps-hero-image-frame">
+                <img src="assets/images/learning-path-graduate.png"
+                  alt="Indian veterinary surgeons teaching practical surgery to veterinary students inside a modern veterinary hospital"
+                  loading="lazy" decoding="async" />
+                <div class="ps-hero-overlay"></div>
+
+                <!-- Floating Glass Info Cards -->
+                <span class="ps-floating-card ps-float-top-left">
+                  🎓 Industry Certified
+                </span>
+                <span class="ps-floating-card ps-float-top-right">
+                  👨‍⚕️ Expert Faculty
+                </span>
+                <span class="ps-floating-card ps-float-mid-right">
+                  🩺 Live Surgical Practice
+                </span>
+                <span class="ps-floating-card ps-float-bottom-left">
+                  ⭐ 4.9 Student Rating
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -104,9 +127,9 @@
 
           <div class="two-column-layout">
             <div class="two-column-media" style="height: 440px;">
-              <img
-                src="https://images.pexels.com/photos/6235651/pexels-photo-6235651.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800"
-                alt="Veterinary surgeon facing surgical decision in clinic" loading="lazy" decoding="async">
+              <img src="assets/images/programs/program-surgery.webp"
+                alt="Indian veterinary surgeon performing soft tissue surgery under OT lights in a modern hospital setting"
+                loading="lazy" decoding="async">
             </div>
 
             <div class="two-column-copy">
@@ -490,9 +513,8 @@
           <div class="faculty-grid">
             <div class="faculty-card">
               <div class="faculty-photo">
-                <img
-                  src="https://images.pexels.com/photos/6235651/pexels-photo-6235651.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Dr. Amit Kulkarni" loading="lazy" decoding="async" />
+                <img src="assets/images/programs/faculty-01.webp" alt="Dr. Amit Kulkarni" loading="lazy"
+                  decoding="async" />
               </div>
               <div class="faculty-body">
                 <h3>Dr. Amit Kulkarni</h3>
@@ -512,9 +534,8 @@
 
             <div class="faculty-card">
               <div class="faculty-photo">
-                <img
-                  src="https://images.pexels.com/photos/6235657/pexels-photo-6235657.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Dr. Priya Sharma" loading="lazy" decoding="async" />
+                <img src="assets/images/programs/faculty-02.webp" alt="Dr. Priya Sharma" loading="lazy"
+                  decoding="async" />
               </div>
               <div class="faculty-body">
                 <h3>Dr. Priya Sharma</h3>
@@ -534,9 +555,8 @@
 
             <div class="faculty-card">
               <div class="faculty-photo">
-                <img
-                  src="https://images.pexels.com/photos/7470752/pexels-photo-7470752.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Dr. Rajesh Verma" loading="lazy" decoding="async" />
+                <img src="assets/images/programs/faculty-03.webp" alt="Dr. Rajesh Verma" loading="lazy"
+                  decoding="async" />
               </div>
               <div class="faculty-body">
                 <h3>Dr. Rajesh Verma</h3>
@@ -562,17 +582,10 @@
         <div class="container">
           <div class="two-column-layout">
             <div class="two-column-media"
-              style="height: 380px; background-color: var(--navy-2); display: flex; align-items: center; justify-content: center; padding: 24px;">
-              <div
-                style="border: 4px double rgba(255,255,255,0.3); padding: 28px; text-align: center; color: var(--white); border-radius: var(--radius-lg); width: 100%;">
-                <i class="fa-solid fa-graduation-cap"
-                  style="font-size: 42px; color: var(--teal-2); margin-bottom: 12px;"></i>
-                <h4 style="font-size: 22px; margin-bottom: 6px;">VETNOVA TRAINING INSTITUTE</h4>
-                <p style="font-size: 13px; color: #cbd7f0; margin-bottom: 14px;">Certificate of Clinical Skill
-                  Competency</p>
-                <span style="font-weight: 800; color: #55f38e; font-size: 14px; letter-spacing: 0.05em;">VETERINARY
-                  SKILL-UP PROGRAM (120+ HRS)</span>
-              </div>
+              style="padding: 0; background: transparent; overflow: hidden; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">
+              <img src="assets/images/programs/vetnova-certificate.webp"
+                alt="VetNova Certificate of Clinical Skill Competency"
+                style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" decoding="async" />
             </div>
 
             <div class="two-column-copy">
@@ -727,9 +740,8 @@
                 managing soft tissue surgeries at a top Pune clinic!"
               </p>
               <div style="display: flex; align-items: center; gap: 14px;">
-                <img
-                  src="https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=150"
-                  alt="Dr. Rahul Deshmukh" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />
+                <img src="assets/images/programs/alumni-01.webp" alt="Dr. Rahul Deshmukh"
+                  style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />
                 <div>
                   <strong style="display: block; color: var(--navy-2); font-size: 15px;">Dr. Rahul Deshmukh</strong>
                   <small style="color: var(--muted);">BVSc Graduate • Pune</small>

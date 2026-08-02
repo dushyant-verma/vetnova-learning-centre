@@ -19,6 +19,7 @@ function runAllInitializers() {
   initBlogCategoryFilter();
   initProgramFilters();
   initFaqSearch();
+  initPopularCoursesFilter();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -267,7 +268,7 @@ const concernData = {
     ],
     ctaText: 'Apply for Surgery Program',
     ctaLink: '#contact',
-    image: 'https://images.pexels.com/photos/6234607/pexels-photo-6234607.jpeg?auto=compress&cs=tinysrgb&w=600'
+    image: 'assets/vet_selector_surgery_result.png'
   },
   radiology: {
     badge: 'Radiology Track',
@@ -280,7 +281,7 @@ const concernData = {
     ],
     ctaText: 'Apply for Radiology Program',
     ctaLink: '#contact',
-    image: 'https://images.pexels.com/photos/6234610/pexels-photo-6234610.jpeg?auto=compress&cs=tinysrgb&w=600'
+    image: 'assets/vet_selector_radiology_result.png'
   },
   'clinic-ready': {
     badge: 'Foundation Track',
@@ -293,7 +294,7 @@ const concernData = {
     ],
     ctaText: 'Apply for Foundation Program',
     ctaLink: '#contact',
-    image: 'https://images.pexels.com/photos/7470752/pexels-photo-7470752.jpeg?auto=compress&cs=tinysrgb&w=600'
+    image: 'assets/vet_selector_foundation_result.png'
   },
   'first-aid': {
     badge: 'Pet Owner Track',
@@ -306,7 +307,7 @@ const concernData = {
     ],
     ctaText: 'Join First Aid Workshop',
     ctaLink: '#contact',
-    image: 'https://images.pexels.com/photos/7469229/pexels-photo-7469229.jpeg?auto=compress&cs=tinysrgb&w=600'
+    image: 'assets/vet_selector_petcare_result.png'
   },
   nurse: {
     badge: 'Vet Nurse Track',
@@ -319,7 +320,7 @@ const concernData = {
     ],
     ctaText: 'Join Vet Nurse Program',
     ctaLink: '#contact',
-    image: 'https://images.pexels.com/photos/7474855/pexels-photo-7474855.jpeg?auto=compress&cs=tinysrgb&w=600'
+    image: 'assets/vet_selector_nurse_result.png'
   }
 };
 
@@ -843,25 +844,25 @@ const testimonialsData = [
     quote: "“The Skill-Up program completely transformed my surgical confidence. I went from assisting to performing soft tissue procedures independently within weeks.”",
     name: "Dr. Ananya Sharma",
     role: "Practicing Vet • 2 Yrs Experience",
-    avatar: "https://images.pexels.com/photos/6235653/pexels-photo-6235653.jpeg?auto=compress&cs=tinysrgb&w=300"
+    avatar: "assets/images/learning-path-graduate.png"
   },
   {
     quote: "“The radiology and ultrasound scanning workshops gave me clear diagnostic reasoning. My clinic's diagnostic accuracy and patient trust have grown tremendously.”",
     name: "Dr. Rahul Deshmukh",
     role: "Clinic Founder • 6 Yrs Experience",
-    avatar: "https://images.pexels.com/photos/6235239/pexels-photo-6235239.jpeg?auto=compress&cs=tinysrgb&w=300"
+    avatar: "assets/images/learning-path-doctor.png"
   },
   {
     quote: "“As a final-year student, VetNova bridged the exact gap between textbook theories and real clinical workflows. Highly recommended for fresh graduates!”",
     name: "Dr. Priya Nair",
     role: "Final-Year Student • Pune",
-    avatar: "https://images.pexels.com/photos/7469214/pexels-photo-7469214.jpeg?auto=compress&cs=tinysrgb&w=300"
+    avatar: "assets/images/learning-path-student.png"
   },
   {
     quote: "“The Vet Nurse program equipped our clinic assistants with standard handling, surgical prep, and emergency response protocols. Exceptional learning environment!”",
     name: "Rohan Mehta",
     role: "Head Vet Assistant • Mumbai",
-    avatar: "https://images.pexels.com/photos/7474855/pexels-photo-7474855.jpeg?auto=compress&cs=tinysrgb&w=300"
+    avatar: "assets/images/learning-path-nurse.png"
   }
 ];
 
@@ -1149,3 +1150,42 @@ function initFaqSearch() {
     }
   });
 }
+
+/* ==========================================================================
+   Popular Courses Category Filter Controller (100% Isolated)
+   ========================================================================== */
+function initPopularCoursesFilter() {
+  const pills = document.querySelectorAll('.popular-course-filter-pill');
+  const cards = document.querySelectorAll('.popular-course-card');
+
+  if (!pills.length || !cards.length) return;
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const filter = pill.dataset.filter || 'all';
+
+      cards.forEach(card => {
+        const categories = card.dataset.category ? card.dataset.category.split(' ') : [];
+        if (filter === 'all' || categories.includes(filter)) {
+          card.style.display = 'flex';
+          requestAnimationFrame(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'scale(1)';
+          });
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            if (card.style.opacity === '0') {
+              card.style.display = 'none';
+            }
+          }, 300);
+        }
+      });
+    });
+  });
+}
+
