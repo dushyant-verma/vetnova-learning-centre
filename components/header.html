@@ -2,16 +2,15 @@
 <div class="top-info-bar">
   <div class="container top-info-container">
     <div class="top-info-left">
-      <span class="top-info-item"><i class="fa-solid fa-location-dot"></i> Pune, Maharashtra</span>
+      <span class="top-info-item"><i class="fa-solid fa-location-dot"></i> Wagholi, Pune</span>
       <a class="top-info-item" href="mailto:hello@vetnova.in"><i class="fa-solid fa-envelope"></i> hello@vetnova.in</a>
       <a class="top-info-item" href="tel:+912012345678"><i class="fa-solid fa-phone"></i> +91 20 1234 5678</a>
     </div>
     <div class="top-info-right">
-      <!-- <a class="top-info-link" href="contact.html#campus-info"><i class="fa-solid fa-user-graduate"></i> Student
-        Login</a> -->
-      <!-- <a class="top-info-link" href="contact.html#campus-info"><i class="fa-solid fa-user-md"></i> Trainer Portal</a> -->
-      <a class="top-info-link btn-download-brochure" href="contact.html#contact-form-section"><i
-          class="fa-solid fa-file-pdf"></i> Download Brochure</a>
+      <a class="top-info-link btn-download-brochure" href="contact.html#contact-form-section"
+        onclick="alert('Downloading VetNova Complete Course Brochure PDF...');">
+        <i class="fa-solid fa-file-pdf"></i> Download Brochure
+      </a>
     </div>
   </div>
 </div>
@@ -19,12 +18,86 @@
 <!-- Main Navigation Header -->
 <header class="topbar" id="header">
   <div class="container nav">
-    <a class="brand" href="index.html">
-      <img src="assets/vetnova-logo.webp" alt="VetNova Training Institute Logo" />
+    <a class="brand" href="index.html" aria-label="VetNova Homepage">
+      <img src="assets/vetnova-logo.webp" alt="VetNova Training Institute Logo" class="brand-logo" />
     </a>
 
     <nav class="menu" aria-label="Main navigation">
       <a class="nav-link" data-nav="index" href="index.html">Home</a>
+
+      <!-- Programs Mega Menu -->
+      <div class="nav-item has-dropdown">
+        <a class="nav-link dropdown-toggle" data-nav="programs" href="programs.html" aria-haspopup="true"
+          aria-expanded="false">
+          Programs <i class="fa-solid fa-chevron-down caret"></i>
+        </a>
+        <div class="dropdown-menu mega-dropdown">
+          <div class="dropdown-arrow"></div>
+          <div class="mega-menu-grid">
+
+            <a class="mega-item" href="veterinary-skill-up.html">
+              <div class="mega-icon icon-teal"><i class="fa-solid fa-stethoscope"></i></div>
+              <div class="mega-text">
+                <div class="mega-title-row">
+                  <strong>Veterinary Skill-Up Program</strong>
+                  <span class="badge-mini">4 WEEKS</span>
+                </div>
+                <small>Flagship 4-week clinical mastery module covering soft tissue surgery, X-ray &amp; USG scanning.</small>
+              </div>
+            </a>
+
+            <a class="mega-item" href="soft-tissue-surgery.html">
+              <div class="mega-icon icon-blue"><i class="fa-solid fa-syringe"></i></div>
+              <div class="mega-text">
+                <div class="mega-title-row">
+                  <strong>Soft Tissue Surgery Track</strong>
+                  <span class="badge-mini">1 WEEK</span>
+                </div>
+                <small>Intensive hands-on procedural workshop covering sterile OR setup, tissue handling &amp; suture patterns.</small>
+              </div>
+            </a>
+
+            <a class="mega-item" href="radiology-ultrasound.html">
+              <div class="mega-icon icon-gold"><i class="fa-solid fa-x-ray"></i></div>
+              <div class="mega-text">
+                <div class="mega-title-row">
+                  <strong>Radiology &amp; Ultrasound</strong>
+                  <span class="badge-mini">1 WEEK</span>
+                </div>
+                <small>Thoracic &amp; abdominal radiograph reading alongside hands-on abdominal ultrasound FAST scanning.</small>
+              </div>
+            </a>
+
+            <a class="mega-item" href="emergency-medicine.html">
+              <div class="mega-icon icon-red"><i class="fa-solid fa-heart-pulse"></i></div>
+              <div class="mega-text">
+                <div class="mega-title-row">
+                  <strong>Pet Emergency Care &amp; ICU</strong>
+                  <span class="badge-mini">3 DAYS</span>
+                </div>
+                <small>Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and emergency triage.</small>
+              </div>
+            </a>
+
+            <a class="mega-item" href="vet-nurse-programme.html">
+              <div class="mega-icon icon-green"><i class="fa-solid fa-user-nurse"></i></div>
+              <div class="mega-text">
+                <div class="mega-title-row">
+                  <strong>Vet Nurse Programme</strong>
+                  <span class="badge-mini">2 WEEKS</span>
+                </div>
+                <small>Foundational clinical training for assistants covering surgical prep, restraint &amp; vitals logging.</small>
+              </div>
+            </a>
+
+            <div class="mega-footer-banner">
+              <span>Looking for customized hospital group training?</span>
+              <a href="contact.html#enquiry" class="link-arrow">Speak to Counsellor <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+
+          </div>
+        </div>
+      </div>
 
       <!-- About Dropdown -->
       <div class="nav-item has-dropdown">
@@ -44,17 +117,10 @@
           <a class="dropdown-item" href="about.html#vision-mission">
             <div class="dropdown-icon"><i class="fa-solid fa-bullseye"></i></div>
             <div class="dropdown-text">
-              <strong>Vision & Mission</strong>
-              <small>Empowering compassionate care & excellence</small>
+              <strong>Vision &amp; Mission</strong>
+              <small>Empowering compassionate care &amp; excellence</small>
             </div>
           </a>
-          <!-- <a class="dropdown-item" href="learning-centre.html">
-            <div class="dropdown-icon"><i class="fa-solid fa-building-user"></i></div>
-            <div class="dropdown-text">
-              <strong>Learning Centre / Infrastructure</strong>
-              <small>3,000 sq. ft. modern Pune learning centre</small>
-            </div>
-          </a> -->
           <a class="dropdown-item" href="about.html#advisory-board">
             <div class="dropdown-icon"><i class="fa-solid fa-award"></i></div>
             <div class="dropdown-text">
@@ -65,56 +131,8 @@
           <a class="dropdown-item" href="about.html#faculty">
             <div class="dropdown-icon"><i class="fa-solid fa-user-doctor"></i></div>
             <div class="dropdown-text">
-              <strong>Faculty</strong>
-              <small>Practicing specialists & educators</small>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Programs Dropdown -->
-      <div class="nav-item has-dropdown">
-        <a class="nav-link dropdown-toggle" data-nav="programs" href="programs.html" aria-haspopup="true"
-          aria-expanded="false">
-          Programs <i class="fa-solid fa-chevron-down caret"></i>
-        </a>
-        <div class="dropdown-menu">
-          <div class="dropdown-arrow"></div>
-          <a class="dropdown-item" href="veterinary-skill-up.html">
-            <div class="dropdown-icon"><i class="fa-solid fa-stethoscope"></i></div>
-            <div class="dropdown-text">
-              <strong>Veterinary Skill-Up</strong>
-              <small>4-Week flagship clinical mastery</small>
-            </div>
-          </a>
-          <a class="dropdown-item" href="soft-tissue-surgery.html">
-            <div class="dropdown-icon"> <i class="fa-solid fa-syringe"></i>
-
-            </div>
-            <div class="dropdown-text">
-              <strong>Soft Tissue Surgery</strong>
-              <small>Sterile procedural hands-on track</small>
-            </div>
-          </a>
-          <a class="dropdown-item" href="radiology-ultrasound.html">
-            <div class="dropdown-icon"><i class="fa-solid fa-x-ray"></i></div>
-            <div class="dropdown-text">
-              <strong>Radiology &amp; Ultrasound</strong>
-              <small>Diagnostic X-ray scanning</small>
-            </div>
-          </a>
-          <a class="dropdown-item" href="emergency-medicine.html">
-            <div class="dropdown-icon"><i class="fa-solid fa-truck-medical"></i></div>
-            <div class="dropdown-text">
-              <strong>Emergency Medicine</strong>
-              <small>ICU triage &amp; emergency resuscitation</small>
-            </div>
-          </a>
-          <a class="dropdown-item" href="vet-nurse-programme.html">
-            <div class="dropdown-icon"><i class="fa-solid fa-user-nurse"></i></div>
-            <div class="dropdown-text">
-              <strong>Vet Nurse Programme</strong>
-              <small>Assistant foundations &amp; clinic care</small>
+              <strong>Faculty &amp; Experts</strong>
+              <small>Practicing specialists &amp; educators</small>
             </div>
           </a>
         </div>
@@ -123,13 +141,16 @@
       <a class="nav-link" data-nav="learning-centre" href="learning-centre.html">Learning Centre</a>
       <a class="nav-link" data-nav="welfare" href="animal-welfare.html">Animal Welfare</a>
       <a class="nav-link" data-nav="blog" href="blog.html">Blog</a>
-
       <a class="nav-link" data-nav="contact" href="contact.html">Contact</a>
     </nav>
 
     <div class="nav-actions">
+      <a class="btn btn-outline btn-sm header-counselling-btn" href="contact.html#enquiry">
+        <i class="fa-solid fa-calendar-check"></i> Book Counselling
+      </a>
       <a class="btn btn-primary btn-apply-now btn-enquire-now" href="contact.html#enquiry">
-        Apply Now <i class="fa-solid fa-arrow-right"></i>
+        <span>Apply Now</span>
+        <i class="fa-solid fa-arrow-right"></i>
       </a>
       <button class="hamb" id="menu-toggle" aria-label="Open menu">
         <i class="fa-solid fa-bars"></i>
@@ -148,47 +169,47 @@
   </div>
 
   <nav class="drawer-menu">
-    <a class="drawer-link" data-nav="index" href="index.html">Home</a>
-
-    <!-- Mobile Accordion: About -->
-    <div class="drawer-accordion">
-      <button class="drawer-accordion-btn" aria-expanded="false">
-        <span>About</span>
-        <i class="fa-solid fa-chevron-down accordion-caret"></i>
-      </button>
-      <div class="drawer-accordion-content">
-        <a href="about.html">About VetNova</a>
-        <a href="about.html#vision-mission">Vision & Mission</a>
-        <a href="learning-centre.html">Infrastructure</a>
-        <a href="about.html#advisory-board">Advisory Board</a>
-        <a href="about.html#faculty">Faculty</a>
-      </div>
-    </div>
+    <a class="drawer-link" data-nav="index" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
 
     <!-- Mobile Accordion: Programs -->
     <div class="drawer-accordion">
       <button class="drawer-accordion-btn" aria-expanded="false">
-        <span>Programs</span>
+        <span><i class="fa-solid fa-layer-group"></i> Clinical Programs</span>
         <i class="fa-solid fa-chevron-down accordion-caret"></i>
       </button>
       <div class="drawer-accordion-content">
-        <a href="veterinary-skill-up.html">Veterinary Skill-Up</a>
-        <a href="soft-tissue-surgery.html">Soft Tissue Surgery</a>
-        <a href="radiology-ultrasound.html">Radiology &amp; Ultrasound</a>
-        <a href="emergency-medicine.html">Emergency Medicine</a>
-        <a href="vet-nurse-programme.html">Vet Nurse Programme</a>
+        <a href="veterinary-skill-up.html"><i class="fa-solid fa-stethoscope"></i> Veterinary Skill-Up Program</a>
+        <a href="soft-tissue-surgery.html"><i class="fa-solid fa-scalpel"></i> Soft Tissue Surgery Track</a>
+        <a href="radiology-ultrasound.html"><i class="fa-solid fa-x-ray"></i> Radiology &amp; Ultrasound</a>
+        <a href="emergency-medicine.html"><i class="fa-solid fa-heart-pulse"></i> Pet Emergency &amp; ICU Care</a>
+        <a href="vet-nurse-programme.html"><i class="fa-solid fa-user-nurse"></i> Vet Nurse Programme</a>
       </div>
     </div>
 
-    <a class="drawer-link" data-nav="learning-centre" href="learning-centre.html">Learning Centre</a>
-    <a class="drawer-link" data-nav="welfare" href="animal-welfare.html">Animal Welfare</a>
-    <a class="drawer-link" data-nav="blog" href="blog.html">Blog</a>
-    <a class="drawer-link" data-nav="faq" href="faq.html">FAQ</a>
-    <a class="drawer-link" data-nav="contact" href="contact.html">Contact</a>
+    <!-- Mobile Accordion: About -->
+    <div class="drawer-accordion">
+      <button class="drawer-accordion-btn" aria-expanded="false">
+        <span><i class="fa-solid fa-hospital"></i> About Institute</span>
+        <i class="fa-solid fa-chevron-down accordion-caret"></i>
+      </button>
+      <div class="drawer-accordion-content">
+        <a href="about.html">About VetNova</a>
+        <a href="about.html#vision-mission">Vision &amp; Mission</a>
+        <a href="learning-centre.html">Infrastructure &amp; Labs</a>
+        <a href="about.html#advisory-board">Advisory Board</a>
+        <a href="about.html#faculty">Expert Faculty</a>
+      </div>
+    </div>
+
+    <a class="drawer-link" data-nav="learning-centre" href="learning-centre.html"><i class="fa-solid fa-building-columns"></i> Learning Centre</a>
+    <a class="drawer-link" data-nav="welfare" href="animal-welfare.html"><i class="fa-solid fa-shield-cat"></i> Animal Welfare</a>
+    <a class="drawer-link" data-nav="blog" href="blog.html"><i class="fa-solid fa-newspaper"></i> Knowledge Hub</a>
+    <a class="drawer-link" data-nav="faq" href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQs</a>
+    <a class="drawer-link" data-nav="contact" href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a>
 
     <div class="drawer-cta-wrap">
-      <a class="btn btn-primary btn-block btn-enquire-now" href="contact.html#enquiry">Apply Now <i
-          class="fa-solid fa-arrow-right"></i></a>
+      <a class="btn btn-primary btn-block btn-enquire-now" href="contact.html#enquiry">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+      <a class="btn btn-outline btn-block" href="contact.html#enquiry"><i class="fa-solid fa-calendar-check"></i> Book Counselling</a>
     </div>
   </nav>
 
