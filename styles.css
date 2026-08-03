@@ -9310,12 +9310,14 @@ section#faq {
     flex-wrap: wrap !important;
     justify-content: center !important;
     gap: 10px !important;
+
   }
 
   .expertise-chip {
     white-space: normal !important;
     text-align: center !important;
     margin: 0 !important;
+    font-size: 12px;
   }
 }
 
