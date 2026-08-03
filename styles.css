@@ -9518,7 +9518,7 @@ section#faq {
 }
 
 .ps-float-mid-right {
-  top: 48%;
+  top: 87%;
   right: 20px;
 }
 
@@ -9789,7 +9789,17 @@ section#faq {
   a.btn.btn-primary.btn-block.btn-enquire-now {
     margin-bottom: 10px;
   }
+
+  .ps-float-top-right {
+    top: 76px;
+  }
+
+  .ps-float-bottom-left {
+    bottom: 56px;
+
+  }
 }
+
 
 /* 2. hero hero-flagship & 5. who-we-serve-section (Tablets <= 1024px) */
 @media (max-width: 1024px) {
