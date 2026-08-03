@@ -9006,3 +9006,1497 @@ section#faq {
     gap: 16px;
   }
 }
+
+/* ==========================================================================
+   Industry Partners Section & Large Logo Showcase Styles
+   ========================================================================== */
+.partner-section {
+  background-color: var(--white);
+  padding: 80px 0;
+  position: relative;
+}
+
+/* Large Partner Logo Strip */
+.partner-large-logo-strip {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--soft-shadow);
+}
+
+.partner-logo-item {
+  background: var(--white);
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-lg);
+  padding: 20px 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  min-height: 110px;
+}
+
+.partner-logo-item:hover {
+  border-style: solid;
+  border-color: var(--teal);
+  box-shadow: 0 8px 20px -4px rgba(15, 118, 110, 0.12);
+  transform: translateY(-3px);
+}
+
+.partner-logo-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+  transition: all 0.25s ease;
+}
+
+.partner-logo-item:hover .partner-logo-icon {
+  background: var(--teal);
+  color: var(--white);
+}
+
+.partner-logo-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy-2);
+  margin-bottom: 4px;
+}
+
+.partner-logo-sub {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  background: #e2e8f0;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* Partnership Areas Grid */
+.partner-areas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.partner-area-card {
+  background: var(--white);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--soft-shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.partner-area-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--teal);
+  box-shadow: 0 12px 28px -6px rgba(15, 118, 110, 0.14);
+}
+
+.partner-area-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+
+.partner-area-card h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy-2);
+  margin-bottom: 8px;
+}
+
+.partner-area-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.partner-area-list {
+  list-style: none;
+  padding: 0;
+  margin: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 14px;
+}
+
+.partner-area-list li {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.partner-area-list li i {
+  color: var(--teal);
+  font-size: 11px;
+}
+
+/* Become a Partner CTA Card */
+.become-partner-cta-card {
+  margin-top: 48px;
+  background: linear-gradient(135deg, var(--navy-2) 0%, #1e293b 100%);
+  border-radius: var(--radius-xl);
+  padding: 36px 40px;
+  color: var(--white);
+  box-shadow: var(--soft-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.become-partner-cta-content h3 {
+  font-size: 1.65rem;
+  color: var(--white);
+  margin: 6px 0 8px;
+}
+
+.become-partner-cta-content p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  max-width: 620px;
+  line-height: 1.6;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1024px) {
+  .partner-large-logo-strip {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .partner-areas-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .become-partner-cta-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .partner-large-logo-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .partner-areas-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Mobile & Tablet Responsiveness Enhancements (5 Targeted Sections)
+   ========================================================================== */
+
+/* 1. top-info-bar (Hide below 768px to prevent header overflow & clipping) */
+@media (max-width: 768px) {
+  .top-info-bar {
+    display: none !important;
+  }
+
+  .rating-stars-box {
+    align-items: center;
+  }
+}
+
+/* 2. hero hero-flagship & 5. who-we-serve-section (Tablets <= 1024px) */
+@media (max-width: 1024px) {
+  .hero.hero-flagship .hero-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .who-serve-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px;
+  }
+}
+
+/* 2. hero hero-flagship, 4. expertise-marquee-wrapper (Mobiles & Small Tablets <= 768px) */
+@media (max-width: 768px) {
+
+  /* hero-flagship spacing & typography */
+  .hero.hero-flagship {
+    padding: 36px 0 48px;
+  }
+
+  .hero-title {
+    font-size: clamp(26px, 6.5vw, 36px);
+    line-height: 1.22;
+  }
+
+  .hero-lead {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  /* 2-column statistics grid in hero */
+  .hero-trust-bar {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+    width: 100%;
+    margin-top: 28px;
+  }
+
+  .hero-trust-bar .trust-divider {
+    display: none !important;
+  }
+
+  .hero-visual-right {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-main-frame {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 8px;
+  }
+
+  section#contact {
+    padding: 60px 20px;
+  }
+
+  .hero-main-img {
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+    object-fit: cover;
+  }
+
+  /* 4. expertise-marquee-wrapper (Responsive flex-wrap chip row) */
+  .expertise-marquee-wrapper {
+    border-radius: var(--radius-lg, 16px) !important;
+    padding: 16px !important;
+    overflow: visible !important;
+    clip-path: none !important;
+  }
+
+  .expertise-chips-track {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 10px !important;
+  }
+
+  .expertise-chip {
+    white-space: normal !important;
+    text-align: center !important;
+    margin: 0 !important;
+  }
+}
+
+/* Phones <= 640px */
+@media (max-width: 640px) {
+
+  /* 2. hero-flagship full-width CTAs & stacked cards */
+  .hero-cta-group {
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hero-btn-main,
+  .hero-btn-sub {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-glass-card.glass-top-left,
+  .hero-glass-card.glass-top-right,
+  .hero-glass-card.glass-bottom-right,
+  .hero-glass-card.glass-bottom-left {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    margin-top: 12px !important;
+  }
+
+  /* 3. stats-band highlights-band (2 cards per row on phones) */
+  .stats-band.highlights-band .stats-inner,
+  .highlights-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .stat-box.highlight-box {
+    height: 100% !important;
+    min-height: 110px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 16px 10px !important;
+  }
+
+  /* 5. who-we-serve-section (1 card per row on phones) */
+  .who-serve-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .who-serve-card {
+    height: 100% !important;
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    overflow: hidden !important;
+    word-wrap: break-word !important;
+  }
+}
+
+/* ==========================================================================
+   About Page Responsiveness Enhancements (why-choose-about & #faculty)
+   ========================================================================== */
+
+/* Tablets <= 1024px */
+@media (max-width: 1024px) {
+
+  /* why-choose-about: 2 cards per row on tablets */
+  #why-choose-about .feature-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #why-choose-about .feature-card-item {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 24px !important;
+  }
+
+  /* #faculty: 2 cards per row on tablets */
+  #faculty .faculty-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #faculty .faculty-card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #faculty .faculty-body {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 22px !important;
+  }
+
+  #faculty .faculty-footer {
+    margin-top: auto !important;
+  }
+}
+
+/* Mobiles & Small Tablets <= 768px */
+@media (max-width: 768px) {
+  #why-choose-about {
+    padding-bottom: 64px !important;
+  }
+
+  #why-choose-about .feature-card-item {
+    padding: 20px !important;
+  }
+}
+
+/* Phones <= 640px */
+@media (max-width: 640px) {
+
+  /* why-choose-about: 1 card per row on phones */
+  #why-choose-about .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #why-choose-about {
+    padding-bottom: 72px !important;
+  }
+
+  /* #faculty: 1 card per row on phones */
+  #faculty .faculty-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  #faculty .faculty-photo {
+    width: 100% !important;
+    height: 240px !important;
+  }
+
+  #faculty .faculty-photo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  #faculty .faculty-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  #faculty .faculty-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+  }
+}
+
+/* ==========================================================================
+   Program Pages Reusable Sections Responsiveness (#outcomes, #all-programs, #faculty-program, #related-programs)
+   ========================================================================== */
+
+/* Tablets <= 1024px */
+@media (max-width: 1024px) {
+
+  /* 1. #outcomes: 2 cards per row on tablets */
+  #outcomes .feature-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #outcomes .feature-card-item {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: center !important;
+    align-items: center !important;
+    padding: 24px 20px !important;
+  }
+
+  /* 2. #all-programs: 2-column grid on tablets */
+  #all-programs .feature-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #all-programs .feature-card-item {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 24px !important;
+  }
+
+  /* 3. #faculty-program: 2 cards per row on tablets */
+  #faculty-program .faculty-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #faculty-program .faculty-card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #faculty-program .faculty-body {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 22px !important;
+  }
+
+  #faculty-program .faculty-footer {
+    margin-top: auto !important;
+  }
+
+  /* 4. #related-programs: 2 cards per row on tablets */
+  #related-programs .feature-grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #related-programs .feature-card-item {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 24px !important;
+  }
+}
+
+/* Mobiles & Small Tablets <= 768px */
+@media (max-width: 768px) {
+
+  #outcomes .feature-card-item,
+  #all-programs .feature-card-item,
+  #related-programs .feature-card-item {
+    padding: 20px 16px !important;
+  }
+
+  section#latest-articles h2 {
+    font-size: 24px;
+  }
+
+  section#categories {
+    padding: 10px 0;
+  }
+
+  .breadcrumb {
+    font-size: 10px;
+  }
+}
+
+/* Phones <= 640px */
+@media (max-width: 640px) {
+
+  /* 1. #outcomes: 1 card per row on phones */
+  #outcomes .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #outcomes .feature-card-item {
+    height: 100% !important;
+    width: 100% !important;
+    text-align: center !important;
+    align-items: center !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+
+  /* 2. #all-programs: 1 card per row on phones */
+  #all-programs .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #all-programs .feature-card-item {
+    height: 100% !important;
+    width: 100% !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+
+  #all-programs .feature-card-item>div:last-child {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  /* 3. #faculty-program: 1 card per row on phones */
+  #faculty-program .faculty-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  #faculty-program .faculty-photo {
+    width: 100% !important;
+    height: 220px !important;
+  }
+
+  #faculty-program .faculty-photo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  #faculty-program .faculty-tags {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  #faculty-program .faculty-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    margin-top: auto !important;
+  }
+
+  /* 4. #related-programs: 1 card per row on phones */
+  #related-programs .feature-grid-4 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #related-programs .feature-card-item {
+    height: 100% !important;
+    width: 100% !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+}
+
+/* ==========================================================================
+   FAQ & Popular Resources Responsiveness (#popular-resources)
+   ========================================================================== */
+
+/* Tablets <= 1024px */
+@media (max-width: 1024px) {
+  #popular-resources .feature-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+
+  #popular-resources .resource-card {
+    height: 100% !important;
+    min-height: 90px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 20px 18px !important;
+    box-sizing: border-box !important;
+  }
+
+  #popular-resources .resource-card>div:last-child {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+/* Phones <= 767px */
+@media (max-width: 767px) {
+  #popular-resources .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  #popular-resources .resource-card {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 18px 16px !important;
+    gap: 16px !important;
+    box-sizing: border-box !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+
+  #popular-resources .resource-card>div:last-child {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  #popular-resources .resource-card strong {
+    font-size: 15px !important;
+    line-height: 1.3 !important;
+  }
+
+  #popular-resources .resource-card small {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    display: block !important;
+  }
+}
+
+/* ==========================================================================
+   Learning Centre Responsiveness (#modern-equipment & #safety-welfare)
+   ========================================================================== */
+
+/* Tablets <= 1024px */
+@media (max-width: 1024px) {
+
+  #modern-equipment .feature-grid-3,
+  #safety-welfare .feature-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #modern-equipment .feature-card-item,
+  #safety-welfare .feature-card-item {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: center !important;
+    align-items: center !important;
+    padding: 24px 20px !important;
+  }
+}
+
+/* Mobiles & Small Tablets <= 768px */
+@media (max-width: 768px) {
+
+  #modern-equipment .feature-card-item,
+  #safety-welfare .feature-card-item {
+    padding: 20px 16px !important;
+  }
+}
+
+/* Phones <= 640px */
+@media (max-width: 640px) {
+
+  #modern-equipment .feature-grid-3,
+  #safety-welfare .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #modern-equipment .feature-card-item,
+  #safety-welfare .feature-card-item {
+    height: 100% !important;
+    width: 100% !important;
+    text-align: center !important;
+    align-items: center !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+}
+
+/* ==========================================================================
+   Animal Welfare Responsiveness (#welfare-pillars)
+   ========================================================================== */
+
+/* Tablets <= 1024px */
+@media (max-width: 1024px) {
+  #welfare-pillars .feature-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #welfare-pillars .feature-card-item {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: center !important;
+    align-items: center !important;
+    padding: 24px 20px !important;
+  }
+}
+
+/* Mobiles & Small Tablets <= 768px */
+@media (max-width: 768px) {
+  #welfare-pillars .feature-card-item {
+    padding: 20px 16px !important;
+  }
+}
+
+/* Phones <= 640px */
+@media (max-width: 640px) {
+  #welfare-pillars .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #welfare-pillars .feature-card-item {
+    height: 100% !important;
+    width: 100% !important;
+    text-align: center !important;
+    align-items: center !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+}
+
+/* ==========================================================================
+   Blog Page Responsiveness Enhancements (#featured-article, #latest-articles, #popular-resources)
+   ========================================================================== */
+
+/* Tablets <= 1024px */
+@media (max-width: 1024px) {
+
+  /* 1. #featured-article on tablets */
+  #featured-article .featured-post-card {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  #featured-article .featured-post-media {
+    min-height: 280px !important;
+    height: 280px !important;
+  }
+
+  #featured-article .featured-post-content {
+    padding: 28px !important;
+  }
+
+  /* 2. #latest-articles: 2 cards per row on tablets */
+  #latest-articles .feature-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #latest-articles .blog-card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #latest-articles .blog-card-body {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 22px !important;
+  }
+
+  #latest-articles .post-author {
+    margin-top: auto !important;
+  }
+
+  /* 3. #popular-resources / #feature-grid-4 on blog: 2 cards per row on tablets */
+  #popular-resources .feature-grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+}
+
+/* Mobiles & Small Tablets <= 768px */
+@media (max-width: 768px) {
+  #featured-article .featured-post-media {
+    height: 220px !important;
+    min-height: 220px !important;
+  }
+
+  #featured-article .featured-post-content {
+    padding: 20px !important;
+  }
+
+  #featured-article .featured-post-content h2 {
+    font-size: clamp(18px, 5vw, 24px) !important;
+    line-height: 1.3 !important;
+  }
+
+  #featured-article .post-author {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  #featured-article .post-author .btn {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+    margin-left: 0 !important;
+    margin-top: 10px !important;
+  }
+}
+
+/* Phones <= 640px */
+@media (max-width: 640px) {
+
+  /* 1. #featured-article: 1 column on phones */
+  #featured-article .featured-post-card {
+    grid-template-columns: 1fr !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  #featured-article .featured-post-media {
+    height: 200px !important;
+    min-height: 200px !important;
+  }
+
+  #featured-article .featured-post-media img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* 2. #latest-articles: 1 card per row on phones */
+  #latest-articles .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #latest-articles .blog-card {
+    height: 100% !important;
+    width: 100% !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+
+  #latest-articles .blog-card-media {
+    height: 180px !important;
+  }
+
+  #latest-articles .blog-card-media img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  #latest-articles .post-meta {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  /* 3. #popular-resources / #feature-grid-4: 1 card per row on phones */
+  #popular-resources .feature-grid-4 {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+}
+
+/* ==========================================================================
+   Contact Page Responsiveness Enhancements (6 Targeted Sections)
+   ========================================================================== */
+
+/* Tablets <= 1024px */
+@media (max-width: 1024px) {
+
+  /* 1. #quick-contact & 2. #feature-grid-4: 2 cards per row on tablets */
+  #quick-contact .feature-grid-4,
+  #emergency-contacts .feature-grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #quick-contact .contact-card-item,
+  #emergency-contacts .resource-card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 24px 20px !important;
+  }
+
+  /* 3. #contact-form-section layout & floating CTA clearance */
+  #contact-form-section {
+    padding-bottom: 80px;
+  }
+
+  #contact-form-section .two-column-layout {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  #contact-form-section .two-column-media {
+    height: 320px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: var(--radius-xl) !important;
+    overflow: hidden !important;
+  }
+
+  #contact-form-section .two-column-media img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  #contact-form-section .two-column-copy {
+    padding: 28px 24px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 4. #why-contact: 2 cards per row on tablets */
+  #why-contact .feature-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #why-contact .feature-card-item {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 24px 20px !important;
+  }
+
+  /* 5. #admissions-team: 2 cards per row on tablets */
+  #admissions-team .faculty-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #admissions-team .advisor-card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #admissions-team .advisor-body {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 22px !important;
+  }
+
+  #admissions-team .advisor-body .btn {
+    margin-top: auto !important;
+  }
+}
+
+/* Mobiles & Small Tablets <= 768px */
+@media (max-width: 768px) {
+  #contact-form-section {
+    padding-bottom: 96px !important;
+  }
+
+  /* Badge & Header wrap */
+  #contact-form-section .two-column-copy>div:first-child {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    align-items: flex-start !important;
+  }
+
+  #contact-form-section .two-column-copy>div:first-child span {
+    max-width: 100% !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+  }
+
+  #contact-form-section h2 {
+    font-size: clamp(20px, 5.2vw, 24px) !important;
+    line-height: 1.3 !important;
+  }
+
+  /* 2-column form rows stack to 1 column */
+  #contact-form-section form div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Phone input flex alignment */
+  #contact-form-section .phone-input-wrap {
+    display: flex !important;
+    gap: 8px !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  #contact-form-section .phone-input-wrap select.country-code {
+    flex-shrink: 0 !important;
+    width: auto !important;
+    min-width: 90px !important;
+    height: 48px !important;
+    padding: 10px 8px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: var(--radius-md) !important;
+    font-size: 13px !important;
+    box-sizing: border-box !important;
+  }
+
+  #contact-form-section .phone-input-wrap input[type="tel"] {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    height: 48px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Inputs & Selects 48px touch targets */
+  #contact-form-section input[type="text"],
+  #contact-form-section input[type="email"],
+  #contact-form-section select {
+    height: 48px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Phones <= 640px */
+@media (max-width: 640px) {
+
+  /* 1. #quick-contact: 1 card per row on phones */
+  #quick-contact .feature-grid-4 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #quick-contact .contact-card-item {
+    width: 100% !important;
+    height: 100% !important;
+    padding: 20px 16px !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+
+  #quick-contact .contact-card-item .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* 3. #contact-form-section inputs & buttons */
+  #contact-form-section {
+    padding-bottom: 110px !important;
+  }
+
+  #contact-form-section .two-column-media {
+    height: 220px !important;
+  }
+
+  #contact-form-section .two-column-copy {
+    padding: 20px 16px !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  /* Form buttons stack vertically and full width */
+  #contact-form-section form>div:last-child {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+
+  #contact-form-section form button {
+    width: 100% !important;
+    min-height: 48px !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: 0 !important;
+  }
+
+  /* 4. #why-contact: 1 card per row on phones */
+  #why-contact .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #why-contact .feature-card-item {
+    width: 100% !important;
+    height: 100% !important;
+    padding: 20px 16px !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+
+  /* 5. #admissions-team: 1 card per row on phones */
+  #admissions-team .faculty-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  #admissions-team .advisor-photo {
+    width: 100% !important;
+    height: 240px !important;
+  }
+
+  #admissions-team .advisor-photo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  #admissions-team .advisor-body .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* 6. #emergency-contacts: 1 card per row on phones */
+  #emergency-contacts .feature-grid-4 {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  #emergency-contacts .resource-card {
+    width: 100% !important;
+    height: 100% !important;
+    padding: 18px 16px !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+
+  #emergency-contacts .resource-card a {
+    display: inline-block !important;
+    word-break: break-all !important;
+  }
+}
+
+/* Extra small devices <= 360px */
+@media (max-width: 360px) {
+  #contact-form-section .phone-input-wrap {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  #contact-form-section .phone-input-wrap select.country-code {
+    width: 100% !important;
+  }
+}
+
+/* ==========================================================================
+   Blog Single Page Responsiveness Enhancements (All Sections)
+   ========================================================================== */
+
+/* Tablets <= 1024px */
+@media (max-width: 1024px) {
+
+  /* 1. Article Layout Grid on Tablets */
+  .article-layout-grid {
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+  }
+
+  .sticky-sidebar {
+    position: static !important;
+  }
+
+  /* 9. Related Posts: 2 cards per row on tablets */
+  #related-posts .feature-grid-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  #related-posts .blog-card {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #related-posts .blog-card-body {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 22px !important;
+  }
+}
+
+/* Mobiles & Small Tablets <= 768px */
+@media (max-width: 768px) {
+
+  /* 1. Hero & Headings */
+  .inner-hero h1 {
+    font-size: clamp(22px, 5.5vw, 32px) !important;
+    line-height: 1.28 !important;
+  }
+
+  .inner-hero p {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+  }
+
+  .inner-hero div[style*="height: 460px"] {
+    height: 240px !important;
+    border-radius: var(--radius-lg) !important;
+  }
+
+  /* 2. Article Typography & Word Wrapping */
+  .article-main-content {
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+  }
+
+  .article-main-content h2 {
+    font-size: clamp(20px, 4.8vw, 24px) !important;
+    margin: 32px 0 14px !important;
+  }
+
+  .article-main-content h3 {
+    font-size: clamp(17px, 4vw, 20px) !important;
+    margin: 24px 0 12px !important;
+  }
+
+  /* 3. Table Responsiveness */
+  .article-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+  }
+
+  .article-table {
+    min-width: 520px !important;
+    width: 100% !important;
+  }
+
+  .article-table th,
+  .article-table td {
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+  }
+
+  /* 5. Callouts & Checklists */
+  .callout-box,
+  .article-checklist,
+  .quote-block {
+    padding: 16px 14px !important;
+    margin: 20px 0 !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .quote-block {
+    font-size: 16px !important;
+    padding-left: 16px !important;
+  }
+
+  /* 6. Lists */
+  .article-main-content ol,
+  .article-main-content ul {
+    padding-left: 20px !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* 8. Share Bar */
+  .inner-hero div[style*="border-top"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+}
+
+/* Phones <= 640px */
+@media (max-width: 640px) {
+
+  /* 7. Author Bio Section */
+  .author-bio-card {
+    flex-direction: column !important;
+    text-align: center !important;
+    align-items: center !important;
+    padding: 20px 16px !important;
+  }
+
+  .author-bio-card img {
+    margin: 0 auto 10px !important;
+  }
+
+  /* 9. Related Posts: 1 card per row on phones */
+  #related-posts .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  #related-posts .blog-card {
+    width: 100% !important;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
+  }
+
+  #related-posts .blog-card-media {
+    height: 180px !important;
+  }
+
+  #related-posts .blog-card-media img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* 10. Final CTA Banner on Blog Single */
+  #single-cta-final .dark-cta-card {
+    padding: 28px 16px !important;
+  }
+
+  #single-cta-final .dark-cta-content {
+    text-align: center !important;
+  }
+
+  #single-cta-final .dark-cta-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+
+  #single-cta-final .dark-cta-buttons .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+}
+
+/* ==========================================================================
+   TOC & Article Section Spacing Optimization (Mobile & Tablet)
+   ========================================================================== */
+
+@media (max-width: 992px) {
+  .article-layout-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    width: 100% !important;
+    align-items: flex-start !important;
+    justify-items: stretch !important;
+    margin-top: 16px !important;
+  }
+
+  .article-main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 0 0 auto !important;
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  aside.article-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    margin-top: 32px !important;
+  }
+
+  .sticky-sidebar {
+    position: static !important;
+    top: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+
+  .callout-box,
+  #toc {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 0 0 auto !important;
+    align-self: flex-start !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .inner-hero {
+    padding-bottom: 12px !important;
+  }
+
+  .inner-hero div[style*="height: 460px"] {
+    margin-top: 16px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .article-main-content h2#section-1 {
+    margin-top: 16px !important;
+  }
+
+  #toc.callout-box {
+    padding: 16px 16px !important;
+    margin-bottom: 16px !important;
+  }
+}
