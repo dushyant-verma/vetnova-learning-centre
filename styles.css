@@ -12073,3 +12073,317 @@ section#faq {
     white-space: normal;
   }
 }
+
+/* ==========================================================================
+   PROGRAMS.HTML MOBILE RESPONSIVENESS FIXES (Strictly scoped <= 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Global Container Padding & Typography for Programs Page */
+  #main-content section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+  }
+
+  #main-content .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #main-content h2,
+  #main-content .section-head h2 {
+    font-size: clamp(26px, 6vw, 34px) !important;
+    line-height: 1.25 !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+  }
+
+  #main-content p,
+  #main-content .section-head p {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    max-width: 100% !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  #main-content img {
+    max-width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+  }
+
+  /* 1. #why-choose-programs Fixes */
+  #why-choose-programs {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  #why-choose-programs .feature-grid-3 {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-top: 24px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #why-choose-programs .feature-card-item {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    margin: 0 !important;
+    height: auto !important;
+  }
+
+  #why-choose-programs .feature-card-icon {
+    flex-shrink: 0 !important;
+    margin-bottom: 12px !important;
+  }
+
+  #why-choose-programs .feature-card-item h3 {
+    font-size: 20px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 8px !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    width: 100% !important;
+  }
+
+  #why-choose-programs .feature-card-item p {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* 2. #training-formats Fixes */
+  #training-formats {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  #training-formats .feature-grid-3 {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-top: 24px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #training-formats .feature-card-item {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    margin: 0 !important;
+    height: auto !important;
+  }
+
+  #training-formats .feature-card-icon {
+    flex-shrink: 0 !important;
+    margin-bottom: 12px !important;
+  }
+
+  #training-formats .feature-card-item h3 {
+    font-size: 20px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 8px !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    width: 100% !important;
+  }
+
+  #training-formats .feature-card-item p {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* 3. General Programs Page Section Overflows & Fixes */
+  #programs-hero .inner-hero-wrap {
+    grid-template-columns: 1fr !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+
+  #programs-hero .inner-hero-image {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  #programs-hero .inner-hero-image img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    border-radius: 16px !important;
+  }
+
+  #programs-hero .hero-ctas {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+
+  #programs-hero .hero-ctas .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* Program Filter Controls Bar */
+  .program-filter-bar {
+    padding: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .filter-search-wrap input {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    font-size: 14px !important;
+  }
+
+  .category-pills-wrap {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    justify-content: flex-start !important;
+  }
+
+  .category-pill {
+    white-space: normal !important;
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+  }
+
+  .filter-selects-wrap {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .filter-selects-wrap select {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Catalogue Grid */
+  #all-programs .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+
+  #all-programs .program-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  #all-programs .program-card-meta {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  #all-programs .meta-item {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  #all-programs .program-card-footer {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  /* Faculty Grid */
+  #faculty-programs .faculty-grid,
+  #faculty-program .faculty-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+
+  #faculty-programs .faculty-card,
+  #faculty-program .faculty-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Certification & Recognition */
+  #certification-recognition .two-column-layout {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    width: 100% !important;
+  }
+
+  #certification-recognition .two-column-media img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+  }
+
+  /* Testimonials & FAQs & Final CTA */
+  #testimonials-programs .testimonial-slider-wrap,
+  #faq-programs .faq-accordion {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  #programs-cta-final .dark-cta-card {
+    padding: 28px 20px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #programs-cta-final .dark-cta-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+
+  #programs-cta-final .dark-cta-buttons .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+}
