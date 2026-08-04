@@ -4632,7 +4632,7 @@ p {
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--soft-shadow);
-  height: 815px;
+
 }
 
 .two-column-media img {
@@ -14975,6 +14975,8 @@ section.equipment-showcase-redesign {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 .equipment-showcase-redesign .eq-stack-card {
@@ -15879,8 +15881,8 @@ section.why-choose-about-redesign {
   white-space: nowrap;
 }
 
-.section.soft .two-column-media {
-  height: auto;
+.section#contact-form-section .two-column-media {
+  height: 815px;
 }
 
 /* Responsive Media Queries */
