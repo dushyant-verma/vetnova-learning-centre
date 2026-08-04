@@ -211,58 +211,298 @@
         </div>
       </section>
 
-      <!-- SECTION 3: Learning Outcomes ("What You Will Achieve") -->
-      <section class="section soft" id="outcomes">
-        <div class="container">
-          <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-circle-check"></i> Nursing Competencies</span>
-            <h2>What You Will Achieve</h2>
-            <p>Practical clinical skills you will master by the end of this 2-week foundation module.</p>
+      <!-- SECTION 3: Learning Outcomes (Clinical Competency Board Redesign) -->
+      <section class="section outcomes-dashboard-redesign" id="outcomes">
+        <!-- Ambient Decorative Background FX -->
+        <div class="ccm-bg-fx" aria-hidden="true">
+          <div class="ccm-glow-1"></div>
+          <div class="ccm-glow-2"></div>
+          <div class="ccm-grid-pattern"></div>
+        </div>
+
+        <div class="container ccm-container">
+          <!-- Section Header -->
+          <div class="section-head center ccm-head">
+            <span class="eyebrow ccm-eyebrow"><i class="fa-solid fa-square-check"></i> COURSE MASTERY</span>
+            <h2 class="ccm-title">What You'll Graduate Ready To Do</h2>
+            <p class="ccm-subtitle">Develop practical confidence through structured clinical exposure, supervised procedures, and hospital-standard veterinary training.</p>
           </div>
 
-          <div class="feature-grid-3">
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-paw"></i></div>
-              <h3>Low-Stress Animal Restraint</h3>
-              <p>Master canine towel wraps, feline muzzle application, cat bag restraint, and gentle positioning for
-                venipuncture and X-rays.</p>
+          <!-- Main Dashboard Layout (45% Left / 55% Right) -->
+          <div class="ccm-main-grid">
+            
+            <!-- LEFT PANEL (45%): Featured Clinical Image & Transformation -->
+            <div class="ccm-left-panel">
+              <div class="ccm-media-card">
+                <img src="assets/images/learning-centre/learning-hospital.webp"
+                  alt="Veterinary nurse performing patient monitoring and clinical sample collection" loading="lazy" decoding="async" />
+                <span class="ccm-floating-badge"><i class="fa-solid fa-user-nurse"></i> <strong>70+</strong> Clinical Nursing Sessions</span>
+              </div>
+
+              <!-- Clinical Transformation Card -->
+              <div class="ccm-transform-card">
+                <div class="ccm-transform-head">
+                  <i class="fa-solid fa-right-left"></i>
+                  <h3>Clinical Transformation</h3>
+                </div>
+                
+                <div class="ccm-before-block">
+                  <span class="ccm-state-tag before">BEFORE TRAINING</span>
+                  <ul>
+                    <li><i class="fa-solid fa-circle-xmark"></i> Basic assisting background</li>
+                    <li><i class="fa-solid fa-circle-xmark"></i> Limited vital monitoring experience</li>
+                    <li><i class="fa-solid fa-circle-xmark"></i> Passive ward support</li>
+                    <li><i class="fa-solid fa-circle-xmark"></i> Unsure of surgical pack sterilization</li>
+                  </ul>
+                </div>
+
+                <div class="ccm-arrow-divider"><i class="fa-solid fa-arrow-down-long"></i></div>
+
+                <div class="ccm-after-block">
+                  <span class="ccm-state-tag after">AFTER GRADUATION</span>
+                  <ul>
+                    <li><i class="fa-solid fa-circle-check"></i> Proactive ICU patient monitoring</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Sterile OR assistant protocols</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Sample collection mastery</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Professional ward management</li>
+                  </ul>
+                </div>
+
+                <div class="ccm-transform-footer">
+                  <a href="#curriculum" class="btn btn-primary">Download Curriculum <i class="fa-solid fa-arrow-right"></i></a>
+                  <a href="#all-programs" class="btn btn-outline">View Complete Journey</a>
+                </div>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-              <h3>Patient Vital Signs Monitoring</h3>
-              <p>Accurately measure temperature, pulse, respiration (TPR), mucous membrane CRT, and operate pulse
-                oximeter vitals monitors.</p>
+            <!-- RIGHT PANEL (55%): Clinical Competency Board -->
+            <div class="ccm-right-panel">
+              <div class="ccm-board-wrapper">
+                <div class="ccm-board-header">
+                  <div class="ccm-board-title"><i class="fa-solid fa-notes-medical"></i> CLINICAL COMPETENCY BOARD</div>
+                  <span class="ccm-live-badge"><span class="ccm-pulse"></span> NURSING WARD VERIFIED</span>
+                </div>
+
+                <div class="ccm-modules-list">
+                  
+                  <!-- Module 01: Patient Care & Triage -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-paw"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Patient Care &amp; Triage</h4>
+                        <p>Master vital signs assessment, TPR measurement, CRT checks, and low-stress restraint.</p>
+                      </div>
+                      <span class="ccm-level-badge mastered">MASTERED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-mastered"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Vital Signs</span>
+                        <span class="ccm-chip">Pain Scoring</span>
+                        <span class="ccm-chip">Patient Comfort</span>
+                        <span class="ccm-chip">Triage Support</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> Care Ready</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 02: Vital Monitoring -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-heart-pulse"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Vital Monitoring</h4>
+                        <p>Operate pulse oximeters, ECG monitors, temperature management, and fluid pumps.</p>
+                      </div>
+                      <span class="ccm-level-badge advanced">ADVANCED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-advanced"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Pulse Oximetry</span>
+                        <span class="ccm-chip">ECG Setup</span>
+                        <span class="ccm-chip">Temperature Control</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> ICU Monitor</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 03: Sample Collection -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-vial"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Sample Collection</h4>
+                        <p>Perform venipuncture positioning, blood smear preparation, and urinalysis setup.</p>
+                      </div>
+                      <span class="ccm-level-badge mastered">MASTERED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-mastered"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Venipuncture</span>
+                        <span class="ccm-chip">Blood Smears</span>
+                        <span class="ccm-chip">Urinalysis Setup</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> Lab Assist</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 04: Operation Assistance -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-spray-can-sparkles"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Operation Assistance</h4>
+                        <p>Prepare surgical instrument packs, operate steam autoclaves, and scrub patient OR sites.</p>
+                      </div>
+                      <span class="ccm-level-badge advanced">ADVANCED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-advanced"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Scrub Support</span>
+                        <span class="ccm-chip">Mayo Stand Prep</span>
+                        <span class="ccm-chip">Sterilization</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> OR Assistant</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 05: Ward Management -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-hospital-user"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Ward Management</h4>
+                        <p>Manage hospital isolation wards, kennel sanitization, fluid line maintenance, and feeding protocols.</p>
+                      </div>
+                      <span class="ccm-level-badge practice-ready">CLINICAL READY</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-practice"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Infection Control</span>
+                        <span class="ccm-chip">Fluid Line Maint</span>
+                        <span class="ccm-chip">Feeding Protocols</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> Ward Supervisor</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 06: Clinical Documentation -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-award"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Clinical Documentation</h4>
+                        <p>Maintain patient treatment logs, medication charts, and shift handover records accurately.</p>
+                      </div>
+                      <span class="ccm-level-badge certified">CERTIFIED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-certified"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Treatment Logs</span>
+                        <span class="ccm-chip">Chart Maintenance</span>
+                        <span class="ccm-chip">Shift Handover</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> Record Verified</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-spray-can-sparkles"></i></div>
-              <h3>OT Scrub &amp; Pack Preparation</h3>
-              <p>Operate steam autoclaves, wrap surgical instrument packs, scrub patient surgical sites, and assist
-                surgeons during procedures.</p>
+          </div>
+
+          <!-- Bottom Competency Summary Horizontal Strip -->
+          <div class="ccm-summary-strip">
+            <div class="ccm-summary-item">
+              <div class="ccm-summary-icon"><i class="fa-solid fa-user-nurse"></i></div>
+              <div class="ccm-summary-text">
+                <strong>70+</strong>
+                <span>Clinical Sessions</span>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-syringe"></i></div>
-              <h3>IV Catheter &amp; Drug Support</h3>
-              <p>Prepare IV catheterization supplies, calculate infusion drip rates, load syringe pumps, and administer
-                prescribed oral/topical meds.</p>
+            <div class="ccm-summary-item">
+              <div class="ccm-summary-icon"><i class="fa-solid fa-hand-holding-medical"></i></div>
+              <div class="ccm-summary-text">
+                <strong>Patient</strong>
+                <span>Care</span>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-hospital-user"></i></div>
-              <h3>Hospital Ward &amp; Patient Care</h3>
-              <p>Manage inpatient feeding, wound dressing changes, kennel sanitization, infection control isolation, and
-                hospital inventory tracking.</p>
+            <div class="ccm-summary-item">
+              <div class="ccm-summary-icon"><i class="fa-solid fa-user-graduate"></i></div>
+              <div class="ccm-summary-text">
+                <strong>Faculty</strong>
+                <span>Mentoring</span>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-award"></i></div>
-              <h3>Verified Nursing Certificate</h3>
-              <p>Receive an official VetNova Veterinary Nurse Foundation Certificate validating 60 practical clinical
-                training hours.</p>
+            <div class="ccm-summary-item">
+              <div class="ccm-summary-icon"><i class="fa-solid fa-briefcase"></i></div>
+              <div class="ccm-summary-text">
+                <strong>Career</strong>
+                <span>Ready</span>
+              </div>
             </div>
           </div>
+
+          <!-- Bottom CTA Banner -->
+          <div class="ccm-cta-banner">
+            <div class="ccm-cta-content">
+              <div class="ccm-cta-text">
+                <h2>Ready for Independent Clinical Practice?</h2>
+                <p>Complete this programme with the confidence, procedural skills, and practical experience expected inside modern veterinary hospitals.</p>
+              </div>
+              <div class="ccm-cta-actions">
+                <a href="#all-programs" class="btn btn-primary">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#all-programs" class="btn btn-white-outline">Download Curriculum</a>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 

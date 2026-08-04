@@ -208,58 +208,297 @@
         </div>
       </section>
 
-      <!-- SECTION 3: Learning Outcomes ("What You Will Achieve") -->
-      <section class="section soft" id="outcomes">
-        <div class="container">
-          <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-circle-check"></i> Imaging Competencies</span>
-            <h2>What You Will Achieve</h2>
-            <p>Concrete practical imaging capabilities you will master by the end of this module.</p>
+      <!-- SECTION 3: Learning Outcomes (Clinical Competency Board Redesign) -->
+      <section class="section outcomes-dashboard-redesign" id="outcomes">
+        <!-- Ambient Decorative Background FX -->
+        <div class="ccm-bg-fx" aria-hidden="true">
+          <div class="ccm-glow-1"></div>
+          <div class="ccm-glow-2"></div>
+          <div class="ccm-grid-pattern"></div>
+        </div>
+
+        <div class="container ccm-container">
+          <!-- Section Header -->
+          <div class="section-head center ccm-head">
+            <span class="eyebrow ccm-eyebrow"><i class="fa-solid fa-square-check"></i> COURSE MASTERY</span>
+            <h2 class="ccm-title">What You'll Graduate Ready To Do</h2>
+            <p class="ccm-subtitle">Develop practical confidence through structured clinical exposure, supervised procedures, and hospital-standard veterinary training.</p>
           </div>
 
-          <div class="feature-grid-3">
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-x-ray"></i></div>
-              <h3>Digital X-Ray Positioning</h3>
-              <p>Position canine and feline patients perfectly for orthogonal thoracic, abdominal, and spinal views with
-                minimal restraint stress.</p>
+          <!-- Main Dashboard Layout (45% Left / 55% Right) -->
+          <div class="ccm-main-grid">
+            
+            <!-- LEFT PANEL (45%): Featured Clinical Image & Transformation -->
+            <div class="ccm-left-panel">
+              <div class="ccm-media-card">
+                <img src="assets/images/learning-centre/learning-ultrasound.webp"
+                  alt="Indian veterinarian performing digital X-ray positioning and abdominal FAST ultrasound" loading="lazy" decoding="async" />
+                <span class="ccm-floating-badge"><i class="fa-solid fa-x-ray"></i> <strong>60+</strong> Clinical Imaging Cases</span>
+              </div>
+
+              <!-- Clinical Transformation Card -->
+              <div class="ccm-transform-card">
+                <div class="ccm-transform-head">
+                  <i class="fa-solid fa-right-left"></i>
+                  <h3>Clinical Transformation</h3>
+                </div>
+                
+                <div class="ccm-before-block">
+                  <span class="ccm-state-tag before">BEFORE TRAINING</span>
+                  <ul>
+                    <li><i class="fa-solid fa-circle-xmark"></i> Artifact confusion</li>
+                    <li><i class="fa-solid fa-circle-xmark"></i> Probe positioning hesitation</li>
+                    <li><i class="fa-solid fa-circle-xmark"></i> Darkroom reliance</li>
+                    <li><i class="fa-solid fa-circle-xmark"></i> Unsure of FAST fluid locations</li>
+                  </ul>
+                </div>
+
+                <div class="ccm-arrow-divider"><i class="fa-solid fa-arrow-down-long"></i></div>
+
+                <div class="ccm-after-block">
+                  <span class="ccm-state-tag after">AFTER GRADUATION</span>
+                  <ul>
+                    <li><i class="fa-solid fa-circle-check"></i> Rapid FAST scan execution</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Precision digital radiograph reading</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Artifact identification</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Independent diagnostic reporting</li>
+                  </ul>
+                </div>
+
+                <div class="ccm-transform-footer">
+                  <a href="#curriculum" class="btn btn-primary">Download Curriculum <i class="fa-solid fa-arrow-right"></i></a>
+                  <a href="#all-programs" class="btn btn-outline">View Complete Journey</a>
+                </div>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-radiation"></i></div>
-              <h3>Radiation Safety Compliance</h3>
-              <p>Enforce lead apron/thyroid shield protocols, scatter radiation reduction, collimation, and AERB safety
-                compliance in your clinic.</p>
+            <!-- RIGHT PANEL (55%): Clinical Competency Board -->
+            <div class="ccm-right-panel">
+              <div class="ccm-board-wrapper">
+                <div class="ccm-board-header">
+                  <div class="ccm-board-title"><i class="fa-solid fa-notes-medical"></i> CLINICAL COMPETENCY BOARD</div>
+                  <span class="ccm-live-badge"><span class="ccm-pulse"></span> IMAGING SUITE VERIFIED</span>
+                </div>
+
+                <div class="ccm-modules-list">
+                  
+                  <!-- Module 01: Radiographic Positioning -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-x-ray"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Radiographic Positioning</h4>
+                        <p>Master Orthopedic views, Thoracic positioning, and stress-free patient restraint.</p>
+                      </div>
+                      <span class="ccm-level-badge mastered">MASTERED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-mastered"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Orthopedic Views</span>
+                        <span class="ccm-chip">Thoracic Positioning</span>
+                        <span class="ccm-chip">Abdominal Views</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> Positioning Ready</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 02: Digital X-Ray -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-radiation"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Digital X-Ray Operations</h4>
+                        <p>Operate CR/DR exposure factors, radiation safety, and PACS digital archiving software.</p>
+                      </div>
+                      <span class="ccm-level-badge advanced">ADVANCED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-advanced"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Exposure Factors</span>
+                        <span class="ccm-chip">Contrast Calibration</span>
+                        <span class="ccm-chip">Digital Archiving</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> CR/DR Operator</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 03: FAST Ultrasound -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-wave-square"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>FAST Ultrasound Scans</h4>
+                        <p>Execute emergency A-FAST, T-FAST, and VetBLUE lung scans for rapid fluid detection.</p>
+                      </div>
+                      <span class="ccm-level-badge mastered">MASTERED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-mastered"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">A-FAST Protocol</span>
+                        <span class="ccm-chip">T-FAST Protocol</span>
+                        <span class="ccm-chip">VetBLUE Lung Scan</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> Emergency Scanning</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 04: Image Interpretation -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-lungs"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Image Interpretation</h4>
+                        <p>Identify radiographic pattern changes, organomegaly, pneumothorax, and acoustic artifacts.</p>
+                      </div>
+                      <span class="ccm-level-badge advanced">ADVANCED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-advanced"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Pattern Recognition</span>
+                        <span class="ccm-chip">Organ Assessment</span>
+                        <span class="ccm-chip">Artifact Identification</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> Diagnostic Reading</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 05: Case Reviews -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-file-medical"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Case Reviews</h4>
+                        <p>Review real clinical imaging cases spanning abdominal pathology, cardiac disease, and trauma.</p>
+                      </div>
+                      <span class="ccm-level-badge practice-ready">CLINICAL READY</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-practice"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Abdominal Pathology</span>
+                        <span class="ccm-chip">Thoracic Disorders</span>
+                        <span class="ccm-chip">Radiographic Reports</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> Case Verified</span>
+                    </div>
+                  </div>
+
+                  <!-- Module 06: Diagnostic Reporting -->
+                  <div class="ccm-module-card">
+                    <div class="ccm-module-top">
+                      <div class="ccm-icon-box"><i class="fa-solid fa-award"></i></div>
+                      <div class="ccm-module-title-wrap">
+                        <h4>Diagnostic Reporting</h4>
+                        <p>Draft structured imaging reports, counsel pet owners, and communicate diagnostic findings.</p>
+                      </div>
+                      <span class="ccm-level-badge certified">CERTIFIED</span>
+                    </div>
+
+                    <div class="ccm-module-meter">
+                      <div class="ccm-meter-indicator">
+                        <span class="ccm-bar-fill level-certified"></span>
+                      </div>
+                    </div>
+
+                    <div class="ccm-module-bottom">
+                      <div class="ccm-skills-row">
+                        <span class="ccm-chip">Structured Reports</span>
+                        <span class="ccm-chip">Client Consultation</span>
+                        <span class="ccm-chip">Faculty Assessed</span>
+                      </div>
+                      <span class="ccm-status-pill"><i class="fa-solid fa-circle-check"></i> Report Ready</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-lungs"></i></div>
-              <h3>Thoracic &amp; Cardiac Reading</h3>
-              <p>Evaluate Vertebral Heart Score (VHS), pulmonary edema patterns, pneumothorax, and diaphragmatic hernia
-                opacities.</p>
+          </div>
+
+          <!-- Bottom Competency Summary Horizontal Strip -->
+          <div class="ccm-summary-strip">
+            <div class="ccm-summary-item">
+              <div class="ccm-summary-icon"><i class="fa-solid fa-x-ray"></i></div>
+              <div class="ccm-summary-text">
+                <strong>60+</strong>
+                <span>Imaging Cases</span>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-wave-square"></i></div>
-              <h3>Abdominal Ultrasound Scanning</h3>
-              <p>Systematically examine the liver, gallbladder, spleen, kidneys, urinary bladder, gastrointestinal
-                tract, and prostate.</p>
+            <div class="ccm-summary-item">
+              <div class="ccm-summary-icon"><i class="fa-solid fa-desktop"></i></div>
+              <div class="ccm-summary-text">
+                <strong>Digital</strong>
+                <span>Equipment</span>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-truck-medical"></i></div>
-              <h3>Emergency AFAST &amp; TFAST Scans</h3>
-              <p>Perform rapid Abdominal &amp; Thoracic Focused Assessment with Sonography for Trauma to detect free
-                fluid and hemoperitoneum.</p>
+            <div class="ccm-summary-item">
+              <div class="ccm-summary-icon"><i class="fa-solid fa-wave-square"></i></div>
+              <div class="ccm-summary-text">
+                <strong>FAST</strong>
+                <span>Protocol</span>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-award"></i></div>
-              <h3>Imaging Certification</h3>
-              <p>Receive an official VetNova Diagnostic Radiology &amp; Ultrasonography Certificate validating 40 hours
-                of practical imaging practice.</p>
+            <div class="ccm-summary-item">
+              <div class="ccm-summary-icon"><i class="fa-solid fa-user-check"></i></div>
+              <div class="ccm-summary-text">
+                <strong>Clinical</strong>
+                <span>Ready</span>
+              </div>
             </div>
           </div>
+
+          <!-- Bottom CTA Banner -->
+          <div class="ccm-cta-banner">
+            <div class="ccm-cta-content">
+              <div class="ccm-cta-text">
+                <h2>Ready for Independent Clinical Practice?</h2>
+                <p>Complete this programme with the confidence, procedural skills, and practical experience expected inside modern veterinary hospitals.</p>
+              </div>
+              <div class="ccm-cta-actions">
+                <a href="#all-programs" class="btn btn-primary">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#all-programs" class="btn btn-white-outline">Download Curriculum</a>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 

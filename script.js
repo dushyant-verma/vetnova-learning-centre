@@ -1598,3 +1598,187 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+/* ==========================================================================
+   Clinical Equipment Showcase Controller (#modern-equipment)
+   ========================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  const eqSection = document.getElementById('modern-equipment');
+  if (!eqSection) return;
+
+  const stackCards = eqSection.querySelectorAll('.eq-stack-card');
+  const mainImg = eqSection.querySelector('#eq-main-img');
+  const mainBadge = eqSection.querySelector('#eq-main-badge');
+  const mainTitle = eqSection.querySelector('#eq-main-title');
+  const mainDesc = eqSection.querySelector('#eq-main-desc');
+  const mainTag = eqSection.querySelector('#eq-main-tag');
+
+  const stackData = {
+    ultrasound: {
+      title: 'Digital Ultrasound System',
+      badge: 'DIAGNOSTIC IMAGING',
+      desc: 'Students practice abdominal scans, FAST protocols, cardiac assessment, reproductive imaging, and image interpretation under expert supervision.',
+      img: 'assets/images/learning-centre/equipment_ultrasound.webp',
+      tag: '<i class="fa-solid fa-hospital"></i> Hospital Grade'
+    },
+    xray: {
+      title: 'Digital Radiography (CR/DR X-Ray)',
+      badge: 'RADIOLOGY SUITE',
+      desc: 'High-frequency digital X-ray positioning, radiograph exposure calibration, thoracic/abdominal view evaluation, and orthopedic diagnostic reading.',
+      img: 'assets/images/learning-centre/equipment_xray.webp',
+      tag: '<i class="fa-solid fa-hospital"></i> Hospital Grade'
+    },
+    vitals: {
+      title: 'Multiparameter Vitals Monitor',
+      badge: 'ICU & MONITORING',
+      desc: 'Continuous real-time ECG, SpO₂, non-invasive blood pressure (NIBP), end-tidal CO₂, and body temperature monitoring during surgical procedures.',
+      img: 'assets/images/learning-centre/equipment_emergency.webp',
+      tag: '<i class="fa-solid fa-shield-halved"></i> ICU Ready'
+    },
+    surgery: {
+      title: 'Sterile Surgical Packs & OT Instruments',
+      badge: 'SURGICAL SUITE',
+      desc: 'Complete Mayo-Hegar needle drivers, Crile & Mosquito hemostats, scalpel ergonomic grips, suture materials, and aseptic OR setups.',
+      img: 'assets/images/learning-centre/equipment_surgery.webp',
+      tag: '<i class="fa-solid fa-square-check"></i> OT Standard'
+    },
+    emergency: {
+      title: 'Emergency Crash Cart & Resuscitation',
+      badge: 'CRITICAL CARE',
+      desc: 'Endotracheal intubation tubes, laryngoscopes, ambu bags, vascular access supplies, and emergency drug dosing reference algorithms.',
+      img: 'assets/images/learning-centre/equipment_emergency.webp',
+      tag: '<i class="fa-solid fa-truck-medical"></i> Critical Care'
+    }
+  };
+
+  stackCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const key = card.getAttribute('data-eq');
+      const data = stackData[key];
+      if (!data) return;
+
+      stackCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      if (mainImg) {
+        mainImg.style.opacity = '0';
+        setTimeout(() => {
+          mainImg.src = data.img;
+          mainImg.alt = data.title;
+          mainImg.style.opacity = '1';
+        }, 150);
+      }
+
+      if (mainBadge) mainBadge.textContent = data.badge;
+      if (mainTitle) mainTitle.textContent = data.title;
+      if (mainDesc) mainDesc.textContent = data.desc;
+      if (mainTag) mainTag.innerHTML = data.tag;
+    });
+  });
+
+  // Category Tabs Controller
+  const tabBtns = eqSection.querySelectorAll('.eq-tab-btn');
+  const panelImg = eqSection.querySelector('#eq-panel-img');
+  const panelEyebrow = eqSection.querySelector('#eq-panel-eyebrow');
+  const panelTitle = eqSection.querySelector('#eq-panel-title');
+  const panelDesc = eqSection.querySelector('#eq-panel-desc');
+  const panelOutcomes = eqSection.querySelector('#eq-panel-outcomes');
+
+  const tabData = {
+    diagnostics: {
+      eyebrow: 'DIAGNOSTICS SUITE',
+      title: 'Ultrasound & Digital Radiography Suite',
+      desc: 'Master probe positioning, FAST scanning protocols, and digital radiography image evaluation under the guidance of senior diagnostic imaging specialists.',
+      img: 'assets/images/learning-centre/equipment_ultrasound.webp',
+      outcomes: [
+        'Abdominal organ scanning & artifact recognition',
+        'Thoracic & abdominal FAST emergency protocol',
+        'Digital radiography exposure & positioning'
+      ]
+    },
+    surgery: {
+      eyebrow: 'OPERATING THEATRE',
+      title: 'Surgical Instrument Packs & OT Setup',
+      desc: 'Practice aseptic scrub routines, Mayo stand arrangement, instrument ergonomics, suture selection, and tissue handling protocols.',
+      img: 'assets/images/learning-centre/equipment_surgery.webp',
+      outcomes: [
+        'Sterile field preservation & gowning',
+        'Precision suture knotting & tension control',
+        'Instrument handling ergonomics in OR'
+      ]
+    },
+    emergency: {
+      eyebrow: 'CRITICAL CARE & ICU',
+      title: 'Emergency Resuscitation & Crash Cart Unit',
+      desc: 'Perform rapid endotracheal intubation, vascular access, fluid therapy calculations, and shock resuscitation protocols.',
+      img: 'assets/images/learning-centre/equipment_emergency.webp',
+      outcomes: [
+        'RECOVER CPR algorithm execution',
+        'Vascular access & catheter securement',
+        'Emergency drug dosing & fluid titration'
+      ]
+    },
+    monitoring: {
+      eyebrow: 'PATIENT MONITORING',
+      title: 'Multiparameter Vitals Monitoring',
+      desc: 'Monitor real-time ECG rhythms, oxygen saturation, end-tidal carbon dioxide, and blood pressure during procedures.',
+      img: 'assets/images/learning-centre/equipment_emergency.webp',
+      outcomes: [
+        'ECG arrhythmia recognition & logging',
+        'SpO₂ & Capnography trend monitoring',
+        'Hypotension & hypothermia alert response'
+      ]
+    },
+    laboratory: {
+      eyebrow: 'CLINICAL LAB',
+      title: 'Wet Lab & Diagnostic Microscopes',
+      desc: 'Conduct blood smear evaluation, skin scrape cytology, urinalysis sediment reading, and micro-parasite identification.',
+      img: 'assets/images/learning-centre/equipment_laboratory.webp',
+      outcomes: [
+        'Cytology staining & slide preparation',
+        'Blood smear differential cell count',
+        'Fecal & skin parasite identification'
+      ]
+    },
+    anesthesia: {
+      eyebrow: 'ANESTHESIOLOGY',
+      title: 'Isoflurane Gas Anesthesia Workstation',
+      desc: 'Master induction protocols, vaporizer precision settings, circuit leak testing, oxygen supply management, and patient recovery.',
+      img: 'assets/images/learning-centre/equipment_anesthesia.webp',
+      outcomes: [
+        'Anesthetic machine pre-use leak test',
+        'Vaporizer percentage calibration & maintenance',
+        'Smooth patient emergence & recovery monitoring'
+      ]
+    }
+  };
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.getAttribute('data-tab');
+      const data = tabData[key];
+      if (!data) return;
+
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (panelImg) {
+        panelImg.style.opacity = '0';
+        setTimeout(() => {
+          panelImg.src = data.img;
+          panelImg.alt = data.title;
+          panelImg.style.opacity = '1';
+        }, 150);
+      }
+
+      if (panelEyebrow) panelEyebrow.textContent = data.eyebrow;
+      if (panelTitle) panelTitle.textContent = data.title;
+      if (panelDesc) panelDesc.textContent = data.desc;
+      if (panelOutcomes && Array.isArray(data.outcomes)) {
+        panelOutcomes.innerHTML = data.outcomes
+          .map(o => `<li><i class="fa-solid fa-circle-check"></i> ${o}</li>`)
+          .join('');
+      }
+    });
+  });
+});
+

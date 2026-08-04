@@ -278,55 +278,222 @@
         </div>
       </section>
 
-      <!-- SECTION 7: Modern Equipment & Technology -->
-      <section class="section" id="modern-equipment">
-        <div class="container">
-          <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-microscope"></i> CLINICAL HARDWARE</span>
-            <h2>Modern Equipment & Technology</h2>
-            <p>Trainees practice using standard clinical hardware deployed in modern veterinary hospitals.</p>
+      <!-- SECTION 7: Modern Equipment & Technology (Redesigned) -->
+      <section class="section equipment-showcase-redesign" id="modern-equipment">
+        <!-- Ambient Decorative Background FX -->
+        <div class="eq-bg-fx" aria-hidden="true">
+          <div class="eq-glow-1"></div>
+          <div class="eq-glow-2"></div>
+          <div class="eq-grid-pattern"></div>
+        </div>
+
+        <div class="container eq-container">
+          <!-- Section Header -->
+          <div class="section-head center eq-head">
+            <span class="eyebrow eq-eyebrow"><i class="fa-solid fa-microscope"></i> CLINICAL TECHNOLOGY</span>
+            <h2 class="eq-title">Train With Modern Veterinary Equipment</h2>
+            <p class="eq-subtitle">Every student gains practical experience using industry-standard diagnostic, surgical, monitoring, and emergency equipment found inside leading veterinary hospitals.</p>
           </div>
 
-          <div class="feature-grid-3">
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-wave-square"></i></div>
-              <h3>Digital Ultrasound Scanning Units</h3>
-              <p>Multi-frequency micro-convex & linear probes for abdominal, cardiac, and FAST fluid detection scans.
-              </p>
+          <!-- Hero Equipment Showcase (60% Left / 40% Right) -->
+          <div class="eq-hero-grid">
+            <!-- Left (60%): Featured Equipment Card -->
+            <div class="eq-featured-card">
+              <div class="eq-card-media">
+                <img id="eq-main-img" src="assets/images/learning-centre/equipment_ultrasound.webp"
+                  alt="Indian veterinary students using a digital ultrasound system" loading="lazy" decoding="async" />
+                <span class="eq-card-badge" id="eq-main-badge">DIAGNOSTIC IMAGING</span>
+              </div>
+              <div class="eq-card-body">
+                <h3 class="eq-card-title" id="eq-main-title">Digital Ultrasound System</h3>
+                <p class="eq-card-desc" id="eq-main-desc">
+                  Students practice abdominal scans, FAST protocols, cardiac assessment, reproductive imaging, and image interpretation under expert supervision.
+                </p>
+                <div class="eq-pills-row" id="eq-main-pills">
+                  <span class="eq-pill"><i class="fa-solid fa-circle-check"></i> Live Patient Training</span>
+                  <span class="eq-pill"><i class="fa-solid fa-circle-check"></i> Faculty Guided</span>
+                  <span class="eq-pill"><i class="fa-solid fa-circle-check"></i> Real Clinical Cases</span>
+                </div>
+                <div class="eq-card-footer">
+                  <a href="contact.html#enquiry" class="btn btn-primary" id="eq-main-cta">Explore Equipment <i class="fa-solid fa-arrow-right"></i></a>
+                  <span class="eq-usage-tag" id="eq-main-tag"><i class="fa-solid fa-hospital"></i> Hospital Grade</span>
+                </div>
+              </div>
             </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-x-ray"></i></div>
-              <h3>High-Frequency Digital X-Ray</h3>
-              <p>Digital radiography CR/DR systems for instant thoracic, abdominal, and orthopedic radiograph
-                evaluation.</p>
-            </div>
+            <!-- Right (40%): Vertical Stack of 5 Premium Equipment Cards -->
+            <div class="eq-vertical-stack">
+              
+              <div class="eq-stack-card active" data-eq="ultrasound">
+                <div class="eq-stack-icon"><i class="fa-solid fa-wave-square"></i></div>
+                <div class="eq-stack-info">
+                  <h4>Digital Ultrasound</h4>
+                  <p>Multi-frequency probes for abdominal &amp; FAST scanning.</p>
+                </div>
+                <span class="eq-stack-tag">Hospital Grade</span>
+              </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-              <h3>Multiparameter Vitals Monitors</h3>
-              <p>Real-time ECG, SpO2, NIBP, end-tidal CO2, and temperature monitoring during anesthetic procedures.</p>
-            </div>
+              <div class="eq-stack-card" data-eq="xray">
+                <div class="eq-stack-icon"><i class="fa-solid fa-x-ray"></i></div>
+                <div class="eq-stack-info">
+                  <h4>Digital X-Ray</h4>
+                  <p>Real-time digital radiography with CR/DR image evaluation.</p>
+                </div>
+                <span class="eq-stack-tag">Hospital Grade</span>
+              </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-syringe"></i></div>
-              <h3>Sterile Surgical Packs</h3>
-              <p>Complete soft tissue instrument sets including Mayo-Hegar needle drivers, Crile hemstats, and scalpel
-                handles.</p>
-            </div>
+              <div class="eq-stack-card" data-eq="vitals">
+                <div class="eq-stack-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                <div class="eq-stack-info">
+                  <h4>Vitals Monitor</h4>
+                  <p>Continuous ECG, SpO₂, NIBP, and temperature monitoring.</p>
+                </div>
+                <span class="eq-stack-tag">ICU Ready</span>
+              </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-kit-medical"></i></div>
-              <h3>Emergency Resuscitation Kits</h3>
-              <p>Endotracheal intubation tubes, laryngoscopes, ambu bags, and emergency drug dosing stations.</p>
-            </div>
+              <div class="eq-stack-card" data-eq="surgery">
+                <div class="eq-stack-icon"><i class="fa-solid fa-syringe"></i></div>
+                <div class="eq-stack-info">
+                  <h4>Surgical Instrument Sets</h4>
+                  <p>Sterile operating theatre packs for soft tissue procedures.</p>
+                </div>
+                <span class="eq-stack-tag">OT Standard</span>
+              </div>
 
-            <div class="feature-card-item">
-              <div class="feature-card-icon"><i class="fa-solid fa-pump-medical"></i></div>
-              <h3>Isoflurane Anesthetic Vaporizers</h3>
-              <p>Precision precision gas anesthetic delivery systems with oxygen flush and scavenger setups.</p>
+              <div class="eq-stack-card" data-eq="emergency">
+                <div class="eq-stack-icon"><i class="fa-solid fa-kit-medical"></i></div>
+                <div class="eq-stack-info">
+                  <h4>Emergency Crash Cart</h4>
+                  <p>Advanced emergency stabilization &amp; resuscitation kit.</p>
+                </div>
+                <span class="eq-stack-tag">Critical Care</span>
+              </div>
+
             </div>
           </div>
+
+          <!-- Interactive Category Segment (6 Tabs) -->
+          <div class="eq-category-segment">
+            <div class="eq-tabs-nav">
+              <button class="eq-tab-btn active" data-tab="diagnostics"><i class="fa-solid fa-wave-square"></i> Diagnostics</button>
+              <button class="eq-tab-btn" data-tab="surgery"><i class="fa-solid fa-user-doctor"></i> Surgery</button>
+              <button class="eq-tab-btn" data-tab="emergency"><i class="fa-solid fa-truck-medical"></i> Emergency</button>
+              <button class="eq-tab-btn" data-tab="monitoring"><i class="fa-solid fa-heart-pulse"></i> Monitoring</button>
+              <button class="eq-tab-btn" data-tab="laboratory"><i class="fa-solid fa-vial"></i> Laboratory</button>
+              <button class="eq-tab-btn" data-tab="anesthesia"><i class="fa-solid fa-pump-medical"></i> Anesthesia</button>
+            </div>
+
+            <div class="eq-tab-preview-card" id="eq-tab-panel">
+              <div class="eq-panel-media">
+                <img id="eq-panel-img" src="assets/images/learning-centre/equipment_ultrasound.webp" alt="Diagnostic Equipment Suite" loading="lazy" decoding="async" />
+              </div>
+              <div class="eq-panel-content">
+                <span class="eq-panel-eyebrow" id="eq-panel-eyebrow">DIAGNOSTICS SUITE</span>
+                <h3 id="eq-panel-title">Ultrasound &amp; Digital Radiography Suite</h3>
+                <p id="eq-panel-desc">Master probe positioning, FAST scanning protocols, and digital radiography image evaluation under the guidance of senior diagnostic imaging specialists.</p>
+                
+                <div class="eq-outcomes-block">
+                  <h5>Practical Learning Outcomes:</h5>
+                  <ul id="eq-panel-outcomes">
+                    <li><i class="fa-solid fa-circle-check"></i> Abdominal organ scanning &amp; artifact recognition</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Thoracic &amp; abdominal FAST emergency protocol</li>
+                    <li><i class="fa-solid fa-circle-check"></i> Digital radiography exposure &amp; positioning</li>
+                  </ul>
+                </div>
+
+                <div class="eq-panel-meta">
+                  <span><strong>Hospital Usage:</strong> Daily Clinical Diagnostics</span>
+                  <span><strong>Training Level:</strong> All Students &amp; Doctors</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clinical Experience Metrics Strip -->
+          <div class="eq-metrics-strip">
+            <div class="eq-metric-card">
+              <div class="eq-metric-icon"><i class="fa-solid fa-hospital"></i></div>
+              <div class="eq-metric-info">
+                <strong>3,000+</strong>
+                <span>Sq.ft Practical Hospital</span>
+              </div>
+            </div>
+            <div class="eq-metric-card">
+              <div class="eq-metric-icon"><i class="fa-solid fa-microscope"></i></div>
+              <div class="eq-metric-info">
+                <strong>20+</strong>
+                <span>Hospital Equipment Systems</span>
+              </div>
+            </div>
+            <div class="eq-metric-card">
+              <div class="eq-metric-icon"><i class="fa-solid fa-hand-holding-medical"></i></div>
+              <div class="eq-metric-info">
+                <strong>100%</strong>
+                <span>Hands-on Equipment Access</span>
+              </div>
+            </div>
+            <div class="eq-metric-card">
+              <div class="eq-metric-icon"><i class="fa-solid fa-user-nurse"></i></div>
+              <div class="eq-metric-info">
+                <strong>1:5</strong>
+                <span>Faculty-to-Student Ratio</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Equipment Learning Process Timeline -->
+          <div class="eq-process-wrapper">
+            <div class="section-head center">
+              <span class="eyebrow"><i class="fa-solid fa-gears"></i> PRACTICAL METHODOLOGY</span>
+              <h3>How Students Master Equipment Training</h3>
+            </div>
+            <div class="eq-process-timeline">
+              <div class="eq-timeline-line"></div>
+
+              <div class="eq-process-step">
+                <div class="eq-step-num">01</div>
+                <h4>Observe</h4>
+                <p>Watch live faculty demonstrations on clinical machines.</p>
+              </div>
+
+              <div class="eq-process-step">
+                <div class="eq-step-num">02</div>
+                <h4>Faculty Demo</h4>
+                <p>1-on-1 walkthrough of machine controls &amp; safety.</p>
+              </div>
+
+              <div class="eq-process-step">
+                <div class="eq-step-num">03</div>
+                <h4>Hands-on Practice</h4>
+                <p>Operate equipment directly on live patient cases.</p>
+              </div>
+
+              <div class="eq-process-step">
+                <div class="eq-step-num">04</div>
+                <h4>Assessment</h4>
+                <p>Supervised evaluation &amp; image interpretation.</p>
+              </div>
+
+              <div class="eq-process-step">
+                <div class="eq-step-num">05</div>
+                <h4>Independent</h4>
+                <p>Gain complete clinical execution confidence.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom CTA Banner -->
+          <div class="eq-cta-banner">
+            <div class="eq-cta-content">
+              <h2>Experience Veterinary Technology First-Hand</h2>
+              <p>Visit our learning centre and explore the same diagnostic and surgical equipment used by professional veterinary hospitals.</p>
+              <div class="eq-cta-actions">
+                <a href="contact.html#enquiry" class="btn btn-primary">Book Campus Visit <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="contact.html#enquiry" class="btn btn-white-outline">Download Equipment Brochure</a>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
