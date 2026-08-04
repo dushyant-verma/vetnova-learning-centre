@@ -20,6 +20,7 @@ function runAllInitializers() {
   initProgramFilters();
   initFaqSearch();
   initPopularCoursesFilter();
+  initSingleFocusJourney();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1188,4 +1189,412 @@ function initPopularCoursesFilter() {
     });
   });
 }
+
+/* ==========================================================================
+   Single-Focus Interactive Clinical Journey Manager
+   ========================================================================== */
+function initSingleFocusJourney() {
+  if (window.__jmInitialized) return;
+
+  const section = document.getElementById('bento-explorer-strip') ||
+    document.querySelector('.bento-explorer-strip') ||
+    document.querySelector('.quick-strip.bento-explorer-strip');
+
+  if (!section) {
+    console.warn("Journey section not found.");
+    return;
+  }
+
+  window.__jmInitialized = true;
+
+  // Cached Selector Fallbacks
+  const milestoneNodes = section.querySelectorAll('.jm-step, .jm-milestone-node, [data-step]');
+  const progLabels = section.querySelectorAll('.jm-prog-label');
+  const singleCard = section.querySelector('.jm-single-card, .jm-featured-card, .jm-single-featured-wrap');
+
+  const cardImg = singleCard ? (singleCard.querySelector('.jm-image, img[data-journey-image], #jm-card-img') || singleCard.querySelector('img')) : null;
+  const cardBadge = singleCard ? (singleCard.querySelector('.jm-badge, #jm-card-badge') || singleCard.querySelector('.jm-card-badge')) : null;
+  const cardStepNum = singleCard ? (singleCard.querySelector('#jm-card-step-num, .jm-card-step-num')) : null;
+  const cardDuration = singleCard ? (singleCard.querySelector('#jm-card-duration, .jm-pill-duration')) : null;
+  const cardLevel = singleCard ? (singleCard.querySelector('#jm-card-level, .jm-pill-level')) : null;
+  const cardTitle = singleCard ? (singleCard.querySelector('.jm-title, #jm-card-title') || singleCard.querySelector('h3, h4')) : null;
+  const cardSubtitle = singleCard ? singleCard.querySelector('.jm-subtitle') : null;
+  const cardDesc = singleCard ? (singleCard.querySelector('.jm-description, #jm-card-desc') || singleCard.querySelector('.jm-card-desc')) : null;
+  const cardHighlights = singleCard ? (singleCard.querySelector('.jm-highlights, #jm-card-highlights') || singleCard.querySelector('.jm-card-highlights')) : null;
+  const cardCta = singleCard ? (singleCard.querySelector('.jm-cta, #jm-card-cta') || singleCard.querySelector('.btn')) : null;
+
+  const prevBtns = section.querySelectorAll('.jm-nav-prev, #jm-prev-btn');
+  const nextBtns = section.querySelectorAll('.jm-nav-next, #jm-next-btn');
+  const counterEl = section.querySelector('.jm-step-counter, .jm-ctrl-counter, #jm-ctrl-counter');
+  const timelineFill = section.querySelector('.jm-timeline-fill-bar, #jm-timeline-fill');
+  const progFill = section.querySelector('.jm-progress-fill, .jm-progression-fill, #jm-progression-fill');
+
+  // Master Journey Data Array (6 Programs)
+  const journeySteps = [
+    {
+      title: 'Veterinary Skill-Up Program',
+      subtitle: 'Clinical Foundation',
+      image: 'assets/images/learning-paths/featured-skillup.webp',
+      alt: 'Veterinary Skill-Up Program Clinical Training',
+      badge: 'FLAGSHIP CLINICAL PATH',
+      duration: '<i class="fa-regular fa-clock"></i> 4 Weeks (120+ Hrs)',
+      difficulty: 'Foundation',
+      description: 'Comprehensive 4-week clinical mastery module covering soft tissue surgery, digital radiology, abdominal ultrasound, and emergency triage for doctors and fresh graduates.',
+      highlights: [
+        '120+ Hours Practical Clinical Exposure',
+        'Live Surgical Suite & Diagnostic Training',
+        '1-on-1 Senior Veterinary Specialist Mentorship',
+        'Verified Clinical Certification & Placement Support'
+      ],
+      buttonText: 'Explore Flagship Program',
+      buttonLink: 'veterinary-skill-up.html',
+      progressLabel: 'Foundation'
+    },
+    {
+      title: 'Radiology & Ultrasound',
+      subtitle: 'Practical Diagnostics',
+      image: 'assets/images/learning-paths/radiology-ultrasound.webp',
+      alt: 'Radiology & Ultrasound Diagnostic Training',
+      badge: 'DIAGNOSTIC IMAGING',
+      duration: '<i class="fa-regular fa-clock"></i> 2 Weeks',
+      difficulty: 'Diagnostics',
+      description: 'Hands-on digital X-ray positioning, FAST abdominal ultrasonography, diagnostic image interpretation, and real clinical case reviews.',
+      highlights: [
+        'FAST Abdominal & Thoracic Ultrasound Protocol',
+        'Digital Radiography Positioning & Artifact Recognition',
+        'Real Patient Case Imaging Analysis',
+        'Radiological Reporting Certification'
+      ],
+      buttonText: 'Explore Radiology Track',
+      buttonLink: 'radiology-ultrasound.html',
+      progressLabel: 'Diagnostics'
+    },
+    {
+      title: 'Soft Tissue Surgery',
+      subtitle: 'Surgical Skills',
+      image: 'assets/images/learning-paths/soft-tissue-surgery.webp',
+      alt: 'Soft Tissue Surgery Training',
+      badge: 'SURGICAL SPECIALIZATION',
+      duration: '<i class="fa-regular fa-clock"></i> 2 Weeks',
+      difficulty: 'Advanced',
+      description: 'Master operating room protocols, aseptic technique, spay/neuter procedures, tissue handling, and tension-free wound closure techniques.',
+      highlights: [
+        'Aseptic OR Protocols & Instrument Handling',
+        'Elective & Emergency Soft Tissue Procedures',
+        'Suture Patterns & Knot Tying Mastery',
+        'Post-Operative Analgesia & Care'
+      ],
+      buttonText: 'Explore Surgery Track',
+      buttonLink: 'soft-tissue-surgery.html',
+      progressLabel: 'Surgery'
+    },
+    {
+      title: 'Emergency Medicine',
+      subtitle: 'Emergency Medicine',
+      image: 'assets/images/learning-paths/emergency-medicine.webp',
+      alt: 'Emergency Medicine ICU Training',
+      badge: 'CRITICAL CARE',
+      duration: '<i class="fa-regular fa-clock"></i> 1 Week',
+      difficulty: 'Advanced',
+      description: 'Rapid triage protocols, CPR interventions, IV fluid resuscitation, shock management, and intensive inpatient ICU monitoring.',
+      highlights: [
+        'RECOVER CPR & Emergency Triage Algorithms',
+        'Vascular Access & Fluid Therapy Calculations',
+        'Point-of-Care Blood Gas & Lactate Triage',
+        'Critical Care Patient Monitoring'
+      ],
+      buttonText: 'Explore Emergency Track',
+      buttonLink: 'emergency-medicine.html',
+      progressLabel: 'Critical Care'
+    },
+    {
+      title: 'Vet Nurse Programme',
+      subtitle: 'Professional Certification',
+      image: 'assets/images/learning-paths/vet-nurse.webp',
+      alt: 'Vet Nurse Certification Track',
+      badge: 'PARAVET CERTIFICATION',
+      duration: '<i class="fa-regular fa-clock"></i> 3 Weeks',
+      difficulty: 'Certification',
+      description: 'Practical clinical nursing, inpatient care, anesthesia monitoring, catheter placement, and diagnostic laboratory sampling.',
+      highlights: [
+        'IV Catheterization & Inpatient Triage',
+        'Surgical Assistant & Sterilization Mastery',
+        'Anesthesia Vital Sign Monitoring',
+        'Certified Vet Nurse Credential'
+      ],
+      buttonText: 'Explore Nurse Track',
+      buttonLink: 'vet-nurse-programme.html',
+      progressLabel: 'Certification'
+    },
+    {
+      title: 'Pet First Aid',
+      subtitle: 'Career Ready',
+      image: 'assets/images/learning-paths/pet-first-aid.webp',
+      alt: 'Pet First Aid Workshop',
+      badge: 'COMMUNITY & FIRST AID',
+      duration: '<i class="fa-regular fa-clock"></i> Weekend',
+      difficulty: 'Career Ready',
+      description: 'Choking response, heat stroke protocol, emergency bandaging, poisoning action, and rescue handling for pet parents and feeders.',
+      highlights: [
+        'Choking & Airway Obstruction Maneuvers',
+        'Emergency Bandaging & Hemorrhage Control',
+        'Heat Stroke & Poison Triage Protocols',
+        'First Responder Certification'
+      ],
+      buttonText: 'Explore First Aid Track',
+      buttonLink: 'animal-welfare.html',
+      progressLabel: 'Career'
+    }
+  ];
+
+  // Preload all 6 images immediately to eliminate flickering
+  journeySteps.forEach(s => {
+    if (s.image) {
+      const img = new Image();
+      img.src = s.image;
+    }
+  });
+
+  let activeStepIndex = 0;
+  let animationTimeout = null;
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Master UI Update Function
+  function updateJourney(stepIndex) {
+    if (stepIndex < 0 || stepIndex >= journeySteps.length) return;
+    activeStepIndex = stepIndex;
+
+    // Clear any previous animation timeout immediately to prevent stacked animations
+    if (animationTimeout) {
+      clearTimeout(animationTimeout);
+      animationTimeout = null;
+    }
+
+    const applyDOMUpdates = () => {
+      const step = journeySteps[activeStepIndex];
+
+      // Update Card Image & Alt
+      if (cardImg) {
+        cardImg.src = step.image;
+        cardImg.alt = step.alt || step.title;
+      }
+
+      // Update Badge
+      if (cardBadge) cardBadge.textContent = step.badge;
+
+      // Update Step Number
+      if (cardStepNum) {
+        cardStepNum.textContent = `MILESTONE ${String(activeStepIndex + 1).padStart(2, '0')} OF ${String(journeySteps.length).padStart(2, '0')}`;
+      }
+
+      // Update Counter Element (01 / 06)
+      if (counterEl) {
+        counterEl.textContent = `${String(activeStepIndex + 1).padStart(2, '0')} / ${String(journeySteps.length).padStart(2, '0')}`;
+      }
+
+      // Update Subtitle & Title
+      if (cardTitle) cardTitle.textContent = step.title;
+      if (cardSubtitle) cardSubtitle.textContent = step.subtitle;
+
+      // Update Meta Pills
+      if (cardDuration) cardDuration.innerHTML = step.duration;
+      if (cardLevel) cardLevel.textContent = step.difficulty;
+
+      // Update Description
+      if (cardDesc) cardDesc.textContent = step.description;
+
+      // Update Bullet Highlights
+      if (cardHighlights && Array.isArray(step.highlights)) {
+        cardHighlights.innerHTML = step.highlights
+          .map(h => `<div class="jm-highlight-item"><i class="fa-solid fa-circle-check"></i> <span>${h}</span></div>`)
+          .join('');
+      }
+
+      // Update CTA Text & URL
+      if (cardCta) {
+        cardCta.href = step.buttonLink;
+        cardCta.innerHTML = `<span>${step.buttonText}</span> <i class="fa-solid fa-arrow-right"></i>`;
+      }
+
+      // Update Timeline Active & Accessibility State
+      milestoneNodes.forEach((node, i) => {
+        const isActive = i === activeStepIndex;
+        node.classList.toggle('active', isActive);
+        node.setAttribute('aria-current', isActive ? 'step' : 'false');
+      });
+
+      // Update Progression Labels Active State
+      progLabels.forEach((label, i) => {
+        label.classList.toggle('active', i === activeStepIndex);
+      });
+
+      // Update Progression Fill Bar Width (0%, 20%, 40%, 60%, 80%, 100%)
+      const progPercent = (activeStepIndex / (journeySteps.length - 1)) * 100;
+      if (progFill) {
+        progFill.style.width = `${progPercent}%`;
+      }
+
+      // Update Vertical Timeline Fill Bar
+      const timelinePercent = ((activeStepIndex + 1) / journeySteps.length) * 100;
+      if (timelineFill) {
+        timelineFill.style.height = `${timelinePercent}%`;
+      }
+    };
+
+    if (prefersReducedMotion || !singleCard) {
+      applyDOMUpdates();
+      return;
+    }
+
+    // Apply 250ms fade out transition
+    singleCard.style.transition = 'opacity 250ms cubic-bezier(0.165, 0.84, 0.44, 1), transform 250ms cubic-bezier(0.165, 0.84, 0.44, 1)';
+    singleCard.style.opacity = '0';
+    singleCard.style.transform = 'translateY(20px) scale(0.98)';
+
+    animationTimeout = setTimeout(() => {
+      applyDOMUpdates();
+      singleCard.style.opacity = '1';
+      singleCard.style.transform = 'translateY(0) scale(1)';
+      animationTimeout = null;
+    }, 250);
+  }
+
+  // Event Listeners on Timeline Nodes (Hover, Click, Keyboard)
+  milestoneNodes.forEach((node, i) => {
+    node.setAttribute('role', 'button');
+    node.setAttribute('tabindex', '0');
+
+    node.addEventListener('click', (e) => {
+      e.preventDefault();
+      updateJourney(i);
+    });
+
+    node.addEventListener('mouseenter', () => {
+      updateJourney(i);
+    });
+
+    node.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        updateJourney(i);
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        updateJourney((activeStepIndex + 1) % journeySteps.length);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        updateJourney((activeStepIndex - 1 + journeySteps.length) % journeySteps.length);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        updateJourney(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        updateJourney(journeySteps.length - 1);
+      }
+    });
+  });
+
+  // Event Listeners on Progression Labels
+  progLabels.forEach((label, i) => {
+    label.setAttribute('role', 'button');
+    label.setAttribute('tabindex', '0');
+    label.addEventListener('click', () => updateJourney(i));
+    label.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        updateJourney(i);
+      }
+    });
+  });
+
+  // Previous Buttons (Infinite Looping)
+  prevBtns.forEach(btn => {
+    btn.setAttribute('aria-label', 'Previous Milestone');
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const prevIndex = (activeStepIndex - 1 + journeySteps.length) % journeySteps.length;
+      updateJourney(prevIndex);
+    });
+  });
+
+  // Next Buttons (Infinite Looping)
+  nextBtns.forEach(btn => {
+    btn.setAttribute('aria-label', 'Next Milestone');
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const nextIndex = (activeStepIndex + 1) % journeySteps.length;
+      updateJourney(nextIndex);
+    });
+  });
+
+  // Section Keyboard Shortcuts
+  section.addEventListener('keydown', (e) => {
+    if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+    if (e.key === 'ArrowLeft') {
+      const prevIndex = (activeStepIndex - 1 + journeySteps.length) % journeySteps.length;
+      updateJourney(prevIndex);
+    } else if (e.key === 'ArrowRight') {
+      const nextIndex = (activeStepIndex + 1) % journeySteps.length;
+      updateJourney(nextIndex);
+    }
+  });
+
+  // Initial Sync (Step 0)
+  updateJourney(0);
+}
+
+// Attach to DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  initSingleFocusJourney();
+});
+
+
+// differet section 
+document.addEventListener('DOMContentLoaded', function () {
+  const qCards = document.querySelectorAll('#clarity-block .clarity-q-card');
+
+  qCards.forEach(card => {
+    card.addEventListener('click', function () {
+      const isActive = this.classList.contains('active');
+      qCards.forEach(c => c.classList.remove('active'));
+      if (!isActive) {
+        this.classList.add('active');
+      }
+    });
+
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+
+  // Open first card by default
+  if (qCards.length > 0) {
+    qCards[0].classList.add('active');
+  }
+
+  // Intersection Observer for smooth fade up on scroll
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('clarity-revealed');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const revealLeft = document.querySelector('#clarity-block .clarity-left');
+    const revealRight = document.querySelector('#clarity-block .clarity-right');
+    if (revealLeft) observer.observe(revealLeft);
+    if (revealRight) observer.observe(revealRight);
+  } else {
+    const revealLeft = document.querySelector('#clarity-block .clarity-left');
+    const revealRight = document.querySelector('#clarity-block .clarity-right');
+    if (revealLeft) revealLeft.classList.add('clarity-revealed');
+    if (revealRight) revealRight.classList.add('clarity-revealed');
+  }
+});
 
