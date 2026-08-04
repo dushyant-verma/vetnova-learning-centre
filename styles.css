@@ -15824,6 +15824,12 @@ section.why-choose-about-redesign {
   margin-top: 4px;
 }
 
+section#still-need-help .two-column-copy {
+  height: stretch;
+}
+
+
+
 /* Bottom Trust Banner */
 .why-choose-about-redesign .wca-trust-banner {
   background: linear-gradient(135deg, #081126 0%, #14194B 100%);
