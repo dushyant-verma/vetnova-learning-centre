@@ -10195,6 +10195,11 @@ section#faq .container {
 /* 2. hero hero-flagship, 4. expertise-marquee-wrapper (Mobiles & Small Tablets <= 768px) */
 @media (max-width: 768px) {
 
+  .path-card {
+
+    min-height: auto !important;
+  }
+
   /* hero-flagship spacing & typography */
   .hero.hero-flagship {
     padding: 36px 0 48px;
