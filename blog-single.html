@@ -42,25 +42,28 @@
       <!-- ARTICLE HERO -->
       <section class="inner-hero" style="padding: 40px 0 20px;">
         <div class="container" style="max-width: 1080px;">
+      <!-- ARTICLE HERO -->
+      <section class="inner-hero" style="padding: 40px 0 20px;">
+        <div class="container" style="max-width: 1080px;">
           <nav class="breadcrumb" aria-label="Breadcrumb navigation" style="margin-bottom: 20px;">
             <a href="index.html">Home</a>
             <i class="fa-solid fa-chevron-right"></i>
             <a href="blog.html">Knowledge Hub</a>
             <i class="fa-solid fa-chevron-right"></i>
-            <a href="blog.html#surgery">Surgery</a>
+            <a href="blog.html" id="breadcrumb-category">Surgery</a>
             <i class="fa-solid fa-chevron-right"></i>
-            <span>Surgical Prep Protocols</span>
+            <span id="breadcrumb-title">Surgical Prep Protocols</span>
           </nav>
 
           <div style="margin-bottom: 20px;">
-            <span class="post-category-badge" style="font-size: 12px; padding: 6px 14px;">SURGICAL MASTERY</span>
+            <span class="post-category-badge" id="article-category-badge" style="font-size: 12px; padding: 6px 14px;">SURGICAL MASTERY</span>
           </div>
 
-          <h1 style="font-size: 38px; line-height: 1.25; color: var(--navy-2); margin-bottom: 16px;">
-            Step-by-Step Soft Tissue Surgical Preparation & Aseptic Scrubbing Protocols
+          <h1 id="article-title" style="font-size: 38px; line-height: 1.25; color: var(--navy-2); margin-bottom: 16px;">
+            Step-by-Step Soft Tissue Surgical Preparation &amp; Aseptic Scrubbing Protocols
           </h1>
 
-          <p style="font-size: 18px; color: var(--muted); line-height: 1.6; max-width: 880px; margin-bottom: 28px;">
+          <p id="article-excerpt" style="font-size: 18px; color: var(--muted); line-height: 1.6; max-width: 880px; margin-bottom: 28px;">
             A practical guide for junior veterinary surgeons on sterile OR setup, instrument ergonomics, scrub
             mechanics, and patient draping to minimize surgical site infections.
           </p>
@@ -69,24 +72,24 @@
           <div
             style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
             <div style="display: flex; align-items: center; gap: 14px;">
-              <img src="assets/images/hero-veterinary-training.webp" alt="Dr. Amit Kulkarni"
+              <img id="article-author-avatar" src="assets/images/hero-veterinary-training.webp" alt="Dr. Amit Kulkarni"
                 style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />
               <div>
-                <strong style="display: block; color: var(--navy-2); font-size: 15px;">Dr. Amit Kulkarni, MVSc</strong>
-                <small style="color: var(--muted);">Published August 1, 2026 • <i class="fa-regular fa-clock"></i> 8 Min
+                <strong id="article-author-name" style="display: block; color: var(--navy-2); font-size: 15px;">Dr. Amit Kulkarni, MVSc</strong>
+                <small id="article-date-read" style="color: var(--muted);">Published August 1, 2026 • <i class="fa-regular fa-clock"></i> 8 Min
                   Read</small>
               </div>
             </div>
 
             <div style="display: flex; align-items: center; gap: 12px;">
               <span style="font-size: 13px; font-weight: 600; color: var(--muted);">Share:</span>
-              <a href="https://linkedin.com" target="_blank" aria-label="Share on LinkedIn"
+              <a id="share-linkedin" href="https://linkedin.com" target="_blank" aria-label="Share on LinkedIn"
                 style="width: 36px; height: 36px; border-radius: 50%; background-color: #f1f5f9; display: flex; align-items: center; justify-content: center; color: var(--navy-2); transition: all 0.2s ease;"><i
                   class="fa-brands fa-linkedin-in"></i></a>
-              <a href="https://twitter.com" target="_blank" aria-label="Share on Twitter"
+              <a id="share-twitter" href="https://twitter.com" target="_blank" aria-label="Share on Twitter"
                 style="width: 36px; height: 36px; border-radius: 50%; background-color: #f1f5f9; display: flex; align-items: center; justify-content: center; color: var(--navy-2); transition: all 0.2s ease;"><i
                   class="fa-brands fa-x-twitter"></i></a>
-              <a href="https://wa.me/?text=Check+out+this+veterinary+surgery+guide" target="_blank"
+              <a id="share-whatsapp" href="https://wa.me/?text=Check+out+this+veterinary+surgery+guide" target="_blank"
                 aria-label="Share on WhatsApp"
                 style="width: 36px; height: 36px; border-radius: 50%; background-color: #f1f5f9; display: flex; align-items: center; justify-content: center; color: var(--navy-2); transition: all 0.2s ease;"><i
                   class="fa-brands fa-whatsapp"></i></a>
@@ -96,7 +99,7 @@
           <!-- Featured Hero Image -->
           <div
             style="margin-top: 32px; border-radius: var(--radius-xl); overflow: hidden; height: 460px; box-shadow: var(--soft-shadow);">
-            <img src="assets/images/hero-veterinary-training.webp" alt="Veterinary surgeon performing aseptic scrub"
+            <img id="article-hero-image" src="assets/images/hero-veterinary-training.webp" alt="Veterinary surgeon performing aseptic scrub"
               loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;" />
           </div>
         </div>
@@ -108,13 +111,13 @@
           <div class="article-layout-grid">
 
             <!-- MAIN ARTICLE BODY -->
-            <article class="article-main-content">
+            <article class="article-main-content" id="article-body-content">
 
               <!-- Inline Table of Contents -->
               <div class="callout-box" id="toc" style="background-color: #f8fafc; border-left-color: var(--navy-2);">
                 <h4 style="margin-bottom: 12px; font-size: 16px; color: var(--navy-2);"><i class="fa-solid fa-list"></i>
                   Table of Contents</h4>
-                <ul
+                <ul id="toc-list"
                   style="margin: 0; padding-left: 20px; font-size: 15px; display: flex; flex-direction: column; gap: 8px;">
                   <li><a href="#section-1" style="color: var(--teal); font-weight: 600;">1. Introduction & Principles of
                       Asepsis</a></li>
@@ -371,7 +374,7 @@
             <h2>Related Knowledge Articles</h2>
           </div>
 
-          <div class="feature-grid-3">
+          <div class="feature-grid-3" id="related-blogs-container">
 
             <div class="blog-card">
               <div class="blog-card-media">
@@ -383,7 +386,7 @@
                   <span class="post-category-badge">RADIOLOGY</span>
                   <span>6 Min Read</span>
                 </div>
-                <h3><a href="blog-single.html">Diagnostic X-Ray Reading: Identifying Thoracic & Abdominal Lesions</a>
+                <h3><a href="blog-single.html">Diagnostic X-Ray Reading: Identifying Thoracic &amp; Abdominal Lesions</a>
                 </h3>
                 <p>Systematic approach to evaluating cardiomegaly, pulmonary opacities, and intestinal foreign bodies.
                 </p>
@@ -400,7 +403,7 @@
                   <span class="post-category-badge">EMERGENCY CARE</span>
                   <span>7 Min Read</span>
                 </div>
-                <h3><a href="blog-single">Emergency Triage & Rapid Fluid Resuscitation Protocols</a></h3>
+                <h3><a href="blog-single">Emergency Triage &amp; Rapid Fluid Resuscitation Protocols</a></h3>
                 <p>How to triage acute hypovolemic shock, toxic ingestion, and respiratory distress cases.</p>
               </div>
             </div>
@@ -453,6 +456,8 @@
   <!-- Interactive JavaScript -->
   <script src="components.js"></script>
   <script src="script.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/blog-single.js"></script>
 </body>
 
 </html>

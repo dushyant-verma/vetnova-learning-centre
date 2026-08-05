@@ -15828,7 +15828,13 @@ section#still-need-help .two-column-copy {
   height: stretch;
 }
 
+section#categories {
+  padding-bottom: 5px;
+}
 
+section#latest-articles {
+  padding-top: 10px;
+}
 
 /* Bottom Trust Banner */
 .why-choose-about-redesign .wca-trust-banner {
