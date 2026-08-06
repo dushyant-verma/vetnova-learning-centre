@@ -1761,6 +1761,7 @@ p {
 }
 
 .hero-img-caption {
+  display: none;
   position: absolute;
   bottom: 20px;
   left: 20px;
@@ -10196,8 +10197,11 @@ section#faq .container {
 @media (max-width: 768px) {
 
   .path-card {
-
     min-height: auto !important;
+  }
+
+  .advisor-photo {
+    height: auto !important;
   }
 
   /* hero-flagship spacing & typography */
@@ -12498,8 +12502,12 @@ section#faq .container {
 
   #main-content img {
     max-width: 100% !important;
-    height: auto !important;
+    height: auto;
     object-fit: cover !important;
+  }
+
+  .gallery-item-card img {
+    height: 100% !important;
   }
 
   /* 1. #why-choose-programs Fixes */
@@ -16735,7 +16743,7 @@ section.outcomes-dashboard-redesign {
   }
 
   .outcomes-dashboard-redesign .ccm-summary-strip {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px;
   }
 
