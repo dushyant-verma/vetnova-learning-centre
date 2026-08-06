@@ -3974,7 +3974,7 @@ p {
   border-radius: var(--radius-xl);
   padding: 48px 44px;
   box-shadow: var(--shadow);
-  text-align: center;
+  text-align: left;
   position: relative;
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
@@ -4109,6 +4109,10 @@ p {
   border-radius: var(--radius-lg);
   padding: 40px 36px;
   box-shadow: var(--soft-shadow);
+}
+
+section#contact-hero .inner-hero-image img {
+  object-fit: fill !important;
 }
 
 /* ==========================================================================
