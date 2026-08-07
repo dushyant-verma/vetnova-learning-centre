@@ -64,15 +64,33 @@ function loadComponent(id, url) {
    Active Navigation Link Highlighting
    ========================================================================== */
 function initActiveNavigation() {
-  const path = (window.location.pathname.split('/').pop() || 'index').replace('.html', '').toLowerCase();
+  const rawPath = window.location.pathname.split('/').pop() || 'index.html';
+  const path = rawPath.split('#')[0].toLowerCase();
+  const cleanPath = (path === '' || path === 'index.html') ? 'index' : path.replace('.html', '');
 
-  const navLinks = document.querySelectorAll('.menu .nav-link, .drawer-menu .drawer-link');
+  // Main menu links highlighting
+  const navLinks = document.querySelectorAll('.menu .nav-link, .drawer-menu .drawer-link, .drawer-accordion-btn');
   navLinks.forEach(link => {
     const dataNav = link.getAttribute('data-nav') || link.getAttribute('href');
     if (dataNav) {
       const cleanDataNav = dataNav.split('#')[0].replace('.html', '').toLowerCase();
-      if (cleanDataNav === path || (path === '' && cleanDataNav === 'index')) {
+      if (cleanDataNav === cleanPath || ((cleanPath === 'index' || cleanPath === 'index-v2' || cleanPath === 'index-v3') && cleanDataNav === 'index')) {
         link.classList.add('active');
+      }
+    }
+  });
+
+  // Submenu items & mobile drawer content links highlighting
+  const subLinks = document.querySelectorAll('.dropdown-menu a, .drawer-accordion-content a');
+  subLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    if (href) {
+      const cleanHref = href.split('#')[0].toLowerCase();
+      const currentFile = (path === '' ? 'index.html' : path);
+      if (cleanHref === currentFile) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
       }
     }
   });
@@ -136,22 +154,116 @@ function initCurriculumAccordion() {
 }
 
 /* ==========================================================================
-   Sticky Header Controller
+   Production-Ready Fixed Smart Hide/Show Header Controller
    ========================================================================== */
 function initStickyHeader() {
-  const header = document.getElementById('header');
-  if (!header) return;
+  const globalHeader = document.getElementById('global-header');
+  const header = document.getElementById('header') || globalHeader;
+  if (!globalHeader && !header) return;
 
-  function handleScroll() {
-    if (window.scrollY > 20) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
+  const targetWrapper = globalHeader || header;
+  const drawer = document.getElementById('mobile-drawer');
+
+  let lastScrollY = Math.max(0, window.scrollY);
+  let ticking = false;
+  const hideThreshold = 90;
+  const directionThreshold = 12;
+  let accumulatedDelta = 0;
+
+  // Dynamically calculate and apply body top padding equal to header height
+  function updateHeaderPadding() {
+    if (targetWrapper) {
+      const height = targetWrapper.offsetHeight;
+      if (height > 0) {
+        document.body.style.paddingTop = height + 'px';
+      }
     }
   }
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  handleScroll();
+  function updateHeader() {
+    // Prevent iOS elastic overscroll bounce issues
+    const currentScrollY = Math.max(0, window.scrollY);
+
+    // Mobile drawer guard: Keep header visible when mobile drawer is open
+    const isMobileMenuOpen = drawer && drawer.classList.contains('open');
+    if (isMobileMenuOpen) {
+      targetWrapper.classList.remove('header-hidden');
+      targetWrapper.classList.add('header-scrolled');
+      if (header && header !== targetWrapper) {
+        header.classList.remove('header-hidden');
+        header.classList.add('scrolled', 'header-scrolled');
+      }
+      lastScrollY = currentScrollY;
+      ticking = false;
+      return;
+    }
+
+    // State 1 & State 5: Top of Page (scrollY <= 20) -> Fully reset header
+    if (currentScrollY <= 20) {
+      targetWrapper.classList.remove('header-scrolled', 'header-hidden');
+      if (header && header !== targetWrapper) {
+        header.classList.remove('scrolled', 'header-scrolled', 'header-hidden');
+      }
+      accumulatedDelta = 0;
+      lastScrollY = currentScrollY;
+      ticking = false;
+      return;
+    }
+
+    // State 2: Scrolled (scrollY > 20) -> Apply glass background and shadow
+    targetWrapper.classList.add('header-scrolled');
+    if (header && header !== targetWrapper) {
+      header.classList.add('scrolled', 'header-scrolled');
+    }
+
+    const delta = currentScrollY - lastScrollY;
+
+    // Accumulate scroll delta in same direction
+    if ((delta > 0 && accumulatedDelta > 0) || (delta < 0 && accumulatedDelta < 0)) {
+      accumulatedDelta += delta;
+    } else {
+      accumulatedDelta = delta;
+    }
+
+    // State 3: Scroll Down -> Hide Header after 90px threshold
+    if (currentScrollY > hideThreshold && accumulatedDelta > directionThreshold) {
+      targetWrapper.classList.add('header-hidden');
+      if (header && header !== targetWrapper) {
+        header.classList.add('header-hidden');
+      }
+    }
+    // State 4: Scroll Up -> Reveal Header Immediately
+    else if (accumulatedDelta < -directionThreshold) {
+      targetWrapper.classList.remove('header-hidden');
+      if (header && header !== targetWrapper) {
+        header.classList.remove('header-hidden');
+      }
+    }
+
+    lastScrollY = currentScrollY;
+    ticking = false;
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(updateHeader);
+      ticking = true;
+    }
+  }
+
+  // Passive event listener for 60fps scrolling & resize updates
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', () => {
+    updateHeaderPadding();
+    requestAnimationFrame(updateHeader);
+  }, { passive: true });
+  window.addEventListener('orientationchange', () => {
+    updateHeaderPadding();
+    requestAnimationFrame(updateHeader);
+  }, { passive: true });
+
+  updateHeaderPadding();
+  updateHeader();
 }
 
 /* ==========================================================================
@@ -1157,7 +1269,7 @@ function initFaqSearch() {
    ========================================================================== */
 function initPopularCoursesFilter() {
   const pills = document.querySelectorAll('.popular-course-filter-pill');
-  const cards = document.querySelectorAll('.popular-course-card');
+  const cards = document.querySelectorAll('.popular-course-card:not(.v2-feature-program)');
 
   if (!pills.length || !cards.length) return;
 

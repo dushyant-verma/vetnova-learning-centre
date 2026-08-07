@@ -60,7 +60,7 @@ body {
   color: var(--ink);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 a {
@@ -78,7 +78,7 @@ img {
 
 .page {
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   position: relative;
   background: linear-gradient(180deg, #fff 0%, #fbfdff 40%, #fff 100%);
 }
@@ -337,22 +337,45 @@ p {
   box-shadow: 0 4px 12px rgba(18, 183, 173, 0.3);
 }
 
-/* Main Header & Glass Sticky Navigation */
-.topbar {
-  position: sticky;
+/* Main Header & Glass Fixed Navigation */
+#global-header {
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 1000;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.35s cubic-bezier(.22, .61, .36, 1), box-shadow 0.35s ease;
+  will-change: transform;
+}
+
+#global-header.header-hidden {
+  transform: translate3d(0, -100%, 0);
+  box-shadow: none;
+}
+
+.topbar {
+  position: relative;
+  width: 100%;
   background-color: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(223, 229, 240, 0.8);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
-.topbar.scrolled {
+.topbar.scrolled,
+.topbar.header-scrolled,
+#global-header.header-scrolled .topbar {
   background-color: rgba(255, 255, 255, 0.98);
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
   border-bottom-color: rgba(223, 229, 240, 0.5);
+}
+
+.topbar.header-hidden {
+  transform: translate3d(0, -100%, 0);
+  box-shadow: none;
 }
 
 .nav {
@@ -473,6 +496,26 @@ p {
 .dropdown-menu.mega-dropdown {
   min-width: 730px;
   padding: 20px;
+}
+
+.dropdown-menu.home-dropdown {
+  min-width: 220px;
+  width: 220px;
+  border-radius: 12px;
+  padding: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+.dropdown-menu.home-dropdown .dropdown-item.active,
+.dropdown-menu .dropdown-item.active {
+  background-color: rgba(18, 199, 193, 0.1);
+  color: var(--teal-dark, #0d9488);
+}
+
+.dropdown-menu.home-dropdown .dropdown-item.active strong,
+.dropdown-menu .dropdown-item.active strong {
+  color: var(--teal-dark, #0d9488);
 }
 
 .dropdown-arrow {

@@ -23,7 +23,39 @@
     </a>
 
     <nav class="menu" aria-label="Main navigation">
-      <a class="nav-link" data-nav="index" href="index.html">Home</a>
+      <!-- Home Submenu (Temporary Development Link) -->
+      <div class="nav-item has-dropdown">
+        <a class="nav-link dropdown-toggle" data-nav="index" href="index.html" aria-haspopup="true"
+          aria-expanded="false">
+          Home <i class="fa-solid fa-chevron-down caret"></i>
+        </a>
+        <div class="dropdown-menu home-dropdown">
+          <div class="dropdown-arrow"></div>
+          <a class="dropdown-item" href="index.html" data-subnav="index">
+            <div class="dropdown-icon"><i class="fa-solid fa-house"></i></div>
+            <div class="dropdown-text">
+              <strong>Home</strong>
+              <small>Original Homepage</small>
+            </div>
+          </a>
+          <a class="dropdown-item" href="index-v2.html" data-subnav="index-v2">
+            <div class="dropdown-icon"> <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div class="dropdown-text">
+              <strong>Home V2</strong>
+              <small>Redesigned Homepage</small>
+            </div>
+          </a>
+          <!-- <a class="dropdown-item" href="index-v3.html" data-subnav="index-v3">
+            <div class="dropdown-icon"> <i class="fa-solid fa-crown"></i>
+            </div>
+            <div class="dropdown-text">
+              <strong>Home V3</strong>
+              <small>Flagship Homepage</small>
+            </div>
+          </a> -->
+        </div>
+      </div>
 
       <!-- Programs Mega Menu -->
       <div class="nav-item has-dropdown">
@@ -42,7 +74,8 @@
                   <strong>Veterinary Skill-Up Program</strong>
                   <span class="badge-mini">4 WEEKS</span>
                 </div>
-                <small>Flagship 4-week clinical mastery module covering soft tissue surgery, X-ray &amp; USG scanning.</small>
+                <small>Flagship 4-week clinical mastery module covering soft tissue surgery, X-ray &amp; USG
+                  scanning.</small>
               </div>
             </a>
 
@@ -53,7 +86,8 @@
                   <strong>Soft Tissue Surgery Track</strong>
                   <span class="badge-mini">1 WEEK</span>
                 </div>
-                <small>Intensive hands-on procedural workshop covering sterile OR setup, tissue handling &amp; suture patterns.</small>
+                <small>Intensive hands-on procedural workshop covering sterile OR setup, tissue handling &amp; suture
+                  patterns.</small>
               </div>
             </a>
 
@@ -64,7 +98,8 @@
                   <strong>Radiology &amp; Ultrasound</strong>
                   <span class="badge-mini">1 WEEK</span>
                 </div>
-                <small>Thoracic &amp; abdominal radiograph reading alongside hands-on abdominal ultrasound FAST scanning.</small>
+                <small>Thoracic &amp; abdominal radiograph reading alongside hands-on abdominal ultrasound FAST
+                  scanning.</small>
               </div>
             </a>
 
@@ -75,7 +110,8 @@
                   <strong>Pet Emergency Care &amp; ICU</strong>
                   <span class="badge-mini">3 DAYS</span>
                 </div>
-                <small>Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and emergency triage.</small>
+                <small>Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and emergency
+                  triage.</small>
               </div>
             </a>
 
@@ -86,13 +122,15 @@
                   <strong>Vet Nurse Programme</strong>
                   <span class="badge-mini">2 WEEKS</span>
                 </div>
-                <small>Foundational clinical training for assistants covering surgical prep, restraint &amp; vitals logging.</small>
+                <small>Foundational clinical training for assistants covering surgical prep, restraint &amp; vitals
+                  logging.</small>
               </div>
             </a>
 
             <div class="mega-footer-banner">
               <span>Looking for customized hospital group training?</span>
-              <a href="contact.html#enquiry" class="link-arrow">Speak to Counsellor <i class="fa-solid fa-arrow-right"></i></a>
+              <a href="contact.html#enquiry" class="link-arrow">Speak to Counsellor <i
+                  class="fa-solid fa-arrow-right"></i></a>
             </div>
 
           </div>
@@ -169,7 +207,18 @@
   </div>
 
   <nav class="drawer-menu">
-    <a class="drawer-link" data-nav="index" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+    <!-- Mobile Accordion: Home -->
+    <div class="drawer-accordion">
+      <button class="drawer-accordion-btn" aria-expanded="false">
+        <span><i class="fa-solid fa-house"></i> Home</span>
+        <i class="fa-solid fa-chevron-down accordion-caret"></i>
+      </button>
+      <div class="drawer-accordion-content">
+        <a href="index.html" data-subnav="index"><i class="fa-solid fa-house-chimney"></i> Home</a>
+        <a href="index-v2.html" data-subnav="index-v2"><i class="fa-solid fa-sparkles"></i> Home V2</a>
+        <a href="index-v3.html" data-subnav="index-v3"><i class="fa-solid fa-crown"></i> Home V3</a>
+      </div>
+    </div>
 
     <!-- Mobile Accordion: Programs -->
     <div class="drawer-accordion">
@@ -201,15 +250,19 @@
       </div>
     </div>
 
-    <a class="drawer-link" data-nav="learning-centre" href="learning-centre.html"><i class="fa-solid fa-building-columns"></i> Learning Centre</a>
-    <a class="drawer-link" data-nav="welfare" href="animal-welfare.html"><i class="fa-solid fa-shield-cat"></i> Animal Welfare</a>
+    <a class="drawer-link" data-nav="learning-centre" href="learning-centre.html"><i
+        class="fa-solid fa-building-columns"></i> Learning Centre</a>
+    <a class="drawer-link" data-nav="welfare" href="animal-welfare.html"><i class="fa-solid fa-shield-cat"></i> Animal
+      Welfare</a>
     <a class="drawer-link" data-nav="blog" href="blog.html"><i class="fa-solid fa-newspaper"></i> Knowledge Hub</a>
     <a class="drawer-link" data-nav="faq" href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQs</a>
     <a class="drawer-link" data-nav="contact" href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a>
 
     <div class="drawer-cta-wrap">
-      <a class="btn btn-primary btn-block btn-enquire-now" href="contact.html#enquiry">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
-      <a class="btn btn-outline btn-block" href="contact.html#enquiry"><i class="fa-solid fa-calendar-check"></i> Book Counselling</a>
+      <a class="btn btn-primary btn-block btn-enquire-now" href="contact.html#enquiry">Apply Now <i
+          class="fa-solid fa-arrow-right"></i></a>
+      <a class="btn btn-outline btn-block" href="contact.html#enquiry"><i class="fa-solid fa-calendar-check"></i> Book
+        Counselling</a>
     </div>
   </nav>
 
