@@ -2521,6 +2521,10 @@ body.homepage-v3 {
     display: none;
   }
 
+  .hp3x-eyebrow {
+    font-size: 10px !important;
+  }
+
   .hp3x-story-header {
     margin-bottom: 24px;
   }

@@ -1914,7 +1914,7 @@ body.homepage-v2 {
 
   .homepage-v2 .v2-stats-flex {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 20px;
   }
 
