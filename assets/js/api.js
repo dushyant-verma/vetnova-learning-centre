@@ -8,7 +8,7 @@ function getApiBaseUrl() {
   if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '') {
     return 'http://localhost:5001/api';
   }
-  return `${window.location.origin}/api`;
+  return 'https://vetnova-api-utnd.onrender.com/api';
 }
 
 const API_BASE_URL = getApiBaseUrl();

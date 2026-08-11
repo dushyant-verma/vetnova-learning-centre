@@ -1315,7 +1315,6 @@ function initSingleFocusJourney() {
     document.querySelector('.quick-strip.bento-explorer-strip');
 
   if (!section) {
-    console.warn("Journey section not found.");
     return;
   }
 
