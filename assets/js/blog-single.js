@@ -90,6 +90,10 @@ function renderArticleContent(blog) {
   const authorAvatar = document.getElementById('article-author-avatar');
   if (authorAvatar) {
     authorAvatar.src = blog.authorImage || 'assets/images/blog/blog-author-amit.webp';
+    authorAvatar.onerror = function() {
+      this.onerror = null;
+      this.src = 'assets/images/blog/blog-author-amit.webp';
+    };
     authorAvatar.alt = blog.author || 'Author';
   }
 
@@ -121,6 +125,10 @@ function renderArticleContent(blog) {
   const heroImage = document.getElementById('article-hero-image');
   if (heroImage) {
     heroImage.src = blog.image || 'assets/images/hero-veterinary-training.webp';
+    heroImage.onerror = function() {
+      this.onerror = null;
+      this.src = 'assets/images/hero-veterinary-training.webp';
+    };
     heroImage.alt = blog.title;
   }
 

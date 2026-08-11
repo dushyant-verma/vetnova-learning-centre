@@ -1147,10 +1147,11 @@ function initReadingProgress() {
    12. Blog Category Filter Pills Controller
    ========================================================================== */
 function initBlogCategoryFilter() {
-  const pills = document.querySelectorAll('.category-pill');
-  const cards = document.querySelectorAll('.blog-card');
+  // If dynamic blog.js controller is loaded, defer category filtering to blog.js
+  if (typeof initBlogPage === 'function') return;
 
-  if (!pills.length || !cards.length) return;
+  const pills = document.querySelectorAll('.category-pill');
+  if (!pills.length) return;
 
   pills.forEach(pill => {
     pill.addEventListener('click', () => {
@@ -1158,8 +1159,9 @@ function initBlogCategoryFilter() {
       pill.classList.add('active');
 
       const category = pill.dataset.category || 'all';
+      const currentCards = document.querySelectorAll('.blog-card');
 
-      cards.forEach(card => {
+      currentCards.forEach(card => {
         const cardCategory = card.dataset.category;
         if (category === 'all' || cardCategory === category) {
           card.style.display = 'flex';

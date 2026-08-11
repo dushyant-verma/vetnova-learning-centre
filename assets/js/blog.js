@@ -62,6 +62,7 @@ function renderFeaturedBlog(blog, container) {
     <div class="featured-post-card">
       <div class="featured-post-media">
         <img src="${escapeHtml(blog.image || 'assets/images/blog/blog-featured-guide.webp')}"
+          onerror="this.onerror=null; this.src='assets/images/blog/blog-featured-guide.webp';"
           alt="${escapeHtml(blog.title)}" loading="lazy" decoding="async" />
       </div>
       <div class="featured-post-content">
@@ -73,7 +74,9 @@ function renderFeaturedBlog(blog, container) {
         <h2><a href="blog-single.html?slug=${encodeURIComponent(blog.slug || blog._id)}">${escapeHtml(blog.title)}</a></h2>
         <p class="featured-post-excerpt">${escapeHtml(blog.excerpt || '')}</p>
         <div class="post-author">
-          <img src="${escapeHtml(blog.authorImage || 'assets/images/blog/blog-author-amit.webp')}" alt="${escapeHtml(blog.author)}" loading="lazy" decoding="async" />
+          <img src="${escapeHtml(blog.authorImage || 'assets/images/blog/blog-author-amit.webp')}"
+            onerror="this.onerror=null; this.src='assets/images/blog/blog-author-amit.webp';"
+            alt="${escapeHtml(blog.author)}" loading="lazy" decoding="async" />
           <div class="post-author-info">
             <strong>${escapeHtml(blog.author)}</strong>
             <small>${escapeHtml(blog.authorRole || 'Faculty Specialist')}</small>
@@ -114,6 +117,7 @@ function renderBlogGrid(blogs, container) {
       <div class="blog-card" data-category="${escapeHtml(normalizeCategory(blog.category))}">
         <div class="blog-card-media">
           <img src="${escapeHtml(blog.image || 'assets/images/hero-veterinary-training.webp')}"
+            onerror="this.onerror=null; this.src='assets/images/hero-veterinary-training.webp';"
             alt="${escapeHtml(blog.title)}" loading="lazy" decoding="async" />
         </div>
         <div class="blog-card-body">
@@ -124,7 +128,9 @@ function renderBlogGrid(blogs, container) {
           <h3><a href="blog-single.html?slug=${slugOrId}">${escapeHtml(blog.title)}</a></h3>
           <p>${escapeHtml(blog.excerpt || '')}</p>
           <div class="post-author" style="margin-top: auto;">
-            <img src="${escapeHtml(authorImg)}" alt="${escapeHtml(blog.author)}" loading="lazy" decoding="async" />
+            <img src="${escapeHtml(authorImg)}"
+              onerror="this.onerror=null; this.src='assets/images/blog/blog-author-amit.webp';"
+              alt="${escapeHtml(blog.author)}" loading="lazy" decoding="async" />
             <div class="post-author-info">
               <strong>${escapeHtml(blog.author)}</strong>
               <small>${escapeHtml(blog.authorRole || 'Specialist')}</small>

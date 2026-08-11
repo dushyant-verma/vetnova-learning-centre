@@ -2,7 +2,16 @@
  * API Abstraction Layer for Blog Module
  * Handles dynamic fetching from MERN Express Backend
  */
-const API_BASE_URL = window.API_BASE_URL || 'http://localhost:5001/api';
+function getApiBaseUrl() {
+  if (window.API_BASE_URL) return window.API_BASE_URL;
+  const hostname = window.location.hostname;
+  if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '') {
+    return 'http://localhost:5001/api';
+  }
+  return `${window.location.origin}/api`;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 /**
  * Fetch all published blogs with optional filtering
@@ -28,10 +37,20 @@ async function getBlogs(options = {}) {
       queryParams.append('featured', options.featured);
     }
 
-    const response = await fetch(`${API_BASE_URL}/blogs?${queryParams.toString()}`);
+    let response;
+    try {
+      response = await fetch(`${API_BASE_URL}/blogs?${queryParams.toString()}`);
+    } catch (netErr) {
+      // Fallback attempt to http://localhost:5001/api if primary URL failed
+      if (!API_BASE_URL.includes('localhost:5001')) {
+        response = await fetch(`http://localhost:5001/api/blogs?${queryParams.toString()}`);
+      } else {
+        throw netErr;
+      }
+    }
     
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    if (!response || !response.ok) {
+      throw new Error(`API error: ${response ? response.status : 'Network error'}`);
     }
 
     const data = await response.json();
@@ -51,11 +70,20 @@ async function getBlog(slugOrId) {
   if (!slugOrId) return null;
   
   try {
-    const response = await fetch(`${API_BASE_URL}/blogs/${encodeURIComponent(slugOrId)}`);
+    let response;
+    try {
+      response = await fetch(`${API_BASE_URL}/blogs/${encodeURIComponent(slugOrId)}`);
+    } catch (netErr) {
+      if (!API_BASE_URL.includes('localhost:5001')) {
+        response = await fetch(`http://localhost:5001/api/blogs/${encodeURIComponent(slugOrId)}`);
+      } else {
+        throw netErr;
+      }
+    }
     
-    if (!response.ok) {
-      if (response.status === 404) return null;
-      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    if (!response || !response.ok) {
+      if (response && response.status === 404) return null;
+      throw new Error(`API error: ${response ? response.status : 'Network error'}`);
     }
 
     return await response.json();
