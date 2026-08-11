@@ -1861,7 +1861,7 @@ body.homepage-v3 {
 /* 1440px+ Standard max content width cap */
 @media (min-width: 1440px) {
   .hp3x-shell {
-    max-width: 1380px;
+    max-width: 1230px;
   }
 }
 
