@@ -74,7 +74,7 @@ function initActiveNavigation() {
     const dataNav = link.getAttribute('data-nav') || link.getAttribute('href');
     if (dataNav) {
       const cleanDataNav = dataNav.split('#')[0].replace('.html', '').toLowerCase();
-      if (cleanDataNav === cleanPath || ((cleanPath === 'index' || cleanPath === 'index-v2' || cleanPath === 'index-v3') && cleanDataNav === 'index')) {
+      if (cleanDataNav === cleanPath || ((cleanPath === 'index' || cleanPath === 'index-v2' || cleanPath === 'index-v3' || cleanPath === 'index-v4') && cleanDataNav === 'index')) {
         link.classList.add('active');
       }
     }

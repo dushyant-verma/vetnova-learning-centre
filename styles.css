@@ -15045,6 +15045,8 @@ section.equipment-showcase-redesign {
   border-radius: 20px;
   padding: 20px;
   display: flex;
+  min-height: 135px;
+
   align-items: center;
   gap: 16px;
   cursor: pointer;
