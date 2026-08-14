@@ -252,7 +252,7 @@ body.homepage-v3 {
 
 .hp3x-hero-layout {
   display: grid;
-  grid-template-columns: 48% 52%;
+  grid-template-columns: 48% 48%;
   gap: 48px;
   align-items: center;
 }
