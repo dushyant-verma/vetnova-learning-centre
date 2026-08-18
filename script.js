@@ -21,6 +21,7 @@ function runAllInitializers() {
   initFaqSearch();
   initPopularCoursesFilter();
   initSingleFocusJourney();
+  initFacultyModal();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1895,3 +1896,225 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+/* ==========================================================================
+   Faculty Profile Modal Logic
+   ========================================================================== */
+const facultyProfiles = {
+  'amit-kulkarni': {
+    name: 'Dr. Amit Kulkarni',
+    role: 'Soft Tissue Surgery & Wound Management Specialist',
+    qual: 'BVSc & AH, MVSc (Surgery)',
+    exp: '12+ Yrs Exp',
+    intro: 'Dr. Amit Kulkarni is a Soft Tissue Surgery & Wound Management Specialist focusing on surgical precision and tissue handling.',
+    expertise: ['Soft Tissue', 'Suturing', 'Sterilization'],
+    img: 'assets/images/about/about-faculty-01.webp'
+  },
+  'priya-sharma': {
+    name: 'Dr. Priya Sharma',
+    role: 'Diagnostic Radiology & Abdominal Ultrasound Trainer',
+    qual: 'BVSc & AH, MVSc (Radiology)',
+    exp: '10+ Yrs Exp',
+    intro: 'Dr. Priya Sharma specializes in Diagnostic Radiology and Abdominal Ultrasound, training professionals in advanced diagnostics.',
+    expertise: ['X-Ray', 'Ultrasound', 'Diagnostics'],
+    img: 'assets/images/about/about-faculty-02.webp'
+  },
+  'rajesh-verma': {
+    name: 'Dr. Rajesh Verma',
+    role: 'Emergency & Critical Pet Care Specialist',
+    qual: 'BVSc & AH, MVSc (Medicine)',
+    exp: '14+ Yrs Exp',
+    intro: 'Dr. Rajesh Verma is an expert in Emergency and Critical Pet Care, ensuring life-saving interventions and rapid triage.',
+    expertise: ['ICU', 'Triage', 'Emergency'],
+    img: 'assets/images/about/about-faculty-03.webp'
+  },
+  'sneha-nair': {
+    name: 'Dr. Sneha Nair',
+    role: 'Feline Clinical Practice & Dermatology Instructor',
+    qual: 'BVSc & AH, PgDip (Dermatology)',
+    exp: '9+ Yrs Exp',
+    intro: 'Dr. Sneha Nair focuses on Feline Clinical Practice and Dermatology, offering specialized care and insights into feline medicine.',
+    expertise: ['Feline Medicine', 'Dermatology'],
+    img: 'assets/images/about/about-faculty-04.webp'
+  },
+  'manoj-shinde': {
+    name: 'Dr. Manoj Shinde',
+    role: 'Bone Plating & Fracture Stabilization Mentor',
+    qual: 'BVSc & AH, MVSc (Orthopedics)',
+    exp: '15+ Yrs Exp',
+    intro: 'Dr. Manoj Shinde is an orthopedics mentor specializing in bone plating, fracture stabilization, and advanced orthopedic procedures.',
+    expertise: ['Orthopedics', 'Plating', 'Fixation'],
+    img: 'assets/images/about/about-faculty-05.webp'
+  },
+  'neha-gupta': {
+    name: 'Dr. Neha Gupta',
+    role: 'Paravet Assistant & Surgical Scrub Lead Instructor',
+    qual: 'BVSc & AH, Cert. Vet Nursing',
+    exp: '8+ Yrs Exp',
+    intro: 'Dr. Neha Gupta is a leading instructor for Paravet Assistants and Surgical Scrubs, emphasizing anesthesia prep and nursing care.',
+    expertise: ['Vet Nursing', 'Anesthesia Prep'],
+    img: 'assets/images/about/about-faculty-06.webp'
+  },
+  'rajesh-kulkarni': {
+    name: 'Dr. Rajesh Kulkarni',
+    role: 'Senior Soft Tissue Surgeon',
+    qual: 'BVSc & AH',
+    exp: '15+ Yrs Exp',
+    intro: 'Pioneered soft tissue surgical workflows; mentored over 1,200+ veterinary clinicians across India.',
+    expertise: ['Soft Tissue Surgery', 'Orthopaedics'],
+    img: 'assets/images/learning-path-doctor.webp'
+  },
+  'ananya-sharma': {
+    name: 'Dr. Ananya Sharma',
+    role: 'Radiology & Imaging Specialist',
+    qual: 'BVSc & AH',
+    exp: '12+ Yrs Exp',
+    intro: 'Specialist in digital X-ray diagnostic interpretation and ultrasound probe handling for small animals.',
+    expertise: ['Radiology', 'Ultrasound'],
+    img: 'assets/images/learning-path-graduate.webp'
+  },
+  'vikram-malhotra': {
+    name: 'Dr. Vikram Malhotra',
+    role: 'Emergency & Critical Care Lead',
+    qual: 'BVSc & AH',
+    exp: '14+ Yrs Exp',
+    intro: 'Expert in small animal emergency triage, CPR protocols, ICU stabilization, and critical care management.',
+    expertise: ['Emergency Medicine', 'Critical Care'],
+    img: 'assets/images/learning-path-specialist.webp'
+  },
+  'meera-deshmukh-1': {
+    name: 'Dr. Meera Deshmukh',
+    role: 'Senior Clinical & Nursing Instructor',
+    qual: 'BVSc & AH',
+    exp: '10+ Yrs Exp',
+    intro: 'Specializes in clinical workflow optimization, humane animal restraint, catheter prep, and assistant training.',
+    expertise: ['Vet Nursing', 'Pet Behaviour'],
+    img: 'assets/images/learning-path-nurse.webp'
+  },
+  'meera-deshmukh-2': {
+    name: 'Dr. Meera Deshmukh',
+    role: 'Senior Clinical & Nursing Instructor',
+    qual: 'BVSc & AH',
+    exp: '10+ Yrs Exp',
+    intro: 'Specializes in clinical workflow optimization, humane animal restraint, catheter prep, and assistant training.',
+    expertise: ['Vet Nursing', 'Pet Behaviour'],
+    img: 'assets/images/learning-path-nurse.webp'
+  },
+  'meera-deshmukh-3': {
+    name: 'Dr. Meera Deshmukh',
+    role: 'Senior Clinical & Nursing Instructor',
+    qual: 'BVSc & AH',
+    exp: '10+ Yrs Exp',
+    intro: 'Specializes in clinical workflow optimization, humane animal restraint, catheter prep, and assistant training.',
+    expertise: ['Vet Nursing', 'Pet Behaviour'],
+    img: 'assets/images/learning-path-nurse.webp'
+  }
+};
+
+function initFacultyModal() {
+  let modal = document.getElementById('faculty-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.className = 'faculty-modal-overlay';
+    modal.id = 'faculty-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'faculty-modal-name');
+    modal.innerHTML = `
+        <div class="faculty-modal-content">
+          <button class="faculty-modal-close" id="faculty-modal-close" aria-label="Close modal">&times;</button>
+          <div class="faculty-modal-layout">
+            <div class="faculty-modal-left">
+              <img id="faculty-modal-image" src="" alt="Faculty Image" class="faculty-modal-image" />
+            </div>
+            <div class="faculty-modal-right">
+              <h2 id="faculty-modal-name" class="faculty-modal-name"></h2>
+              <p id="faculty-modal-role" class="faculty-modal-role"></p>
+              <div class="faculty-modal-meta">
+                <span id="faculty-modal-qual" class="faculty-modal-qual"></span>
+                <span id="faculty-modal-exp" class="faculty-modal-exp"></span>
+              </div>
+              <p id="faculty-modal-intro" class="faculty-modal-intro"></p>
+              
+              <div class="faculty-modal-expertise-section">
+                <h4>Areas of Expertise</h4>
+                <div id="faculty-modal-expertise" class="faculty-modal-expertise"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  
+  const closeBtn = document.getElementById('faculty-modal-close');
+  const profileBtns = document.querySelectorAll('.faculty-profile-btn');
+  
+  // Modal elements
+  const imgEl = document.getElementById('faculty-modal-image');
+  const nameEl = document.getElementById('faculty-modal-name');
+  const roleEl = document.getElementById('faculty-modal-role');
+  const qualEl = document.getElementById('faculty-modal-qual');
+  const expEl = document.getElementById('faculty-modal-exp');
+  const introEl = document.getElementById('faculty-modal-intro');
+  const expertiseEl = document.getElementById('faculty-modal-expertise');
+  
+  function openModal(facultyId) {
+    const data = facultyProfiles[facultyId];
+    if (!data) return;
+    
+    // Populate data
+    imgEl.src = data.img;
+    imgEl.alt = data.name;
+    nameEl.textContent = data.name;
+    roleEl.textContent = data.role;
+    qualEl.textContent = data.qual;
+    expEl.textContent = data.exp;
+    introEl.textContent = data.intro;
+    
+    // Populate expertise chips
+    expertiseEl.innerHTML = '';
+    data.expertise.forEach(item => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = item;
+      expertiseEl.appendChild(chip);
+    });
+    
+    // Show modal and prevent scroll
+    // Small timeout to allow display block to apply before adding transition class
+    setTimeout(() => {
+      modal.classList.add('open');
+    }, 10);
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeModal() {
+    modal.classList.remove('open');
+    // Wait for transition
+    setTimeout(() => {
+      document.body.style.overflow = '';
+    }, 300);
+  }
+  
+  profileBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const facultyId = btn.getAttribute('data-faculty-id');
+      if (facultyId) openModal(facultyId);
+    });
+  });
+  
+  closeBtn.addEventListener('click', closeModal);
+  
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+  
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) {
+      closeModal();
+    }
+  });
+}

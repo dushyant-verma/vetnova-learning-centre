@@ -17247,3 +17247,177 @@ section.outcomes-dashboard-redesign {
     padding: 24px 18px;
   }
 }
+
+/* ==========================================================================
+   Faculty Profile Modal
+   ========================================================================== */
+.faculty-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(14, 27, 70, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 999999; /* Ensure above Tawk.to */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  padding: 20px;
+}
+
+.faculty-modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.faculty-modal-content {
+  background: #FFFFFF;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+  box-shadow: 0 24px 60px rgba(20, 25, 75, 0.2);
+}
+
+.faculty-modal-overlay.open .faculty-modal-content {
+  transform: scale(1);
+}
+
+.faculty-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(20, 25, 75, 0.05);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  color: #14194B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.faculty-modal-close:hover {
+  background: #14194B;
+  color: #FFFFFF;
+}
+
+.faculty-modal-layout {
+  display: flex;
+  flex-direction: row;
+}
+
+.faculty-modal-left {
+  flex: 0 0 40%;
+  max-width: 40%;
+  background: #F8FAFD;
+}
+
+.faculty-modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.faculty-modal-right {
+  flex: 0 0 60%;
+  max-width: 60%;
+  padding: 40px 48px;
+}
+
+.faculty-modal-name {
+  color: #14194B;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.faculty-modal-role {
+  color: #12C7C1;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.faculty-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.faculty-modal-qual, .faculty-modal-exp {
+  background: #F1F5F9;
+  color: #4A5568;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 50px;
+  display: inline-block;
+}
+
+.faculty-modal-intro {
+  color: #4A5568;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.faculty-modal-expertise-section h4 {
+  color: #14194B;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.faculty-modal-expertise {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.faculty-modal-expertise .chip {
+  background: rgba(18, 199, 193, 0.1);
+  color: #0f766e;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 50px;
+}
+
+@media (max-width: 768px) {
+  .faculty-modal-layout {
+    flex-direction: column;
+  }
+  .faculty-modal-left, .faculty-modal-right {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .faculty-modal-left {
+    height: 300px;
+  }
+  .faculty-modal-right {
+    padding: 32px 24px;
+  }
+  .faculty-modal-name {
+    font-size: 26px;
+  }
+  .faculty-modal-close {
+    background: rgba(255, 255, 255, 0.9);
+  }
+}

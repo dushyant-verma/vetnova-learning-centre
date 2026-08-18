@@ -617,7 +617,7 @@
                 </div>
                 <div class="faculty-footer">
                   <span class="faculty-exp">12+ Yrs Exp</span>
-                  <a class="btn btn-outline btn-sm" href="contact.html#enquiry">View Profile</a>
+                  <a class="btn btn-outline btn-sm faculty-profile-btn" href="javascript:void(0)" data-faculty-id="amit-kulkarni">View Profile</a>
                 </div>
               </div>
             </div>
@@ -638,7 +638,7 @@
                 </div>
                 <div class="faculty-footer">
                   <span class="faculty-exp">10+ Yrs Exp</span>
-                  <a class="btn btn-outline btn-sm" href="contact.html#enquiry">View Profile</a>
+                  <a class="btn btn-outline btn-sm faculty-profile-btn" href="javascript:void(0)" data-faculty-id="priya-sharma">View Profile</a>
                 </div>
               </div>
             </div>
@@ -659,7 +659,7 @@
                 </div>
                 <div class="faculty-footer">
                   <span class="faculty-exp">14+ Yrs Exp</span>
-                  <a class="btn btn-outline btn-sm" href="contact.html#enquiry">View Profile</a>
+                  <a class="btn btn-outline btn-sm faculty-profile-btn" href="javascript:void(0)" data-faculty-id="rajesh-verma">View Profile</a>
                 </div>
               </div>
             </div>
@@ -679,7 +679,7 @@
                 </div>
                 <div class="faculty-footer">
                   <span class="faculty-exp">9+ Yrs Exp</span>
-                  <a class="btn btn-outline btn-sm" href="contact.html#enquiry">View Profile</a>
+                  <a class="btn btn-outline btn-sm faculty-profile-btn" href="javascript:void(0)" data-faculty-id="sneha-nair">View Profile</a>
                 </div>
               </div>
             </div>
@@ -700,7 +700,7 @@
                 </div>
                 <div class="faculty-footer">
                   <span class="faculty-exp">15+ Yrs Exp</span>
-                  <a class="btn btn-outline btn-sm" href="contact.html#enquiry">View Profile</a>
+                  <a class="btn btn-outline btn-sm faculty-profile-btn" href="javascript:void(0)" data-faculty-id="manoj-shinde">View Profile</a>
                 </div>
               </div>
             </div>
@@ -720,7 +720,7 @@
                 </div>
                 <div class="faculty-footer">
                   <span class="faculty-exp">8+ Yrs Exp</span>
-                  <a class="btn btn-outline btn-sm" href="contact.html#enquiry">View Profile</a>
+                  <a class="btn btn-outline btn-sm faculty-profile-btn" href="javascript:void(0)" data-faculty-id="neha-gupta">View Profile</a>
                 </div>
               </div>
             </div>
@@ -789,6 +789,32 @@
           </div>
         </div>
       </section>
+
+      <!-- Faculty Profile Modal -->
+      <div class="faculty-modal-overlay" id="faculty-modal" role="dialog" aria-modal="true" aria-labelledby="faculty-modal-name">
+        <div class="faculty-modal-content">
+          <button class="faculty-modal-close" id="faculty-modal-close" aria-label="Close modal">&times;</button>
+          <div class="faculty-modal-layout">
+            <div class="faculty-modal-left">
+              <img id="faculty-modal-image" src="" alt="Faculty Image" class="faculty-modal-image" />
+            </div>
+            <div class="faculty-modal-right">
+              <h2 id="faculty-modal-name" class="faculty-modal-name"></h2>
+              <p id="faculty-modal-role" class="faculty-modal-role"></p>
+              <div class="faculty-modal-meta">
+                <span id="faculty-modal-qual" class="faculty-modal-qual"></span>
+                <span id="faculty-modal-exp" class="faculty-modal-exp"></span>
+              </div>
+              <p id="faculty-modal-intro" class="faculty-modal-intro"></p>
+              
+              <div class="faculty-modal-expertise-section">
+                <h4>Areas of Expertise</h4>
+                <div id="faculty-modal-expertise" class="faculty-modal-expertise"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </main>
 
