@@ -1,7 +1,7 @@
 /**
  * Single Blog Controller for blog-single.html
  * Populates existing HTML markup with dynamic API data.
- * Generates dynamic Table of Contents from H2/H3 headings.
+ * Generates dynamic Table of Contents from H1-H6 headings.
  * Renders relevant Related Practical Programs (zero random selection).
  * Preserves exact layout, styling, and design.
  */
@@ -178,22 +178,42 @@ function renderArticleContent(blog) {
   if (bodyContainer) {
     bodyContainer.innerHTML = blog.content || '<p>Content coming soon.</p>';
     
-    // Auto-generate Table of Contents from H2 / H3 headings after content is rendered
+    // Auto-generate Table of Contents from H1 - H6 headings after content is rendered into DOM
     generateTableOfContents(bodyContainer);
   }
 }
 
 function generateTableOfContents(bodyContainer) {
-  const tocList = document.getElementById('toc-list');
-  if (!tocList) return;
+  const widgets = document.querySelectorAll('.article-sidebar .sidebar-widget');
+  let tocWidget = null;
 
-  const headings = bodyContainer.querySelectorAll('h2, h3');
+  widgets.forEach(w => {
+    const h4 = w.querySelector('h4, h3, h2');
+    if (h4 && h4.textContent.trim().toLowerCase().includes('table of contents')) {
+      tocWidget = w;
+    }
+  });
+
+  if (!tocWidget && widgets.length > 0) {
+    tocWidget = widgets[0];
+  }
+
+  if (!tocWidget) return;
+
+  let tocList = tocWidget.querySelector('.toc-list') || document.getElementById('toc-list');
+  if (!tocList) {
+    tocList = document.createElement('ul');
+    tocList.className = 'toc-list';
+    tocWidget.appendChild(tocList);
+  }
+
+  const headings = bodyContainer.querySelectorAll('h1, h2, h3, h4, h5, h6');
   if (headings.length === 0) {
-    const tocBox = document.getElementById('toc') || tocList.closest('.sidebar-widget');
-    if (tocBox) tocBox.style.display = 'none';
+    tocWidget.style.display = 'none';
     return;
   }
 
+  tocWidget.style.display = 'block';
   const idCounts = {};
 
   tocList.innerHTML = Array.from(headings).map((h) => {
@@ -208,9 +228,23 @@ function generateTableOfContents(bodyContainer) {
       h.id = baseSlug;
     }
 
-    const isH3 = h.tagName.toLowerCase() === 'h3';
-    const indent = isH3 ? 'margin-left: 16px; font-size: 13px;' : 'font-weight: 600; font-size: 14px;';
-    return `<li style="${indent} margin-bottom: 6px;"><a href="#${h.id}" style="color: var(--teal); text-decoration: none;">${escapeHtml(rawText)}</a></li>`;
+    const tagName = h.tagName.toLowerCase();
+    let indentClass = '';
+    let styleStr = 'margin-bottom: 6px;';
+
+    if (tagName === 'h1' || tagName === 'h2') {
+      styleStr += ' font-weight: 700; font-size: 14px;';
+    } else if (tagName === 'h3') {
+      styleStr += ' margin-left: 12px; font-size: 13px; font-weight: 500;';
+    } else if (tagName === 'h4') {
+      styleStr += ' margin-left: 20px; font-size: 12px; opacity: 0.9;';
+    } else if (tagName === 'h5') {
+      styleStr += ' margin-left: 28px; font-size: 12px; opacity: 0.85;';
+    } else if (tagName === 'h6') {
+      styleStr += ' margin-left: 36px; font-size: 11px; opacity: 0.8;';
+    }
+
+    return `<li style="${styleStr}"><a href="#${h.id}" style="color: var(--teal); text-decoration: none;">${escapeHtml(rawText)}</a></li>`;
   }).join('');
 }
 
