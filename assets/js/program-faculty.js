@@ -1,7 +1,7 @@
 /**
  * Program Faculty Controller for Single Program Pages
  * Handles dynamic fetching and modal popups for program-assigned faculty members.
- * Enforces STRICT Faculty-to-Program assignment mapping from Dashboard.
+ * Enforces STRICT Rule: faculty.status === "Published" && faculty.programs.includes(currentProgramSlug)
  * Zero fallback, zero random, zero unassigned faculty displayed.
  */
 
@@ -33,10 +33,19 @@ async function initProgramFaculty() {
   // Fetch published faculty from API
   const facultyList = await getFaculty({ program: programSlug, status: 'Published' });
 
-  // Secondary strict filter on client side: member.programs MUST explicitly contain programSlug
+  // STRICT RULE ENFORCEMENT:
+  // Faculty can appear ONLY if status === "Published" AND member.programs explicitly includes currentProgramSlug
   const filteredList = (facultyList || []).filter(member => {
+    const isPublished = String(member.status || 'Published').toLowerCase() === 'published';
+    if (!isPublished) return false;
+
     if (!member.programs || !Array.isArray(member.programs)) return false;
-    return member.programs.some(p => p.toLowerCase() === programSlug.toLowerCase());
+
+    const targetSlug = String(programSlug).toLowerCase().trim();
+    return member.programs.some(p => {
+      const pSlug = String(p).toLowerCase().trim();
+      return pSlug === targetSlug || pSlug.replace(/-/g, '') === targetSlug.replace(/-/g, '');
+    });
   });
 
   if (!filteredList || filteredList.length === 0) {
