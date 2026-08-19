@@ -62,7 +62,7 @@ async function initBlogSinglePage() {
   // Update SEO Meta Tags
   updateSEOMetadata(blog);
 
-  // Render Article Content
+  // Render Article Content & TOC
   renderArticleContent(blog);
 
   // Load Related Articles
@@ -178,7 +178,7 @@ function renderArticleContent(blog) {
   if (bodyContainer) {
     bodyContainer.innerHTML = blog.content || '<p>Content coming soon.</p>';
     
-    // Auto-generate Table of Contents from H2 / H3 headings
+    // Auto-generate Table of Contents from H2 / H3 headings after content is rendered
     generateTableOfContents(bodyContainer);
   }
 }
@@ -215,8 +215,19 @@ function generateTableOfContents(bodyContainer) {
 }
 
 function renderRelatedPrograms(blog) {
-  const widgetContainer = document.querySelector('.sidebar-widget:has(h4:contains("Related")), .sidebar-widget h4:contains("Program")') || 
-                          document.querySelectorAll('.sidebar-widget')[2];
+  const widgets = document.querySelectorAll('.article-sidebar .sidebar-widget');
+  let widgetContainer = null;
+
+  widgets.forEach(w => {
+    const h4 = w.querySelector('h4');
+    if (h4 && (h4.textContent.includes('Related') || h4.textContent.includes('Program') || h4.textContent.includes('Course'))) {
+      widgetContainer = w;
+    }
+  });
+
+  if (!widgetContainer && widgets.length >= 3) {
+    widgetContainer = widgets[2];
+  }
 
   if (!widgetContainer) return;
 
@@ -234,20 +245,27 @@ function renderRelatedPrograms(blog) {
     else assignedSlugs = ['veterinary-skill-up'];
   }
 
-  const program = PROGRAM_DETAILS_MAP[assignedSlugs[0]] || PROGRAM_DETAILS_MAP['veterinary-skill-up'];
+  const cardsHtml = assignedSlugs.map((slug) => {
+    const p = PROGRAM_DETAILS_MAP[slug] || PROGRAM_DETAILS_MAP['veterinary-skill-up'];
+    return `
+      <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px border-dashed #e2e8f0;">
+        <div style="width: 40px; height: 40px; border-radius: 8px; background-color: var(--mint); color: var(--teal); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+          <i class="fa-solid ${p.icon}"></i>
+        </div>
+        <div style="flex: 1;">
+          <strong style="display: block; font-size: 13px; color: var(--navy-2); font-weight: 700;">${escapeHtml(p.title)}</strong>
+          <small style="color: var(--muted); font-size: 11px;">${escapeHtml(p.meta)}</small>
+        </div>
+        <a class="btn btn-outline btn-sm" style="padding: 4px 10px; font-size: 11px; flex-shrink: 0;" href="${p.url}">View</a>
+      </div>
+    `;
+  }).join('');
 
   widgetContainer.innerHTML = `
-    <h4 style="font-size: 16px; color: var(--navy-2); margin-bottom: 12px; border-bottom: 2px solid var(--mint); padding-bottom: 6px;">Related Practical Program</h4>
-    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 14px;">
-      <div style="width: 44px; height: 44px; border-radius: 8px; background-color: var(--mint); color: var(--teal); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
-        <i class="fa-solid ${program.icon}"></i>
-      </div>
-      <div>
-        <strong style="display: block; font-size: 14px; color: var(--navy-2); font-weight: 700;">${escapeHtml(program.title)}</strong>
-        <small style="color: var(--muted);">${escapeHtml(program.meta)}</small>
-      </div>
+    <h4 style="font-size: 16px; color: var(--navy-2); margin-bottom: 14px; border-bottom: 2px solid var(--mint); padding-bottom: 6px;">Related Practical Program</h4>
+    <div style="display: flex; flex-direction: column;">
+      ${cardsHtml}
     </div>
-    <a class="btn btn-outline btn-sm btn-block" href="${program.url}">View Program Details</a>
   `;
 }
 

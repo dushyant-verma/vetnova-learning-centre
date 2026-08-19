@@ -7023,11 +7023,16 @@ section#related-posts {
   display: flex;
   align-items: center;
   gap: 12px;
-  justify-content: space-between;
-  flex-wrap: wrap;
+
+
   font-size: 13px;
   color: var(--muted);
   margin-bottom: 14px;
+}
+
+.blog-card .post-meta {
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .post-category-badge {
