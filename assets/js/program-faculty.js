@@ -1,6 +1,8 @@
 /**
  * Program Faculty Controller for Single Program Pages
  * Handles dynamic fetching and modal popups for program-assigned faculty members.
+ * Enforces STRICT Faculty-to-Program assignment mapping from Dashboard.
+ * Zero fallback, zero random, zero unassigned faculty displayed.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,23 +13,38 @@ async function initProgramFaculty() {
   const facultyGrid = document.querySelector('.faculty-grid');
   if (!facultyGrid) return;
 
+  // Render temporary loading state while fetching API assignments
+  facultyGrid.innerHTML = `
+    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--muted);">
+      <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--teal); margin-bottom: 12px;"></i>
+      <p style="font-size: 14px;">Loading program faculty assignments...</p>
+    </div>
+  `;
+
   // Determine current program slug from URL path or query params
   const rawFile = window.location.pathname.split('/').pop() || 'programs-single.html';
   const urlParams = new URLSearchParams(window.location.search);
   let programSlug = urlParams.get('slug') || rawFile.replace('.html', '');
 
-  if (programSlug === 'index' || programSlug === 'programs') {
+  if (programSlug === 'index' || programSlug === 'programs' || programSlug === 'programs-single') {
     programSlug = 'veterinary-skill-up';
   }
 
-  // Fetch published faculty assigned to this program
+  // Fetch published faculty from API
   const facultyList = await getFaculty({ program: programSlug, status: 'Published' });
 
-  if (!facultyList || facultyList.length === 0) {
+  // Secondary strict filter on client side: member.programs MUST explicitly contain programSlug
+  const filteredList = (facultyList || []).filter(member => {
+    if (!member.programs || !Array.isArray(member.programs)) return false;
+    return member.programs.some(p => p.toLowerCase() === programSlug.toLowerCase());
+  });
+
+  if (!filteredList || filteredList.length === 0) {
     facultyGrid.innerHTML = `
       <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--muted); background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px;">
-        <i class="fa-solid fa-user-doctor fa-2x" style="margin-bottom: 12px; color: #0d9488;"></i>
-        <p style="font-weight: 500; margin: 0;">Faculty assignment details for this program will be updated shortly.</p>
+        <i class="fa-solid fa-user-doctor fa-2x" style="margin-bottom: 12px; color: var(--teal);"></i>
+        <p style="font-weight: 500; margin: 0; color: var(--navy-2);">No faculty members currently assigned to this program.</p>
+        <small style="color: var(--muted);">Faculty assignments can be updated via the VetNova Platform Dashboard.</small>
       </div>
     `;
     return;
@@ -35,7 +52,7 @@ async function initProgramFaculty() {
 
   window.loadedFacultyMap = window.loadedFacultyMap || {};
 
-  facultyGrid.innerHTML = facultyList.map(member => {
+  facultyGrid.innerHTML = filteredList.map(member => {
     const idKey = member._id || member.slug || slugify(member.name);
     window.loadedFacultyMap[idKey] = member;
 
