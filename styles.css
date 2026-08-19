@@ -7023,6 +7023,8 @@ section#related-posts {
   display: flex;
   align-items: center;
   gap: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
   font-size: 13px;
   color: var(--muted);
   margin-bottom: 14px;
@@ -17260,7 +17262,8 @@ section.outcomes-dashboard-redesign {
   background-color: rgba(14, 27, 70, 0.7);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 999999; /* Ensure above Tawk.to */
+  z-index: 999999;
+  /* Ensure above Tawk.to */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17361,7 +17364,8 @@ section.outcomes-dashboard-redesign {
   margin-bottom: 24px;
 }
 
-.faculty-modal-qual, .faculty-modal-exp {
+.faculty-modal-qual,
+.faculty-modal-exp {
   background: #F1F5F9;
   color: #4A5568;
   font-size: 13px;
@@ -17404,19 +17408,25 @@ section.outcomes-dashboard-redesign {
   .faculty-modal-layout {
     flex-direction: column;
   }
-  .faculty-modal-left, .faculty-modal-right {
+
+  .faculty-modal-left,
+  .faculty-modal-right {
     flex: 0 0 100%;
     max-width: 100%;
   }
+
   .faculty-modal-left {
     height: 300px;
   }
+
   .faculty-modal-right {
     padding: 32px 24px;
   }
+
   .faculty-modal-name {
     font-size: 26px;
   }
+
   .faculty-modal-close {
     background: rgba(255, 255, 255, 0.9);
   }

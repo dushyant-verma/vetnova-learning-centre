@@ -1,13 +1,47 @@
 /**
  * Single Blog Controller for blog-single.html
  * Populates existing HTML markup with dynamic API data.
- * Updates SEO meta tags dynamically.
+ * Generates dynamic Table of Contents from H2/H3 headings.
+ * Renders relevant Related Practical Programs (zero random selection).
  * Preserves exact layout, styling, and design.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initBlogSinglePage();
 });
+
+const PROGRAM_DETAILS_MAP = {
+  'veterinary-skill-up': {
+    title: 'Veterinary Skill-Up Program',
+    meta: '6-Month Comprehensive Track',
+    url: 'veterinary-skill-up.html',
+    icon: 'fa-graduation-cap'
+  },
+  'emergency-medicine': {
+    title: 'Emergency & Critical Care',
+    meta: '1-Week Practical Masterclass',
+    url: 'emergency-medicine.html',
+    icon: 'fa-truck-medical'
+  },
+  'radiology-ultrasound': {
+    title: 'Radiology & Ultrasound',
+    meta: '4-Day Hands-on Workshop',
+    url: 'radiology-ultrasound.html',
+    icon: 'fa-wave-square'
+  },
+  'soft-tissue-surgery': {
+    title: 'Soft Tissue Surgery Track',
+    meta: '1-Week Practical Masterclass',
+    url: 'soft-tissue-surgery.html',
+    icon: 'fa-scalpel'
+  },
+  'vet-nurse-programme': {
+    title: 'Vet Nurse Certification',
+    meta: 'Foundation Nursing Track',
+    url: 'vet-nurse-programme.html',
+    icon: 'fa-user-nurse'
+  }
+};
 
 async function initBlogSinglePage() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -33,6 +67,9 @@ async function initBlogSinglePage() {
 
   // Load Related Articles
   loadRelatedArticles(blog);
+
+  // Render Related Practical Programs
+  renderRelatedPrograms(blog);
 }
 
 function updateSEOMetadata(blog) {
@@ -57,11 +94,15 @@ function updateSEOMetadata(blog) {
 }
 
 function renderArticleContent(blog) {
+  const catList = Array.isArray(blog.categories) && blog.categories.length > 0
+    ? blog.categories
+    : [blog.category || 'Clinical Guide'];
+
   // Breadcrumb
   const breadcrumbCat = document.getElementById('breadcrumb-category');
   if (breadcrumbCat) {
-    breadcrumbCat.textContent = blog.category || 'Clinical Guide';
-    breadcrumbCat.href = `blog.html#${encodeURIComponent(blog.category || '')}`;
+    breadcrumbCat.textContent = catList[0];
+    breadcrumbCat.href = `blog.html#${encodeURIComponent(catList[0])}`;
   }
 
   const breadcrumbTitle = document.getElementById('breadcrumb-title');
@@ -72,7 +113,7 @@ function renderArticleContent(blog) {
   // Category Badge
   const categoryBadge = document.getElementById('article-category-badge');
   if (categoryBadge) {
-    categoryBadge.textContent = (blog.category || 'CLINICAL MASTERY').toUpperCase();
+    categoryBadge.textContent = catList.map(c => c.toUpperCase()).join(' • ');
   }
 
   // Title & Subtitle
@@ -137,7 +178,7 @@ function renderArticleContent(blog) {
   if (bodyContainer) {
     bodyContainer.innerHTML = blog.content || '<p>Content coming soon.</p>';
     
-    // Auto-generate Table of Contents if container exists
+    // Auto-generate Table of Contents from H2 / H3 headings
     generateTableOfContents(bodyContainer);
   }
 }
@@ -148,19 +189,66 @@ function generateTableOfContents(bodyContainer) {
 
   const headings = bodyContainer.querySelectorAll('h2, h3');
   if (headings.length === 0) {
-    const tocBox = document.getElementById('toc');
+    const tocBox = document.getElementById('toc') || tocList.closest('.sidebar-widget');
     if (tocBox) tocBox.style.display = 'none';
     return;
   }
 
-  tocList.innerHTML = Array.from(headings).map((h, idx) => {
-    if (!h.id) {
-      h.id = `section-auto-${idx + 1}`;
+  const idCounts = {};
+
+  tocList.innerHTML = Array.from(headings).map((h) => {
+    const rawText = h.textContent.trim();
+    let baseSlug = slugify(rawText) || 'section';
+    
+    if (idCounts[baseSlug]) {
+      idCounts[baseSlug]++;
+      h.id = `${baseSlug}-${idCounts[baseSlug]}`;
+    } else {
+      idCounts[baseSlug] = 1;
+      h.id = baseSlug;
     }
+
     const isH3 = h.tagName.toLowerCase() === 'h3';
-    const indent = isH3 ? 'margin-left: 16px; font-size: 14px;' : 'font-weight: 600;';
-    return `<li style="${indent}"><a href="#${h.id}" style="color: var(--teal);">${escapeHtml(h.textContent)}</a></li>`;
+    const indent = isH3 ? 'margin-left: 16px; font-size: 13px;' : 'font-weight: 600; font-size: 14px;';
+    return `<li style="${indent} margin-bottom: 6px;"><a href="#${h.id}" style="color: var(--teal); text-decoration: none;">${escapeHtml(rawText)}</a></li>`;
   }).join('');
+}
+
+function renderRelatedPrograms(blog) {
+  const widgetContainer = document.querySelector('.sidebar-widget:has(h4:contains("Related")), .sidebar-widget h4:contains("Program")') || 
+                          document.querySelectorAll('.sidebar-widget')[2];
+
+  if (!widgetContainer) return;
+
+  let assignedSlugs = Array.isArray(blog.relatedPrograms) && blog.relatedPrograms.length > 0
+    ? blog.relatedPrograms
+    : [];
+
+  // Deterministic Fallback based on Category if no explicit assignment exists
+  if (assignedSlugs.length === 0) {
+    const catStr = (blog.category || (Array.isArray(blog.categories) ? blog.categories[0] : '') || '').toLowerCase();
+    if (catStr.includes('surgery')) assignedSlugs = ['soft-tissue-surgery'];
+    else if (catStr.includes('radiology') || catStr.includes('imaging')) assignedSlugs = ['radiology-ultrasound'];
+    else if (catStr.includes('emergency')) assignedSlugs = ['emergency-medicine'];
+    else if (catStr.includes('nurse')) assignedSlugs = ['vet-nurse-programme'];
+    else assignedSlugs = ['veterinary-skill-up'];
+  }
+
+  const program = PROGRAM_DETAILS_MAP[assignedSlugs[0]] || PROGRAM_DETAILS_MAP['veterinary-skill-up'];
+
+  widgetContainer.innerHTML = `
+    <h4 style="font-size: 16px; color: var(--navy-2); margin-bottom: 12px; border-bottom: 2px solid var(--mint); padding-bottom: 6px;">Related Practical Program</h4>
+    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 14px;">
+      <div style="width: 44px; height: 44px; border-radius: 8px; background-color: var(--mint); color: var(--teal); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+        <i class="fa-solid ${program.icon}"></i>
+      </div>
+      <div>
+        <strong style="display: block; font-size: 14px; color: var(--navy-2); font-weight: 700;">${escapeHtml(program.title)}</strong>
+        <small style="color: var(--muted);">${escapeHtml(program.meta)}</small>
+      </div>
+    </div>
+    <a class="btn btn-outline btn-sm btn-block" href="${program.url}">View Program Details</a>
+  `;
 }
 
 async function loadRelatedArticles(currentBlog) {
@@ -212,6 +300,11 @@ function renderNotFoundState() {
       </section>
     `;
   }
+}
+
+function slugify(text) {
+  if (!text) return '';
+  return text.toString().toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '');
 }
 
 function formatDate(dateStr) {
