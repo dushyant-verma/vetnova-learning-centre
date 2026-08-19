@@ -1,6 +1,7 @@
 /**
  * Blog Listing Controller for blog.html
  * Populates existing HTML elements with dynamic API data.
+ * Fetches categories dynamically from /api/categories.
  * Preserves exact layout, styles, and markup structure.
  */
 
@@ -24,8 +25,16 @@ async function initBlogPage() {
     `;
   }
 
-  // Fetch blogs from API
-  allBlogs = await getBlogs();
+  // Load categories and blogs in parallel
+  const [categoriesList, blogsData] = await Promise.all([
+    getCategories(),
+    getBlogs({ status: 'Published' })
+  ]);
+
+  allBlogs = blogsData || [];
+
+  // Render dynamic Category Pills
+  renderCategoryPills(categoriesList, gridContainer);
 
   if (!allBlogs || allBlogs.length === 0) {
     if (gridContainer) {
@@ -47,16 +56,40 @@ async function initBlogPage() {
 
   // Render Grid Articles
   renderBlogGrid(allBlogs, gridContainer);
+}
 
-  // Setup Category Pills Filter Listeners
-  setupCategoryFilters(gridContainer);
+function renderCategoryPills(categoriesList, gridContainer) {
+  const pillsWrap = document.querySelector('.category-pills-wrap');
+  if (!pillsWrap) return;
+
+  if (categoriesList && categoriesList.length > 0) {
+    pillsWrap.innerHTML = `
+      <button class="category-pill ${activeCategory === 'all' ? 'active' : ''}" data-category="all">All Articles</button>
+      ${categoriesList.map(cat => {
+        const catSlug = cat.slug || slugify(cat.name);
+        const catName = cat.name.toUpperCase();
+        return `<button class="category-pill ${activeCategory === catSlug ? 'active' : ''}" data-category="${escapeHtml(catSlug)}">${escapeHtml(catName)}</button>`;
+      }).join('')}
+    `;
+  }
+
+  // Bind click listeners
+  const pills = pillsWrap.querySelectorAll('.category-pill');
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeCategory = pill.dataset.category || 'all';
+      renderBlogGrid(allBlogs, gridContainer);
+    });
+  });
 }
 
 function renderFeaturedBlog(blog, container) {
   if (!container || !blog) return;
 
   const dateStr = formatDate(blog.createdAt);
-  const categoryUpper = (blog.category || 'SURGICAL MASTERY').toUpperCase();
+  const categoryUpper = (blog.category || 'GENERAL').toUpperCase();
 
   container.innerHTML = `
     <div class="featured-post-card">
@@ -96,7 +129,7 @@ function renderBlogGrid(blogs, container) {
   // Filter based on active category if set
   const filtered = activeCategory === 'all' 
     ? blogs 
-    : blogs.filter(b => normalizeCategory(b.category) === normalizeCategory(activeCategory));
+    : blogs.filter(b => matchCategory(b.category, activeCategory));
 
   if (filtered.length === 0) {
     container.innerHTML = `
@@ -114,7 +147,7 @@ function renderBlogGrid(blogs, container) {
     const authorImg = blog.authorImage || 'assets/images/blog/blog-author-amit.webp';
 
     return `
-      <div class="blog-card" data-category="${escapeHtml(normalizeCategory(blog.category))}">
+      <div class="blog-card" data-category="${escapeHtml(slugify(blog.category))}">
         <div class="blog-card-media">
           <img src="${escapeHtml(blog.image || 'assets/images/hero-veterinary-training.webp')}"
             onerror="this.onerror=null; this.src='assets/images/hero-veterinary-training.webp';"
@@ -142,30 +175,16 @@ function renderBlogGrid(blogs, container) {
   }).join('');
 }
 
-function setupCategoryFilters(gridContainer) {
-  const pills = document.querySelectorAll('.category-pill');
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      pills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      activeCategory = pill.dataset.category || 'all';
-      renderBlogGrid(allBlogs, gridContainer);
-    });
-  });
+function matchCategory(blogCategory, targetCategory) {
+  if (!blogCategory || !targetCategory || targetCategory === 'all') return true;
+  const b = slugify(blogCategory);
+  const t = slugify(targetCategory);
+  return b.includes(t) || t.includes(b);
 }
 
-function normalizeCategory(cat) {
-  if (!cat) return 'all';
-  const c = cat.toLowerCase();
-  if (c.includes('surgery')) return 'surgery';
-  if (c.includes('radiology') || c.includes('imaging')) return 'radiology';
-  if (c.includes('emergency')) return 'emergency';
-  if (c.includes('clinical')) return 'clinical-skills';
-  if (c.includes('pet') || c.includes('wellness')) return 'pet-care';
-  if (c.includes('welfare')) return 'welfare';
-  if (c.includes('nurse')) return 'nurse';
-  if (c.includes('career')) return 'career';
-  return c;
+function slugify(text) {
+  if (!text) return '';
+  return text.toString().toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '');
 }
 
 function formatDate(dateStr) {
