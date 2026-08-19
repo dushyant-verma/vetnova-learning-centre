@@ -89,7 +89,9 @@ function renderFeaturedBlog(blog, container) {
   if (!container || !blog) return;
 
   const dateStr = formatDate(blog.createdAt);
-  const categoryUpper = (blog.category || 'GENERAL').toUpperCase();
+  const catList = Array.isArray(blog.categories) && blog.categories.length > 0
+    ? blog.categories
+    : [blog.category || 'GENERAL'];
 
   container.innerHTML = `
     <div class="featured-post-card">
@@ -99,8 +101,8 @@ function renderFeaturedBlog(blog, container) {
           alt="${escapeHtml(blog.title)}" loading="lazy" decoding="async" />
       </div>
       <div class="featured-post-content">
-        <div class="post-meta">
-          <span class="post-category-badge">${escapeHtml(categoryUpper)}</span>
+        <div class="post-meta flex flex-wrap gap-1 items-center">
+          ${catList.map(c => `<span class="post-category-badge">${escapeHtml(c.toUpperCase())}</span>`).join('')}
           <span><i class="fa-regular fa-clock"></i> ${escapeHtml(blog.readTime || '8 Min Read')}</span>
           <span>• ${dateStr}</span>
         </div>
@@ -129,7 +131,7 @@ function renderBlogGrid(blogs, container) {
   // Filter based on active category if set
   const filtered = activeCategory === 'all' 
     ? blogs 
-    : blogs.filter(b => matchCategory(b.category, activeCategory));
+    : blogs.filter(b => matchBlogCategories(b, activeCategory));
 
   if (filtered.length === 0) {
     container.innerHTML = `
@@ -143,19 +145,21 @@ function renderBlogGrid(blogs, container) {
 
   container.innerHTML = filtered.map(blog => {
     const slugOrId = encodeURIComponent(blog.slug || blog._id);
-    const categoryUpper = (blog.category || 'CLINICAL GUIDE').toUpperCase();
+    const catList = Array.isArray(blog.categories) && blog.categories.length > 0
+      ? blog.categories
+      : [blog.category || 'CLINICAL GUIDE'];
     const authorImg = blog.authorImage || 'assets/images/blog/blog-author-amit.webp';
 
     return `
-      <div class="blog-card" data-category="${escapeHtml(slugify(blog.category))}">
+      <div class="blog-card" data-category="${escapeHtml(catList.map(c => slugify(c)).join(' '))}">
         <div class="blog-card-media">
           <img src="${escapeHtml(blog.image || 'assets/images/hero-veterinary-training.webp')}"
             onerror="this.onerror=null; this.src='assets/images/hero-veterinary-training.webp';"
             alt="${escapeHtml(blog.title)}" loading="lazy" decoding="async" />
         </div>
         <div class="blog-card-body">
-          <div class="post-meta">
-            <span class="post-category-badge">${escapeHtml(categoryUpper)}</span>
+          <div class="post-meta flex flex-wrap gap-1 items-center">
+            ${catList.map(c => `<span class="post-category-badge">${escapeHtml(c.toUpperCase())}</span>`).join('')}
             <span>${escapeHtml(blog.readTime || '5 Min Read')}</span>
           </div>
           <h3><a href="blog-single.html?slug=${slugOrId}">${escapeHtml(blog.title)}</a></h3>
@@ -175,11 +179,18 @@ function renderBlogGrid(blogs, container) {
   }).join('');
 }
 
-function matchCategory(blogCategory, targetCategory) {
-  if (!blogCategory || !targetCategory || targetCategory === 'all') return true;
-  const b = slugify(blogCategory);
-  const t = slugify(targetCategory);
-  return b.includes(t) || t.includes(b);
+function matchBlogCategories(blog, targetCategory) {
+  if (!targetCategory || targetCategory === 'all') return true;
+  const target = slugify(targetCategory);
+  
+  const categoriesToTest = Array.isArray(blog.categories) && blog.categories.length > 0
+    ? blog.categories
+    : [blog.category || 'general'];
+
+  return categoriesToTest.some(cat => {
+    const c = slugify(cat);
+    return c.includes(target) || target.includes(c);
+  });
 }
 
 function slugify(text) {

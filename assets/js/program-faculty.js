@@ -24,7 +24,12 @@ async function initProgramFaculty() {
   const facultyList = await getFaculty({ program: programSlug, status: 'Published' });
 
   if (!facultyList || facultyList.length === 0) {
-    // If no specific assigned faculty returned, keep static cards or show clean state
+    facultyGrid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--muted); background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px;">
+        <i class="fa-solid fa-user-doctor fa-2x" style="margin-bottom: 12px; color: #0d9488;"></i>
+        <p style="font-weight: 500; margin: 0;">Faculty assignment details for this program will be updated shortly.</p>
+      </div>
+    `;
     return;
   }
 
