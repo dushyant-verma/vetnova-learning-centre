@@ -2059,21 +2059,32 @@ function initFacultyModal() {
   const expertiseEl = document.getElementById('faculty-modal-expertise');
   
   function openModal(facultyId) {
-    const data = facultyProfiles[facultyId];
+    const data = (window.loadedFacultyMap && window.loadedFacultyMap[facultyId]) || facultyProfiles[facultyId];
     if (!data) return;
     
     // Populate data
-    imgEl.src = data.img;
-    imgEl.alt = data.name;
-    nameEl.textContent = data.name;
-    roleEl.textContent = data.role;
-    qualEl.textContent = data.qual;
-    expEl.textContent = data.exp;
-    introEl.textContent = data.intro;
+    const photo = data.image || data.img || 'assets/images/about/about-faculty-01.webp';
+    const name = data.name || 'Faculty Specialist';
+    const role = data.designation || data.department || data.specialization || data.role || '';
+    const qual = data.qualification || data.qual || '';
+    const exp = data.experience || data.exp || '';
+    const intro = data.bio || data.intro || '';
+
+    imgEl.src = photo;
+    imgEl.alt = name;
+    nameEl.textContent = name;
+    roleEl.textContent = role;
+    qualEl.textContent = qual;
+    expEl.textContent = exp;
+    introEl.textContent = intro;
     
     // Populate expertise chips
     expertiseEl.innerHTML = '';
-    data.expertise.forEach(item => {
+    const tags = data.department || data.specialization
+      ? (data.department || data.specialization).split(/[,&]/).map(t => t.trim()).filter(Boolean)
+      : (Array.isArray(data.expertise) ? data.expertise : ['Clinical Care']);
+
+    tags.forEach(item => {
       const chip = document.createElement('span');
       chip.className = 'chip';
       chip.textContent = item;
