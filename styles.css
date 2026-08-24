@@ -11612,8 +11612,27 @@ section#faq .container {
   display: inline-block;
   width: 8px;
   height: 8px;
+  display: none;
   border-radius: 50%;
   background-color: #12C7C1;
+}
+
+.ps-hero-eyebrow i,
+.popular-course-eyebrow i,
+span.clarity-eyebrow i,
+#clarity-block .clarity-eyebrow:before,
+.footer-cta-eyebrow i,
+span.partner-cta-badge i,
+.homepage-v2 .v2-hero-badge-pill i,
+.homepage-v2 .v2-eyebrow i,
+.hp3x-network-label i,
+.hp3x-story-kicker i,
+.hp3x-eyebrow.hp3x-eyebrow-dark i,
+.hp3x-eyebrow i,
+.hp3x-pill-dot,
+.hp4-eyebrow i,
+.legal-hero-eyebrow i {
+  display: none !important;
 }
 
 .fp-heading {
