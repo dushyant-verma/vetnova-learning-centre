@@ -22,6 +22,7 @@ function runAllInitializers() {
   initPopularCoursesFilter();
   initSingleFocusJourney();
   initFacultyModal();
+  initDesktopDropdowns();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2129,3 +2130,105 @@ function initFacultyModal() {
     }
   });
 }
+
+/* ==========================================================================
+   Desktop Navigation Dropdown Hover Controller
+   ========================================================================== */
+function initDesktopDropdowns() {
+  const dropdownContainers = document.querySelectorAll('.menu .has-dropdown');
+  if (!dropdownContainers.length) return;
+
+  const CLOSE_DELAY = 200; // 200ms close delay (approx 150ms-300ms)
+
+  dropdownContainers.forEach(container => {
+    let closeTimer = null;
+    const toggleLink = container.querySelector('.dropdown-toggle');
+    const menuPanel = container.querySelector('.dropdown-menu');
+
+    function openDropdown() {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+
+      // Close all other open dropdowns immediately for clean horizontal switching
+      dropdownContainers.forEach(otherContainer => {
+        if (otherContainer !== container) {
+          otherContainer.classList.remove('is-open');
+          const otherToggle = otherContainer.querySelector('.dropdown-toggle');
+          if (otherToggle) {
+            otherToggle.setAttribute('aria-expanded', 'false');
+          }
+        }
+      });
+
+      container.classList.add('is-open');
+      if (toggleLink) {
+        toggleLink.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    function scheduleCloseDropdown() {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+      }
+      closeTimer = setTimeout(() => {
+        container.classList.remove('is-open');
+        if (toggleLink) {
+          toggleLink.setAttribute('aria-expanded', 'false');
+        }
+        closeTimer = null;
+      }, CLOSE_DELAY);
+    }
+
+    // Pointer enters the combined hover region (trigger or dropdown panel)
+    container.addEventListener('mouseenter', () => {
+      openDropdown();
+    });
+
+    // Pointer moves within the combined hover region -> cancel any active close timer
+    container.addEventListener('mousemove', () => {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+      if (!container.classList.contains('is-open')) {
+        openDropdown();
+      }
+    });
+
+    // Pointer leaves the combined hover region
+    container.addEventListener('mouseleave', () => {
+      scheduleCloseDropdown();
+    });
+
+    // Keyboard accessibility support
+    container.addEventListener('focusin', () => {
+      openDropdown();
+    });
+
+    container.addEventListener('focusout', (e) => {
+      if (!container.contains(e.relatedTarget)) {
+        scheduleCloseDropdown();
+      }
+    });
+
+    // Close dropdown immediately when any link inside the panel is clicked
+    if (menuPanel) {
+      const menuLinks = menuPanel.querySelectorAll('a');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (closeTimer) {
+            clearTimeout(closeTimer);
+            closeTimer = null;
+          }
+          container.classList.remove('is-open');
+          if (toggleLink) {
+            toggleLink.setAttribute('aria-expanded', 'false');
+          }
+        });
+      });
+    }
+  });
+}
+

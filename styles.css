@@ -473,9 +473,22 @@ p {
 }
 
 .has-dropdown:hover .nav-link .caret,
-.has-dropdown:focus-within .nav-link .caret {
+.has-dropdown:focus-within .nav-link .caret,
+.has-dropdown.is-open .nav-link .caret {
   transform: rotate(180deg);
   color: var(--teal, #12C7C1);
+}
+
+.has-dropdown:hover .nav-link::after,
+.has-dropdown:focus-within .nav-link::after,
+.has-dropdown.is-open .nav-link::after {
+  transform: scaleX(1);
+}
+
+.has-dropdown:hover .nav-link,
+.has-dropdown:focus-within .nav-link,
+.has-dropdown.is-open .nav-link {
+  color: var(--navy-2, #081028);
 }
 
 .dropdown-menu {
@@ -496,6 +509,17 @@ p {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+/* Invisible hover bridge to eliminate mouse gap between navigation trigger and dropdown panel */
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: transparent;
 }
 
 .dropdown-menu.mega-dropdown {
@@ -536,7 +560,8 @@ p {
 }
 
 .has-dropdown:hover .dropdown-menu,
-.has-dropdown:focus-within .dropdown-menu {
+.has-dropdown:focus-within .dropdown-menu,
+.has-dropdown.is-open .dropdown-menu {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
