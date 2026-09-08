@@ -129,3 +129,42 @@ async function getBlog(slugOrId) {
   if (!slugOrId) return null;
   return await fetchFromApi(`/blogs/${encodeURIComponent(slugOrId)}`);
 }
+
+/**
+ * Submit an enquiry / form submission to Vetnova MERN backend
+ * @param {Object} enquiryData - { name, countryCode, phone, email, profile, course, message, source, sourcePage }
+ * @returns {Promise<Object>} API response JSON object
+ */
+async function submitEnquiry(enquiryData) {
+  const primaryUrl = `${API_BASE_URL}/enquiries`;
+  try {
+    let response;
+    try {
+      response = await fetch(primaryUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(enquiryData)
+      });
+    } catch (netErr) {
+      if (!API_BASE_URL.includes('localhost:5001')) {
+        response = await fetch('http://localhost:5001/api/enquiries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(enquiryData)
+        });
+      } else {
+        throw netErr;
+      }
+    }
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to submit enquiry');
+    }
+    return data;
+  } catch (error) {
+    console.error('Error submitting enquiry:', error);
+    throw error;
+  }
+}
+

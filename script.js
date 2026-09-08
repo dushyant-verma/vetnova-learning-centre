@@ -743,7 +743,7 @@ function initContactForm() {
 
   if (!form || !successState) return;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const nameEl = document.getElementById('form-name');
@@ -764,17 +764,50 @@ function initContactForm() {
       return;
     }
 
-    console.log('Form Submitted: ', {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.innerHTML : 'Submit Enquiry';
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Submitting...';
+    }
+
+    const pagePath = window.location.pathname || '/';
+    let sourceName = 'website';
+    if (pagePath.includes('contact')) sourceName = 'contact_page';
+    else if (pagePath.includes('faq')) sourceName = 'faq_page';
+    else if (pagePath.includes('index') || pagePath === '/' || pagePath.endsWith('/')) sourceName = 'homepage';
+
+    const payload = {
       name,
       email,
-      phone: countryCode + ' ' + phone,
-      role: roleEl ? roleEl.value : '',
-      program: programEl ? programEl.value : '',
-      message: messageEl ? messageEl.value : ''
-    });
+      phone,
+      countryCode,
+      profile: roleEl ? roleEl.value : '',
+      course: programEl ? programEl.value : '',
+      message: messageEl ? messageEl.value.trim() : '',
+      source: sourceName,
+      sourcePage: pagePath
+    };
 
-    form.style.display = 'none';
-    successState.style.display = 'flex';
+    try {
+      if (typeof submitEnquiry === 'function') {
+        await submitEnquiry(payload);
+      } else {
+        console.log('API submitEnquiry fallback: ', payload);
+      }
+
+      form.style.display = 'none';
+      successState.style.display = 'flex';
+      form.reset();
+    } catch (err) {
+      alert(err.message || 'Submission failed. Please try again.');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    }
   });
 
   if (resetBtn) {
@@ -858,7 +891,7 @@ function initEnquiryModal() {
   });
 
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const ccSelect = form.querySelector('select[name="modal_country_code"]');
@@ -871,33 +904,54 @@ function initEnquiryModal() {
       const messageEl = document.getElementById('modal-message');
 
       const phoneVal = phoneEl ? phoneEl.value.trim() : '';
+      const nameVal = nameEl ? nameEl.value.trim() : '';
+      const emailVal = emailEl ? emailEl.value.trim() : '';
 
-      console.log('Modal Form Submitted: ', {
-        name: nameEl ? nameEl.value.trim() : '',
-        email: emailEl ? emailEl.value.trim() : '',
-        phone: countryCode + ' ' + phoneVal,
-        role: roleEl ? roleEl.value : '',
-        message: messageEl ? messageEl.value.trim() : ''
-      });
-
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn ? submitBtn.textContent : 'Submit Enquiry';
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
+      if (!nameVal || !emailVal || !phoneVal) {
+        alert('Please fill in all required fields.');
+        return;
       }
 
-      setTimeout(() => {
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.innerText : 'Submit Enquiry';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Submitting...';
+      }
+
+      const pagePath = window.location.pathname || '/';
+
+      const payload = {
+        name: nameVal,
+        email: emailVal,
+        phone: phoneVal,
+        countryCode: countryCode,
+        profile: roleEl ? roleEl.value : '',
+        course: document.title || '',
+        message: messageEl ? messageEl.value.trim() : '',
+        source: 'popup',
+        sourcePage: pagePath
+      };
+
+      try {
+        if (typeof submitEnquiry === 'function') {
+          await submitEnquiry(payload);
+        } else {
+          console.log('Modal Form API Fallback: ', payload);
+        }
+
         form.style.display = 'none';
         if (successState) successState.style.display = 'flex';
         if (modalHead) modalHead.style.display = 'none';
-
+        form.reset();
+      } catch (err) {
+        alert(err.message || 'Submission failed. Please try again.');
+      } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = originalText;
+          submitBtn.innerText = originalText;
         }
-        form.reset();
-      }, 1000);
+      }
     });
   }
 }
