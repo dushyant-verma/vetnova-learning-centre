@@ -791,17 +791,17 @@ function initContactForm() {
     };
 
     try {
-      if (typeof submitEnquiry === 'function') {
-        await submitEnquiry(payload);
-      } else {
-        console.log('API submitEnquiry fallback: ', payload);
+      if (typeof submitEnquiry !== 'function') {
+        throw new Error('API client script (api.js) failed to load. Please refresh the page and try again.');
       }
+      await submitEnquiry(payload);
 
       form.style.display = 'none';
       successState.style.display = 'flex';
       form.reset();
     } catch (err) {
-      alert(err.message || 'Submission failed. Please try again.');
+      console.error('Enquiry submission error:', err);
+      alert(err.message || 'Unable to submit enquiry. Please check your connection and try again.');
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -934,18 +934,18 @@ function initEnquiryModal() {
       };
 
       try {
-        if (typeof submitEnquiry === 'function') {
-          await submitEnquiry(payload);
-        } else {
-          console.log('Modal Form API Fallback: ', payload);
+        if (typeof submitEnquiry !== 'function') {
+          throw new Error('API client script (api.js) failed to load. Please refresh the page and try again.');
         }
+        await submitEnquiry(payload);
 
         form.style.display = 'none';
         if (successState) successState.style.display = 'flex';
         if (modalHead) modalHead.style.display = 'none';
         form.reset();
       } catch (err) {
-        alert(err.message || 'Submission failed. Please try again.');
+        console.error('Modal Enquiry Submission error:', err);
+        alert(err.message || 'Unable to submit enquiry. Please check your connection and try again.');
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
