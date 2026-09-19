@@ -23,6 +23,8 @@ function runAllInitializers() {
   initSingleFocusJourney();
   initFacultyModal();
   initDesktopDropdowns();
+  initConnectWidget();
+  initPartnershipForm();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2285,4 +2287,193 @@ function initDesktopDropdowns() {
     }
   });
 }
+
+/* ==========================================================================
+   Global Floating Connect With Us Widget
+   ========================================================================== */
+function initConnectWidget() {
+  const widgetBtn = document.getElementById('connect-widget-btn');
+  const widgetPanel = document.getElementById('connect-widget-panel');
+  const closeBtn = document.getElementById('connect-widget-close');
+  const widgetWrap = document.getElementById('connect-widget');
+
+  if (!widgetBtn || !widgetPanel) return;
+
+  if (widgetBtn.dataset.initialized === 'true') return;
+  widgetBtn.dataset.initialized = 'true';
+
+  function openPanel() {
+    widgetPanel.classList.add('is-open');
+    widgetPanel.setAttribute('aria-hidden', 'false');
+    widgetBtn.setAttribute('aria-expanded', 'true');
+  }
+
+  function closePanel() {
+    widgetPanel.classList.remove('is-open');
+    widgetPanel.setAttribute('aria-hidden', 'true');
+    widgetBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  function togglePanel() {
+    const isOpen = widgetPanel.classList.contains('is-open');
+    if (isOpen) {
+      closePanel();
+    } else {
+      openPanel();
+    }
+  }
+
+  widgetBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    togglePanel();
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closePanel();
+    });
+  }
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (widgetPanel.classList.contains('is-open')) {
+      if (widgetWrap && !widgetWrap.contains(e.target)) {
+        closePanel();
+      }
+    }
+  });
+
+  // Keyboard accessibility: ESC key to close
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && widgetPanel.classList.contains('is-open')) {
+      closePanel();
+      widgetBtn.focus();
+    }
+  });
+
+  // Handle action links
+  const actionLinks = widgetPanel.querySelectorAll('.connect-action-item');
+  actionLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      if (link.classList.contains('btn-counselling-modal') || link.getAttribute('href') === 'contact.html#enquiry') {
+        const modal = document.getElementById('enquiry-modal');
+        if (modal) {
+          e.preventDefault();
+          closePanel();
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        } else {
+          closePanel();
+        }
+      } else {
+        closePanel();
+      }
+    });
+  });
+}
+
+/* ==========================================================================
+   Partnership Enquiry Form Handling
+   ========================================================================== */
+function initPartnershipForm() {
+  const form = document.getElementById('partnership-enquiry-form');
+  const submitBtn = document.getElementById('partnership-submit-btn');
+  const errorBanner = document.getElementById('partnership-error-banner');
+  const errorText = document.getElementById('partnership-error-text');
+  const successState = document.getElementById('partnership-success-state');
+  const resetBtn = document.getElementById('partnership-reset-btn');
+
+  if (!form) return;
+
+  if (form.dataset.initialized === 'true') return;
+  form.dataset.initialized = 'true';
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (errorBanner) errorBanner.style.display = 'none';
+
+    const nameEl = document.getElementById('partnership-name');
+    const orgEl = document.getElementById('partnership-organization');
+    const emailEl = document.getElementById('partnership-email');
+    const countryCodeEl = document.getElementById('partnership-country-code');
+    const phoneEl = document.getElementById('partnership-phone');
+    const orgTypeEl = document.getElementById('partnership-org-type');
+    const interestEl = document.getElementById('partnership-interest');
+    const messageEl = document.getElementById('partnership-message');
+
+    const name = nameEl ? nameEl.value.trim() : '';
+    const organization = orgEl ? orgEl.value.trim() : '';
+    const email = emailEl ? emailEl.value.trim() : '';
+    const countryCode = countryCodeEl ? countryCodeEl.value.trim() : '+91';
+    const phone = phoneEl ? phoneEl.value.trim() : '';
+    const organizationType = orgTypeEl ? orgTypeEl.value.trim() : '';
+    const partnershipInterest = interestEl ? interestEl.value.trim() : '';
+    const message = messageEl ? messageEl.value.trim() : '';
+
+    if (!name || !organization || !email || !phone || !organizationType || !partnershipInterest || !message) {
+      if (errorBanner && errorText) {
+        errorText.textContent = 'Please fill out all required fields before submitting.';
+        errorBanner.style.display = 'flex';
+      }
+      return;
+    }
+
+    const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting Enquiry...';
+    }
+
+    const payload = {
+      name,
+      organization,
+      email,
+      countryCode,
+      phone,
+      organizationType,
+      partnershipInterest,
+      message,
+      source: 'Partnership Enquiry',
+      sourcePage: 'partnerships.html'
+    };
+
+    try {
+      if (typeof submitEnquiry !== 'function') {
+        throw new Error('API client script (api.js) failed to load. Please refresh the page and try again.');
+      }
+
+      await submitEnquiry(payload);
+
+      // On Success
+      form.style.display = 'none';
+      if (successState) successState.style.display = 'block';
+      if (errorBanner) errorBanner.style.display = 'none';
+    } catch (err) {
+      console.error('Partnership enquiry submission error:', err);
+      if (errorBanner && errorText) {
+        errorText.textContent = err.message || 'Unable to submit enquiry. Please check your connection and try again.';
+        errorBanner.style.display = 'flex';
+      } else {
+        alert(err.message || 'Unable to submit enquiry. Please check your connection and try again.');
+      }
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
+      }
+    }
+  });
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      if (successState) successState.style.display = 'none';
+      if (errorBanner) errorBanner.style.display = 'none';
+      form.style.display = 'grid';
+    });
+  }
+}
+
 

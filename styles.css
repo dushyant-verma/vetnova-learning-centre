@@ -17515,3 +17515,277 @@ section.outcomes-dashboard-redesign {
     background: rgba(255, 255, 255, 0.9);
   }
 }
+
+.hero-actions {
+  padding-top: 20px;
+}
+
+
+
+/* ==========================================================================
+   Global Floating Connect With Us Widget
+   ========================================================================== */
+.connect-widget-wrap {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+  font-family: var(--font-main, 'Inter', sans-serif);
+}
+
+.connect-widget-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--navy-2, #0B1C3E);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 22px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(11, 28, 62, 0.28), 0 2px 8px rgba(18, 199, 193, 0.2);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.connect-widget-btn:hover {
+  background-color: #122852;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(11, 28, 62, 0.35), 0 4px 12px rgba(18, 199, 193, 0.3);
+}
+
+.connect-widget-btn:focus-visible {
+  outline: 2px solid var(--teal, #12C7C1);
+  outline-offset: 3px;
+}
+
+.connect-btn-icon-wrap {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(18, 199, 193, 0.2);
+  color: var(--teal, #12C7C1);
+  font-size: 13px;
+}
+
+.connect-btn-text {
+  letter-spacing: 0.2px;
+}
+
+/* Widget Panel Popup */
+.connect-widget-panel {
+  position: absolute;
+  bottom: 64px;
+  right: 0;
+  width: 330px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(11, 28, 62, 0.22), 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(223, 229, 240, 0.9);
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.25s;
+}
+
+.connect-widget-panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.connect-widget-header {
+  background: linear-gradient(135deg, #0B1C3E 0%, #162C5B 100%);
+  color: #ffffff;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.connect-widget-header-title {
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+}
+
+.connect-widget-header-title i {
+  color: var(--teal, #12C7C1);
+}
+
+.connect-widget-close {
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.connect-widget-close:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.08);
+}
+
+.connect-widget-close:focus-visible {
+  outline: 2px solid var(--teal, #12C7C1);
+}
+
+.connect-widget-body {
+  padding: 14px;
+}
+
+.connect-widget-subtitle {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted, #64748B);
+  margin-bottom: 10px;
+  padding-left: 6px;
+}
+
+.connect-widget-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.connect-action-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.connect-action-item:hover {
+  background-color: #F8FAFC;
+  border-color: #E2E8F0;
+  transform: translateX(3px);
+}
+
+.connect-action-item:focus-visible {
+  outline: 2px solid var(--teal, #12C7C1);
+  background-color: #F8FAFC;
+}
+
+.connect-action-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.connect-action-icon.icon-teal {
+  background: rgba(18, 199, 193, 0.12);
+  color: #0d9488;
+}
+
+.connect-action-icon.icon-blue {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+}
+
+.connect-action-icon.icon-gold {
+  background: rgba(217, 119, 6, 0.12);
+  color: #d97706;
+}
+
+.connect-action-icon.icon-navy {
+  background: rgba(11, 28, 62, 0.1);
+  color: #0B1C3E;
+}
+
+.connect-action-text {
+  flex: 1;
+}
+
+.connect-action-text strong {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--navy-2, #0B1C3E);
+  line-height: 1.25;
+}
+
+.connect-action-text small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted, #64748B);
+  margin-top: 2px;
+}
+
+.connect-action-arrow {
+  font-size: 12px;
+  color: #CBD5E1;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.connect-action-item:hover .connect-action-arrow {
+  color: var(--teal, #12C7C1);
+  transform: translateX(2px);
+}
+
+/* Adjust WhatsApp desktop position so it sits cleanly above Connect widget */
+@media (min-width: 769px) {
+  .whatsapp {
+    bottom: 86px !important;
+    right: 24px !important;
+  }
+}
+
+/* Mobile widget adjustments */
+@media (max-width: 768px) {
+  .connect-widget-wrap {
+    right: 16px;
+    bottom: 74px;
+    /* Positioned above mobile-stick bar */
+    z-index: 1000;
+  }
+
+  .connect-widget-btn {
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+
+  .connect-widget-panel {
+    right: 0;
+    width: calc(100vw - 32px);
+    max-width: 320px;
+    bottom: 58px;
+  }
+
+  .partnership-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .partnership-form-grid .form-group {
+    grid-column: span 1 !important;
+  }
+}
