@@ -381,8 +381,8 @@ const concernData = {
       'Soft tissue surgeries (spay/neuter, cystotomy)',
       'Assistance during complex orthopedic operations'
     ],
-    ctaText: 'Apply for Surgery Program',
-    ctaLink: '#contact',
+    ctaText: 'Apply Now',
+    ctaLink: 'contact.html',
     image: 'assets/vet_selector_surgery_result.webp'
   },
   radiology: {
@@ -394,8 +394,8 @@ const concernData = {
       'Ultrasound patient positioning & probe handling',
       'Systematic approach to diagnosing pathology'
     ],
-    ctaText: 'Apply for Radiology Program',
-    ctaLink: '#contact',
+    ctaText: 'Apply Now',
+    ctaLink: 'contact.html',
     image: 'assets/vet_selector_radiology_result.webp'
   },
   'clinic-ready': {
@@ -407,8 +407,8 @@ const concernData = {
       'Common diagnostics checklist (blood tests, smears)',
       'Effective pet parent communication & counseling'
     ],
-    ctaText: 'Apply for Foundation Program',
-    ctaLink: '#contact',
+    ctaText: 'Apply Now',
+    ctaLink: 'contact.html',
     image: 'assets/vet_selector_foundation_result.webp'
   },
   'first-aid': {
@@ -420,8 +420,8 @@ const concernData = {
       'Wound cleaning, bandages & bleeding control',
       'Heat stroke, poisoning & animal bite protocol'
     ],
-    ctaText: 'Join First Aid Workshop',
-    ctaLink: '#contact',
+    ctaText: 'Apply Now',
+    ctaLink: 'contact.html',
     image: 'assets/vet_selector_petcare_result.webp'
   },
   nurse: {
@@ -433,8 +433,8 @@ const concernData = {
       'Surgical prep support & sanitization rules',
       'Basic medication routes and front desk tasks'
     ],
-    ctaText: 'Join Vet Nurse Program',
-    ctaLink: '#contact',
+    ctaText: 'Apply Now',
+    ctaLink: 'contact.html',
     image: 'assets/vet_selector_nurse_result.webp'
   }
 };
@@ -483,7 +483,7 @@ function renderConcernResults(data) {
           ${bulletHTML}
         </ul>
         <div class="results-cta">
-          <a class="btn btn-primary" href="${data.ctaLink}">${data.ctaText}</a>
+          <a class="btn btn-primary btn-apply-now" href="${data.ctaLink}"><span>${data.ctaText}</span> <i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
       <div class="results-image">
@@ -858,7 +858,7 @@ function initEnquiryModal() {
   const successState = document.getElementById('modal-success-state');
   const modalHead = modal ? modal.querySelector('.modal-head') : null;
 
-  const enquireButtons = document.querySelectorAll('.btn-enquire-now, a[href="#contact"][class*="btn"], a[href*="contact"][class*="btn"]');
+  const enquireButtons = document.querySelectorAll('.btn-counselling-modal, .header-counselling-btn, .btn-enquire-now');
 
   if (!modal) return;
 

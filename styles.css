@@ -1902,6 +1902,41 @@ p {
   border-color: rgba(45, 212, 191, 0.4);
 }
 
+/* Distinct Action/CTA Floating Glass Card */
+.hero-glass-card.glass-cta-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(18, 199, 193, 0.16) 100%);
+  border: 1px solid rgba(18, 199, 193, 0.45);
+  box-shadow: 0 20px 40px -10px rgba(18, 199, 193, 0.25);
+}
+
+.hero-glass-card.glass-cta-card:hover {
+  border-color: rgba(18, 199, 193, 0.7);
+  box-shadow: 0 25px 50px -10px rgba(18, 199, 193, 0.4);
+}
+
+.glass-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 5px 12px;
+  background: var(--teal, #12C7C1);
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-full, 9999px);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(18, 199, 193, 0.35);
+  width: fit-content;
+}
+
+.glass-cta-btn:hover {
+  background: #ffffff;
+  color: #0f172a;
+  transform: translateX(2px);
+}
+
 .glass-icon {
   width: 40px;
   height: 40px;

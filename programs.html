@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Programs & Clinical Skill Tracks — VetNova Training Institute Pune</title>
+  <title>Programs &amp; Clinical Skill Tracks — VetNova Training Institute Pune</title>
   <meta name="description"
     content="Explore VetNova's practical veterinary clinical training programs: Veterinary Skill-Up, Soft Tissue Surgery, Radiology, Ultrasound Scanning, Emergency Medicine, and Vet Nurse Certification." />
 
@@ -18,6 +18,99 @@
 
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Styles for Program Hierarchy, Levels & Batch Sections */
+    .track-group-section {
+      margin-bottom: 50px;
+    }
+
+    .track-group-header {
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 12px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .track-group-header h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy, #0B1C3E);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .track-level-badge {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 12px;
+      border-radius: 50px;
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .track-level-badge.foundation {
+      background: #f0fdf4;
+      color: #15803d;
+    }
+
+    .track-level-badge.intermediate {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .track-level-badge.advanced {
+      background: #f1f5f9;
+      color: #334155;
+    }
+
+    .ongoing-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(18, 199, 193, 0.12);
+      color: #0d9488;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .ongoing-status-badge i {
+      font-size: 8px;
+      animation: pulse-dot 1.5s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .ongoing-empty-card {
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: var(--radius-xl, 16px);
+      padding: 40px 24px;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
@@ -28,59 +121,122 @@
 
     <main id="main-content">
 
-      <!-- SECTION 1: Programs Hero Banner -->
-      <!-- <section class="inner-hero" id="programs-hero">
+      <!-- SECTION 1: Page Hero -->
+      <div class="page-hero">
         <div class="container">
           <nav class="breadcrumb" aria-label="Breadcrumb navigation">
             <a href="index.html">Home</a>
             <i class="fa-solid fa-chevron-right"></i>
-            <span>Programs & Clinical Tracks</span>
+            <span>Programs &amp; Clinical Tracks</span>
           </nav>
-
-          <div class="inner-hero-wrap">
-            <div class="inner-hero-copy">
-              <span class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> CLINICAL PATHWAYS</span>
-              <h1>Practical Veterinary Programs & Workshops</h1>
-              <p>
-                From intensive 4-week flagship skill-up tracks to focused surgical and radiology masterclasses, explore
-                accredited clinical modules engineered to build genuine manual confidence and diagnostic precision.
-              </p>
-              <div class="hero-ctas">
-                <a class="btn btn-primary" href="#all-programs">Explore All Tracks <i
-                    class="fa-solid fa-arrow-down"></i></a>
-                <a class="btn btn-outline" href="contact.html#enquiry"><i class="fa-solid fa-file-pdf"></i> Download
-                  Complete
-                  Syllabus</a>
-              </div>
-            </div>
-
-            <div class="inner-hero-image">
-              <img src="assets/vet_selector_petcare_result.webp"
-                alt="Indian veterinary surgeons teaching students during a practical workshop at VetNova Pune"
-                loading="lazy" decoding="async" />
-            </div>
-          </div>
-        </div>
-      </section> -->
-
-      <div class="page-hero">
-        <div class="container">
-          <nav class="breadcrumb" aria-label="Breadcrumb navigation">
-            <a href="index">Home</a>
-            <i class="fa-solid fa-chevron-right"></i>
-            <span>Programs & Clinical Tracks</span>
-          </nav>
-          <h1>Practical Veterinary Programs & Workshops</h1>
+          <h1>Practical Veterinary Programs &amp; Workshops</h1>
           <p>
             From intensive 4-week flagship skill-up tracks to focused surgical and radiology masterclasses, explore
             accredited clinical modules engineered to build genuine manual confidence and diagnostic precision.
           </p>
         </div>
-
       </div>
 
-      <!-- SECTION 2: Interactive Filter & Search Controls Bar -->
-      <section class="section soft" id="program-filters" style="padding-bottom: 20px;">
+      <!-- SECTION 2: Who Should Apply? (Persona Alignment) -->
+      <section class="section soft" id="who-should-apply" style="padding: 50px 0;">
+        <div class="container">
+          <div class="section-head center">
+            <span class="eyebrow"><i class="fa-solid fa-users"></i> PARTICIPANT ELIGIBILITY</span>
+            <h2>Who Should Apply?</h2>
+            <p>Discover how VetNova's hands-on clinical curriculums align with your experience level, professional
+              background, and career goals.</p>
+          </div>
+
+          <div class="path-grid">
+            <!-- Persona 1: Practicing Veterinarians -->
+            <div class="path-card">
+              <span class="tag">Practicing Clinicians</span>
+              <div class="photo">
+                <img src="assets/images/learning-path-specialist.webp"
+                  alt="Practicing veterinarian conducting surgical procedure at VetNova Pune" loading="lazy"
+                  decoding="async" />
+              </div>
+              <div class="body">
+                <h3>Practicing Veterinarians</h3>
+                <p>Expand your clinic capabilities with advanced soft tissue surgeries, abdominal ultrasound, and
+                  critical triage protocols.</p>
+                <a class="link" href="soft-tissue-surgery.html">View Advanced Tracks <i
+                    class="fa-solid fa-chevron-right"></i></a>
+              </div>
+            </div>
+
+            <!-- Persona 2: Fresh / New Graduates -->
+            <div class="path-card">
+              <span class="tag">0–1 Yr Graduates &amp; Interns</span>
+              <div class="photo">
+                <img src="assets/images/learning-path-graduate.webp"
+                  alt="Young veterinary graduate practicing clinical skills with mentor" loading="lazy"
+                  decoding="async" />
+              </div>
+              <div class="body">
+                <h3>Fresh &amp; New Graduates</h3>
+                <p>Bridge the gap between university textbooks and independent practice with 80%+ tactile lab hours and
+                  case exposure.</p>
+                <a class="link" href="veterinary-skill-up.html">Explore Skill-Up <i
+                    class="fa-solid fa-chevron-right"></i></a>
+              </div>
+            </div>
+
+            <!-- Persona 3: Veterinary Nurses & Technicians -->
+            <div class="path-card">
+              <span class="tag">Paravet &amp; Clinic Staff</span>
+              <div class="photo">
+                <img src="assets/images/learning-path-nurse.webp"
+                  alt="Veterinary nurse assisting with patient monitoring in clinical bay" loading="lazy"
+                  decoding="async" />
+              </div>
+              <div class="body">
+                <h3>Vet Nurses &amp; Technicians</h3>
+                <p>Master surgical suite sterilization, patient restraint, IV catheterization, fluid therapy, and ICU
+                  patient monitoring.</p>
+                <a class="link" href="vet-nurse-programme.html">Nurse Certification <i
+                    class="fa-solid fa-chevron-right"></i></a>
+              </div>
+            </div>
+
+            <!-- Persona 4: Pet Parents & NGO Volunteers -->
+            <div class="path-card">
+              <span class="tag">Non-Technical &amp; Caregivers</span>
+              <div class="photo">
+                <img src="assets/images/learning-path-student.webp"
+                  alt="Pet parent learning emergency first aid procedures" loading="lazy" decoding="async" />
+              </div>
+              <div class="body">
+                <h3>Pet Parents &amp; Caregivers</h3>
+                <p>Learn emergency first-aid, choking resuscitation, thermal stroke stabilization, and basic preventive
+                  pet health care.</p>
+                <a class="link" href="emergency-medicine.html">Emergency First-Aid <i
+                    class="fa-solid fa-chevron-right"></i></a>
+              </div>
+            </div>
+
+            <!-- Persona 5: International & Overseas Vets -->
+            <div class="path-card">
+              <span class="tag">International Veterinarians</span>
+              <div class="photo">
+                <img src="assets/images/learning-path-doctor.webp"
+                  alt="International veterinarian attending practical clinical workshop at VetNova Pune" loading="lazy"
+                  decoding="async" />
+              </div>
+              <div class="body">
+                <h3>International &amp; Overseas Vets</h3>
+                <p>Build practical clinical skills through hands-on veterinary training designed to support professional development and advanced learning.</p>
+                <a class="link" href="programs.html#all-programs">Explore Programs <i
+                    class="fa-solid fa-chevron-right"></i></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 3: Search & Category Filter Controls -->
+      <section class="section" id="program-filters" style="padding: 40px 0 20px 0;">
         <div class="container">
           <div class="program-filter-bar">
             <!-- Search Input -->
@@ -93,12 +249,12 @@
             <!-- Category Filter Pills -->
             <div class="category-pills-wrap" style="margin: 0; justify-content: flex-start;">
               <button class="category-pill program-category-pill active" data-category="all">All Tracks</button>
-              <button class="category-pill program-category-pill" data-category="surgery">Surgery</button>
+              <button class="category-pill program-category-pill" data-category="skillup">Vet Skill-Up</button>
+              <button class="category-pill program-category-pill" data-category="surgery">Soft Tissue Surgery</button>
               <button class="category-pill program-category-pill" data-category="radiology">Radiology &amp;
                 Ultrasound</button>
               <button class="category-pill program-category-pill" data-category="emergency">Emergency Care</button>
               <button class="category-pill program-category-pill" data-category="nurse">Vet Nurse</button>
-              <button class="category-pill program-category-pill" data-category="first-aid">Pet First Aid</button>
             </div>
 
             <!-- Select Dropdowns -->
@@ -120,709 +276,578 @@
         </div>
       </section>
 
-      <!-- SECTION 3: All Programs Catalogue Grid (MASTER REUSABLE CARDS) -->
-      <section class="section" id="all-programs" style="padding-top: 0;">
+      <!-- SECTION 4: Structured Program Catalogue Grid (Separated By Program & Level) -->
+      <section class="section" id="all-programs" style="padding-top: 20px; padding-bottom: 60px;">
+        <div class="container">
+          <div class="section-head center" style="margin-bottom: 40px;">
+            <span class="eyebrow"><i class="fa-solid fa-cubes"></i> ACCREDITED CURRICULUM DIRECTORY</span>
+            <h2>Program Tracks &amp; Levels</h2>
+            <p>Browse structured clinical tracks categorized by program depth and manual complexity.</p>
+          </div>
+
+          <!-- TRACK 1: VETERINARY SKILL-UP PROGRAM (Levels: Foundation & Intermediate) -->
+          <div class="track-group-section" data-track-category="skillup surgery">
+            <div class="track-group-header">
+              <h3><i class="fa-solid fa-graduation-cap text-teal"></i> Veterinary Skill-Up Program</h3>
+              <span class="track-level-badge intermediate">Flagship Clinical Track</span>
+            </div>
+
+            <div class="feature-grid-3">
+              <!-- Level: Intermediate (Flagship 4-Week Track) -->
+              <div class="program-card" data-category="skillup surgery" data-mode="offline" data-duration="4weeks"
+                onclick="window.location.href='veterinary-skill-up.html';">
+                <div class="program-card-media">
+                  <span class="program-card-badge">INTERMEDIATE • FLAGSHIP</span>
+                  <img src="assets/images/programs/program-skill-up.webp"
+                    alt="Veterinary Skill-Up Program practical lab" loading="lazy" decoding="async" />
+                </div>
+                <div class="program-card-body">
+                  <h3 class="program-card-title"><a href="veterinary-skill-up.html">Veterinary Skill-Up Program</a></h3>
+                  <p class="program-card-desc">Comprehensive 4-week clinical mastery module covering soft tissue
+                    surgery, digital radiology reading, ultrasound scanning, and emergency triage.</p>
+                  <div class="program-card-meta">
+                    <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>4 Weeks</strong> (120+ Hrs)</div>
+                    <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Dr. Amit Kulkarni</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
+                    <div class="meta-item"><i class="fa-solid fa-signal"></i> Intermediate</div>
+                  </div>
+                  <div class="program-card-footer">
+                    <div class="program-card-price">₹38,000 <small>+ GST</small></div>
+                    <a class="btn btn-primary btn-sm" href="veterinary-skill-up.html">View Details <i
+                        class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRACK 2: SOFT TISSUE SURGERY TRACK -->
+          <div class="track-group-section" data-track-category="surgery">
+            <div class="track-group-header">
+              <h3><i class="fa-solid fa-scalpel text-teal"></i> Soft Tissue Surgery Track</h3>
+              <span class="track-level-badge intermediate">Intermediate / Advanced</span>
+            </div>
+
+            <div class="feature-grid-3">
+              <div class="program-card" data-category="surgery" data-mode="offline" data-duration="1week"
+                onclick="window.location.href='soft-tissue-surgery.html';">
+                <div class="program-card-media">
+                  <span class="program-card-badge">SURGERY TRACK</span>
+                  <img src="assets/images/programs/program-surgery.webp" alt="Soft Tissue Surgery procedural lab"
+                    loading="lazy" decoding="async" />
+                </div>
+                <div class="program-card-body">
+                  <h3 class="program-card-title"><a href="soft-tissue-surgery.html">Soft Tissue Surgery Track</a></h3>
+                  <p class="program-card-desc">Intensive hands-on procedural workshop covering sterile OR setup, tissue
+                    handling, suture patterns, spay/neuter, and intestinal cystotomy closures.</p>
+                  <div class="program-card-meta">
+                    <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>1 Week</strong> (40 Hrs)</div>
+                    <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Dr. Amit Kulkarni</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
+                    <div class="meta-item"><i class="fa-solid fa-signal"></i> Intermediate</div>
+                  </div>
+                  <div class="program-card-footer">
+                    <div class="program-card-price">₹18,500 <small>+ GST</small></div>
+                    <a class="btn btn-primary btn-sm" href="soft-tissue-surgery.html">View Details <i
+                        class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRACK 3: RADIOLOGY & ULTRASOUND TRACK -->
+          <div class="track-group-section" data-track-category="radiology">
+            <div class="track-group-header">
+              <h3><i class="fa-solid fa-x-ray text-teal"></i> Radiology &amp; Ultrasound Track</h3>
+              <span class="track-level-badge intermediate">Diagnostic Specialization</span>
+            </div>
+
+            <div class="feature-grid-3">
+              <div class="program-card" data-category="radiology" data-mode="offline" data-duration="1week"
+                onclick="window.location.href='radiology-ultrasound.html';">
+                <div class="program-card-media">
+                  <span class="program-card-badge">DIAGNOSTICS TRACK</span>
+                  <img src="assets/images/programs/program-radiology.webp" alt="Radiology X-ray reading masterclass"
+                    loading="lazy" decoding="async" />
+                </div>
+                <div class="program-card-body">
+                  <h3 class="program-card-title"><a href="radiology-ultrasound.html">Radiology &amp; Ultrasound
+                      Masterclass</a></h3>
+                  <p class="program-card-desc">Systematic abdominal &amp; thoracic radiograph interpretation alongside
+                    hands-on abdominal ultrasound probe handling and FAST scanning.</p>
+                  <div class="program-card-meta">
+                    <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>1 Week</strong> (40 Hrs)</div>
+                    <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Dr. Priya Sharma</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
+                    <div class="meta-item"><i class="fa-solid fa-signal"></i> Intermediate</div>
+                  </div>
+                  <div class="program-card-footer">
+                    <div class="program-card-price">₹16,000 <small>+ GST</small></div>
+                    <a class="btn btn-primary btn-sm" href="radiology-ultrasound.html">View Details <i
+                        class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRACK 4: EMERGENCY MEDICINE TRACK -->
+          <div class="track-group-section" data-track-category="emergency">
+            <div class="track-group-header">
+              <h3><i class="fa-solid fa-truck-medical text-teal"></i> Emergency Medicine &amp; First Aid Track</h3>
+              <span class="track-level-badge advanced">Emergency &amp; Critical Care</span>
+            </div>
+
+            <div class="feature-grid-3">
+              <!-- Emergency ICU Track -->
+              <div class="program-card" data-category="emergency" data-mode="offline" data-duration="short"
+                onclick="window.location.href='emergency-medicine.html';">
+                <div class="program-card-media">
+                  <span class="program-card-badge emergency">EMERGENCY TRACK</span>
+                  <img src="assets/images/programs/program-emergency.webp" alt="Emergency ICU triage training"
+                    loading="lazy" decoding="async" />
+                </div>
+                <div class="program-card-body">
+                  <h3 class="program-card-title"><a href="emergency-medicine.html">Pet Emergency &amp; Critical Care</a>
+                  </h3>
+                  <p class="program-card-desc">Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and
+                    multiparameter vitals monitoring.</p>
+                  <div class="program-card-meta">
+                    <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>3 Days</strong> (24 Hrs)</div>
+                    <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Dr. Rajesh Verma</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
+                    <div class="meta-item"><i class="fa-solid fa-signal"></i> Advanced</div>
+                  </div>
+                  <div class="program-card-footer">
+                    <div class="program-card-price">₹12,500 <small>+ GST</small></div>
+                    <a class="btn btn-primary btn-sm" href="emergency-medicine.html">View Details <i
+                        class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pet Emergency First Aid Workshop -->
+              <div class="program-card" data-category="emergency first-aid" data-mode="workshop" data-duration="short"
+                onclick="window.location.href='emergency-medicine.html';">
+                <div class="program-card-media">
+                  <span class="program-card-badge workshop">WORKSHOP</span>
+                  <img src="assets/images/programs/program-first-aid.webp" alt="Pet parent emergency first aid class"
+                    loading="lazy" decoding="async" />
+                </div>
+                <div class="program-card-body">
+                  <h3 class="program-card-title"><a href="emergency-medicine.html">Pet Emergency First Aid Workshop</a>
+                  </h3>
+                  <p class="program-card-desc">Designed for pet parents and rescuers to stabilize pets during
+                    life-threatening choking, bleeding, or heat stroke emergencies.</p>
+                  <div class="program-card-meta">
+                    <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>1 Day</strong> (8 Hrs)</div>
+                    <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Clinical Team</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
+                    <div class="meta-item"><i class="fa-solid fa-signal"></i> Beginner</div>
+                  </div>
+                  <div class="program-card-footer">
+                    <div class="program-card-price">₹3,500 <small>+ GST</small></div>
+                    <a class="btn btn-outline btn-sm" href="emergency-medicine.html">View Details <i
+                        class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRACK 5: VET NURSE PROGRAMME -->
+          <div class="track-group-section" data-track-category="nurse">
+            <div class="track-group-header">
+              <h3><i class="fa-solid fa-user-nurse text-teal"></i> Vet Nurse &amp; Assistant Programme</h3>
+              <span class="track-level-badge foundation">Foundation / Paravet</span>
+            </div>
+
+            <div class="feature-grid-3">
+              <div class="program-card" data-category="nurse" data-mode="offline" data-duration="short"
+                onclick="window.location.href='vet-nurse-programme.html';">
+                <div class="program-card-media">
+                  <span class="program-card-badge">NURSE TRACK</span>
+                  <img src="assets/images/programs/program-nurse.webp" alt="Vet nurse assistant practical prep"
+                    loading="lazy" decoding="async" />
+                </div>
+                <div class="program-card-body">
+                  <h3 class="program-card-title"><a href="vet-nurse-programme.html">Vet Nurse Foundation Certificate</a>
+                  </h3>
+                  <p class="program-card-desc">Foundational practical training for clinic assistants and paravet staff
+                    covering animal restraint and sterile OR scrub prep.</p>
+                  <div class="program-card-meta">
+                    <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>2 Weeks</strong> (60 Hrs)</div>
+                    <div class="meta-item"><i class="fa-solid fa-user-nurse"></i> Rohan Mehta</div>
+                    <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
+                    <div class="meta-item"><i class="fa-solid fa-signal"></i> Foundation</div>
+                  </div>
+                  <div class="program-card-footer">
+                    <div class="program-card-price">₹9,500 <small>+ GST</small></div>
+                    <a class="btn btn-primary btn-sm" href="vet-nurse-programme.html">View Details <i
+                        class="fa-solid fa-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECTION 5: Upcoming Practical Batches Schedule -->
+      <section class="section soft" id="upcoming-batches">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-cubes"></i> ACCREDITED CURRICULUM</span>
-            <h2>Select Your Learning Track</h2>
-            <p>Structured hands-on modules designed for BVSc interns, fresh graduates, practicing clinicians, and vet
-              assistants.</p>
+            <span class="eyebrow"><i class="fa-solid fa-calendar-days"></i> BATCH CALENDAR</span>
+            <h2>Upcoming Practical Batches (2026)</h2>
+            <p>Strictly capped at 12 doctors per batch for 1-on-1 mentor guidance. Reserve your seat early.</p>
           </div>
 
-          <!-- Master Reusable Program Cards Grid (3 Columns) -->
+          <div
+            style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #e2e8f0; overflow: hidden; box-shadow: var(--soft-shadow);">
+            <div style="overflow-x-auto;">
+              <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 15px;">
+                <thead>
+                  <tr style="background-color: var(--navy-2); color: var(--white);">
+                    <th style="padding: 16px 20px;">Program Track</th>
+                    <th style="padding: 16px 20px;">Start Date</th>
+                    <th style="padding: 16px 20px;">Duration</th>
+                    <th style="padding: 16px 20px;">Seat Status</th>
+                    <th style="padding: 16px 20px;">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 18px 20px;"><strong>Veterinary Skill-Up Program</strong></td>
+                    <td style="padding: 18px 20px; color: var(--navy-2);">August 15, 2026</td>
+                    <td style="padding: 18px 20px;">4 Weeks</td>
+                    <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 4 Seats
+                        Remaining</span></td>
+                    <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
+                        href="contact.html">Apply Now</a></td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #f1f5f9; background-color: #fafcfd;">
+                    <td style="padding: 18px 20px;"><strong>Soft Tissue Surgery Track</strong></td>
+                    <td style="padding: 18px 20px; color: var(--navy-2);">September 1, 2026</td>
+                    <td style="padding: 18px 20px;">1 Week</td>
+                    <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢 Admissions
+                        Open</span></td>
+                    <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
+                        href="contact.html">Apply Now</a></td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 18px 20px;"><strong>Radiology &amp; Ultrasound Masterclass</strong></td>
+                    <td style="padding: 18px 20px; color: var(--navy-2);">September 12, 2026</td>
+                    <td style="padding: 18px 20px;">1 Week</td>
+                    <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢 Admissions
+                        Open</span></td>
+                    <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
+                        href="contact.html">Apply Now</a></td>
+                  </tr>
+                  <tr style="background-color: #fafcfd;">
+                    <td style="padding: 18px 20px;"><strong>Pet Emergency &amp; Critical Care</strong></td>
+                    <td style="padding: 18px 20px; color: var(--navy-2);">September 25, 2026</td>
+                    <td style="padding: 18px 20px;">3 Days</td>
+                    <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 3 Seats
+                        Remaining</span></td>
+                    <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
+                        href="contact.html">Apply Now</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: Ongoing Batches -->
+      <section class="section" id="ongoing-batches" style="padding: 50px 0;">
+        <div class="container">
+          <div class="section-head center">
+            <span class="ongoing-status-badge"><i class="fa-solid fa-circle"></i> ACTIVE SESSIONS</span>
+            <h2 style="margin-top: 12px;">Ongoing Batches</h2>
+            <p>Currently running practical clinical workshops at our Pune learning facility.</p>
+          </div>
+
+          <div class="ongoing-empty-card">
+            <i class="fa-solid fa-clock-rotate-left"
+              style="font-size: 36px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
+            <h3 style="font-size: 1.15rem; color: #334155; margin-bottom: 6px; font-weight: 600;">July &amp; August
+              Batches Currently In Session</h3>
+            <p
+              style="font-size: 0.95rem; color: #64748b; margin: 0 0 16px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
+              Active clinical cohorts are undergoing supervised surgical and diagnostic training on campus. Explore
+              upcoming batches above to reserve your seat in the next scheduled intake.</p>
+            <a href="#upcoming-batches" class="btn btn-outline btn-sm">View Upcoming Batches <i
+                class="fa-solid fa-arrow-up" style="margin-left: 6px;"></i></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: Why Choose VetNova Programs -->
+      <section class="section soft" id="why-choose-programs">
+        <div class="container">
+          <div class="section-head center">
+            <span class="eyebrow"><i class="fa-solid fa-star"></i> PRACTICAL ADVANTAGE</span>
+            <h2>Why Choose VetNova Programs</h2>
+            <p>Why veterinary doctors and assistants choose VetNova over traditional passive lectures.</p>
+          </div>
+
           <div class="feature-grid-3">
-
-            <!-- Card 1: Veterinary Skill-Up Program -->
-            <div class="program-card" data-category="surgery" data-mode="offline" data-duration="4weeks"
-              onclick="window.location.href='veterinary-skill-up.html';">
-              <div class="program-card-media">
-                <span class="program-card-badge">FLAGSHIP COURSE</span>
-                <img src="assets/images/programs/program-skill-up.webp" alt="Veterinary Skill-Up Program practical lab"
-                  loading="lazy" decoding="async" />
-              </div>
-              <div class="program-card-body">
-                <h3 class="program-card-title"><a href="veterinary-skill-up.html">Veterinary Skill-Up
-                    Program</a></h3>
-                <p class="program-card-desc">Comprehensive 4-week clinical mastery module covering soft tissue surgery,
-                  digital radiology reading, ultrasound scanning, and emergency triage.</p>
-                <div class="program-card-meta">
-                  <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>4 Weeks</strong> (120+ Hrs)</div>
-                  <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Dr. Amit Kulkarni</div>
-                  <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
-                  <div class="meta-item"><i class="fa-solid fa-signal"></i> Intermediate</div>
-                </div>
-                <div class="program-card-footer">
-                  <div class="program-card-price">₹38,000 <small>+ GST</small></div>
-                  <a class="btn btn-primary btn-sm" href="veterinary-skill-up.html">View Details <i
-                      class="fa-solid fa-arrow-right"></i></a>
-                </div>
-              </div>
+            <div class="feature-card-item">
+              <div class="feature-card-icon"><i class="fa-solid fa-hand-holding-hand"></i></div>
+              <h3>Hands-on Clinical Training</h3>
+              <p>80% of total course hours spent executing tactile procedures on models and simulated clinical cases for
+                genuine manual dexterity.</p>
             </div>
 
-            <!-- Card 2: Soft Tissue Surgery Track -->
-            <div class="program-card" data-category="surgery" data-mode="offline" data-duration="1week"
-              onclick="window.location.href='soft-tissue-surgery.html';">
-              <div class="program-card-media">
-                <span class="program-card-badge">SURGERY TRACK</span>
-                <img src="assets/images/programs/program-surgery.webp" alt="Soft Tissue Surgery procedural lab"
-                  loading="lazy" decoding="async" />
-              </div>
-              <div class="program-card-body">
-                <h3 class="program-card-title"><a href="soft-tissue-surgery.html">Soft Tissue Surgery
-                    Track</a></h3>
-                <p class="program-card-desc">Intensive hands-on procedural workshop covering sterile OR setup, tissue
-                  handling, suture patterns, spay/neuter, and intestinal cystotomy closures.</p>
-                <div class="program-card-meta">
-                  <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>1 Week</strong> (40 Hrs)</div>
-                  <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Dr. Amit Kulkarni</div>
-                  <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
-                  <div class="meta-item"><i class="fa-solid fa-signal"></i> Intermediate</div>
-                </div>
-                <div class="program-card-footer">
-                  <div class="program-card-price">₹18,500 <small>+ GST</small></div>
-                  <a class="btn btn-outline btn-sm" href="soft-tissue-surgery.html">View Details <i
-                      class="fa-solid fa-arrow-right"></i></a>
-                </div>
-              </div>
+            <div class="feature-card-item">
+              <div class="feature-card-icon"><i class="fa-solid fa-user-doctor"></i></div>
+              <h3>Expert Veterinary Faculty</h3>
+              <p>Direct 1-on-1 mentorship from senior practicing surgeons, radiologists, and emergency clinic owners
+                with decades of field exposure.</p>
             </div>
 
-            <!-- Card 3: Radiology & Ultrasound Masterclass -->
-            <div class="program-card" data-category="radiology" data-mode="offline" data-duration="1week"
-              onclick="window.location.href='radiology-ultrasound.html';">
-              <div class="program-card-media">
-                <span class="program-card-badge">DIAGNOSTICS TRACK</span>
-                <img src="assets/images/programs/program-radiology.webp" alt="Radiology X-ray reading masterclass"
-                  loading="lazy" decoding="async" />
-              </div>
-              <div class="program-card-body">
-                <h3 class="program-card-title"><a href="radiology-ultrasound.html">Radiology &amp;
-                    Ultrasound Masterclass</a></h3>
-                <p class="program-card-desc">Systematic abdominal &amp; thoracic radiograph interpretation alongside
-                  hands-on abdominal ultrasound probe handling and FAST scanning.</p>
-                <div class="program-card-meta">
-                  <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>1 Week</strong> (40 Hrs)</div>
-                  <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Dr. Priya Sharma</div>
-                  <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
-                  <div class="meta-item"><i class="fa-solid fa-signal"></i> Intermediate</div>
-                </div>
-                <div class="program-card-footer">
-                  <div class="program-card-price">₹16,000 <small>+ GST</small></div>
-                  <a class="btn btn-outline btn-sm" href="radiology-ultrasound.html">View Details <i
-                      class="fa-solid fa-arrow-right"></i></a>
-                </div>
-              </div>
+            <div class="feature-card-item">
+              <div class="feature-card-icon"><i class="fa-solid fa-hospital"></i></div>
+              <h3>Modern Simulation Labs</h3>
+              <p>3,000 sq. ft. Wagholi Pune center equipped with sterile procedure bays, digital X-rays, and ultrasound
+                scanning suites.</p>
             </div>
 
-            <!-- Card 4: Pet Emergency & Critical Care -->
-            <div class="program-card" data-category="emergency" data-mode="offline" data-duration="short"
-              onclick="window.location.href='emergency-medicine.html';">
-              <div class="program-card-media">
-                <span class="program-card-badge emergency">EMERGENCY TRACK</span>
-                <img src="assets/images/programs/program-emergency.webp" alt="Emergency ICU triage training"
-                  loading="lazy" decoding="async" />
-              </div>
-              <div class="program-card-body">
-                <h3 class="program-card-title"><a href="emergency-medicine.html">Pet Emergency &amp;
-                    Critical Care</a></h3>
-                <p class="program-card-desc">Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and
-                  multiparameter vitals monitoring.</p>
-                <div class="program-card-meta">
-                  <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>3 Days</strong> (24 Hrs)</div>
-                  <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Dr. Rajesh Verma</div>
-                  <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
-                  <div class="meta-item"><i class="fa-solid fa-signal"></i> Advanced</div>
-                </div>
-                <div class="program-card-footer">
-                  <div class="program-card-price">₹12,500 <small>+ GST</small></div>
-                  <a class="btn btn-outline btn-sm" href="emergency-medicine.html">View Details <i
-                      class="fa-solid fa-arrow-right"></i></a>
-                </div>
-              </div>
+            <div class="feature-card-item">
+              <div class="feature-card-icon"><i class="fa-solid fa-users"></i></div>
+              <h3>Small Batch Learning</h3>
+              <p>Strictly capped at 12 doctors per batch to ensure personalized feedback and direct instructor guidance
+                during every step.</p>
             </div>
 
-            <!-- Card 5: Vet Nurse Foundation Certificate -->
-            <div class="program-card" data-category="nurse" data-mode="offline" data-duration="short"
-              onclick="window.location.href='vet-nurse-programme.html';">
-              <div class="program-card-media">
-                <span class="program-card-badge">NURSE TRACK</span>
-                <img src="assets/images/programs/program-nurse.webp" alt="Vet nurse assistant practical prep"
-                  loading="lazy" decoding="async" />
-              </div>
-              <div class="program-card-body">
-                <h3 class="program-card-title"><a href="vet-nurse-programme.html">Vet Nurse Foundation
-                    Certificate</a></h3>
-                <p class="program-card-desc">Foundational practical training for clinic assistants and paravet staff
-                  covering animal restraint and sterile OR scrub prep.</p>
-                <div class="program-card-meta">
-                  <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>2 Weeks</strong> (60 Hrs)</div>
-                  <div class="meta-item"><i class="fa-solid fa-user-nurse"></i> Rohan Mehta</div>
-                  <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
-                  <div class="meta-item"><i class="fa-solid fa-signal"></i> Foundation</div>
-                </div>
-                <div class="program-card-footer">
-                  <div class="program-card-price">₹9,500 <small>+ GST</small></div>
-                  <a class="btn btn-outline btn-sm" href="vet-nurse-programme.html">View Details <i
-                      class="fa-solid fa-arrow-right"></i></a>
-                </div>
-              </div>
+            <div class="feature-card-item">
+              <div class="feature-card-icon"><i class="fa-solid fa-certificate"></i></div>
+              <h3>Industry-Recognized Certification</h3>
+              <p>Certificates respected across private clinics, pet hospitals, and academic institutions for verified
+                clinical skill readiness.</p>
             </div>
 
-            <!-- Card 6: Pet Emergency First Aid Workshop -->
-            <div class="program-card" data-category="first-aid" data-mode="workshop" data-duration="short"
-              onclick="window.location.href='emergency-medicine.html';">
-              <div class="program-card-media">
-                <span class="program-card-badge workshop">WORKSHOP</span>
-                <img src="assets/images/programs/program-first-aid.webp" alt="Pet parent emergency first aid class"
-                  loading="lazy" decoding="async" />
-              </div>
-              <div class="program-card-body">
-                <h3 class="program-card-title"><a href="emergency-medicine.html">Pet Emergency First Aid
-                    Workshop</a></h3>
-                <p class="program-card-desc">Designed for pet parents and rescuers to stabilize pets during
-                  life-threatening choking, bleeding, or heat stroke emergencies.</p>
-                <div class="program-card-meta">
-                  <div class="meta-item"><i class="fa-regular fa-clock"></i> <strong>1 Day</strong> (8 Hrs)</div>
-                  <div class="meta-item"><i class="fa-solid fa-user-doctor"></i> Clinical Team</div>
-                  <div class="meta-item"><i class="fa-solid fa-location-dot"></i> Pune Campus</div>
-                  <div class="meta-item"><i class="fa-solid fa-signal"></i> Beginner</div>
-                </div>
-                <div class="program-card-footer">
-                  <div class="program-card-price">₹3,500 <small>+ GST</small></div>
-                  <a class="btn btn-outline btn-sm" href="emergency-medicine.html">View Details <i
-                      class="fa-solid fa-arrow-right"></i></a>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-  </div>
-  </section>
-
-  <!-- SECTION 4: Upcoming Batches Schedule -->
-  <section class="section soft" id="upcoming-batches">
-    <div class="container">
-      <div class="section-head center">
-        <span class="eyebrow"><i class="fa-solid fa-calendar-days"></i> BATCH CALENDAR</span>
-        <h2>Upcoming Practical Batches (2026)</h2>
-        <p>Strictly capped at 12 doctors per batch for 1-on-1 mentor guidance. Reserve your seat early.</p>
-      </div>
-
-      <div
-        style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #e2e8f0; overflow: hidden; box-shadow: var(--soft-shadow);">
-        <div style="overflow-x: auto;">
-          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 15px;">
-            <thead>
-              <tr style="background-color: var(--navy-2); color: var(--white);">
-                <th style="padding: 16px 20px;">Program Track</th>
-                <th style="padding: 16px 20px;">Start Date</th>
-                <th style="padding: 16px 20px;">Duration</th>
-                <th style="padding: 16px 20px;">Seat Status</th>
-                <th style="padding: 16px 20px;">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 18px 20px;"><strong>Veterinary Skill-Up Program</strong></td>
-                <td style="padding: 18px 20px; color: var(--navy-2);">August 15, 2026</td>
-                <td style="padding: 18px 20px;">4 Weeks</td>
-                <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 4 Seats
-                    Remaining</span></td>
-                <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-enquire-now"
-                    href="contact.html#enquiry">Apply Now</a></td>
-              </tr>
-              <tr style="border-bottom: 1px solid #f1f5f9; background-color: #fafcfd;">
-                <td style="padding: 18px 20px;"><strong>Soft Tissue Surgery Track</strong></td>
-                <td style="padding: 18px 20px; color: var(--navy-2);">September 1, 2026</td>
-                <td style="padding: 18px 20px;">1 Week</td>
-                <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢 Admissions
-                    Open</span></td>
-                <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-enquire-now"
-                    href="contact.html#enquiry">Reserve Seat</a></td>
-              </tr>
-              <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 18px 20px;"><strong>Radiology & Ultrasound Masterclass</strong></td>
-                <td style="padding: 18px 20px; color: var(--navy-2);">September 12, 2026</td>
-                <td style="padding: 18px 20px;">1 Week</td>
-                <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢 Admissions
-                    Open</span></td>
-                <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-enquire-now"
-                    href="contact.html#enquiry">Reserve Seat</a></td>
-              </tr>
-              <tr style="background-color: #fafcfd;">
-                <td style="padding: 18px 20px;"><strong>Pet Emergency & Critical Care</strong></td>
-                <td style="padding: 18px 20px; color: var(--navy-2);">September 25, 2026</td>
-                <td style="padding: 18px 20px;">3 Days</td>
-                <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 3 Seats
-                    Remaining</span></td>
-                <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-enquire-now"
-                    href="contact.html#enquiry">Apply Now</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 5: Why Choose VetNova Programs -->
-  <section class="section" id="why-choose-programs">
-    <div class="container">
-      <div class="section-head center">
-        <span class="eyebrow"><i class="fa-solid fa-star"></i> PRACTICAL ADVANTAGE</span>
-        <h2>Why Choose VetNova Programs</h2>
-        <p>Why veterinary doctors and assistants choose VetNova over traditional passive lectures.</p>
-      </div>
-
-      <div class="feature-grid-3">
-        <div class="feature-card-item">
-          <div class="feature-card-icon"><i class="fa-solid fa-hand-holding-hand"></i></div>
-          <h3>Hands-on Clinical Training</h3>
-          <p>80% of total course hours spent executing tactile procedures on models and simulated clinical cases for
-            genuine manual dexterity.</p>
-        </div>
-
-        <div class="feature-card-item">
-          <div class="feature-card-icon"><i class="fa-solid fa-user-doctor"></i></div>
-          <h3>Expert Veterinary Faculty</h3>
-          <p>Direct 1-on-1 mentorship from senior practicing surgeons, radiologists, and emergency clinic owners
-            with decades of field exposure.</p>
-        </div>
-
-        <div class="feature-card-item">
-          <div class="feature-card-icon"><i class="fa-solid fa-hospital"></i></div>
-          <h3>Modern Simulation Labs</h3>
-          <p>3,000 sq. ft. Wagholi Pune center equipped with sterile procedure bays, digital X-rays, and ultrasound
-            scanning suites.</p>
-        </div>
-
-        <div class="feature-card-item">
-          <div class="feature-card-icon"><i class="fa-solid fa-users"></i></div>
-          <h3>Small Batch Learning</h3>
-          <p>Strictly capped at 12 doctors per batch to ensure personalized feedback and direct instructor guidance
-            during every step.</p>
-        </div>
-
-        <div class="feature-card-item">
-          <div class="feature-card-icon"><i class="fa-solid fa-certificate"></i></div>
-          <h3>Industry-Recognized Certification</h3>
-          <p>Certificates respected across private clinics, pet hospitals, and academic institutions for verified
-            clinical skill readiness.</p>
-        </div>
-
-        <div class="feature-card-item">
-          <div class="feature-card-icon"><i class="fa-solid fa-briefcase"></i></div>
-          <h3>Career & Placement Support</h3>
-          <p>Personalized career guidance, clinic setup consultations, resume reviews, and direct referral
-            connections with hiring pet hospitals.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 6: Training Formats & Delivery Modes (Redesigned) -->
-  <section class="section tf-premium-section" id="training-formats">
-    <div class="tf-bg-glow"></div>
-    <div class="container">
-
-      <!-- Section Header -->
-      <div class="section-head center">
-        <span class="eyebrow"><i class="fa-solid fa-sliders"></i> Training Formats &amp; Delivery Modes</span>
-        <h2>How VetNova Delivers Practical Education</h2>
-        <p>Flexible learning modes designed to suit interns, full-time clinicians, and veterinary hospital teams.</p>
-      </div>
-
-      <!-- Asymmetric Two-Column Grid -->
-      <div class="tf-asymmetric-grid">
-
-        <!-- LEFT (45%): Featured Learning Experience Card -->
-        <div class="tf-featured-card">
-          <div class="tf-featured-image-wrap">
-            <img src="assets/images/programs/training-formats-featured.webp"
-              alt="VetNova Practical Clinical Workshop with Veterinary Faculty and Students" loading="lazy"
-              decoding="async" />
-            <div class="tf-featured-badge">
-              <i class="fa-solid fa-fire"></i> MOST POPULAR
-            </div>
-          </div>
-          <div class="tf-featured-body">
-            <h3>Hands-on Clinical Learning</h3>
-            <p>Every VetNova program combines faculty-led demonstrations, practical hospital exposure, simulation labs,
-              and guided procedures to ensure graduates are confident inside real veterinary clinics.</p>
-
-            <div class="tf-featured-checklist">
-              <div class="tf-check-item">
-                <span class="tf-check-icon"><i class="fa-solid fa-check"></i></span>
-                <span>Live patient demonstrations</span>
-              </div>
-              <div class="tf-check-item">
-                <span class="tf-check-icon"><i class="fa-solid fa-check"></i></span>
-                <span>Faculty-guided procedures</span>
-              </div>
-              <div class="tf-check-item">
-                <span class="tf-check-icon"><i class="fa-solid fa-check"></i></span>
-                <span>Diagnostic imaging practice</span>
-              </div>
-              <div class="tf-check-item">
-                <span class="tf-check-icon"><i class="fa-solid fa-check"></i></span>
-                <span>Small batch mentorship</span>
-              </div>
-            </div>
-
-            <div class="tf-featured-action">
-              <a href="#all-programs" class="btn btn-primary">Explore Programs <i
-                  class="fa-solid fa-arrow-right"></i></a>
+            <div class="feature-card-item">
+              <div class="feature-card-icon"><i class="fa-solid fa-briefcase"></i></div>
+              <h3>Career &amp; Placement Support</h3>
+              <p>Personalized career guidance, clinic setup consultations, resume reviews, and direct referral
+                connections with hiring pet hospitals.</p>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- RIGHT (55%): Four Interactive Delivery Cards (2x2 Grid) -->
-        <div class="tf-delivery-grid">
+      <!-- SECTION 8: Training Formats & Delivery Modes -->
+      <section class="section tf-premium-section" id="training-formats">
+        <div class="tf-bg-glow"></div>
+        <div class="container">
 
-          <!-- Card 1 -->
-          <div class="tf-delivery-card">
-            <div class="tf-card-top">
-              <div class="tf-card-icon">
-                <i class="fa-solid fa-laptop-code"></i>
-              </div>
-              <span class="tf-card-badge">Flexible</span>
-            </div>
-            <h4 class="tf-card-title">Hybrid Learning</h4>
-            <p class="tf-card-desc">Complete theoretical preparation online followed by immersive practical learning on
-              campus.</p>
-            <div class="tf-card-footer">
-              <span class="tf-card-link">Learn More <i class="fa-solid fa-arrow-right"></i></span>
-            </div>
-          </div>
-
-          <!-- Card 2 -->
-          <div class="tf-delivery-card">
-            <div class="tf-card-top">
-              <div class="tf-card-icon">
-                <i class="fa-solid fa-calendar-check"></i>
-              </div>
-              <span class="tf-card-badge">Working Professionals</span>
-            </div>
-            <h4 class="tf-card-title">Weekend Masterclasses</h4>
-            <p class="tf-card-desc">Saturday and Sunday practical workshops designed for busy veterinarians and
-              clinicians.</p>
-            <div class="tf-card-footer">
-              <span class="tf-card-link">Learn More <i class="fa-solid fa-arrow-right"></i></span>
-            </div>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="tf-delivery-card">
-            <div class="tf-card-top">
-              <div class="tf-card-icon">
-                <i class="fa-solid fa-bolt"></i>
-              </div>
-              <span class="tf-card-badge">Fast Track</span>
-            </div>
-            <h4 class="tf-card-title">Intensive Bootcamps</h4>
-            <p class="tf-card-desc">Focused 3–5 day surgical and diagnostic skill enhancement programs.</p>
-            <div class="tf-card-footer">
-              <span class="tf-card-link">Learn More <i class="fa-solid fa-arrow-right"></i></span>
-            </div>
-          </div>
-
-          <!-- Card 4 -->
-          <div class="tf-delivery-card">
-            <div class="tf-card-top">
-              <div class="tf-card-icon">
-                <i class="fa-solid fa-hospital-user"></i>
-              </div>
-              <span class="tf-card-badge">Institutional</span>
-            </div>
-            <h4 class="tf-card-title">Corporate Hospital Training</h4>
-            <p class="tf-card-desc">Customized veterinary training programs for hospitals, universities and
-              organizations.</p>
-            <div class="tf-card-footer">
-              <span class="tf-card-link">Learn More <i class="fa-solid fa-arrow-right"></i></span>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- Learning Journey Timeline -->
-      <div class="tf-timeline-block">
-        <div class="tf-timeline-head">
-          <h3>Your Practical Learning Journey</h3>
-          <p>Step-by-step roadmap from initial enrollment to clinical mastery and career advancement.</p>
-        </div>
-
-        <div class="tf-timeline-track">
-
-          <div class="tf-timeline-step">
-            <div class="tf-step-icon"><i class="fa-solid fa-paper-plane"></i></div>
-            <h5 class="tf-step-title">Apply</h5>
-            <p class="tf-step-desc">Counseling &amp; selection</p>
-          </div>
-
-          <div class="tf-timeline-connector"></div>
-
-          <div class="tf-timeline-step">
-            <div class="tf-step-icon"><i class="fa-solid fa-book-open"></i></div>
-            <h5 class="tf-step-title">Online Preparation</h5>
-            <p class="tf-step-desc">Core theory &amp; modules</p>
-          </div>
-
-          <div class="tf-timeline-connector"></div>
-
-          <div class="tf-timeline-step">
-            <div class="tf-step-icon"><i class="fa-solid fa-hand-holding-medical"></i></div>
-            <h5 class="tf-step-title">Hands-on Campus Training</h5>
-            <p class="tf-step-desc">Surgical &amp; clinical exposure</p>
-          </div>
-
-          <div class="tf-timeline-connector"></div>
-
-          <div class="tf-timeline-step">
-            <div class="tf-step-icon"><i class="fa-solid fa-user-check"></i></div>
-            <h5 class="tf-step-title">Faculty Assessment</h5>
-            <p class="tf-step-desc">Practical skills review</p>
-          </div>
-
-          <div class="tf-timeline-connector"></div>
-
-          <div class="tf-timeline-step">
-            <div class="tf-step-icon"><i class="fa-solid fa-award"></i></div>
-            <h5 class="tf-step-title">Certification</h5>
-            <p class="tf-step-desc">Verified credentials</p>
-          </div>
-
-          <div class="tf-timeline-connector"></div>
-
-          <div class="tf-timeline-step">
-            <div class="tf-step-icon"><i class="fa-solid fa-chart-line"></i></div>
-            <h5 class="tf-step-title">Career Support</h5>
-            <p class="tf-step-desc">Placement &amp; clinic setup</p>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Bottom Training Statistics -->
-      <div class="tf-stats-grid">
-        <div class="tf-stat-card">
-          <span class="tf-stat-number">3,000+</span>
-          <span class="tf-stat-label">Sq.ft Practical Campus</span>
-        </div>
-        <div class="tf-stat-card">
-          <span class="tf-stat-number">20+</span>
-          <span class="tf-stat-label">Expert Faculty</span>
-        </div>
-        <div class="tf-stat-card">
-          <span class="tf-stat-number">100+</span>
-          <span class="tf-stat-label">Clinical Workshops</span>
-        </div>
-        <div class="tf-stat-card">
-          <span class="tf-stat-number">95%</span>
-          <span class="tf-stat-label">Hands-on Learning</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- SECTION 7: Meet Our Faculty Preview -->
-  <section class="section" id="faculty-programs">
-    <div class="container">
-      <div class="section-head center">
-        <span class="eyebrow"><i class="fa-solid fa-user-doctor"></i> CLINICAL EDUCATORS</span>
-        <h2>Meet Our Lead Faculty</h2>
-        <p>Learn from experienced veterinary specialists actively practicing in leading clinics and pet hospitals.
-        </p>
-      </div>
-
-      <div class="faculty-grid">
-        <div class="faculty-card">
-          <div class="faculty-photo">
-            <img src="assets/images/programs/faculty-01.webp" alt="Dr. Amit Kulkarni" loading="lazy" decoding="async" />
-          </div>
-          <div class="faculty-body">
-            <h3>Dr. Amit Kulkarni</h3>
-            <span class="faculty-role">MVSc (Surgery) • Senior Faculty</span>
-            <p>15+ years experience in small animal soft tissue surgery, sterile OR setup, and emergency surgical
-              intervention.</p>
-          </div>
-        </div>
-
-        <div class="faculty-card">
-          <div class="faculty-photo">
-            <img src="assets/images/programs/faculty-02.webp" alt="Dr. Priya Sharma" loading="lazy" decoding="async" />
-          </div>
-          <div class="faculty-body">
-            <h3>Dr. Priya Sharma</h3>
-            <span class="faculty-role">MVSc (Radiology) • Diagnostic Specialist</span>
-            <p>Specializes in abdominal ultrasonography, digital X-ray interpretation, and diagnostic case reviews.
+          <div class="section-head center">
+            <span class="eyebrow"><i class="fa-solid fa-sliders"></i> Training Formats &amp; Delivery Modes</span>
+            <h2>How VetNova Delivers Practical Education</h2>
+            <p>Flexible learning modes designed to suit interns, full-time clinicians, and veterinary hospital teams.
             </p>
           </div>
-        </div>
 
-        <div class="faculty-card">
-          <div class="faculty-photo">
-            <img src="assets/images/programs/faculty-03.webp" alt="Dr. Rajesh Verma" loading="lazy" decoding="async" />
-          </div>
-          <div class="faculty-body">
-            <h3>Dr. Rajesh Verma</h3>
-            <span class="faculty-role">MVSc (Medicine) • Emergency Lead</span>
-            <p>Expert in small animal emergency triage, fluid resuscitation, shock management, and ICU patient
-              monitoring.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+          <div class="tf-asymmetric-grid">
+            <div class="tf-featured-card">
+              <div class="tf-featured-image-wrap">
+                <img src="assets/images/programs/training-formats-featured.webp"
+                  alt="VetNova Practical Clinical Workshop with Veterinary Faculty and Students" loading="lazy"
+                  decoding="async" />
+                <div class="tf-featured-badge">
+                  <i class="fa-solid fa-fire"></i> MOST POPULAR
+                </div>
+              </div>
+              <div class="tf-featured-body">
+                <h3>Hands-on Clinical Learning</h3>
+                <p>Every VetNova program combines faculty-led demonstrations, practical hospital exposure, simulation
+                  labs, and guided procedures to ensure graduates are confident inside real veterinary clinics.</p>
 
-  <!-- SECTION 8: Certification & Recognition -->
-  <section class="section soft" id="certification-recognition">
-    <div class="container">
-      <div class="two-column-layout">
-        <div class="two-column-media"
-          style="padding: 0; background: transparent; overflow: hidden; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">
-          <img src="assets/images/programs/vetnova-certificate.webp"
-            alt="Official VetNova Certificate of Practical Veterinary Skills"
-            style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" decoding="async" />
-        </div>
+                <div class="tf-featured-checklist">
+                  <div class="tf-check-item">
+                    <span class="tf-check-icon"><i class="fa-solid fa-check"></i></span>
+                    <span>Live patient demonstrations</span>
+                  </div>
+                  <div class="tf-check-item">
+                    <span class="tf-check-icon"><i class="fa-solid fa-check"></i></span>
+                    <span>Faculty-guided procedures</span>
+                  </div>
+                  <div class="tf-check-item">
+                    <span class="tf-check-icon"><i class="fa-solid fa-check"></i></span>
+                    <span>Diagnostic imaging practice</span>
+                  </div>
+                  <div class="tf-check-item">
+                    <span class="tf-check-icon"><i class="fa-solid fa-check"></i></span>
+                    <span>Small batch mentorship</span>
+                  </div>
+                </div>
 
-        <div class="two-column-copy">
-          <span class="eyebrow"><i class="fa-solid fa-certificate"></i> VERIFIED ACCREDITATION</span>
-          <h2>Certification &amp; Recognition</h2>
-          <p>Every VetNova program concludes with a rigorous practical assessment and verified credential issuance.
-          </p>
-
-          <div class="clarity-list" style="margin-top: 20px;">
-            <div class="clarity-item">
-              <div>
-                <b>Practical Completion Certificate</b>
-                <span>Validates exact hands-on surgical and diagnostic radiograph hours executed.</span>
+                <div class="tf-featured-action">
+                  <a href="#all-programs" class="btn btn-primary">Explore Programs <i
+                      class="fa-solid fa-arrow-right"></i></a>
+                </div>
               </div>
             </div>
-            <div class="clarity-item">
-              <div>
-                <b>QR Code Digital Verification</b>
-                <span>Instantly shareable on LinkedIn and medical resume profiles for employer verification.</span>
+
+            <div class="tf-delivery-grid">
+              <div class="tf-delivery-card">
+                <div class="tf-card-top">
+                  <div class="tf-card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                  <span class="tf-card-badge">Flexible</span>
+                </div>
+                <h4 class="tf-card-title">Hybrid Learning</h4>
+                <p class="tf-card-desc">Complete theoretical preparation online followed by immersive practical learning
+                  on campus.</p>
+              </div>
+
+              <div class="tf-delivery-card">
+                <div class="tf-card-top">
+                  <div class="tf-card-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                  <span class="tf-card-badge">Working Professionals</span>
+                </div>
+                <h4 class="tf-card-title">Weekend Masterclasses</h4>
+                <p class="tf-card-desc">Saturday and Sunday practical workshops designed for busy veterinarians and
+                  clinicians.</p>
+              </div>
+
+              <div class="tf-delivery-card">
+                <div class="tf-card-top">
+                  <div class="tf-card-icon"><i class="fa-solid fa-bolt"></i></div>
+                  <span class="tf-card-badge">Fast Track</span>
+                </div>
+                <h4 class="tf-card-title">Intensive Bootcamps</h4>
+                <p class="tf-card-desc">Focused 3–5 day surgical and diagnostic skill enhancement programs.</p>
+              </div>
+
+              <div class="tf-delivery-card">
+                <div class="tf-card-top">
+                  <div class="tf-card-icon"><i class="fa-solid fa-hospital-user"></i></div>
+                  <span class="tf-card-badge">Institutional</span>
+                </div>
+                <h4 class="tf-card-title">Corporate Hospital Training</h4>
+                <p class="tf-card-desc">Customized veterinary training programs for hospitals, universities and
+                  organizations.</p>
               </div>
             </div>
-            <div class="clarity-item">
-              <div>
-                <b>Skills Acquired Guarantee</b>
-                <span>Documented procedural competencies backing your independent clinic applications.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 9: Certification & Recognition -->
+      <section class="section soft" id="certification-recognition">
+        <div class="container">
+          <div class="two-column-layout">
+            <div class="two-column-media"
+              style="padding: 0; background: transparent; overflow: hidden; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">
+              <img src="assets/images/programs/vetnova-certificate.webp"
+                alt="Official VetNova Certificate of Practical Veterinary Skills"
+                style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" decoding="async" />
+            </div>
+
+            <div class="two-column-copy">
+              <span class="eyebrow"><i class="fa-solid fa-certificate"></i> VERIFIED ACCREDITATION</span>
+              <h2>Certification &amp; Recognition</h2>
+              <p>Every VetNova program concludes with a rigorous practical assessment and verified credential issuance.
+              </p>
+
+              <div class="clarity-list" style="margin-top: 20px;">
+                <div class="clarity-item">
+                  <div>
+                    <b>Practical Completion Certificate</b>
+                    <span>Validates exact hands-on surgical and diagnostic radiograph hours executed.</span>
+                  </div>
+                </div>
+                <div class="clarity-item">
+                  <div>
+                    <b>QR Code Digital Verification</b>
+                    <span>Instantly shareable on LinkedIn and medical resume profiles for employer verification.</span>
+                  </div>
+                </div>
+                <div class="clarity-item">
+                  <div>
+                    <b>Skills Acquired Guarantee</b>
+                    <span>Documented procedural competencies backing your independent clinic applications.</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- SECTION 9: Alumni Testimonials Slider -->
-  <section class="section" id="testimonials-programs">
-    <div class="container">
-      <div class="section-head center">
-        <span class="eyebrow"><i class="fa-solid fa-star"></i> ALUMNI FEEDBACK</span>
-        <h2>Student Success Stories</h2>
-        <p>Hear from doctors and assistants who completed VetNova clinical programs.</p>
-      </div>
-
-      <div class="testimonial-slider-wrap" style="max-width: 840px; margin: 36px auto 0;">
-        <div class="testimonial-card"
-          style="background-color: var(--white); padding: 36px; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; box-shadow: var(--soft-shadow);">
-          <div style="color: #f59e0b; margin-bottom: 12px;">
-            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-              class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      <!-- SECTION 10: Frequently Asked Questions -->
+      <section class="section" id="faq-programs">
+        <div class="container">
+          <div class="section-head center">
+            <span class="eyebrow"><i class="fa-solid fa-circle-question"></i> HAVE QUESTIONS?</span>
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about course prerequisites, batch schedules, and certifications.</p>
           </div>
-          <p style="font-size: 16px; color: var(--navy-2); line-height: 1.65; font-style: italic; margin-bottom: 20px;">
-            "The hands-on surgical training at VetNova gave me the exact confidence I needed. I went from feeling
-            nervous about my first independent spay to running daily surgery schedules at a busy clinic."
-          </p>
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <img src="assets/images/programs/alumni-01.webp" alt="Dr. Rahul Deshmukh"
-              style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />
-            <div>
-              <strong style="display: block; color: var(--navy-2); font-size: 15px;">Dr. Rahul Deshmukh</strong>
-              <small style="color: var(--muted);">BVSc Graduate • Pune</small>
+
+          <div class="faq-accordion" style="max-width: 840px; margin: 36px auto 0;">
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>What are the admission prerequisites for clinical programs?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Doctor tracks require a recognized BVSc &amp; AH degree or active final-year internship status.
+                  Paravet &amp; Nurse tracks are open to clinic assistants and paravet staff.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Are batch sizes limited during practical lab sessions?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Yes, batch sizes are strictly capped at 12 doctors per batch to ensure personal mentor attention and
+                  direct hands-on lab access.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Do I receive a verifiable certificate after completion?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Yes! Every graduate receives a formal VetNova Certificate of Skill Competency complete with digital
+                  QR verification backing their practical training hours.</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- SECTION 10: Frequently Asked Questions -->
-  <section class="section soft" id="faq-programs">
-    <div class="container">
-      <div class="section-head center">
-        <span class="eyebrow"><i class="fa-solid fa-circle-question"></i> HAVE QUESTIONS?</span>
-        <h2>Frequently Asked Questions</h2>
-        <p>Everything you need to know about course prerequisites, batch schedules, and certifications.</p>
-      </div>
-
-      <div class="faq-accordion" style="max-width: 840px; margin: 36px auto 0;">
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>What are the admission prerequisites for clinical programs?</span>
-            <i class="fa-solid fa-chevron-down faq-icon"></i>
-          </button>
-          <div class="faq-answer">
-            <p>Doctor tracks require a recognized BVSc & AH degree or active final-year internship status. Paravet &
-              Nurse tracks are open to clinic assistants and paravet staff.</p>
+      <!-- SECTION 11: Final CTA Banner -->
+      <section class="section dark-cta-section" id="programs-cta-final">
+        <div class="container">
+          <div class="dark-cta-card">
+            <div class="dark-cta-content">
+              <h2>Need Help Choosing The Right Track?</h2>
+              <p>Connect with our academic counsellors to discuss your clinical background, experience goals, and batch
+                availability.</p>
+              <div class="dark-cta-buttons">
+                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                    class="fa-solid fa-arrow-right"></i></a>
+                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                    class="fa-solid fa-calendar-check"></i> Book Counselling</a>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>Are batch sizes limited during practical lab sessions?</span>
-            <i class="fa-solid fa-chevron-down faq-icon"></i>
-          </button>
-          <div class="faq-answer">
-            <p>Yes, batch sizes are strictly capped at 12 doctors per batch to ensure personal mentor attention and
-              direct hands-on lab access.</p>
-          </div>
-        </div>
+    </main>
 
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>Do I receive a verifiable certificate after completion?</span>
-            <i class="fa-solid fa-chevron-down faq-icon"></i>
-          </button>
-          <div class="faq-answer">
-            <p>Yes! Every graduate receives a formal VetNova Certificate of Skill Competency complete with digital
-              QR verification backing their practical training hours.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 11: Final CTA Banner -->
-  <section class="section dark-cta-section" id="programs-cta-final">
-    <div class="container">
-      <div class="dark-cta-card">
-        <div class="dark-cta-content">
-          <h2>Need Help Choosing The Right Track?</h2>
-          <p>Connect with our academic counsellors to discuss your clinical background, experience goals, and batch
-            availability.</p>
-          <div class="dark-cta-buttons">
-            <a class="btn btn-primary btn-enquire-now" href="contact.html#enquiry">Speak to an Academic Advisor <i
-                class="fa-solid fa-arrow-right"></i></a>
-            <a class="btn btn-white-outline" href="https://wa.me/919999999999" target="_blank"><i
-                class="fa-brands fa-whatsapp"></i> Chat on WhatsApp</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  </main>
-
-  <!-- Global Footer Container -->
-  <div id="global-footer"></div>
+    <!-- Global Footer Container -->
+    <div id="global-footer"></div>
 
   </div> <!-- Close .page -->
 

@@ -1,15 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=about.html#faculty">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Faculty - VetNova Learning Centre</title>
-  <script>
-    window.location.replace("about.html#faculty");
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Faculty &amp; Expert Trainers — VetNova Learning Centre</title>
+  <meta name="description"
+    content="Meet VetNova's distinguished veterinary faculty, senior MVSc surgeons, diagnostic imaging specialists, and critical care educators providing hands-on tactile training." />
+
+  <!-- Font and Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Faculty Page Specific Filter Bar & Layout Enhancements */
+    .faculty-filter-wrapper {
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .faculty-filter-pill {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .faculty-filter-pill:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
+    .faculty-filter-pill.active {
+      background: var(--navy, #0B1C3E);
+      color: #ffffff;
+      border-color: var(--navy, #0B1C3E);
+      box-shadow: 0 4px 12px rgba(11, 28, 62, 0.15);
+    }
+    .faculty-directory-hero {
+      background: linear-gradient(135deg, #0B1C3E 0%, #162B54 100%);
+      color: #ffffff;
+      padding: 60px 0 50px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .faculty-directory-hero .eyebrow {
+      color: var(--teal, #12C7C1);
+      background: rgba(18, 199, 193, 0.12);
+      border: 1px solid rgba(18, 199, 193, 0.3);
+      padding: 6px 16px;
+      border-radius: 50px;
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .faculty-directory-hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+    }
+    .faculty-directory-hero p {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+  </style>
 </head>
+
 <body>
-  <p>Redirecting to <a href="about.html#faculty">VetNova Faculty Listing</a>...</p>
+  <div class="page">
+
+    <!-- Global Header -->
+    <div id="global-header"></div>
+
+    <main id="main-content">
+
+      <!-- Hero Section -->
+      <section class="faculty-directory-hero">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb navigation" style="margin-bottom: 24px; justify-content: center;">
+            <a href="index.html" style="color: #94a3b8;">Home</a>
+            <i class="fa-solid fa-chevron-right" style="color: #64748b; font-size: 12px;"></i>
+            <span style="color: #ffffff; font-weight: 600;">Our Faculty</span>
+          </nav>
+          
+          <span class="eyebrow"><i class="fa-solid fa-user-doctor"></i> EXPERT VETERINARY FACULTY &amp; TRAINERS</span>
+          <h1>Our Faculty</h1>
+          <p>Learn directly from senior clinical specialists, surgeons, and diagnosticians dedicated to building real-world veterinary confidence through hands-on tactile mentorship.</p>
+        </div>
+      </section>
+
+      <!-- Faculty Directory Section -->
+      <section class="section" id="faculty-directory-section" style="padding: 60px 0 80px 0; background: #f8fafc;">
+        <div class="container">
+
+          <!-- Specialization Filter Bar -->
+          <div class="faculty-filter-wrapper" aria-label="Filter faculty by specialization">
+            <button type="button" class="faculty-filter-pill active" data-filter="all">
+              <i class="fa-solid fa-list-ul"></i> All Faculty
+            </button>
+            <button type="button" class="faculty-filter-pill" data-filter="surgery">
+              <i class="fa-solid fa-scalpel"></i> Surgery &amp; Orthopedics
+            </button>
+            <button type="button" class="faculty-filter-pill" data-filter="radiology">
+              <i class="fa-solid fa-x-ray"></i> Diagnostic Imaging &amp; USG
+            </button>
+            <button type="button" class="faculty-filter-pill" data-filter="emergency">
+              <i class="fa-solid fa-truck-medical"></i> Emergency &amp; Critical Care
+            </button>
+            <button type="button" class="faculty-filter-pill" data-filter="medicine">
+              <i class="fa-solid fa-stethoscope"></i> Internal Medicine
+            </button>
+            <button type="button" class="faculty-filter-pill" data-filter="nurse">
+              <i class="fa-solid fa-user-nurse"></i> Veterinary Nursing
+            </button>
+          </div>
+
+          <!-- Dynamic Faculty Cards Grid -->
+          <div class="faculty-cards-grid" id="faculty-directory-grid">
+            <!-- Dynamically populated via assets/js/homepage-faculty.js using getFaculty({ status: 'Published' }) -->
+          </div>
+
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="section dark-cta-section" id="faculty-cta-final">
+        <div class="container">
+          <div class="dark-cta-card">
+            <div class="dark-cta-content">
+              <h2>Want to Experience Our Faculty Mentorship First-Hand?</h2>
+              <p>Book a 1-on-1 academic counselling session or visit our Pune facility for a personal campus &amp; lab walkthrough with our senior instructors.</p>
+              <div class="dark-cta-buttons">
+                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i class="fa-solid fa-calendar-check"></i> Book Counselling</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Global Footer Container -->
+    <div id="global-footer"></div>
+
+  </div> <!-- Close .page -->
+
+  <!-- Interactive JavaScript -->
+  <script src="components.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/homepage-faculty.js"></script>
+  <script src="script.js"></script>
 </body>
+
 </html>

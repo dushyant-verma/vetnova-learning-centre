@@ -1,16 +1,18 @@
 /**
- * Homepage Faculty Controller for index.html
+ * Faculty Controller for index.html and faculty.html
  * Fetches published Faculty from VetNova Platform MERN API.
- * Deduplicates by _id / id / slug, limits to first 4 cards, and renders "View More Faculty" button.
+ * Handles deduplication, homepage preview (first 3-4 cards), full directory grid, department filtering, and modal popups.
  * Enforces zero hardcoded fallback cards on API error or empty data.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initHomepageFaculty();
+  initFacultyDirectory();
 });
 
 // Cache map of loaded faculty objects indexed by ID or slug for modal popup
 window.loadedFacultyMap = window.loadedFacultyMap || {};
+window.allPublishedFaculty = window.allPublishedFaculty || [];
 
 async function initHomepageFaculty() {
   const facultyGrid = document.querySelector('#faculty-experts .faculty-cards-grid');
@@ -37,25 +39,9 @@ async function initHomepageFaculty() {
   }
 
   // Deduplication logic using _id > id > slug > normalized name
-  const uniqueFaculty = [];
-  const seen = new Set();
+  const uniqueFaculty = filterPublishedUniqueFaculty(facultyList);
 
-  for (const member of facultyList || []) {
-    if (!member) continue;
-
-    // Rule 2: Only include faculty whose status is Published
-    const statusStr = String(member.status || 'Published').toLowerCase().trim();
-    if (statusStr !== 'published') continue;
-
-    // Primary unique identifier: _id
-    const id = member._id || member.id || member.slug || (member.name ? slugify(member.name) : null);
-    if (!id || seen.has(id)) continue;
-
-    seen.add(id);
-    uniqueFaculty.push(member);
-  }
-
-  // Rules 7 & 8: Empty / Error state if no faculty available
+  // Empty / Error state if no faculty available
   if (!uniqueFaculty || uniqueFaculty.length === 0) {
     facultyGrid.innerHTML = `
       <div class="faculty-empty-state" style="grid-column: 1 / -1; text-align: center; padding: 48px 24px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 20px;">
@@ -67,53 +53,152 @@ async function initHomepageFaculty() {
     return;
   }
 
-  // Rule: Display ONLY the first 4 unique published faculty members
+  // Display ONLY the first 4 unique published faculty members for homepage preview
   const displayFaculty = uniqueFaculty.slice(0, 4);
 
-  facultyGrid.innerHTML = displayFaculty.map(member => {
-    const idKey = member._id || member.id || member.slug || slugify(member.name);
-    window.loadedFacultyMap[idKey] = member;
+  facultyGrid.innerHTML = displayFaculty.map(member => renderFacultyCardHTML(member)).join('');
 
-    const name = escapeHtml(member.name || 'Faculty Specialist');
-    const qual = escapeHtml(member.qualification || 'BVSc & AH');
-    const spec = escapeHtml(member.department || member.specialization || member.designation || 'Veterinary Specialist');
-    const exp = escapeHtml(member.experience || '10+ Yrs Exp');
-    const bio = escapeHtml(member.bio || member.qualification || 'Clinical & Surgical Veterinary Specialist');
-    const photo = member.image || 'assets/images/about/about-faculty-01.webp';
+  // Re-bind profile popup click events
+  bindFacultyModalEvents('#faculty-experts');
+}
 
-    const tags = (member.department || member.specialization || member.designation || 'Clinical Care')
-      .split(/[,&]/)
-      .map(t => t.trim())
-      .filter(Boolean)
-      .slice(0, 3);
+async function initFacultyDirectory() {
+  const directoryGrid = document.querySelector('#faculty-directory-grid');
+  if (!directoryGrid) return;
 
-    return `
-      <div class="expert-card">
-        <div class="expert-header">
-          <img src="${escapeHtml(photo)}" onerror="this.onerror=null; this.src='assets/images/about/about-faculty-01.webp';" alt="${name}" class="expert-portrait" loading="lazy" decoding="async" />
-          <div class="expert-meta">
-            <h3>${name}</h3>
-            <span class="specialty">${spec}</span>
-          </div>
+  // Show loading indicator
+  directoryGrid.innerHTML = `
+    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--muted, #64748b);">
+      <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--teal, #12C7C1); margin-bottom: 12px;"></i>
+      <p style="font-size: 15px; font-weight: 500; margin: 0;">Loading VetNova Faculty Directory...</p>
+    </div>
+  `;
+
+  let facultyList = [];
+  try {
+    if (typeof getFaculty === 'function') {
+      facultyList = await getFaculty({ status: 'Published' });
+    }
+  } catch (err) {
+    console.error('Failed to fetch faculty directory:', err);
+    facultyList = [];
+  }
+
+  const uniqueFaculty = filterPublishedUniqueFaculty(facultyList);
+  window.allPublishedFaculty = uniqueFaculty;
+
+  renderFacultyDirectoryCards(uniqueFaculty);
+  initFacultyFilterPills();
+}
+
+function filterPublishedUniqueFaculty(facultyList) {
+  const uniqueFaculty = [];
+  const seen = new Set();
+
+  for (const member of facultyList || []) {
+    if (!member) continue;
+
+    // Only include faculty whose status is Published
+    const statusStr = String(member.status || 'Published').toLowerCase().trim();
+    if (statusStr !== 'published') continue;
+
+    const id = member._id || member.id || member.slug || (member.name ? slugify(member.name) : null);
+    if (!id || seen.has(id)) continue;
+
+    seen.add(id);
+    uniqueFaculty.push(member);
+  }
+
+  return uniqueFaculty;
+}
+
+function renderFacultyDirectoryCards(facultyArray) {
+  const directoryGrid = document.querySelector('#faculty-directory-grid');
+  if (!directoryGrid) return;
+
+  if (!facultyArray || facultyArray.length === 0) {
+    directoryGrid.innerHTML = `
+      <div class="faculty-empty-state" style="grid-column: 1 / -1; text-align: center; padding: 60px 24px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 20px;">
+        <i class="fa-solid fa-user-doctor" style="font-size: 40px; color: #94a3b8; margin-bottom: 16px; display: block;"></i>
+        <h3 style="font-size: 1.2rem; color: #334155; margin-bottom: 8px; font-weight: 600;">No Faculty Members Found</h3>
+        <p style="font-size: 0.95rem; color: #64748b; margin: 0;">No matching published faculty members for this selection.</p>
+      </div>
+    `;
+    return;
+  }
+
+  directoryGrid.innerHTML = facultyArray.map(member => renderFacultyCardHTML(member)).join('');
+  bindFacultyModalEvents('#faculty-directory-grid');
+}
+
+function renderFacultyCardHTML(member) {
+  const idKey = member._id || member.id || member.slug || slugify(member.name);
+  window.loadedFacultyMap[idKey] = member;
+
+  const name = escapeHtml(member.name || 'Faculty Specialist');
+  const qual = escapeHtml(member.qualification || 'BVSc & AH');
+  const spec = escapeHtml(member.department || member.specialization || member.designation || 'Veterinary Specialist');
+  const exp = escapeHtml(member.experience || '10+ Yrs Exp');
+  const bio = escapeHtml(member.bio || member.qualification || 'Clinical & Surgical Veterinary Specialist');
+  const photo = member.image || member.img || 'assets/images/about/about-faculty-01.webp';
+  const linkedin = member.linkedin || member.linkedinUrl || null;
+
+  const tags = (member.department || member.specialization || member.designation || 'Clinical Care')
+    .split(/[,&]/)
+    .map(t => t.trim())
+    .filter(Boolean)
+    .slice(0, 3);
+
+  return `
+    <div class="expert-card" data-department="${escapeHtml(spec.toLowerCase())}">
+      <div class="expert-header">
+        <img src="${escapeHtml(photo)}" onerror="this.onerror=null; this.src='assets/images/about/about-faculty-01.webp';" alt="${name}" class="expert-portrait" loading="lazy" decoding="async" />
+        <div class="expert-meta">
+          <h3>${name}</h3>
+          <span class="specialty">${qual} • ${spec}</span>
         </div>
-        <p class="expert-bio">${bio}</p>
-        <div class="expert-tags">
-          ${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
-        </div>
-        <div class="faculty-footer">
-          <span class="faculty-exp">${exp}</span>
+      </div>
+      <p class="expert-bio">${bio}</p>
+      <div class="expert-tags">
+        ${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+      </div>
+      <div class="faculty-footer">
+        <span class="faculty-exp"><i class="fa-solid fa-award"></i> ${exp}</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          ${linkedin ? `<a href="${escapeHtml(linkedin)}" target="_blank" rel="noopener noreferrer" class="btn btn-icon btn-outline btn-sm" aria-label="LinkedIn Profile of ${name}" title="LinkedIn Profile"><i class="fa-brands fa-linkedin-in"></i></a>` : ''}
           <button type="button" class="btn btn-outline btn-sm faculty-profile-btn" data-faculty-id="${idKey}">View Profile</button>
         </div>
       </div>
-    `;
-  }).join('');
-
-  // Re-bind profile popup click events
-  bindHomepageFacultyModalEvents();
+    </div>
+  `;
 }
 
-function bindHomepageFacultyModalEvents() {
-  const btns = document.querySelectorAll('#faculty-experts .faculty-profile-btn');
+function initFacultyFilterPills() {
+  const pills = document.querySelectorAll('.faculty-filter-pill');
+  if (!pills || pills.length === 0) return;
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const cat = pill.getAttribute('data-filter') || 'all';
+      if (cat === 'all') {
+        renderFacultyDirectoryCards(window.allPublishedFaculty);
+      } else {
+        const filtered = (window.allPublishedFaculty || []).filter(member => {
+          const spec = (member.department || member.specialization || member.designation || '').toLowerCase();
+          return spec.includes(cat.toLowerCase());
+        });
+        renderFacultyDirectoryCards(filtered);
+      }
+    });
+  });
+}
+
+function bindFacultyModalEvents(containerSelector) {
+  const container = document.querySelector(containerSelector) || document;
+  const btns = container.querySelectorAll('.faculty-profile-btn');
   btns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -155,6 +240,8 @@ function openDefaultFacultyModal(facultyId) {
               <h4>Areas of Expertise</h4>
               <div id="faculty-modal-expertise" class="faculty-modal-expertise"></div>
             </div>
+
+            <div id="faculty-modal-social" style="margin-top: 20px;"></div>
           </div>
         </div>
       </div>
@@ -177,6 +264,7 @@ function openDefaultFacultyModal(facultyId) {
   const expEl = document.getElementById('faculty-modal-exp');
   const introEl = document.getElementById('faculty-modal-intro');
   const expertiseEl = document.getElementById('faculty-modal-expertise');
+  const socialEl = document.getElementById('faculty-modal-social');
 
   if (imgEl) {
     imgEl.src = member.image || member.img || 'assets/images/about/about-faculty-01.webp';
@@ -202,6 +290,15 @@ function openDefaultFacultyModal(facultyId) {
     });
   }
 
+  if (socialEl) {
+    const linkedin = member.linkedin || member.linkedinUrl || null;
+    if (linkedin) {
+      socialEl.innerHTML = `<a href="${escapeHtml(linkedin)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm"><i class="fa-brands fa-linkedin"></i> Connect on LinkedIn</a>`;
+    } else {
+      socialEl.innerHTML = '';
+    }
+  }
+
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -220,3 +317,4 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
+

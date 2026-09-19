@@ -1,11 +1,11 @@
 /**
- * API Abstraction Layer for Vetnova Learning Centre Public Website
- * Connects public HTML pages with Vetnova Platform MERN Express Backend
+ * API Abstraction Layer for VetNova Learning Centre Public Website
+ * Connects public HTML pages with VetNova Platform MERN Express Backend
  */
 function getApiBaseUrl() {
   if (window.API_BASE_URL) return window.API_BASE_URL;
   const hostname = window.location.hostname;
-  if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '') {
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'http://localhost:5001/api';
   }
   return 'https://vetnova-api-utnd.onrender.com/api';
@@ -14,7 +14,7 @@ function getApiBaseUrl() {
 const API_BASE_URL = getApiBaseUrl();
 
 /**
- * Utility helper to handle HTTP fetch with localhost fallback
+ * Utility helper to handle HTTP fetch from public API
  */
 async function fetchFromApi(endpoint, queryParams = {}) {
   const params = new URLSearchParams(queryParams);
@@ -22,16 +22,7 @@ async function fetchFromApi(endpoint, queryParams = {}) {
   const primaryUrl = `${API_BASE_URL}${endpoint}${queryString}`;
 
   try {
-    let response;
-    try {
-      response = await fetch(primaryUrl);
-    } catch (netErr) {
-      if (!API_BASE_URL.includes('localhost:5001')) {
-        response = await fetch(`http://localhost:5001/api${endpoint}${queryString}`);
-      } else {
-        throw netErr;
-      }
-    }
+    const response = await fetch(primaryUrl);
 
     if (!response || !response.ok) {
       if (response && response.status === 404) return null;
@@ -40,7 +31,7 @@ async function fetchFromApi(endpoint, queryParams = {}) {
 
     return await response.json();
   } catch (error) {
-    console.error(`Error fetching API [${endpoint}]:`, error);
+    console.error(`API request failed [${endpoint}]`);
     return null;
   }
 }
@@ -131,40 +122,30 @@ async function getBlog(slugOrId) {
 }
 
 /**
- * Submit an enquiry / form submission to Vetnova MERN backend
+ * Submit an enquiry / form submission to VetNova MERN backend
  * @param {Object} enquiryData - { name, countryCode, phone, email, profile, course, message, source, sourcePage }
  * @returns {Promise<Object>} API response JSON object
  */
 async function submitEnquiry(enquiryData) {
   const primaryUrl = `${API_BASE_URL}/enquiries`;
   try {
-    let response;
-    try {
-      response = await fetch(primaryUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(enquiryData)
-      });
-    } catch (netErr) {
-      if (!API_BASE_URL.includes('localhost:5001')) {
-        response = await fetch('http://localhost:5001/api/enquiries', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(enquiryData)
-        });
-      } else {
-        throw netErr;
-      }
-    }
+    const response = await fetch(primaryUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(enquiryData)
+    });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(data.message || 'Failed to submit enquiry');
+      if (response.status === 429) {
+        throw new Error('Too many submission attempts. Please wait a moment before trying again.');
+      }
+      throw new Error(data.message || 'Failed to submit enquiry. Please try again.');
     }
     return data;
   } catch (error) {
-    console.error('Error submitting enquiry:', error);
     throw error;
   }
 }
+
 

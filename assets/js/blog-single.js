@@ -176,10 +176,70 @@ function renderArticleContent(blog) {
   // Rich HTML Body Content
   const bodyContainer = document.getElementById('article-body-content');
   if (bodyContainer) {
-    bodyContainer.innerHTML = blog.content || '<p>Content coming soon.</p>';
+    bodyContainer.innerHTML = sanitizeBlogHtml(blog.content || '<p>Content coming soon.</p>');
     
     // Auto-generate Table of Contents from H1 - H6 headings after content is rendered into DOM
     generateTableOfContents(bodyContainer);
+  }
+}
+
+/**
+ * Robust, client-side HTML Sanitizer for CMS blog content.
+ * Strips script tags, executable event handlers, iframe/embeds, and javascript: links
+ * while preserving rich blog markup (H1-H6, bold, italic, underline, links, images, tables, lists, blockquotes, code).
+ */
+function sanitizeBlogHtml(dirtyHtml) {
+  if (!dirtyHtml) return '';
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(dirtyHtml, 'text/html');
+    
+    const forbiddenTags = ['script', 'iframe', 'object', 'embed', 'applet', 'base', 'meta', 'form', 'input', 'button', 'textarea', 'select'];
+    forbiddenTags.forEach(tag => {
+      const elements = doc.body.getElementsByTagName(tag);
+      for (let i = elements.length - 1; i >= 0; i--) {
+        elements[i].parentNode.removeChild(elements[i]);
+      }
+    });
+
+    const allElements = doc.body.getElementsByTagName('*');
+    for (let i = 0; i < allElements.length; i++) {
+      const el = allElements[i];
+      const attrNames = Array.from(el.attributes).map(attr => attr.name);
+      
+      attrNames.forEach(attrName => {
+        const lowerName = attrName.toLowerCase();
+        // Remove event handlers (onclick, onerror, onload, etc.)
+        if (lowerName.startsWith('on')) {
+          el.removeAttribute(attrName);
+        }
+      });
+
+      // Validate href & src protocols
+      if (el.hasAttribute('href')) {
+        const href = el.getAttribute('href').trim().toLowerCase();
+        if (href.startsWith('javascript:') || href.startsWith('data:') || href.startsWith('vbscript:')) {
+          el.removeAttribute('href');
+        }
+      }
+
+      if (el.hasAttribute('src')) {
+        const src = el.getAttribute('src').trim().toLowerCase();
+        if (src.startsWith('javascript:') || src.startsWith('data:text/html') || src.startsWith('vbscript:')) {
+          el.removeAttribute('src');
+        }
+      }
+
+      // Secure external links opening in new tab
+      if (el.tagName.toLowerCase() === 'a' && el.getAttribute('target') === '_blank') {
+        el.setAttribute('rel', 'noopener noreferrer');
+      }
+    }
+
+    return doc.body.innerHTML;
+  } catch (err) {
+    console.error('Sanitization fallback applied');
+    return escapeHtml(dirtyHtml);
   }
 }
 
