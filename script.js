@@ -742,53 +742,168 @@ function initContactForm() {
   const form = document.getElementById('enquiry-form');
   const successState = document.getElementById('form-success-message');
   const resetBtn = document.getElementById('form-reset-btn');
+  const errorBanner = document.getElementById('form-error-message');
+  const errorText = document.getElementById('form-error-text');
 
   if (!form || !successState) return;
+
+  // Query persona pills globally or within form container
+  const personaPills = document.querySelectorAll('.persona-pill');
+  const roleSelect = document.getElementById('form-role');
+  const dynamicDoctor = form.querySelector('.dynamic-field-doctor');
+  const dynamicNurse = form.querySelector('.dynamic-field-nurse');
+  const dynamicCorporate = form.querySelector('.dynamic-field-corporate');
+  const dynamicPet = form.querySelector('.dynamic-field-pet');
+
+  let selectedPersona = 'practicing_vet';
+
+  function setPersona(persona) {
+    if (!persona) return;
+    selectedPersona = persona;
+
+    if (roleSelect) {
+      roleSelect.value = persona;
+    }
+
+    personaPills.forEach(pill => {
+      const isSelected = pill.getAttribute('data-persona') === persona;
+      if (isSelected) {
+        pill.classList.add('active');
+        pill.setAttribute('aria-pressed', 'true');
+      } else {
+        pill.classList.remove('active');
+        pill.setAttribute('aria-pressed', 'false');
+      }
+    });
+
+    // Toggle persona-specific form fields immediately
+    if (dynamicDoctor) dynamicDoctor.style.display = (persona === 'practicing_vet' || persona === 'fresh_grad' || persona === 'doctor') ? 'grid' : 'none';
+    if (dynamicNurse) dynamicNurse.style.display = (persona === 'vet_nurse' || persona === 'nurse') ? 'block' : 'none';
+    if (dynamicCorporate) dynamicCorporate.style.display = (persona === 'corporate' || persona === 'academic' || persona === 'sponsor') ? 'block' : 'none';
+    if (dynamicPet) dynamicPet.style.display = (persona === 'pet_parent') ? 'block' : 'none';
+  }
+
+  // Attach click and keydown event handlers to all persona pills
+  personaPills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.preventDefault();
+      const persona = pill.getAttribute('data-persona');
+      setPersona(persona);
+    });
+
+    pill.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const persona = pill.getAttribute('data-persona');
+        setPersona(persona);
+      }
+    });
+  });
+
+  if (roleSelect) {
+    roleSelect.addEventListener('change', () => {
+      setPersona(roleSelect.value);
+    });
+  }
+
+  // Initialize initial active state
+  setPersona('practicing_vet');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const nameEl = document.getElementById('form-name');
-    const emailEl = document.getElementById('form-email');
-    const phoneEl = document.getElementById('form-phone');
-    const roleEl = document.getElementById('form-role');
-    const programEl = document.getElementById('form-program');
-    const messageEl = document.getElementById('form-message');
+    if (errorBanner) errorBanner.style.display = 'none';
 
-    const name = nameEl ? nameEl.value.trim() : '';
-    const email = emailEl ? emailEl.value.trim() : '';
-    const phone = phoneEl ? phoneEl.value.trim() : '';
-    const ccSelect = form.querySelector('select[name="country_code"]');
-    const countryCode = ccSelect ? ccSelect.value : '';
-
-    if (name === '' || email === '' || phone === '') {
-      alert('Please fill out all required fields.');
+    // Persona validation
+    if (!selectedPersona) {
+      if (errorBanner && errorText) {
+        errorText.textContent = 'Please select your profile.';
+        errorBanner.style.display = 'flex';
+      }
       return;
     }
 
+    const nameEl = document.getElementById('form-name');
+    const emailEl = document.getElementById('form-email');
+    const phoneEl = document.getElementById('form-phone');
+    const programEl = document.getElementById('form-program');
+    const periodEl = document.getElementById('form-period');
+    const messageEl = document.getElementById('form-message');
+    const expEl = document.getElementById('form-experience');
+    const orgEl = document.getElementById('form-org');
+
+    const name = nameEl ? nameEl.value.trim() : '';
+    const email = emailEl ? emailEl.value.trim() : '';
+    let phone = phoneEl ? phoneEl.value.trim() : '';
+    const ccSelect = form.querySelector('select[name="country_code"]');
+    const countryCode = ccSelect ? ccSelect.value.trim() : '+91';
+
+    // Normalize phone number
+    if (phone.startsWith(countryCode)) {
+      phone = phone.substring(countryCode.length).trim();
+    }
+    phone = phone.replace(/^0+/, '').trim();
+
+    if (!name || !email || !phone) {
+      if (errorBanner && errorText) {
+        errorText.textContent = 'Please fill out all required fields (Name, Email, Phone Number).';
+        errorBanner.style.display = 'flex';
+      }
+      return;
+    }
+
+    // Course title resolution
+    let courseTitle = 'General Enquiry';
+    if (programEl && programEl.options && programEl.selectedIndex >= 0) {
+      courseTitle = programEl.options[programEl.selectedIndex].text.replace(/\s*\(Flagship\)\s*/i, '').trim();
+    }
+
+    // Clinical Experience resolution
+    let clinicalExp = '';
+    if (expEl && expEl.options && expEl.selectedIndex >= 0) {
+      clinicalExp = expEl.options[expEl.selectedIndex].text;
+    }
+
+    const preferredTrainingPeriod = periodEl ? periodEl.value.trim() : '';
+    const rawMessage = messageEl ? messageEl.value.trim() : '';
+    const orgName = orgEl ? orgEl.value.trim() : '';
+
+    let fullMessage = rawMessage;
+    const metaParts = [];
+    if (preferredTrainingPeriod) metaParts.push(`Preferred Timeline: ${preferredTrainingPeriod}`);
+    if (clinicalExp && (selectedPersona === 'practicing_vet' || selectedPersona === 'fresh_grad')) {
+      metaParts.push(`Clinical Experience: ${clinicalExp}`);
+    }
+    if (orgName && (selectedPersona === 'corporate' || selectedPersona === 'academic')) {
+      metaParts.push(`Organization: ${orgName}`);
+    }
+
+    if (metaParts.length > 0) {
+      const metaHeader = metaParts.join(' | ');
+      fullMessage = rawMessage ? `${metaHeader}\n\n${rawMessage}` : metaHeader;
+    }
+
     const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn ? submitBtn.innerHTML : 'Submit Enquiry';
+    const originalText = submitBtn ? submitBtn.innerHTML : 'Book Free Counselling Session <i class="fa-solid fa-calendar-check"></i>';
 
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.innerText = 'Submitting...';
+      submitBtn.innerHTML = 'Submitting...';
     }
 
-    const pagePath = window.location.pathname || '/';
-    let sourceName = 'website';
-    if (pagePath.includes('contact')) sourceName = 'contact_page';
-    else if (pagePath.includes('faq')) sourceName = 'faq_page';
-    else if (pagePath.includes('index') || pagePath === '/' || pagePath.endsWith('/')) sourceName = 'homepage';
+    const pagePath = 'contact.html';
 
     const payload = {
       name,
-      email,
-      phone,
       countryCode,
-      profile: roleEl ? roleEl.value : '',
-      course: programEl ? programEl.value : '',
-      message: messageEl ? messageEl.value.trim() : '',
-      source: sourceName,
+      phone,
+      email,
+      profile: selectedPersona,
+      course: courseTitle,
+      preferredTrainingPeriod,
+      clinicalExperience: clinicalExp,
+      message: fullMessage,
+      source: 'Contact Page Counselling',
       sourcePage: pagePath
     };
 
@@ -801,9 +916,13 @@ function initContactForm() {
       form.style.display = 'none';
       successState.style.display = 'flex';
       form.reset();
+      setPersona('practicing_vet');
     } catch (err) {
-      console.error('Enquiry submission error:', err);
-      alert(err.message || 'Unable to submit enquiry. Please check your connection and try again.');
+      console.error('[Contact Enquiry]', err);
+      if (errorBanner && errorText) {
+        errorText.textContent = err.message || 'Unable to submit your enquiry right now. Please check your connection and try again, or contact us directly.';
+        errorBanner.style.display = 'flex';
+      }
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -815,8 +934,10 @@ function initContactForm() {
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
       form.reset();
+      setPersona('practicing_vet');
+      if (errorBanner) errorBanner.style.display = 'none';
       successState.style.display = 'none';
-      form.style.display = 'grid';
+      form.style.display = 'block';
     });
   }
 }
@@ -850,7 +971,7 @@ function initSmoothScroll() {
 }
 
 /* ==========================================================================
-   Popup Enquiry Modal Controller
+   Popup Enquiry Modal Controller (with Show Interest & Notify Me Prefill Support)
    ========================================================================== */
 function initEnquiryModal() {
   const modal = document.getElementById('enquiry-modal');
@@ -864,23 +985,133 @@ function initEnquiryModal() {
 
   if (!modal) return;
 
-  function openModal(e) {
-    e.preventDefault();
+  function openModal(e, options = {}) {
+    if (e && e.preventDefault) e.preventDefault();
+
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
 
-    if (form) form.style.display = 'grid';
+    if (form) {
+      form.style.display = 'grid';
+      if (options.source) {
+        form.dataset.source = options.source;
+      } else {
+        delete form.dataset.source;
+      }
+    }
     if (successState) successState.style.display = 'none';
-    if (modalHead) modalHead.style.display = '';
+
+    if (modalHead) {
+      modalHead.style.display = '';
+      const headTitle = modalHead.querySelector('h3');
+      const headSub = modalHead.querySelector('p');
+
+      if (options.title && headTitle) {
+        headTitle.textContent = options.title;
+      } else if (headTitle) {
+        headTitle.textContent = 'Enquire Now';
+      }
+
+      if (options.subtitle && headSub) {
+        headSub.textContent = options.subtitle;
+      } else if (headSub) {
+        headSub.textContent = 'Fill out the form below, and our academic counsellor will get in touch with you shortly.';
+      }
+    }
+
+    if (options.message) {
+      const messageEl = document.getElementById('modal-message');
+      if (messageEl) messageEl.value = options.message;
+    }
   }
 
   function closeModal() {
     modal.classList.remove('open');
     document.body.style.overflow = '';
+    if (form) delete form.dataset.source;
   }
 
   enquireButtons.forEach(btn => {
     btn.addEventListener('click', openModal);
+  });
+
+  // Attach handlers for Show Interest & Notify Me buttons dynamically
+  document.body.addEventListener('click', (e) => {
+    const interestBtn = e.target.closest('.btn-show-interest');
+    const notifyBtn = e.target.closest('.btn-notify-me');
+
+    if (!interestBtn && !notifyBtn) return;
+
+    e.preventDefault();
+
+    const triggerBtn = interestBtn || notifyBtn;
+    const isNotify = !!notifyBtn;
+    const customSource = triggerBtn.dataset.source || (isNotify ? 'Program Notify Me' : 'Program Interest');
+    const context = triggerBtn.dataset.context || '';
+
+    // Read active filter selections
+    const levelSelect = document.getElementById('filter-level');
+    const topicSelect = document.getElementById('filter-topic');
+    const modeSelect = document.getElementById('filter-mode');
+    const searchInput = document.getElementById('program-search-input');
+
+    const topicMap = {
+      skillup: 'Veterinary Skill-Up Program',
+      surgery: 'Soft Tissue Surgery Track',
+      radiology: 'Radiology & Ultrasound Masterclass',
+      emergency: 'Pet Emergency & Critical Care',
+      nurse: 'Vet Nurse & Assistant Programme'
+    };
+
+    const levelMap = {
+      foundation: 'Foundation / Beginner',
+      intermediate: 'Intermediate',
+      advanced: 'Advanced'
+    };
+
+    const modeMap = {
+      offline: '100% Offline Campus',
+      hybrid: 'Hybrid Learning',
+      workshop: 'Weekend Workshop'
+    };
+
+    const rawTopic = topicSelect ? topicSelect.value : 'all';
+    const rawLevel = levelSelect ? levelSelect.value : 'all';
+    const rawMode = modeSelect ? modeSelect.value : 'all';
+    const keyword = searchInput ? searchInput.value.trim() : '';
+
+    const topicName = topicMap[rawTopic] || (rawTopic !== 'all' ? rawTopic : '');
+    const levelName = levelMap[rawLevel] || (rawLevel !== 'all' ? rawLevel : '');
+    const modeName = modeMap[rawMode] || (rawMode !== 'all' ? rawMode : '');
+
+    let activeFilterSummary = [];
+    if (topicName) activeFilterSummary.push(`Topic: ${topicName}`);
+    if (levelName) activeFilterSummary.push(`Level: ${levelName}`);
+    if (modeName) activeFilterSummary.push(`Mode: ${modeName}`);
+    if (keyword) activeFilterSummary.push(`Keyword: "${keyword}"`);
+
+    const summaryStr = activeFilterSummary.length > 0 ? activeFilterSummary.join(' | ') : 'General Clinical Programs';
+
+    let prefilledMessage = '';
+    let modalTitle = '';
+    let modalSubtitle = '';
+
+    if (isNotify) {
+      modalTitle = 'Get Notified for Upcoming Batches';
+      modalSubtitle = 'We will notify you immediately as soon as a new batch or seat opens for your selected course.';
+      prefilledMessage = `Please notify me when the next batch/intake opens for: [${summaryStr}].${context ? ' Context: ' + context : ''}`;
+    } else {
+      modalTitle = 'Show Interest in a Course';
+      modalSubtitle = 'Tell us your learning goals and our academic team will connect with you to explore customized options.';
+      prefilledMessage = `I am interested in a clinical training program matching: [${summaryStr}]. Please share details on upcoming options.${context ? ' Context: ' + context : ''}`;
+    }
+
+    openModal(e, {
+      source: customSource,
+      title: modalTitle,
+      subtitle: modalSubtitle,
+      message: prefilledMessage
+    });
   });
 
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
@@ -921,7 +1152,8 @@ function initEnquiryModal() {
         submitBtn.innerText = 'Submitting...';
       }
 
-      const pagePath = window.location.pathname || '/';
+      const pagePath = window.location.pathname || 'programs.html';
+      const sourceTag = form.dataset.source || 'popup';
 
       const payload = {
         name: nameVal,
@@ -929,9 +1161,9 @@ function initEnquiryModal() {
         phone: phoneVal,
         countryCode: countryCode,
         profile: roleEl ? roleEl.value : '',
-        course: document.title || '',
+        course: document.title || 'VetNova Programs',
         message: messageEl ? messageEl.value.trim() : '',
-        source: 'popup',
+        source: sourceTag,
         sourcePage: pagePath
       };
 
@@ -1233,59 +1465,262 @@ function initBlogCategoryFilter() {
 }
 
 /* ==========================================================================
-   13. Realtime Program Filter & Search Controller
+   13. Realtime Program Filter, Persona Discovery & Recommendation Controller
    ========================================================================== */
 function initProgramFilters() {
   const searchInput = document.getElementById('program-search-input');
-  const categoryPills = document.querySelectorAll('.program-category-pill');
+  const levelSelect = document.getElementById('filter-level');
+  const topicSelect = document.getElementById('filter-topic');
   const modeSelect = document.getElementById('filter-mode');
   const durationSelect = document.getElementById('filter-duration');
-  const cards = document.querySelectorAll('.program-card[data-category]');
+  const cards = document.querySelectorAll('.program-card[data-category], .program-card[data-topic]');
+  const trackSections = document.querySelectorAll('.track-group-section');
+  const noResultsState = document.getElementById('no-programs-match');
+  const clearFiltersBtn = document.getElementById('btn-clear-filters');
+  const personaBanner = document.getElementById('persona-discovery-banner');
+  const personaCloseBtn = document.getElementById('persona-banner-reset');
 
-  if (!cards.length) return;
+  if (!cards.length && !levelSelect && !topicSelect) return;
 
   function filterPrograms() {
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const activePill = document.querySelector('.program-category-pill.active');
-    const categoryFilter = activePill ? activePill.dataset.category : 'all';
+    const levelFilter = levelSelect ? levelSelect.value : 'all';
+    const topicFilter = topicSelect ? topicSelect.value : 'all';
     const modeFilter = modeSelect ? modeSelect.value : 'all';
     const durationFilter = durationSelect ? durationSelect.value : 'all';
 
+    let totalVisible = 0;
+
     cards.forEach(card => {
-      const cardCategory = card.dataset.category || '';
+      if (card.classList.contains('related-card')) return;
+
+      const cardLevel = card.dataset.level || '';
+      const cardTopic = card.dataset.topic || card.dataset.category || '';
       const cardMode = card.dataset.mode || '';
       const cardDuration = card.dataset.duration || '';
       const cardTitle = card.querySelector('.program-card-title') ? card.querySelector('.program-card-title').textContent.toLowerCase() : '';
       const cardDesc = card.querySelector('.program-card-desc') ? card.querySelector('.program-card-desc').textContent.toLowerCase() : '';
 
       const matchesSearch = query === '' || cardTitle.includes(query) || cardDesc.includes(query);
-      const matchesCategory = categoryFilter === 'all' || cardCategory === categoryFilter;
+      const matchesLevel = levelFilter === 'all' || cardLevel === levelFilter || cardLevel.includes(levelFilter);
+      const matchesTopic = topicFilter === 'all' || cardTopic.includes(topicFilter);
       const matchesMode = modeFilter === 'all' || cardMode === modeFilter;
       const matchesDuration = durationFilter === 'all' || cardDuration === durationFilter;
 
-      if (matchesSearch && matchesCategory && matchesMode && matchesDuration) {
+      if (matchesSearch && matchesLevel && matchesTopic && matchesMode && matchesDuration) {
         card.style.display = 'flex';
         card.style.animation = 'fadeIn 0.3s ease';
+        totalVisible++;
       } else {
         card.style.display = 'none';
       }
     });
+
+    // Toggle track sections visibility based on visible child cards
+    trackSections.forEach(section => {
+      const visibleCards = section.querySelectorAll('.program-card:not(.related-card)[style*="display: flex"], .program-card:not(.related-card)[style*="display:flex"]');
+      if (visibleCards.length > 0) {
+        section.style.display = 'block';
+      } else {
+        section.style.display = 'none';
+      }
+    });
+
+    // Handle Empty Results State
+    if (noResultsState) {
+      if (totalVisible === 0) {
+        noResultsState.style.display = 'block';
+      } else {
+        noResultsState.style.display = 'none';
+      }
+    }
+
+    // Update related programs recommendations
+    updateRelatedPrograms(topicFilter);
   }
 
-  if (searchInput) {
-    searchInput.addEventListener('input', filterPrograms);
+  function resetAllFilters() {
+    if (searchInput) searchInput.value = '';
+    if (levelSelect) levelSelect.value = 'all';
+    if (topicSelect) topicSelect.value = 'all';
+    if (modeSelect) modeSelect.value = 'all';
+    if (durationSelect) durationSelect.value = 'all';
+    if (personaBanner) personaBanner.style.display = 'none';
+    filterPrograms();
   }
 
-  categoryPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      categoryPills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      filterPrograms();
+  if (searchInput) searchInput.addEventListener('input', filterPrograms);
+  if (levelSelect) levelSelect.addEventListener('change', filterPrograms);
+  if (topicSelect) topicSelect.addEventListener('change', filterPrograms);
+  if (modeSelect) modeSelect.addEventListener('change', filterPrograms);
+  if (durationSelect) durationSelect.addEventListener('change', filterPrograms);
+
+  if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', resetAllFilters);
+  if (personaCloseBtn) personaCloseBtn.addEventListener('click', resetAllFilters);
+
+  // Persona Selection Listener ("Who Should Apply?" Cards)
+  const personaTriggers = document.querySelectorAll('.persona-card, .persona-trigger-link');
+  personaTriggers.forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const persona = trigger.dataset.persona;
+      applyPersonaFilter(persona);
     });
   });
 
-  if (modeSelect) modeSelect.addEventListener('change', filterPrograms);
-  if (durationSelect) durationSelect.addEventListener('change', filterPrograms);
+  function applyPersonaFilter(persona) {
+    const personaMap = {
+      practicing: {
+        title: "Practicing Veterinarians",
+        badge: "Practicing Clinician Pathway",
+        message: "Advance your clinical capabilities with focused hands-on training.",
+        topic: "surgery",
+        level: "intermediate"
+      },
+      graduate: {
+        title: "Fresh & New Graduates",
+        badge: "Graduate Pathway",
+        message: "Build practical confidence beyond university training.",
+        topic: "skillup",
+        level: "intermediate"
+      },
+      nurse: {
+        title: "Vet Nurses & Technicians",
+        badge: "Nurse Pathway",
+        message: "Develop practical nursing and clinical support skills.",
+        topic: "nurse",
+        level: "foundation"
+      },
+      caregiver: {
+        title: "Pet Parents & Caregivers",
+        badge: "Emergency Caregiver Pathway",
+        message: "Learn essential emergency stabilization and first-aid response.",
+        topic: "emergency",
+        level: "foundation"
+      },
+      international: {
+        title: "International Veterinarians",
+        badge: "International Vet Pathway",
+        message: "Acquire hands-on clinical skills with verified international training standards.",
+        topic: "radiology",
+        level: "intermediate"
+      }
+    };
+
+    const details = personaMap[persona];
+    if (details) {
+      if (levelSelect && details.level) levelSelect.value = details.level;
+      if (topicSelect && details.topic) topicSelect.value = details.topic;
+      if (modeSelect) modeSelect.value = 'all';
+
+      if (personaBanner) {
+        const titleEl = document.getElementById('persona-title-text');
+        const badgeEl = document.getElementById('persona-badge-text');
+        const msgEl = document.getElementById('persona-message-text');
+
+        if (titleEl) titleEl.textContent = details.title;
+        if (badgeEl) badgeEl.textContent = details.badge;
+        if (msgEl) msgEl.textContent = details.message;
+
+        personaBanner.style.display = 'flex';
+      }
+
+      filterPrograms();
+
+      const filterSection = document.getElementById('program-filters');
+      if (filterSection) {
+        filterSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+
+  // Initial execution
+  filterPrograms();
+}
+
+function updateRelatedPrograms(activeTopic) {
+  const relatedGrid = document.getElementById('related-programs-grid');
+  if (!relatedGrid) return;
+
+  const allRelatedCards = [
+    {
+      topic: 'surgery',
+      badge: 'INTERMEDIATE / ADVANCED',
+      title: 'Soft Tissue Surgery Track',
+      desc: 'Intensive surgical workshop covering sterile setup, tissue handling, and suture patterns.',
+      price: '₹18,500',
+      href: 'soft-tissue-surgery.html',
+      img: 'assets/images/programs/program-surgery.webp'
+    },
+    {
+      topic: 'radiology',
+      badge: 'DIAGNOSTICS TRACK',
+      title: 'Radiology & Ultrasound Masterclass',
+      desc: 'Radiograph reading & hands-on abdominal ultrasound FAST scanning.',
+      price: '₹16,000',
+      href: 'radiology-ultrasound.html',
+      img: 'assets/images/programs/program-radiology.webp'
+    },
+    {
+      topic: 'emergency',
+      badge: 'ADVANCED • ICU TRACK',
+      title: 'Pet Emergency & Critical Care',
+      desc: 'Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and triage.',
+      price: '₹12,500',
+      href: 'emergency-medicine.html',
+      img: 'assets/images/programs/program-emergency.webp'
+    },
+    {
+      topic: 'skillup',
+      badge: 'INTERMEDIATE • FLAGSHIP',
+      title: 'Veterinary Skill-Up Program',
+      desc: 'Comprehensive 4-week clinical mastery covering surgery, X-ray, ultrasound, and ICU.',
+      price: '₹38,000',
+      href: 'veterinary-skill-up.html',
+      img: 'assets/images/programs/program-skill-up.webp'
+    },
+    {
+      topic: 'nurse',
+      badge: 'FOUNDATION • NURSE TRACK',
+      title: 'Vet Nurse Foundation Certificate',
+      desc: 'Foundational practical training for clinic assistants and paravet staff.',
+      price: '₹9,500',
+      href: 'vet-nurse-programme.html',
+      img: 'assets/images/programs/program-nurse.webp'
+    }
+  ];
+
+  let recommendedTopics = [];
+  if (activeTopic === 'surgery') {
+    recommendedTopics = ['emergency', 'radiology', 'skillup'];
+  } else if (activeTopic === 'radiology') {
+    recommendedTopics = ['emergency', 'skillup', 'surgery'];
+  } else if (activeTopic === 'emergency') {
+    recommendedTopics = ['surgery', 'radiology', 'skillup'];
+  } else if (activeTopic === 'nurse') {
+    recommendedTopics = ['emergency', 'skillup', 'surgery'];
+  } else {
+    recommendedTopics = ['surgery', 'radiology', 'emergency'];
+  }
+
+  const itemsToDisplay = allRelatedCards.filter(item => recommendedTopics.includes(item.topic) && item.topic !== activeTopic).slice(0, 3);
+
+  relatedGrid.innerHTML = itemsToDisplay.map(item => `
+    <div class="program-card related-card" data-topic="${item.topic}" onclick="window.location.href='${item.href}';">
+      <div class="program-card-media">
+        <span class="program-card-badge ${item.topic === 'emergency' ? 'emergency' : ''}">${item.badge}</span>
+        <img src="${item.img}" alt="${item.title}" loading="lazy" decoding="async" />
+      </div>
+      <div class="program-card-body">
+        <h3 class="program-card-title"><a href="${item.href}">${item.title}</a></h3>
+        <p class="program-card-desc">${item.desc}</p>
+        <div class="program-card-footer">
+          <div class="program-card-price">${item.price} <small>+ GST</small></div>
+          <a class="btn btn-outline btn-sm" href="${item.href}">View Program <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
 
 /* ==========================================================================
