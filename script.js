@@ -24,6 +24,18 @@ function runAllInitializers() {
   initFacultyModal();
   initDesktopDropdowns();
   initConnectWidget();
+  if (typeof window.initVetNovaChatbot === 'function') {
+    window.initVetNovaChatbot();
+  } else {
+    const cbScript = document.createElement('script');
+    cbScript.src = 'assets/js/chatbot.js';
+    cbScript.onload = () => {
+      if (typeof window.initVetNovaChatbot === 'function') {
+        window.initVetNovaChatbot();
+      }
+    };
+    document.body.appendChild(cbScript);
+  }
   initPartnershipForm();
 }
 

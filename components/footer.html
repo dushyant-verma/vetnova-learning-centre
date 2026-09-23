@@ -20,7 +20,7 @@
             <i class="fa-solid fa-file-pdf"></i>
             <span>Download Brochure</span>
           </a> -->
-          <a href="tel:+912012345678" class="btn btn-white-outline"">
+          <a href="tel:+912012345678" class="btn btn-white-outline">
             <i class=" fa-solid fa-phone"></i>
             <span>Call For Admissions</span>
           </a>
@@ -41,7 +41,8 @@
           </a>
           <span class="footer-tagline">Learn • Practice • Lead</span>
           <p class="footer-brand-desc">
-            Pune's premier practical veterinary learning centre, empowering veterinarians, nurses, and pet professionals with hands-on clinical skills, expert faculty mentorship, and verified skill competency certifications.
+            Pune's premier practical veterinary learning centre, empowering veterinarians, nurses, and pet professionals
+            with hands-on clinical skills, expert faculty mentorship, and verified skill competency certifications.
           </p>
 
           <div class="footer-social-wrap">
@@ -84,7 +85,7 @@
           <ul class="footer-links">
             <li><a href="about.html"><i class="fa-solid fa-chevron-right"></i> About VetNova</a></li>
             <li><a href="faculty.html"><i class="fa-solid fa-chevron-right"></i> Our Faculty</a></li>
-            <li><a href="learning-centre.html"><i class="fa-solid fa-chevron-right"></i> Faculty Tour</a></li>
+            <li><a href="learning-centre.html"><i class="fa-solid fa-chevron-right"></i> Facility Tour</a></li>
             <li><a href="partnerships.html"><i class="fa-solid fa-chevron-right"></i> Partner With Us</a></li>
             <li><a href="animal-welfare.html"><i class="fa-solid fa-chevron-right"></i> Animal Welfare</a></li>
             <li><a href="blog.html"><i class="fa-solid fa-chevron-right"></i> Knowledge Hub (Blog)</a></li>
@@ -106,7 +107,8 @@
             </li>
             <li><a href="index.html#testimonials"><i class="fa-solid fa-chevron-right"></i> Student Stories</a></li>
             <li><a href="privacy-policy.html"><i class="fa-solid fa-chevron-right"></i> Privacy Policy</a></li>
-            <li><a href="terms-and-conditions.html"><i class="fa-solid fa-chevron-right"></i> Terms &amp; Conditions</a></li>
+            <li><a href="terms-and-conditions.html"><i class="fa-solid fa-chevron-right"></i> Terms &amp; Conditions</a>
+            </li>
           </ul>
         </div>
 
@@ -300,70 +302,100 @@
 </div>
 
 <!-- Fixed/Float Interactions -->
+<a href="contact.html" class="floating-apply-now" aria-label="Apply Now">APPLY NOW</a>
+
 <a class="whatsapp" href="https://wa.me/919999999999" target="_blank" aria-label="Chat on WhatsApp">
   <i class="fa-brands fa-whatsapp"></i>
 </a>
 
 <!-- Mobile Sticky Call to Actions -->
 <div class="mobile-stick">
-  <a class="btn btn-outline btn-counselling-modal" href="contact.html#enquiry"><i class="fa-solid fa-calendar-check"></i> Book Counselling</a>
+  <a class="btn btn-outline btn-counselling-modal" href="contact.html#enquiry"><i
+      class="fa-solid fa-calendar-check"></i> Book Counselling</a>
   <a class="btn btn-primary btn-apply-now" href="contact.html"><i class="fa-solid fa-arrow-right"></i> Apply Now</a>
 </div>
 
-<!-- Compact Global Floating Connect With Us Widget -->
-<div class="connect-widget-wrap" id="connect-widget">
-  <!-- Action Panel Popup -->
-  <div class="connect-widget-panel" id="connect-widget-panel" aria-hidden="true" role="dialog" aria-label="Connect With Us Options">
-    <div class="connect-widget-header">
-      <div class="connect-widget-header-title">
-        <i class="fa-solid fa-comments"></i> Connect With Us
+<!-- VetNova Assistant Conversational Chatbot Widget -->
+<div class="vetnova-chatbot-wrap" id="vetnova-chatbot">
+  <!-- Chatbot Panel -->
+  <div class="chatbot-panel" id="chatbot-panel" aria-hidden="true" role="dialog" aria-label="VetNova Assistant Chatbot">
+    <!-- Header -->
+    <div class="chatbot-header">
+      <div class="chatbot-header-info">
+        <div class="chatbot-avatar">
+          <i class="fa-solid fa-robot"></i>
+          <span class="online-indicator"></span>
+        </div>
+        <div class="chatbot-header-text">
+          <strong class="chatbot-title">VetNova Assistant</strong>
+          <span class="chatbot-status">Online • Instant Support</span>
+        </div>
       </div>
-      <button type="button" class="connect-widget-close" id="connect-widget-close" aria-label="Close Connect panel">
+      <button type="button" class="chatbot-close-btn" id="chatbot-close-btn" aria-label="Close Chatbot">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
-    <div class="connect-widget-body">
-      <p class="connect-widget-subtitle">How can we help you?</p>
-      <div class="connect-widget-actions">
-        <a href="programs.html" class="connect-action-item">
-          <div class="connect-action-icon icon-teal"><i class="fa-solid fa-graduation-cap"></i></div>
-          <div class="connect-action-text">
-            <strong>Find a Program</strong>
-            <small>Browse clinical courses</small>
+
+    <!-- Chat Body -->
+    <div class="chatbot-body">
+      <!-- Scrollable Message Log -->
+      <div class="chatbot-messages" id="chatbot-messages">
+        <!-- Welcome Card -->
+        <div class="chat-msg chat-msg-assistant">
+          <div class="chat-msg-bubble welcome-bubble">
+            <p>Hi! 👋 I'm the <strong>VetNova Assistant</strong>.</p>
+            <p>I can help you with:</p>
+            <ul class="chatbot-welcome-list">
+              <li>• Programs &amp; clinical tracks</li>
+              <li>• Eligibility for grads, vets &amp; nurses</li>
+              <li>• Course levels &amp; practical formats</li>
+              <li>• Upcoming batches &amp; schedules</li>
+              <li>• Tuition fees &amp; admissions</li>
+              <li>• Faculty &amp; 3,000 sq. ft. Pune campus</li>
+              <li>• Counselling &amp; partnerships</li>
+            </ul>
+            <p>How can I help you today?</p>
           </div>
-          <i class="fa-solid fa-chevron-right connect-action-arrow"></i>
-        </a>
-        <a href="contact.html#enquiry" class="connect-action-item btn-counselling-modal">
-          <div class="connect-action-icon icon-blue"><i class="fa-solid fa-calendar-check"></i></div>
-          <div class="connect-action-text">
-            <strong>Book Counselling</strong>
-            <small>Speak with academic team</small>
-          </div>
-          <i class="fa-solid fa-chevron-right connect-action-arrow"></i>
-        </a>
-        <a href="partnerships.html" class="connect-action-item">
-          <div class="connect-action-icon icon-gold"><i class="fa-solid fa-handshake"></i></div>
-          <div class="connect-action-text">
-            <strong>Partnership Enquiry</strong>
-            <small>Collaborate with VetNova</small>
-          </div>
-          <i class="fa-solid fa-chevron-right connect-action-arrow"></i>
-        </a>
-        <a href="contact.html" class="connect-action-item">
-          <div class="connect-action-icon icon-navy"><i class="fa-solid fa-headset"></i></div>
-          <div class="connect-action-text">
-            <strong>Contact VetNova</strong>
-            <small>General contact &amp; campus info</small>
-          </div>
-          <i class="fa-solid fa-chevron-right connect-action-arrow"></i>
-        </a>
+        </div>
       </div>
+
+      <!-- Quick Question Chips -->
+      <div class="chatbot-chips" id="chatbot-chips">
+        <button type="button" class="chip-btn" data-question="Which program is right for me?">Which program is right for
+          me?</button>
+        <button type="button" class="chip-btn" data-question="What programs do you offer?">What programs do you
+          offer?</button>
+        <button type="button" class="chip-btn" data-question="What are the upcoming batches?">What are the upcoming
+          batches?</button>
+        <button type="button" class="chip-btn" data-question="Who can apply?">Who can apply?</button>
+        <button type="button" class="chip-btn" data-question="What are the course fees?">What are the course
+          fees?</button>
+        <button type="button" class="chip-btn" data-question="Tell me about VetNova faculty">Tell me about VetNova
+          faculty</button>
+        <button type="button" class="chip-btn" data-question="Where is VetNova located?">Where is VetNova
+          located?</button>
+        <button type="button" class="chip-btn" data-question="Book a counselling session">Book a counselling
+          session</button>
+      </div>
+    </div>
+
+    <!-- Chat Input Footer -->
+    <div class="chatbot-footer">
+      <form class="chatbot-input-form" id="chatbot-input-form">
+        <input type="text" id="chatbot-input-field" class="chatbot-input-field" placeholder="Type your question..."
+          autocomplete="off" maxlength="500" required aria-label="Type your question" />
+        <button type="submit" class="chatbot-send-btn" id="chatbot-send-btn" aria-label="Send message">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
     </div>
   </div>
 
-  <!-- Trigger Button pill -->
-  <button type="button" class="connect-widget-btn" id="connect-widget-btn" aria-expanded="false" aria-controls="connect-widget-panel" aria-label="Open Connect With Us panel">
-    <span class="connect-btn-icon-wrap"><i class="fa-solid fa-comments"></i></span>
-    <span class="connect-btn-text">Connect With Us</span>
+  <!-- Launcher Trigger Button -->
+  <button type="button" class="chatbot-launcher-btn" id="chatbot-launcher-btn" aria-expanded="false"
+    aria-controls="chatbot-panel" aria-label="Open VetNova Assistant Chatbot">
+    <span class="launcher-icon-wrap"><i class="fa-solid fa-comments"></i></span>
+    <span class="launcher-badge"></span>
+    <span class="launcher-text">Ask VetNova</span>
   </button>
 </div>
