@@ -18,6 +18,7 @@ function runAllInitializers() {
   initReadingProgress();
   initBlogCategoryFilter();
   initProgramFilters();
+  initSingleProgramGradeRepresentation();
   initFaqSearch();
   initPopularCoursesFilter();
   initSingleFocusJourney();
@@ -337,6 +338,39 @@ function initMobileMenu() {
           }
         }
       });
+
+      if (isOpen) {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+        if (content) content.classList.remove('open');
+      } else {
+        btn.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
+        if (content) content.classList.add('open');
+      }
+    });
+  });
+
+  const subAccordionBtns = document.querySelectorAll('.drawer-sub-accordion-btn');
+  subAccordionBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const content = btn.nextElementSibling;
+      const isOpen = btn.classList.contains('active');
+
+      const parentContent = btn.closest('.drawer-accordion-content');
+      if (parentContent) {
+        const siblingSubBtns = parentContent.querySelectorAll('.drawer-sub-accordion-btn');
+        siblingSubBtns.forEach(otherBtn => {
+          if (otherBtn !== btn) {
+            otherBtn.classList.remove('active');
+            otherBtn.setAttribute('aria-expanded', 'false');
+            if (otherBtn.nextElementSibling) {
+              otherBtn.nextElementSibling.classList.remove('open');
+            }
+          }
+        });
+      }
 
       if (isOpen) {
         btn.classList.remove('active');
@@ -1062,23 +1096,25 @@ function initEnquiryModal() {
     const context = triggerBtn.dataset.context || '';
 
     // Read active filter selections
-    const levelSelect = document.getElementById('filter-level');
-    const topicSelect = document.getElementById('filter-topic');
+    const gradeSelect = document.getElementById('filter-grade') || document.getElementById('filter-level');
+    const trackSelect = document.getElementById('filter-track') || document.getElementById('filter-topic');
     const modeSelect = document.getElementById('filter-mode');
     const searchInput = document.getElementById('program-search-input');
 
-    const topicMap = {
-      skillup: 'Veterinary Skill-Up Program',
-      surgery: 'Soft Tissue Surgery Track',
-      radiology: 'Radiology & Ultrasound Masterclass',
-      emergency: 'Pet Emergency & Critical Care',
-      nurse: 'Vet Nurse & Assistant Programme'
+    const gradeMap = {
+      'grade-1': 'Grade 1 — Basic',
+      'grade-2': 'Grade 2 — Intermediate',
+      'grade-3': 'Grade 3 — Competitive',
+      'grade-4': 'Grade 4 — Advanced',
+      'grade-5': 'Grade 5 — Pro'
     };
 
-    const levelMap = {
-      foundation: 'Foundation / Beginner',
-      intermediate: 'Intermediate',
-      advanced: 'Advanced'
+    const trackMap = {
+      'fresh-graduates': 'Fresh Graduates & Interns',
+      'practicing-vets': 'Practicing Veterinarians',
+      'diagnostic-specialization': 'Diagnostic Specialization',
+      'emergency-care': 'Emergency & Critical Care',
+      'vet-nurse': 'Vet Nurse & Paravet Staff'
     };
 
     const modeMap = {
@@ -1087,18 +1123,18 @@ function initEnquiryModal() {
       workshop: 'Weekend Workshop'
     };
 
-    const rawTopic = topicSelect ? topicSelect.value : 'all';
-    const rawLevel = levelSelect ? levelSelect.value : 'all';
+    const rawGrade = gradeSelect ? gradeSelect.value : 'all';
+    const rawTrack = trackSelect ? trackSelect.value : 'all';
     const rawMode = modeSelect ? modeSelect.value : 'all';
     const keyword = searchInput ? searchInput.value.trim() : '';
 
-    const topicName = topicMap[rawTopic] || (rawTopic !== 'all' ? rawTopic : '');
-    const levelName = levelMap[rawLevel] || (rawLevel !== 'all' ? rawLevel : '');
+    const gradeName = gradeMap[rawGrade] || (rawGrade !== 'all' ? rawGrade : '');
+    const trackName = trackMap[rawTrack] || (rawTrack !== 'all' ? rawTrack : '');
     const modeName = modeMap[rawMode] || (rawMode !== 'all' ? rawMode : '');
 
     let activeFilterSummary = [];
-    if (topicName) activeFilterSummary.push(`Topic: ${topicName}`);
-    if (levelName) activeFilterSummary.push(`Level: ${levelName}`);
+    if (gradeName) activeFilterSummary.push(`Grade: ${gradeName}`);
+    if (trackName) activeFilterSummary.push(`Track: ${trackName}`);
     if (modeName) activeFilterSummary.push(`Mode: ${modeName}`);
     if (keyword) activeFilterSummary.push(`Keyword: "${keyword}"`);
 
@@ -1479,47 +1515,202 @@ function initBlogCategoryFilter() {
 /* ==========================================================================
    13. Realtime Program Filter, Persona Discovery & Recommendation Controller
    ========================================================================== */
+/* ==========================================================================
+   13. Grade-Based Program Data Model (Requirement 16)
+   ========================================================================== */
+window.VETNOVA_PROGRAMS_DATA = [
+  {
+    grade: "grade-1",
+    gradeLabel: "Grade 1 — Basic",
+    track: "fresh-graduates",
+    trackLabel: "Fresh Graduates & Interns",
+    program: "Veterinary Skill-Up Program",
+    programSlug: "veterinary-skill-up",
+    url: "veterinary-skill-up.html?grade=grade-1",
+    deliveryMode: "offline",
+    duration: "4 Weeks",
+    price: "₹38,000 + GST",
+    batch: "August 15, 2026",
+    status: "Admissions Open"
+  },
+  {
+    grade: "grade-2",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "practicing-vets",
+    trackLabel: "Practicing Veterinarians",
+    program: "Soft Tissue Surgery Track",
+    programSlug: "soft-tissue-surgery",
+    url: "soft-tissue-surgery.html?grade=grade-2",
+    deliveryMode: "offline",
+    duration: "1 Week",
+    price: "₹18,500 + GST",
+    batch: "September 1, 2026",
+    status: "Admissions Open"
+  },
+  {
+    grade: "grade-2",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "diagnostic-specialization",
+    trackLabel: "Diagnostic Specialization",
+    program: "Radiology & Ultrasound Masterclass",
+    programSlug: "radiology-ultrasound",
+    url: "radiology-ultrasound.html?grade=grade-2",
+    deliveryMode: "offline",
+    duration: "1 Week",
+    price: "₹16,000 + GST",
+    batch: "September 12, 2026",
+    status: "Admissions Open"
+  },
+  {
+    grade: "grade-3",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "emergency-care",
+    trackLabel: "Emergency & Critical Care",
+    program: "Pet Emergency & Critical Care",
+    programSlug: "emergency-medicine",
+    url: "emergency-medicine.html?grade=grade-3",
+    deliveryMode: "offline",
+    duration: "3 Days",
+    price: "₹12,500 + GST",
+    batch: "September 25, 2026",
+    status: "Admissions Open"
+  },
+  {
+    grade: "grade-1",
+    gradeLabel: "Grade 1 — Basic",
+    track: "emergency-care",
+    trackLabel: "Emergency & Critical Care",
+    program: "Pet Emergency First Aid Workshop",
+    programSlug: "emergency-medicine",
+    url: "emergency-medicine.html?grade=grade-1",
+    deliveryMode: "workshop",
+    duration: "1 Day",
+    price: "₹3,500 + GST",
+    batch: "Monthly Intake",
+    status: "Admissions Open"
+  },
+  {
+    grade: "grade-1",
+    gradeLabel: "Grade 1 — Basic",
+    track: "vet-nurse",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    program: "Vet Nurse Foundation Certificate",
+    programSlug: "vet-nurse-programme",
+    url: "vet-nurse-programme.html?grade=grade-1",
+    deliveryMode: "offline",
+    duration: "2 Weeks",
+    price: "₹9,500 + GST",
+    batch: "Upcoming Intake",
+    status: "Admissions Open"
+  }
+];
+
+/* Realtime Grade & Track Program Filter Controller */
 function initProgramFilters() {
   const searchInput = document.getElementById('program-search-input');
-  const levelSelect = document.getElementById('filter-level');
-  const topicSelect = document.getElementById('filter-topic');
+  const gradeSelect = document.getElementById('filter-grade') || document.getElementById('filter-level');
+  const trackSelect = document.getElementById('filter-track') || document.getElementById('filter-topic');
   const modeSelect = document.getElementById('filter-mode');
-  const durationSelect = document.getElementById('filter-duration');
-  const cards = document.querySelectorAll('.program-card[data-category], .program-card[data-topic]');
+  const cards = document.querySelectorAll('.program-card[data-grade], .program-card[data-topic], .program-card[data-category]');
   const trackSections = document.querySelectorAll('.track-group-section');
   const noResultsState = document.getElementById('no-programs-match');
   const clearFiltersBtn = document.getElementById('btn-clear-filters');
+  const gradeCards = document.querySelectorAll('.grade-card[data-grade]');
+  const trackPills = document.querySelectorAll('.track-pill[data-track]');
+  const selectedGradeTitle = document.getElementById('selected-grade-title');
   const personaBanner = document.getElementById('persona-discovery-banner');
   const personaCloseBtn = document.getElementById('persona-banner-reset');
 
-  if (!cards.length && !levelSelect && !topicSelect) return;
+  if (!cards.length && !gradeSelect && !trackSelect) return;
+
+  const gradeNameMap = {
+    'all': 'All Grades',
+    'grade-1': 'Grade 1 — Basic',
+    'grade-2': 'Grade 2 — Intermediate',
+    'grade-3': 'Grade 3 — Competitive',
+    'grade-4': 'Grade 4 — Advanced',
+    'grade-5': 'Grade 5 — Pro'
+  };
+
+  const trackNameMap = {
+    'all': 'All Tracks',
+    'fresh-graduates': 'Fresh Graduates & Interns',
+    'practicing-vets': 'Practicing Veterinarians',
+    'diagnostic-specialization': 'Diagnostic Specialization',
+    'emergency-care': 'Emergency & Critical Care',
+    'vet-nurse': 'Vet Nurse & Paravet Staff'
+  };
 
   function filterPrograms() {
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const levelFilter = levelSelect ? levelSelect.value : 'all';
-    const topicFilter = topicSelect ? topicSelect.value : 'all';
+    const gradeFilter = gradeSelect ? gradeSelect.value : 'all';
+    const trackFilter = trackSelect ? trackSelect.value : 'all';
     const modeFilter = modeSelect ? modeSelect.value : 'all';
-    const durationFilter = durationSelect ? durationSelect.value : 'all';
 
     let totalVisible = 0;
 
+    // Sync Grade Card UI state
+    gradeCards.forEach(gCard => {
+      const gVal = gCard.dataset.grade;
+      if (gVal === gradeFilter) {
+        gCard.classList.add('active');
+      } else {
+        gCard.classList.remove('active');
+      }
+    });
+
+    // Sync Track Pills UI state
+    trackPills.forEach(tPill => {
+      const tVal = tPill.dataset.track;
+      if (tVal === trackFilter) {
+        tPill.classList.add('active');
+      } else {
+        tPill.classList.remove('active');
+      }
+    });
+
+    // Update Grade Selector title text
+    if (selectedGradeTitle) {
+      const gLabel = gradeNameMap[gradeFilter] || 'All Grades';
+      const tLabel = trackNameMap[trackFilter] || 'All Tracks';
+      selectedGradeTitle.innerHTML = `Showing: <strong>${gLabel}</strong> ${trackFilter !== 'all' ? '&bull; ' + tLabel : ''}`;
+    }
+
+    // Filter Cards using AND logic
     cards.forEach(card => {
       if (card.classList.contains('related-card')) return;
 
-      const cardLevel = card.dataset.level || '';
-      const cardTopic = card.dataset.topic || card.dataset.category || '';
+      const cardGrade = card.dataset.grade || card.dataset.level || '';
+      const cardTrack = card.dataset.track || card.dataset.topic || card.dataset.category || '';
       const cardMode = card.dataset.mode || '';
-      const cardDuration = card.dataset.duration || '';
       const cardTitle = card.querySelector('.program-card-title') ? card.querySelector('.program-card-title').textContent.toLowerCase() : '';
       const cardDesc = card.querySelector('.program-card-desc') ? card.querySelector('.program-card-desc').textContent.toLowerCase() : '';
 
       const matchesSearch = query === '' || cardTitle.includes(query) || cardDesc.includes(query);
-      const matchesLevel = levelFilter === 'all' || cardLevel === levelFilter || cardLevel.includes(levelFilter);
-      const matchesTopic = topicFilter === 'all' || cardTopic.includes(topicFilter);
-      const matchesMode = modeFilter === 'all' || cardMode === modeFilter;
-      const matchesDuration = durationFilter === 'all' || cardDuration === durationFilter;
+      
+      let matchesGrade = gradeFilter === 'all';
+      if (!matchesGrade) {
+        matchesGrade = cardGrade.includes(gradeFilter) || 
+          (gradeFilter === 'grade-1' && (cardGrade.includes('foundation') || cardGrade.includes('beginner'))) ||
+          (gradeFilter === 'grade-2' && cardGrade.includes('intermediate')) ||
+          (gradeFilter === 'grade-3' && (cardGrade.includes('intermediate') || cardGrade.includes('advanced'))) ||
+          (gradeFilter === 'grade-4' && cardGrade.includes('advanced')) ||
+          (gradeFilter === 'grade-5' && cardGrade.includes('pro'));
+      }
 
-      if (matchesSearch && matchesLevel && matchesTopic && matchesMode && matchesDuration) {
+      let matchesTrack = trackFilter === 'all';
+      if (!matchesTrack) {
+        matchesTrack = cardTrack.includes(trackFilter) ||
+          (trackFilter === 'fresh-graduates' && (cardTrack.includes('skillup') || cardTrack.includes('graduate'))) ||
+          (trackFilter === 'practicing-vets' && (cardTrack.includes('surgery') || cardTrack.includes('practicing'))) ||
+          (trackFilter === 'diagnostic-specialization' && (cardTrack.includes('radiology') || cardTrack.includes('ultrasound'))) ||
+          (trackFilter === 'emergency-care' && (cardTrack.includes('emergency') || cardTrack.includes('first-aid'))) ||
+          (trackFilter === 'vet-nurse' && cardTrack.includes('nurse'));
+      }
+
+      const matchesMode = modeFilter === 'all' || cardMode === modeFilter;
+
+      if (matchesSearch && matchesGrade && matchesTrack && matchesMode) {
         card.style.display = 'flex';
         card.style.animation = 'fadeIn 0.3s ease';
         totalVisible++;
@@ -1528,7 +1719,7 @@ function initProgramFilters() {
       }
     });
 
-    // Toggle track sections visibility based on visible child cards
+    // Toggle track group section visibility
     trackSections.forEach(section => {
       const visibleCards = section.querySelectorAll('.program-card:not(.related-card)[style*="display: flex"], .program-card:not(.related-card)[style*="display:flex"]');
       if (visibleCards.length > 0) {
@@ -1538,7 +1729,7 @@ function initProgramFilters() {
       }
     });
 
-    // Handle Empty Results State
+    // Empty state handling
     if (noResultsState) {
       if (totalVisible === 0) {
         noResultsState.style.display = 'block';
@@ -1547,107 +1738,111 @@ function initProgramFilters() {
       }
     }
 
-    // Update related programs recommendations
-    updateRelatedPrograms(topicFilter);
+    updateRelatedPrograms(trackFilter);
   }
 
   function resetAllFilters() {
     if (searchInput) searchInput.value = '';
-    if (levelSelect) levelSelect.value = 'all';
-    if (topicSelect) topicSelect.value = 'all';
+    if (gradeSelect) gradeSelect.value = 'all';
+    if (trackSelect) trackSelect.value = 'all';
     if (modeSelect) modeSelect.value = 'all';
-    if (durationSelect) durationSelect.value = 'all';
     if (personaBanner) personaBanner.style.display = 'none';
+    gradeCards.forEach(c => c.classList.remove('active'));
+    trackPills.forEach(p => {
+      if (p.dataset.track === 'all') p.classList.add('active');
+      else p.classList.remove('active');
+    });
     filterPrograms();
   }
 
+  // Bind Event Listeners
   if (searchInput) searchInput.addEventListener('input', filterPrograms);
-  if (levelSelect) levelSelect.addEventListener('change', filterPrograms);
-  if (topicSelect) topicSelect.addEventListener('change', filterPrograms);
+  if (gradeSelect) gradeSelect.addEventListener('change', filterPrograms);
+  if (trackSelect) trackSelect.addEventListener('change', filterPrograms);
   if (modeSelect) modeSelect.addEventListener('change', filterPrograms);
-  if (durationSelect) durationSelect.addEventListener('change', filterPrograms);
-
   if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', resetAllFilters);
   if (personaCloseBtn) personaCloseBtn.addEventListener('click', resetAllFilters);
 
-  // Persona Selection Listener ("Who Should Apply?" Cards)
-  const personaTriggers = document.querySelectorAll('.persona-card, .persona-trigger-link');
-  personaTriggers.forEach(trigger => {
-    trigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      const persona = trigger.dataset.persona;
-      applyPersonaFilter(persona);
+  // Grade Card Click Handlers
+  gradeCards.forEach(gCard => {
+    gCard.addEventListener('click', () => {
+      const selectedG = gCard.dataset.grade;
+      if (gradeSelect) {
+        if (gradeSelect.value === selectedG) {
+          gradeSelect.value = 'all';
+        } else {
+          gradeSelect.value = selectedG;
+        }
+        filterPrograms();
+      }
     });
   });
 
-  function applyPersonaFilter(persona) {
-    const personaMap = {
-      practicing: {
-        title: "Practicing Veterinarians",
-        badge: "Practicing Clinician Pathway",
-        message: "Advance your clinical capabilities with focused hands-on training.",
-        topic: "surgery",
-        level: "intermediate"
-      },
-      graduate: {
-        title: "Fresh & New Graduates",
-        badge: "Graduate Pathway",
-        message: "Build practical confidence beyond university training.",
-        topic: "skillup",
-        level: "intermediate"
-      },
-      nurse: {
-        title: "Vet Nurses & Technicians",
-        badge: "Nurse Pathway",
-        message: "Develop practical nursing and clinical support skills.",
-        topic: "nurse",
-        level: "foundation"
-      },
-      caregiver: {
-        title: "Pet Parents & Caregivers",
-        badge: "Emergency Caregiver Pathway",
-        message: "Learn essential emergency stabilization and first-aid response.",
-        topic: "emergency",
-        level: "foundation"
-      },
-      international: {
-        title: "International Veterinarians",
-        badge: "International Vet Pathway",
-        message: "Acquire hands-on clinical skills with verified international training standards.",
-        topic: "radiology",
-        level: "intermediate"
+  // Track Pill Click Handlers
+  trackPills.forEach(tPill => {
+    tPill.addEventListener('click', () => {
+      const selectedT = tPill.dataset.track;
+      if (trackSelect) {
+        trackSelect.value = selectedT;
+        filterPrograms();
       }
-    };
+    });
+  });
 
-    const details = personaMap[persona];
-    if (details) {
-      if (levelSelect && details.level) levelSelect.value = details.level;
-      if (topicSelect && details.topic) topicSelect.value = details.topic;
-      if (modeSelect) modeSelect.value = 'all';
+  // URL Parameter auto-selection
+  const urlParams = new URLSearchParams(window.location.search);
+  let paramTriggered = false;
+  if (urlParams.has('grade') && gradeSelect) {
+    gradeSelect.value = urlParams.get('grade');
+    paramTriggered = true;
+  }
+  if (urlParams.has('track') && trackSelect) {
+    trackSelect.value = urlParams.get('track');
+    paramTriggered = true;
+  }
 
-      if (personaBanner) {
-        const titleEl = document.getElementById('persona-title-text');
-        const badgeEl = document.getElementById('persona-badge-text');
-        const msgEl = document.getElementById('persona-message-text');
+  // Initial Execution
+  filterPrograms();
 
-        if (titleEl) titleEl.textContent = details.title;
-        if (badgeEl) badgeEl.textContent = details.badge;
-        if (msgEl) msgEl.textContent = details.message;
+  if (paramTriggered) {
+    const filterSec = document.getElementById('choose-learning-grade') || document.getElementById('program-filters');
+    if (filterSec) {
+      setTimeout(() => {
+        filterSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+  }
+}
 
-        personaBanner.style.display = 'flex';
-      }
+/* Single Program Page Grade Context Representation */
+function initSingleProgramGradeRepresentation() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const gradeParam = urlParams.get('grade');
+  if (!gradeParam) return;
 
-      filterPrograms();
+  const gradeLabels = {
+    'grade-1': 'Grade 1 — Basic',
+    'grade-2': 'Grade 2 — Intermediate',
+    'grade-3': 'Grade 3 — Competitive',
+    'grade-4': 'Grade 4 — Advanced',
+    'grade-5': 'Grade 5 — Pro'
+  };
 
-      const filterSection = document.getElementById('program-filters');
-      if (filterSection) {
-        filterSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+  const gLabel = gradeLabels[gradeParam];
+  if (!gLabel) return;
+
+  const heroBreadcrumb = document.querySelector('.breadcrumb');
+  if (heroBreadcrumb) {
+    const spanEl = heroBreadcrumb.querySelector('span:last-child');
+    if (spanEl) {
+      spanEl.innerHTML = `<a href="programs.html?grade=${gradeParam}" style="color: inherit; text-decoration: underline;">${gLabel}</a> &rsaquo; ${spanEl.textContent}`;
     }
   }
 
-  // Initial execution
-  filterPrograms();
+  const eyebrow = document.querySelector('.program-hero .eyebrow, .page-hero .eyebrow');
+  if (eyebrow) {
+    eyebrow.innerHTML = `<i class="fa-solid fa-graduation-cap"></i> ${gLabel.toUpperCase()} &bull; ${eyebrow.textContent}`;
+  }
 }
 
 function updateRelatedPrograms(activeTopic) {
