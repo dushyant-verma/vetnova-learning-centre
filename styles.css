@@ -588,11 +588,25 @@ p {
   border-bottom: 2px solid #cbd5e1;
 }
 
-.grade-col-head.grade-1 { border-color: #3b82f6; }
-.grade-col-head.grade-2 { border-color: #10b981; }
-.grade-col-head.grade-3 { border-color: #f59e0b; }
-.grade-col-head.grade-4 { border-color: #8b5cf6; }
-.grade-col-head.grade-5 { border-color: #ec4899; }
+.grade-col-head.grade-1 {
+  border-color: #3b82f6;
+}
+
+.grade-col-head.grade-2 {
+  border-color: #10b981;
+}
+
+.grade-col-head.grade-3 {
+  border-color: #f59e0b;
+}
+
+.grade-col-head.grade-4 {
+  border-color: #8b5cf6;
+}
+
+.grade-col-head.grade-5 {
+  border-color: #ec4899;
+}
 
 .grade-col-num {
   font-size: 0.65rem;
@@ -694,11 +708,25 @@ p {
   background: var(--navy-1);
 }
 
-.drawer-sub-accordion-btn .grade-pill-1 { background: #2563eb; }
-.drawer-sub-accordion-btn .grade-pill-2 { background: #059669; }
-.drawer-sub-accordion-btn .grade-pill-3 { background: #d97706; }
-.drawer-sub-accordion-btn .grade-pill-4 { background: #7c3aed; }
-.drawer-sub-accordion-btn .grade-pill-5 { background: #db2777; }
+.drawer-sub-accordion-btn .grade-pill-1 {
+  background: #2563eb;
+}
+
+.drawer-sub-accordion-btn .grade-pill-2 {
+  background: #059669;
+}
+
+.drawer-sub-accordion-btn .grade-pill-3 {
+  background: #d97706;
+}
+
+.drawer-sub-accordion-btn .grade-pill-4 {
+  background: #7c3aed;
+}
+
+.drawer-sub-accordion-btn .grade-pill-5 {
+  background: #db2777;
+}
 
 .drawer-sub-content {
   display: none;
@@ -792,11 +820,25 @@ p {
   margin-bottom: 8px;
 }
 
-.grade-badge-1 { background: #2563eb; }
-.grade-badge-2 { background: #059669; }
-.grade-badge-3 { background: #d97706; }
-.grade-badge-4 { background: #7c3aed; }
-.grade-badge-5 { background: #db2777; }
+.grade-badge-1 {
+  background: #2563eb;
+}
+
+.grade-badge-2 {
+  background: #059669;
+}
+
+.grade-badge-3 {
+  background: #d97706;
+}
+
+.grade-badge-4 {
+  background: #7c3aed;
+}
+
+.grade-badge-5 {
+  background: #db2777;
+}
 
 .grade-card-top h3 {
   font-size: 1.15rem;
@@ -809,7 +851,45 @@ p {
   font-size: 0.85rem;
   color: #64748b;
   line-height: 1.4;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+}
+
+.grade-card-tracks-preview {
+  margin: 4px 0 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: #f8fafc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+}
+
+.grade-track-item {
+  font-size: 0.73rem;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #475569;
+}
+
+.grade-track-item.available {
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.grade-track-item.available i {
+  color: #0d9488;
+}
+
+.grade-track-item.upcoming {
+  color: #64748b;
+  font-style: normal;
+}
+
+.grade-track-item.upcoming i {
+  color: #94a3b8;
 }
 
 .grade-card-footer {
@@ -896,9 +976,9 @@ p {
 }
 
 .track-pill.active {
-  background: var(--navy-1);
-  color: #ffffff;
-  border-color: var(--navy-1);
+  background: #15265b;
+  color: white;
+  border-color: #16255a;
 }
 
 .track-pill.active i {

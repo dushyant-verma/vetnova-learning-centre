@@ -1611,7 +1611,7 @@ function initProgramFilters() {
   const gradeSelect = document.getElementById('filter-grade') || document.getElementById('filter-level');
   const trackSelect = document.getElementById('filter-track') || document.getElementById('filter-topic');
   const modeSelect = document.getElementById('filter-mode');
-  const cards = document.querySelectorAll('.program-card[data-grade], .program-card[data-topic], .program-card[data-category]');
+  const cards = document.querySelectorAll('.program-card:not(.related-card)');
   const trackSections = document.querySelectorAll('.track-group-section');
   const noResultsState = document.getElementById('no-programs-match');
   const clearFiltersBtn = document.getElementById('btn-clear-filters');
@@ -1652,7 +1652,7 @@ function initProgramFilters() {
     // Sync Grade Card UI state
     gradeCards.forEach(gCard => {
       const gVal = gCard.dataset.grade;
-      if (gVal === gradeFilter) {
+      if (gVal === gradeFilter && gradeFilter !== 'all') {
         gCard.classList.add('active');
       } else {
         gCard.classList.remove('active');
@@ -1676,38 +1676,48 @@ function initProgramFilters() {
       selectedGradeTitle.innerHTML = `Showing: <strong>${gLabel}</strong> ${trackFilter !== 'all' ? '&bull; ' + tLabel : ''}`;
     }
 
-    // Filter Cards using AND logic
-    cards.forEach(card => {
-      if (card.classList.contains('related-card')) return;
+    // Update Persona Adaptive Messaging Banner
+    if (personaBanner) {
+      const badgeText = document.getElementById('persona-badge-text');
+      const titleText = document.getElementById('persona-title-text');
+      const messageText = document.getElementById('persona-message-text');
 
-      const cardGrade = card.dataset.grade || card.dataset.level || '';
-      const cardTrack = card.dataset.track || card.dataset.topic || card.dataset.category || '';
+      if (gradeFilter !== 'all' || trackFilter !== 'all' || modeFilter !== 'all' || query !== '') {
+        personaBanner.style.display = 'flex';
+        const gName = gradeNameMap[gradeFilter] || '';
+        const tName = trackNameMap[trackFilter] || '';
+        if (badgeText) badgeText.textContent = 'Filtered Pathway View';
+        if (titleText) {
+          if (gradeFilter !== 'all' && trackFilter !== 'all') {
+            titleText.textContent = `${gName} • ${tName}`;
+          } else if (gradeFilter !== 'all') {
+            titleText.textContent = `${gName} Selected`;
+          } else if (trackFilter !== 'all') {
+            titleText.textContent = `${tName} Selected`;
+          } else {
+            titleText.textContent = `Search: "${query}"`;
+          }
+        }
+        if (messageText) {
+          messageText.textContent = `Exploring verified clinical learning tracks matching your selected criteria.`;
+        }
+      } else {
+        personaBanner.style.display = 'none';
+      }
+    }
+
+    // Filter Cards using strict AND logic
+    cards.forEach(card => {
+      const cardGrades = (card.dataset.grade || '').split(/\s+/).filter(Boolean);
+      const cardTracks = (card.dataset.track || '').split(/\s+/).filter(Boolean);
       const cardMode = card.dataset.mode || '';
+
       const cardTitle = card.querySelector('.program-card-title') ? card.querySelector('.program-card-title').textContent.toLowerCase() : '';
       const cardDesc = card.querySelector('.program-card-desc') ? card.querySelector('.program-card-desc').textContent.toLowerCase() : '';
 
       const matchesSearch = query === '' || cardTitle.includes(query) || cardDesc.includes(query);
-      
-      let matchesGrade = gradeFilter === 'all';
-      if (!matchesGrade) {
-        matchesGrade = cardGrade.includes(gradeFilter) || 
-          (gradeFilter === 'grade-1' && (cardGrade.includes('foundation') || cardGrade.includes('beginner'))) ||
-          (gradeFilter === 'grade-2' && cardGrade.includes('intermediate')) ||
-          (gradeFilter === 'grade-3' && (cardGrade.includes('intermediate') || cardGrade.includes('advanced'))) ||
-          (gradeFilter === 'grade-4' && cardGrade.includes('advanced')) ||
-          (gradeFilter === 'grade-5' && cardGrade.includes('pro'));
-      }
-
-      let matchesTrack = trackFilter === 'all';
-      if (!matchesTrack) {
-        matchesTrack = cardTrack.includes(trackFilter) ||
-          (trackFilter === 'fresh-graduates' && (cardTrack.includes('skillup') || cardTrack.includes('graduate'))) ||
-          (trackFilter === 'practicing-vets' && (cardTrack.includes('surgery') || cardTrack.includes('practicing'))) ||
-          (trackFilter === 'diagnostic-specialization' && (cardTrack.includes('radiology') || cardTrack.includes('ultrasound'))) ||
-          (trackFilter === 'emergency-care' && (cardTrack.includes('emergency') || cardTrack.includes('first-aid'))) ||
-          (trackFilter === 'vet-nurse' && cardTrack.includes('nurse'));
-      }
-
+      const matchesGrade = gradeFilter === 'all' || cardGrades.includes(gradeFilter);
+      const matchesTrack = trackFilter === 'all' || cardTracks.includes(trackFilter);
       const matchesMode = modeFilter === 'all' || cardMode === modeFilter;
 
       if (matchesSearch && matchesGrade && matchesTrack && matchesMode) {
@@ -1719,20 +1729,51 @@ function initProgramFilters() {
       }
     });
 
-    // Toggle track group section visibility
+    // Toggle track group section visibility based on visible cards inside it
     trackSections.forEach(section => {
-      const visibleCards = section.querySelectorAll('.program-card:not(.related-card)[style*="display: flex"], .program-card:not(.related-card)[style*="display:flex"]');
-      if (visibleCards.length > 0) {
-        section.style.display = 'block';
-      } else {
-        section.style.display = 'none';
-      }
+      const sectionCards = section.querySelectorAll('.program-card:not(.related-card)');
+      let hasVisible = false;
+      sectionCards.forEach(c => {
+        if (c.style.display !== 'none') {
+          hasVisible = true;
+        }
+      });
+      section.style.display = hasVisible ? 'block' : 'none';
     });
 
     // Empty state handling
     if (noResultsState) {
       if (totalVisible === 0) {
         noResultsState.style.display = 'block';
+        const titleEl = noResultsState.querySelector('h3');
+        const descEl = noResultsState.querySelector('p');
+
+        const gLabel = gradeNameMap[gradeFilter] || '';
+        const tLabel = trackNameMap[trackFilter] || '';
+
+        if (titleEl && descEl) {
+          if (gradeFilter === 'grade-5') {
+            if (trackFilter !== 'all') {
+              titleEl.textContent = `No Pro-level ${tLabel} program is currently available.`;
+            } else {
+              titleEl.textContent = `No Pro-level programs are currently available.`;
+            }
+            descEl.textContent = `Grade 5 (Pro) clinical pathways are currently under active curriculum development. Register your interest or request intake notification below.`;
+          } else if (gradeFilter === 'grade-4') {
+            if (trackFilter !== 'all') {
+              titleEl.textContent = `No Advanced-level ${tLabel} program is currently available.`;
+            } else {
+              titleEl.textContent = `No Advanced-level programs match your criteria.`;
+            }
+            descEl.textContent = `Advanced (Grade 4) training modules for this track are currently being scheduled. Submit your interest and we will notify you when new seats open.`;
+          } else if (gradeFilter !== 'all' && trackFilter !== 'all') {
+            titleEl.textContent = `No ${gLabel} program is currently available for ${tLabel}.`;
+            descEl.textContent = `We are continuously expanding our practical clinical offerings. Tell us what you're looking for and we'll help you find or customize the right pathway.`;
+          } else {
+            titleEl.textContent = `No programs match your selected criteria.`;
+            descEl.textContent = `Can't find the program you're looking for? Tell us what you're interested in and we'll help you find the right learning pathway.`;
+          }
+        }
       } else {
         noResultsState.style.display = 'none';
       }
@@ -1845,77 +1886,64 @@ function initSingleProgramGradeRepresentation() {
   }
 }
 
-function updateRelatedPrograms(activeTopic) {
+function updateRelatedPrograms(activeTrack) {
   const relatedGrid = document.getElementById('related-programs-grid');
   if (!relatedGrid) return;
 
   const allRelatedCards = [
     {
-      topic: 'surgery',
-      badge: 'INTERMEDIATE / ADVANCED',
+      track: 'practicing-vets',
+      badge: 'PRACTICING VETS TRACK',
       title: 'Soft Tissue Surgery Track',
       desc: 'Intensive surgical workshop covering sterile setup, tissue handling, and suture patterns.',
       price: '₹18,500',
-      href: 'soft-tissue-surgery.html',
+      href: 'soft-tissue-surgery.html?grade=grade-2',
       img: 'assets/images/programs/program-surgery.webp'
     },
     {
-      topic: 'radiology',
-      badge: 'DIAGNOSTICS TRACK',
+      track: 'diagnostic-specialization',
+      badge: 'DIAGNOSTIC SPECIALIZATION',
       title: 'Radiology & Ultrasound Masterclass',
       desc: 'Radiograph reading & hands-on abdominal ultrasound FAST scanning.',
       price: '₹16,000',
-      href: 'radiology-ultrasound.html',
+      href: 'radiology-ultrasound.html?grade=grade-2',
       img: 'assets/images/programs/program-radiology.webp'
     },
     {
-      topic: 'emergency',
-      badge: 'ADVANCED • ICU TRACK',
+      track: 'emergency-care',
+      badge: 'EMERGENCY & CRITICAL CARE',
       title: 'Pet Emergency & Critical Care',
       desc: 'Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and triage.',
       price: '₹12,500',
-      href: 'emergency-medicine.html',
+      href: 'emergency-medicine.html?grade=grade-3',
       img: 'assets/images/programs/program-emergency.webp'
     },
     {
-      topic: 'skillup',
-      badge: 'INTERMEDIATE • FLAGSHIP',
+      track: 'fresh-graduates',
+      badge: 'FRESH GRADUATES TRACK',
       title: 'Veterinary Skill-Up Program',
       desc: 'Comprehensive 4-week clinical mastery covering surgery, X-ray, ultrasound, and ICU.',
       price: '₹38,000',
-      href: 'veterinary-skill-up.html',
+      href: 'veterinary-skill-up.html?grade=grade-1',
       img: 'assets/images/programs/program-skill-up.webp'
     },
     {
-      topic: 'nurse',
-      badge: 'FOUNDATION • NURSE TRACK',
+      track: 'vet-nurse',
+      badge: 'VET NURSE TRACK',
       title: 'Vet Nurse Foundation Certificate',
       desc: 'Foundational practical training for clinic assistants and paravet staff.',
       price: '₹9,500',
-      href: 'vet-nurse-programme.html',
+      href: 'vet-nurse-programme.html?grade=grade-1',
       img: 'assets/images/programs/program-nurse.webp'
     }
   ];
 
-  let recommendedTopics = [];
-  if (activeTopic === 'surgery') {
-    recommendedTopics = ['emergency', 'radiology', 'skillup'];
-  } else if (activeTopic === 'radiology') {
-    recommendedTopics = ['emergency', 'skillup', 'surgery'];
-  } else if (activeTopic === 'emergency') {
-    recommendedTopics = ['surgery', 'radiology', 'skillup'];
-  } else if (activeTopic === 'nurse') {
-    recommendedTopics = ['emergency', 'skillup', 'surgery'];
-  } else {
-    recommendedTopics = ['surgery', 'radiology', 'emergency'];
-  }
-
-  const itemsToDisplay = allRelatedCards.filter(item => recommendedTopics.includes(item.topic) && item.topic !== activeTopic).slice(0, 3);
+  const itemsToDisplay = allRelatedCards.filter(item => item.track !== activeTrack).slice(0, 3);
 
   relatedGrid.innerHTML = itemsToDisplay.map(item => `
-    <div class="program-card related-card" data-topic="${item.topic}" onclick="window.location.href='${item.href}';">
+    <div class="program-card related-card" data-track="${item.track}" onclick="window.location.href='${item.href}';">
       <div class="program-card-media">
-        <span class="program-card-badge ${item.topic === 'emergency' ? 'emergency' : ''}">${item.badge}</span>
+        <span class="program-card-badge ${item.track === 'emergency-care' ? 'emergency' : ''}">${item.badge}</span>
         <img src="${item.img}" alt="${item.title}" loading="lazy" decoding="async" />
       </div>
       <div class="program-card-body">
