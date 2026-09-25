@@ -921,6 +921,11 @@ p {
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
 }
 
+.top-info-right {
+  position: relative;
+  right: -27px;
+}
+
 .selector-head {
   display: flex;
   align-items: center;
