@@ -488,295 +488,417 @@ const concernData = {
 };
 
 function initConcernSelector() {
-  const cards = document.querySelectorAll('#concern-selector .choice-card');
-  const panel = document.getElementById('selector-results-panel');
-
-  if (!panel) return;
-
-  cards.forEach(card => {
-    card.addEventListener('click', () => {
-      cards.forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-
-      const concern = card.dataset.concern;
-      const data = concernData[concern];
-
-      if (data) {
-        panel.style.opacity = '0';
-        panel.style.transform = 'translateY(5px)';
-
-        setTimeout(() => {
-          renderConcernResults(data);
-          panel.style.opacity = '1';
-          panel.style.transform = 'translateY(0)';
-        }, 200);
-      }
-    });
-  });
-}
-
-function renderConcernResults(data) {
-  const panel = document.getElementById('selector-results-panel');
-  if (!panel) return;
-
-  const bulletHTML = data.bullets.map(b => `<li><i class="fa-solid fa-check"></i> ${b}</li>`).join('');
-
-  panel.innerHTML = `
-    <div class="results-layout" style="animation: fadeIn 0.3s ease;">
-      <div class="results-copy">
-        <span class="badge">${data.badge}</span>
-        <h3>${data.title}</h3>
-        <p>${data.description}</p>
-        <ul class="results-bullets">
-          ${bulletHTML}
-        </ul>
-        <div class="results-cta">
-          <a class="btn btn-primary btn-apply-now" href="${data.ctaLink}"><span>${data.ctaText}</span> <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-      </div>
-      <div class="results-image">
-        <img src="${data.image}" alt="${data.title}" />
-      </div>
-    </div>
-  `;
+  // Concern selector integrated into unified Program Discovery component (#quiz-section)
 }
 
 /* ==========================================================================
-   Interactive Persona Matching Quiz
+   Program Discovery & Gamification Controller
+   Focus: "What would you like to explore?" (Topic & Skill Discovery)
    ========================================================================== */
-const quizData = {
-  'early-career': {
-    journey: 'Early-Career Vet Doctor Track',
-    goals: [
-      {
-        text: 'Upgrade basic clinical/surgery confidence',
-        program: 'Veterinary Skill-Up Program',
-        message: '“Upgrade your clinical confidence with practical, hands-on veterinary training.”',
-        modules: 'Surgeries, X-Ray reading, Emergency care, ECG, Wound management',
-        factors: 'Hands-on practice, certificate validation, trainer credibility, peer group network',
-        formProgram: 'skill-up'
-      },
-      {
-        text: 'Learn case decision making & diagnostics',
-        program: 'Veterinary Skill-Up Program',
-        message: '“Upgrade your clinical confidence with practical, hands-on veterinary training.”',
-        modules: 'Thoracic x-rays, ECG basics, common prescription guides, critical care support',
-        factors: 'Curriculum details, duration, batch size, expert feedback score',
-        formProgram: 'skill-up'
-      }
-    ]
+const discoveryDatabase = {
+  topics: {
+    surgery: {
+      name: 'Soft Tissue & Orthopedic Surgery',
+      goals: [
+        { text: 'Improve Soft Tissue Surgery Confidence (Spay, Neuter, Organ Resection)', programIds: ['soft-tissue-surgery', 'skill-up'] },
+        { text: 'Master Small Animal Orthopaedics (Fracture Stabilization & Bone Plating)', programIds: ['orthopaedics', 'soft-tissue-surgery'] },
+        { text: 'Learn Operating Theater Sterilization & Surgical Protocols', programIds: ['soft-tissue-surgery', 'skill-up'] }
+      ]
+    },
+    radiology: {
+      name: 'Radiology & Diagnostic Ultrasound',
+      goals: [
+        { text: 'Abdominal Ultrasound FAST Scans & Probe Handling Ergonomics', programIds: ['radiology-ultrasound', 'skill-up'] },
+        { text: 'Digital X-Ray Contrast Reading & Thoracic Radiography', programIds: ['radiology-ultrasound', 'skill-up'] },
+        { text: 'Organ Pathology Mapping & Bedside Ultrasound Diagnostics', programIds: ['radiology-ultrasound'] }
+      ]
+    },
+    emergency: {
+      name: 'Emergency & Critical Care',
+      goals: [
+        { text: 'RECOVER CPR Protocols, Triage & Fluid Resuscitation', programIds: ['emergency-care', 'skill-up'] },
+        { text: 'Trauma Patient ICU Monitoring & Shock Therapy', programIds: ['emergency-care'] },
+        { text: 'Pet First Aid, Choking Release & Home Emergency Response', programIds: ['pet-first-aid', 'emergency-care'] }
+      ]
+    },
+    nurse: {
+      name: 'Vet Nursing & Paravet Skills',
+      goals: [
+        { text: 'Patient Restraint, IV Setup & Scrub Assistant Training', programIds: ['vet-nurse'] },
+        { text: 'OT Sterilization, Anesthesia Monitoring & Wound Dressing', programIds: ['vet-nurse'] },
+        { text: 'Clinic Workflow Readiness & Patient Record Systems', programIds: ['vet-nurse', 'skill-up'] }
+      ]
+    },
+    'skill-up': {
+      name: 'Comprehensive Clinical Skill-Up',
+      goals: [
+        { text: 'Full Transition Training for Independent Clinical Mastery', programIds: ['skill-up'] },
+        { text: 'ECG Rhythm Analysis, Prescription Protocols & Diagnostics', programIds: ['skill-up'] },
+        { text: 'Everyday Clinical Essentials & Surgical/Emergency Foundations', programIds: ['skill-up'] }
+      ]
+    },
+    all: {
+      name: 'All Learning Tracks',
+      goals: [
+        { text: 'Explore Flagship Clinical Programs', programIds: ['skill-up', 'soft-tissue-surgery'] },
+        { text: 'Explore Diagnostic & Imaging Workshops', programIds: ['radiology-ultrasound'] },
+        { text: 'Explore Emergency & Nursing Courses', programIds: ['emergency-care', 'vet-nurse', 'pet-first-aid'] }
+      ]
+    }
   },
-  'experienced': {
-    journey: 'Experienced Vet Doctor Specialization',
-    goals: [
-      {
-        text: 'Master advanced soft tissue/orthopedic surgery',
-        program: 'Surgery & Radiology Workshops',
-        message: '“Move from general practice to advanced clinical excellence.”',
-        modules: 'Bone plating, pinning, joint stabilization, complex soft tissue flap surgeries',
-        factors: 'Expert specialist faculty, real case discussion, premium lab equipment',
-        formProgram: 'surgery'
-      },
-      {
-        text: 'Acquire expert radiology/ultrasound diagnostics',
-        program: 'Surgery & Radiology Workshops',
-        message: '“Move from general practice to advanced clinical excellence.”',
-        modules: 'Advanced cardiac scans, abdominal mapping, systematic pathology reviews',
-        factors: 'Conference access, clinic growth outcomes, peer networking plans',
-        formProgram: 'surgery'
-      }
-    ]
-  },
-  'student': {
-    journey: 'Final-Year Vet Student Pathway',
-    goals: [
-      {
-        text: 'Acquire practical confidence before internships',
-        program: 'Clinic-Ready Foundation Program',
-        message: '“Bridge the gap between college learning and real veterinary practice.”',
-        modules: 'Beginner modules, patient examination guides, common case histories',
-        factors: 'Mentorship, affordability, student-friendly batches, certificate value',
-        formProgram: 'foundation'
-      },
-      {
-        text: 'Get clear career roadmap & resume support',
-        program: 'Clinic-Ready Foundation Program',
-        message: '“Bridge the gap between college learning and real veterinary practice.”',
-        modules: 'Career counseling, job-readiness checklist, clinic setup tips',
-        factors: 'Job pathways, placement support, counseling guidance',
-        formProgram: 'foundation'
-      }
-    ]
-  },
-  'graduate': {
-    journey: 'Recently Passed-Out Graduate Program',
-    goals: [
-      {
-        text: 'Gain employable skills & clinic workflow exposure',
-        program: 'Clinic-Ready Foundation Program',
-        message: '“Get clinic-ready with practical veterinary skills that help you start your career.”',
-        modules: 'Diagnosis assistance, patient communication, clinic database handling',
-        factors: 'Job-focused curriculum, trainer verification, success stories',
-        formProgram: 'foundation'
-      }
-    ]
-  },
-  'pet-owner': {
-    journey: 'Pet First Aid & Emergency Track',
-    goals: [
-      {
-        text: 'Learn home emergency first aid',
-        program: 'Pet Emergency First Aid Workshop',
-        message: '“Learn how to respond safely during a pet emergency before professional help arrives.”',
-        modules: 'Choking release, bleeding stops, seizure response, road accident safety guidelines',
-        factors: 'Simple language, short timing, affordable fees, emergency checklists',
-        formProgram: 'first-aid'
-      }
-    ]
-  },
-  'nurse': {
-    journey: 'Vet Nurse / Clinic Assistant Track',
-    goals: [
-      {
-        text: 'Build career proof for clinic assistant jobs',
-        program: 'Online Vet Nurse Program',
-        message: '“Start your career as a trained veterinary nurse with practical basic skills.”',
-        modules: 'Animal restraint, cage sanitization, client registration desk checklists',
-        factors: 'Online access, certificate verification, module simplicity',
-        formProgram: 'nurse'
-      }
-    ]
-  }
+  programs: [
+    {
+      id: 'skill-up',
+      title: 'Veterinary Skill-Up Program',
+      badge: 'FLAGSHIP PROGRAM',
+      level: 'Foundation to Advanced',
+      duration: '6 Weeks (Hands-on)',
+      url: 'veterinary-skill-up.html',
+      topics: ['skill-up', 'surgery', 'radiology', 'emergency'],
+      levels: ['foundation', 'intermediate', 'advanced'],
+      image: 'assets/images/edu-flagship-skillup.webp',
+      description: 'Comprehensive clinical immersion course focusing on soft tissue surgery assistance, digital radiology, ECG interpretation, and emergency response.',
+      outcomes: ['Soft Tissue Surgery', 'Digital Radiology', 'ECG & Cardiology', 'Emergency Triage'],
+      formProgram: 'skill-up'
+    },
+    {
+      id: 'soft-tissue-surgery',
+      title: 'Soft Tissue Surgery Masterclass',
+      badge: 'SURGERY TRACK',
+      level: 'Intermediate to Advanced',
+      duration: '4 Weeks',
+      url: 'soft-tissue-surgery.html',
+      topics: ['surgery'],
+      levels: ['intermediate', 'advanced'],
+      image: 'assets/images/program-surgery.webp',
+      description: 'Master standard surgical incisions, stitching techniques, spay/neuter protocols, and abdominal organ surgeries under direct mentor guidance.',
+      outcomes: ['Independent Surgical Cases', 'OT Sterilization Protocols', 'Abdominal Organ Surgeries', 'Tissue Handling'],
+      formProgram: 'surgery'
+    },
+    {
+      id: 'orthopaedics',
+      title: 'Small Animal Orthopaedics',
+      badge: 'SURGERY SPECIALIST',
+      level: 'Advanced',
+      duration: '6 Weeks',
+      url: 'soft-tissue-surgery.html',
+      topics: ['surgery'],
+      levels: ['advanced'],
+      image: 'assets/images/hero-veterinary-training.webp',
+      description: 'Comprehensive training in bone fracture stabilization, dynamic bone plating, IM pinning, and joint injury management in dogs and cats.',
+      outcomes: ['Bone Fracture Fixation', 'Dynamic Bone Plating', 'IM Pinning', 'Post-Op Radiology'],
+      formProgram: 'surgery'
+    },
+    {
+      id: 'radiology-ultrasound',
+      title: 'Ultrasound & Diagnostic Radiology',
+      badge: 'RADIOLOGY TRACK',
+      level: 'Intermediate',
+      duration: '3 Weeks',
+      url: 'radiology-ultrasound.html',
+      topics: ['radiology'],
+      levels: ['foundation', 'intermediate'],
+      image: 'assets/images/facility-radiology.webp',
+      description: 'Hands-on probe handling, acoustic windows, systematic abdominal scanning, and digital radiograph contrast reading.',
+      outcomes: ['Abdominal FAST Scanning', 'Probe Ergonomics', 'X-Ray Contrast Interpretation', 'Organ Mapping'],
+      formProgram: 'surgery'
+    },
+    {
+      id: 'emergency-care',
+      title: 'Emergency & Critical Care Triage',
+      badge: 'EMERGENCY TRACK',
+      level: 'Intermediate to Advanced',
+      duration: '2 Weeks',
+      url: 'emergency-medicine.html',
+      topics: ['emergency'],
+      levels: ['intermediate', 'advanced'],
+      image: 'assets/images/learning-path-specialist.webp',
+      description: 'Rapid patient triage, RECOVER CPR resuscitation protocols, fluid therapy management, and ICU monitoring for small animals.',
+      outcomes: ['RECOVER CPR Protocols', 'IV Catheterization & Shock', 'Fluid Resuscitation', 'ICU Monitoring'],
+      formProgram: 'first-aid'
+    },
+    {
+      id: 'pet-first-aid',
+      title: 'Pet First Aid & Emergency Response',
+      badge: 'PET CARE WORKSHOP',
+      level: 'Foundational',
+      duration: '2 Days Workshop',
+      url: 'emergency-medicine.html',
+      topics: ['emergency', 'all'],
+      levels: ['foundation'],
+      image: 'assets/vet_selector_petcare_card.webp',
+      description: 'Essential hands-on training for pet owners, rescuers, and shelter volunteers on wound dressing, toxin response, choking release, and pet CPR.',
+      outcomes: ['Choking & CPR Simulation', 'Wound Bandaging', 'Toxin Emergency Action', 'First Aid Kit Usage'],
+      formProgram: 'first-aid'
+    },
+    {
+      id: 'vet-nurse',
+      title: 'Certified Vet Nursing & Paravet Skills',
+      badge: 'VET NURSE TRACK',
+      level: 'Foundational',
+      duration: '4 Weeks',
+      url: 'vet-nurse-programme.html',
+      topics: ['nurse'],
+      levels: ['foundation', 'intermediate'],
+      image: 'assets/images/learning-path-nurse.webp',
+      description: 'Designed for clinic assistants and nursing staff to master patient restraint, surgical scrub prep, anesthesia monitoring, and wound care.',
+      outcomes: ['Patient Restraint & IV Setup', 'OT Scrub & Sterilization', 'Anesthesia Monitoring', 'Clinic Workflow'],
+      formProgram: 'nurse'
+    }
+  ]
 };
 
-let userSelections = {
-  role: null,
-  goalIndex: null
+let discoveryState = {
+  discoveryStarted: false,
+  selectedTopic: null,
+  selectedGoal: null,
+  selectedLevel: 'all'
 };
 
 function initQuiz() {
-  const roleButtons = document.querySelectorAll('#step-1-content .quiz-opt-btn');
+  initProgramDiscovery();
+}
+
+function initProgramDiscovery() {
+  const topicButtons = document.querySelectorAll('.discovery-topic-btn');
   const goalContainer = document.getElementById('goal-options-container');
   const step1 = document.getElementById('step-1-content');
   const step2 = document.getElementById('step-2-content');
   const step3 = document.getElementById('step-3-content');
 
-  const progressStep1 = document.querySelector('.progress-step[data-step="1"]');
-  const progressStep2 = document.querySelector('.progress-step[data-step="2"]');
-  const progressStep3 = document.querySelector('.progress-step[data-step="3"]');
+  const progressStep1 = document.querySelector('.discovery-progress .progress-step[data-step="1"]');
+  const progressStep2 = document.querySelector('.discovery-progress .progress-step[data-step="2"]');
+  const progressStep3 = document.querySelector('.discovery-progress .progress-step[data-step="3"]');
 
   const backBtn = document.getElementById('quiz-back-btn');
   const resetBtn = document.getElementById('quiz-reset-btn');
+  const levelPills = document.querySelectorAll('.discovery-level-filter .level-pill');
 
-  if (!roleButtons || roleButtons.length === 0 || !goalContainer || !backBtn) return;
+  if (!topicButtons || topicButtons.length === 0 || !step1) return;
 
-  roleButtons.forEach(btn => {
+  // Initialize strictly at Step 1: No cards rendered, Step 2 & 3 locked
+  resetToStep1();
+
+  function resetToStep1() {
+    discoveryState = {
+      discoveryStarted: false,
+      selectedTopic: null,
+      selectedGoal: null,
+      selectedLevel: 'all'
+    };
+
+    topicButtons.forEach(b => b.classList.remove('selected'));
+    if (goalContainer) goalContainer.innerHTML = '';
+    const resultsContainer = document.getElementById('discovery-program-cards');
+    if (resultsContainer) resultsContainer.innerHTML = '';
+
+    if (step1) step1.classList.add('active');
+    if (step2) step2.classList.remove('active');
+    if (step3) step3.classList.remove('active');
+
+    if (progressStep1) {
+      progressStep1.classList.add('active');
+      progressStep1.classList.remove('completed', 'locked');
+    }
+    if (progressStep2) {
+      progressStep2.classList.add('locked');
+      progressStep2.classList.remove('active', 'completed');
+    }
+    if (progressStep3) {
+      progressStep3.classList.add('locked');
+      progressStep3.classList.remove('active', 'completed');
+    }
+  }
+
+  // Step 1: Select Topic
+  topicButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      roleButtons.forEach(b => b.classList.remove('selected'));
+      topicButtons.forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
 
-      const role = btn.dataset.role;
-      userSelections.role = role;
+      const topicKey = btn.dataset.topic || 'all';
+      discoveryState.selectedTopic = topicKey;
+      discoveryState.discoveryStarted = true;
+      discoveryState.selectedGoal = null;
 
-      populateGoals(role);
+      populateGoals(topicKey);
 
       step1.classList.remove('active');
       step2.classList.add('active');
+      step3.classList.remove('active');
 
       if (progressStep1) {
         progressStep1.classList.add('completed');
-        progressStep1.classList.remove('active');
+        progressStep1.classList.remove('active', 'locked');
       }
-      if (progressStep2) progressStep2.classList.add('active');
+      if (progressStep2) {
+        progressStep2.classList.add('active');
+        progressStep2.classList.remove('locked', 'completed');
+      }
+      if (progressStep3) {
+        progressStep3.classList.add('locked');
+        progressStep3.classList.remove('active', 'completed');
+      }
     });
   });
 
-  backBtn.addEventListener('click', () => {
-    if (step2 && step1) {
-      step2.classList.remove('active');
-      step1.classList.add('active');
-    }
-    if (progressStep1) {
-      progressStep1.classList.remove('completed');
-      progressStep1.classList.add('active');
-    }
-    if (progressStep2) progressStep2.classList.remove('active');
-
-    userSelections.goalIndex = null;
-  });
-
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      if (step3 && step1) {
-        step3.classList.remove('active');
-        step1.classList.add('active');
-      }
-      if (progressStep1) {
-        progressStep1.classList.remove('completed');
-        progressStep1.classList.add('active');
-      }
-      if (progressStep3) progressStep3.classList.remove('active');
-
-      roleButtons.forEach(b => b.classList.remove('selected'));
-      userSelections = { role: null, goalIndex: null };
+  // Level Refinement Filter Pills (Optional fine-tune inside Step 2)
+  if (levelPills) {
+    levelPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        levelPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        discoveryState.selectedLevel = pill.dataset.level || 'all';
+      });
     });
   }
 
-  function populateGoals(role) {
-    const data = quizData[role];
+  // Back Button (Step 2 -> Step 1)
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      step2.classList.remove('active');
+      step1.classList.add('active');
+      step3.classList.remove('active');
+
+      if (progressStep1) {
+        progressStep1.classList.add('active');
+        progressStep1.classList.remove('completed', 'locked');
+      }
+      if (progressStep2) {
+        progressStep2.classList.add('locked');
+        progressStep2.classList.remove('active', 'completed');
+      }
+      if (progressStep3) {
+        progressStep3.classList.add('locked');
+        progressStep3.classList.remove('active', 'completed');
+      }
+
+      discoveryState.selectedGoal = null;
+    });
+  }
+
+  // Reset Button (Step 3 -> Step 1)
+  if (resetBtn) {
+    resetBtn.addEventListener('click', resetToStep1);
+  }
+
+  function populateGoals(topicKey) {
+    if (!goalContainer) return;
+    const topicData = discoveryDatabase.topics[topicKey] || discoveryDatabase.topics['all'];
     goalContainer.innerHTML = '';
 
-    if (data && data.goals) {
-      data.goals.forEach((goal, index) => {
+    if (topicData && topicData.goals) {
+      topicData.goals.forEach(goal => {
         const btn = document.createElement('button');
-        btn.className = 'quiz-opt-btn';
+        btn.className = 'quiz-opt-btn discovery-goal-btn';
         btn.innerHTML = `
           <span class="icon"><i class="fa-solid fa-bullseye"></i></span>
           <div class="text">
             <b>${goal.text}</b>
+            <small>Click to see matched programs for this specific outcome</small>
           </div>
         `;
         btn.addEventListener('click', () => {
-          userSelections.goalIndex = index;
-          calculateQuizResult();
+          discoveryState.selectedGoal = goal;
+          renderDiscoveryResults(goal);
         });
         goalContainer.appendChild(btn);
       });
     }
   }
 
-  function calculateQuizResult() {
-    const data = quizData[userSelections.role];
-    const goal = data.goals[userSelections.goalIndex];
+  function renderDiscoveryResults(goal) {
+    const resultsContainer = document.getElementById('discovery-program-cards');
+    const resultsTitle = document.getElementById('discovery-results-title');
+    const resultsSubtitle = document.getElementById('discovery-results-subtitle');
 
-    if (goal) {
-      const resTitle = document.getElementById('result-title');
-      const resMsg = document.getElementById('result-message');
-      const resJourney = document.getElementById('result-journey');
-      const resMods = document.getElementById('result-modules');
-      const resFactors = document.getElementById('result-factors');
+    if (!resultsContainer) return;
 
-      if (resTitle) resTitle.textContent = goal.program;
-      if (resMsg) resMsg.textContent = goal.message;
-      if (resJourney) resJourney.textContent = data.journey;
-      if (resMods) resMods.textContent = goal.modules;
-      if (resFactors) resFactors.textContent = goal.factors;
-
-      const formRole = document.getElementById('form-role');
-      const formProgram = document.getElementById('form-program');
-      if (formRole) formRole.value = userSelections.role;
-      if (formProgram) formProgram.value = goal.formProgram;
-
-      if (step2 && step3) {
-        step2.classList.remove('active');
-        step3.classList.add('active');
+    if (resultsTitle) {
+      if (discoveryState.selectedTopic === 'all') {
+        resultsTitle.textContent = 'Relevant Programs Matching Your Interests';
+      } else {
+        const topicName = discoveryDatabase.topics[discoveryState.selectedTopic]?.name || 'Your Selected Topic';
+        resultsTitle.textContent = `Relevant Programs for ${topicName}`;
       }
+    }
+    if (resultsSubtitle) {
+      resultsSubtitle.textContent = `Targeting: "${goal.text}"`;
+    }
 
-      if (progressStep2) {
-        progressStep2.classList.add('completed');
-        progressStep2.classList.remove('active');
-      }
-      if (progressStep3) progressStep3.classList.add('active');
+    // Filter matched programs deterministically strictly based on selected topic + goal + level
+    const targetProgramIds = goal.programIds || [];
+    let matchedPrograms = discoveryDatabase.programs.filter(p => {
+      const matchesGoal = targetProgramIds.includes(p.id);
+      const matchesTopic = discoveryState.selectedTopic === 'all' ? true : p.topics.includes(discoveryState.selectedTopic);
+      const matchesLevel = discoveryState.selectedLevel === 'all' || p.levels.includes(discoveryState.selectedLevel);
+      if (discoveryState.selectedTopic === 'all') return matchesGoal && matchesLevel;
+      return matchesGoal && matchesTopic && matchesLevel;
+    });
+
+    if (matchedPrograms.length === 0) {
+      // Clean explicit empty state - DO NOT show all programs as a fallback!
+      resultsContainer.innerHTML = `
+        <div class="discovery-empty-state" style="text-align: center; padding: 48px 24px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 16px;">
+          <i class="fa-solid fa-compass-drafting" style="font-size: 36px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
+          <h3 style="font-size: 1.15rem; color: #334155; margin-bottom: 8px; font-weight: 600;">No programs currently match these exact selections.</h3>
+          <p style="font-size: 0.95rem; color: #64748b; margin: 0 0 20px 0;">We couldn't find a program matching your exact level refinement. Would you like to reset your selections or speak with our academic advisors?</p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline btn-sm" id="empty-reset-btn"><i class="fa-solid fa-rotate-right"></i> Reset Selections</button>
+            <a href="contact.html#enquiry" class="btn btn-primary btn-sm"><i class="fa-solid fa-calendar-check"></i> Book Free Counselling</a>
+          </div>
+        </div>
+      `;
+      const emptyResetBtn = document.getElementById('empty-reset-btn');
+      if (emptyResetBtn) emptyResetBtn.addEventListener('click', resetToStep1);
+    } else {
+      // Render clean, verified matching program cards
+      resultsContainer.innerHTML = matchedPrograms.map(p => `
+        <div class="discovery-card">
+          <div class="discovery-card-img-wrap">
+            <img src="${p.image}" alt="${p.title}" loading="lazy" />
+            <span class="discovery-card-badge">${p.badge}</span>
+          </div>
+          <div class="discovery-card-body">
+            <div class="discovery-card-meta">
+              <span><i class="fa-regular fa-clock"></i> ${p.duration}</span>
+              <span><i class="fa-solid fa-layer-group"></i> ${p.level}</span>
+            </div>
+            <h4 class="discovery-card-title">${p.title}</h4>
+            <p class="discovery-card-desc">${p.description}</p>
+            <div class="discovery-card-outcomes">
+              ${p.outcomes.map(o => `<span><i class="fa-solid fa-check-circle"></i> ${o}</span>`).join('')}
+            </div>
+            <div class="discovery-card-actions">
+              <a href="${p.url}" class="btn btn-primary btn-sm">
+                Explore Program <i class="fa-solid fa-arrow-right"></i>
+              </a>
+              <a href="contact.html#enquiry" class="btn btn-outline btn-sm btn-apply-now" data-program-id="${p.formProgram}">
+                Enquire Now
+              </a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Transition view to Step 3
+    if (step2 && step3) {
+      step2.classList.remove('active');
+      step3.classList.add('active');
+    }
+
+    if (progressStep1) {
+      progressStep1.classList.add('completed');
+      progressStep1.classList.remove('active');
+    }
+    if (progressStep2) {
+      progressStep2.classList.add('completed');
+      progressStep2.classList.remove('active');
+    }
+    if (progressStep3) {
+      progressStep3.classList.add('active');
+      progressStep3.classList.remove('locked');
     }
   }
 }

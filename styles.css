@@ -3296,6 +3296,87 @@ p {
   transform: translateX(4px);
 }
 
+/* Persona Card Visual Differentiation & Color Themes */
+.persona-card-fresh-vet {
+  background: linear-gradient(180deg, #ffffff 0%, #f0fdfa 100%);
+  border: 1.5px solid #ccfbf1;
+}
+.persona-card-fresh-vet:hover {
+  border-color: #0d9488;
+  box-shadow: 0 14px 30px rgba(13, 148, 136, 0.16);
+}
+.tag-fresh-vet {
+  background-color: #0d9488 !important;
+  color: #ffffff !important;
+}
+.link-fresh-vet {
+  color: #0d9488 !important;
+}
+
+.persona-card-practising-vet {
+  background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+  border: 1.5px solid #dbeafe;
+}
+.persona-card-practising-vet:hover {
+  border-color: #2563eb;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.16);
+}
+.tag-practising-vet {
+  background-color: #1e40af !important;
+  color: #ffffff !important;
+}
+.link-practising-vet {
+  color: #1d4ed8 !important;
+}
+
+.persona-card-experienced-vet {
+  background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%);
+  border: 1.5px solid #fef3c7;
+}
+.persona-card-experienced-vet:hover {
+  border-color: #d97706;
+  box-shadow: 0 14px 30px rgba(217, 119, 6, 0.16);
+}
+.tag-experienced-vet {
+  background-color: #b45309 !important;
+  color: #ffffff !important;
+}
+.link-experienced-vet {
+  color: #b45309 !important;
+}
+
+.persona-card-vet-nurse {
+  background: linear-gradient(180deg, #ffffff 0%, #ecfdf5 100%);
+  border: 1.5px solid #a7f3d0;
+}
+.persona-card-vet-nurse:hover {
+  border-color: #059669;
+  box-shadow: 0 14px 30px rgba(5, 150, 105, 0.16);
+}
+.tag-vet-nurse {
+  background-color: #047857 !important;
+  color: #ffffff !important;
+}
+.link-vet-nurse {
+  color: #047857 !important;
+}
+
+.persona-card-pet-owner {
+  background: linear-gradient(180deg, #ffffff 0%, #fff1f2 100%);
+  border: 1.5px solid #fecdd3;
+}
+.persona-card-pet-owner:hover {
+  border-color: #e11d48;
+  box-shadow: 0 14px 30px rgba(225, 29, 72, 0.16);
+}
+.tag-pet-owner {
+  background-color: #be123c !important;
+  color: #ffffff !important;
+}
+.link-pet-owner {
+  color: #be123c !important;
+}
+
 /* Featured Programs */
 .program-layout {
   display: grid;
@@ -3503,6 +3584,13 @@ p {
   border-bottom-color: var(--teal-2);
 }
 
+.progress-step.locked {
+  color: #94a3b8;
+  border-bottom-color: #e2e8f0;
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .quiz-step-content {
   display: none;
   animation: fadeIn 0.4s ease;
@@ -3674,6 +3762,297 @@ p {
   justify-content: center;
   gap: 12px;
 }
+
+/* Program Discovery & Gamification Redesign */
+.discovery-panel {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-xl, 20px);
+  padding: 48px 36px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.discovery-topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.discovery-topic-btn {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.discovery-topic-btn:hover {
+  border-color: var(--teal, #12C7C1);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(18, 199, 193, 0.12);
+}
+
+.discovery-topic-btn.selected {
+  border-color: var(--teal, #12C7C1);
+  background: #f0fdfa;
+  box-shadow: 0 8px 24px rgba(13, 148, 136, 0.15);
+}
+
+.discovery-level-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  padding: 12px 18px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.level-filter-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy-2, #0f172a);
+}
+
+.level-pill {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.level-pill:hover,
+.level-pill.active {
+  background: var(--teal, #12C7C1);
+  border-color: var(--teal, #12C7C1);
+  color: #ffffff;
+}
+
+.discovery-results-wrapper {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 36px 28px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.results-header-bar {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.results-header-bar h3 {
+  font-size: 24px;
+  color: var(--navy-2, #0f172a);
+  margin-top: 8px;
+}
+
+.results-header-bar p {
+  font-size: 14px;
+  color: var(--muted, #64748b);
+  margin-top: 4px;
+}
+
+.discovery-program-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.discovery-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.discovery-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+  border-color: #cbd5e1;
+}
+
+.discovery-card-img-wrap {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.discovery-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.discovery-card:hover .discovery-card-img-wrap img {
+  transform: scale(1.05);
+}
+
+.discovery-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.discovery-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.discovery-card-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--teal-dark, #0d9488);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.discovery-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy-2, #0f172a);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.discovery-card-desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+
+.discovery-card-outcomes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.discovery-card-outcomes span {
+  font-size: 11px;
+  font-weight: 600;
+  background: #f0fdfa;
+  color: #0f766e;
+  border: 1px solid #ccfbf1;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.discovery-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+  width: 100%;
+}
+
+.discovery-card-actions .btn {
+  flex: 1 1 0%;
+  min-width: 0;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 10px !important;
+  font-size: 13px !important;
+  font-weight: 700;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.discovery-card-actions .btn-apply-now {
+  box-shadow: none !important;
+}
+
+@media (max-width: 1100px) and (min-width: 992px) {
+  .discovery-card-actions .btn {
+    padding: 0 8px !important;
+    font-size: 12px !important;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 640px) {
+  .discovery-card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .discovery-card-actions .btn {
+    width: 100%;
+    flex: none;
+    height: 44px !important;
+    min-height: 44px !important;
+    font-size: 14px !important;
+  }
+}
+
+.discovery-empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+}
+
+.discovery-empty-state i {
+  font-size: 40px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+
+.discovery-empty-state h3 {
+  font-size: 18px;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.discovery-empty-state p {
+  font-size: 14px;
+  color: #64748b;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
 
 /* Why VetNova / Video */
 .advantage-wrap {
