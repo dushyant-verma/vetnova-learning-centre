@@ -238,11 +238,11 @@
   <nav class="drawer-menu">
     <!-- Mobile Accordion: Home -->
     <div class="drawer-accordion">
-      <button class="drawer-accordion-btn" aria-expanded="false">
+      <button type="button" class="drawer-accordion-btn" id="drawer-home-btn" aria-expanded="false" aria-controls="drawer-home-panel">
         <span><i class="fa-solid fa-house"></i> Home</span>
         <i class="fa-solid fa-chevron-down accordion-caret"></i>
       </button>
-      <div class="drawer-accordion-content">
+      <div class="drawer-accordion-content" id="drawer-home-panel" role="region" aria-labelledby="drawer-home-btn">
         <a href="index.html" data-subnav="index"><i class="fa-solid fa-house-chimney"></i> Home</a>
         <a href="index-v2.html" data-subnav="index-v2"><i class="fa-solid fa-crown"></i> Home V2</a>
         <a href="index-v3.html" data-subnav="index-v3"><i class="fa-solid fa-crown"></i> Home V3</a>
@@ -252,11 +252,11 @@
 
     <!-- Mobile Accordion: About -->
     <div class="drawer-accordion">
-      <button class="drawer-accordion-btn" aria-expanded="false">
+      <button type="button" class="drawer-accordion-btn" id="drawer-about-btn" aria-expanded="false" aria-controls="drawer-about-panel">
         <span><i class="fa-solid fa-hospital"></i> About Institute</span>
         <i class="fa-solid fa-chevron-down accordion-caret"></i>
       </button>
-      <div class="drawer-accordion-content">
+      <div class="drawer-accordion-content" id="drawer-about-panel" role="region" aria-labelledby="drawer-about-btn">
         <a href="about.html">
           <span class="drawer-item-icon">
             <i class="fa-solid fa-building-columns"></i>
@@ -297,18 +297,18 @@
 
     <!-- Mobile Accordion: Programs -->
     <div class="drawer-accordion">
-      <button class="drawer-accordion-btn" aria-expanded="false">
+      <button type="button" class="drawer-accordion-btn" id="drawer-programs-btn" aria-expanded="false" aria-controls="drawer-programs-panel">
         <span><i class="fa-solid fa-layer-group"></i> Clinical Programs by Grade</span>
         <i class="fa-solid fa-chevron-down accordion-caret"></i>
       </button>
-      <div class="drawer-accordion-content">
+      <div class="drawer-accordion-content" id="drawer-programs-panel" role="region" aria-labelledby="drawer-programs-btn">
         <!-- Grade 1 -->
         <div class="drawer-sub-accordion">
-          <button class="drawer-sub-accordion-btn" aria-expanded="false">
+          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-1-btn" aria-expanded="false" aria-controls="drawer-grade-1-panel">
             <span><strong class="grade-pill grade-pill-1">Grade 1</strong> Basic</span>
             <i class="fa-solid fa-chevron-down accordion-caret"></i>
           </button>
-          <div class="drawer-sub-content">
+          <div class="drawer-sub-content" id="drawer-grade-1-panel" role="region" aria-labelledby="drawer-grade-1-btn">
             <a href="programs.html?grade=grade-1&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
             <a href="programs.html?grade=grade-1&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
             <a href="programs.html?grade=grade-1&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>
@@ -319,11 +319,11 @@
 
         <!-- Grade 2 -->
         <div class="drawer-sub-accordion">
-          <button class="drawer-sub-accordion-btn" aria-expanded="false">
+          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-2-btn" aria-expanded="false" aria-controls="drawer-grade-2-panel">
             <span><strong class="grade-pill grade-pill-2">Grade 2</strong> Intermediate</span>
             <i class="fa-solid fa-chevron-down accordion-caret"></i>
           </button>
-          <div class="drawer-sub-content">
+          <div class="drawer-sub-content" id="drawer-grade-2-panel" role="region" aria-labelledby="drawer-grade-2-btn">
             <a href="programs.html?grade=grade-2&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
             <a href="programs.html?grade=grade-2&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
             <a href="programs.html?grade=grade-2&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>
@@ -334,11 +334,11 @@
 
         <!-- Grade 3 -->
         <div class="drawer-sub-accordion">
-          <button class="drawer-sub-accordion-btn" aria-expanded="false">
+          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-3-btn" aria-expanded="false" aria-controls="drawer-grade-3-panel">
             <span><strong class="grade-pill grade-pill-3">Grade 3</strong> Competitive</span>
             <i class="fa-solid fa-chevron-down accordion-caret"></i>
           </button>
-          <div class="drawer-sub-content">
+          <div class="drawer-sub-content" id="drawer-grade-3-panel" role="region" aria-labelledby="drawer-grade-3-btn">
             <a href="programs.html?grade=grade-3&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
             <a href="programs.html?grade=grade-3&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
             <a href="programs.html?grade=grade-3&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>
@@ -349,11 +349,11 @@
 
         <!-- Grade 4 -->
         <div class="drawer-sub-accordion">
-          <button class="drawer-sub-accordion-btn" aria-expanded="false">
+          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-4-btn" aria-expanded="false" aria-controls="drawer-grade-4-panel">
             <span><strong class="grade-pill grade-pill-4">Grade 4</strong> Advanced</span>
             <i class="fa-solid fa-chevron-down accordion-caret"></i>
           </button>
-          <div class="drawer-sub-content">
+          <div class="drawer-sub-content" id="drawer-grade-4-panel" role="region" aria-labelledby="drawer-grade-4-btn">
             <a href="programs.html?grade=grade-4&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
             <a href="programs.html?grade=grade-4&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
             <a href="programs.html?grade=grade-4&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>
@@ -364,11 +364,11 @@
 
         <!-- Grade 5 -->
         <div class="drawer-sub-accordion">
-          <button class="drawer-sub-accordion-btn" aria-expanded="false">
+          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-5-btn" aria-expanded="false" aria-controls="drawer-grade-5-panel">
             <span><strong class="grade-pill grade-pill-5">Grade 5</strong> Pro</span>
             <i class="fa-solid fa-chevron-down accordion-caret"></i>
           </button>
-          <div class="drawer-sub-content">
+          <div class="drawer-sub-content" id="drawer-grade-5-panel" role="region" aria-labelledby="drawer-grade-5-btn">
             <a href="programs.html?grade=grade-5&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
             <a href="programs.html?grade=grade-5&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
             <a href="programs.html?grade=grade-5&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>

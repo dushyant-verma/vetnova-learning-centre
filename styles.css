@@ -729,16 +729,23 @@ p {
 }
 
 .drawer-sub-content {
-  display: none;
-  padding: 8px 12px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, padding 0.25s ease;
+  padding: 0 12px;
   background: #ffffff;
-  border-top: 1px solid #f1f5f9;
-}
-
-.drawer-sub-content.open {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  border-top: 1px solid transparent;
+}
+
+.drawer-sub-content.open {
+  max-height: 500px;
+  opacity: 1;
+  padding: 8px 12px;
+  border-top-color: #f1f5f9;
 }
 
 .drawer-sub-content a {
@@ -1334,21 +1341,24 @@ p {
 .mobile-drawer {
   position: fixed;
   top: 0;
-  right: -340px;
-  width: 320px;
+  right: -360px;
+  width: 340px;
+  max-width: 88vw;
   height: 100vh;
+  height: 100dvh;
   background-color: var(--white);
-  z-index: 1010;
+  z-index: 1050;
   box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
-  padding: 28px 24px;
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mobile-drawer.open {
-  transform: translateX(-340px);
+  transform: translateX(-360px);
 }
 
 .drawer-header {
@@ -1449,8 +1459,9 @@ p {
 
 .drawer-accordion-content {
   max-height: 0;
+  opacity: 0;
   overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1458,10 +1469,11 @@ p {
 }
 
 .drawer-accordion-content.open {
-  max-height: 300px;
+  max-height: 1500px;
+  opacity: 1;
   padding-top: 4px;
   padding-bottom: 8px;
-  transition: max-height 0.35s ease-in-out;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
 }
 
 .drawer-accordion-content a {
@@ -1511,7 +1523,7 @@ p {
   inset: 0;
   background-color: rgba(9, 21, 56, 0.4);
   backdrop-filter: blur(4px);
-  z-index: 100;
+  z-index: 1040;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -3301,14 +3313,17 @@ p {
   background: linear-gradient(180deg, #ffffff 0%, #f0fdfa 100%);
   border: 1.5px solid #ccfbf1;
 }
+
 .persona-card-fresh-vet:hover {
   border-color: #0d9488;
   box-shadow: 0 14px 30px rgba(13, 148, 136, 0.16);
 }
+
 .tag-fresh-vet {
   background-color: #0d9488 !important;
   color: #ffffff !important;
 }
+
 .link-fresh-vet {
   color: #0d9488 !important;
 }
@@ -3317,14 +3332,17 @@ p {
   background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
   border: 1.5px solid #dbeafe;
 }
+
 .persona-card-practising-vet:hover {
   border-color: #2563eb;
   box-shadow: 0 14px 30px rgba(37, 99, 235, 0.16);
 }
+
 .tag-practising-vet {
   background-color: #1e40af !important;
   color: #ffffff !important;
 }
+
 .link-practising-vet {
   color: #1d4ed8 !important;
 }
@@ -3333,14 +3351,17 @@ p {
   background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%);
   border: 1.5px solid #fef3c7;
 }
+
 .persona-card-experienced-vet:hover {
   border-color: #d97706;
   box-shadow: 0 14px 30px rgba(217, 119, 6, 0.16);
 }
+
 .tag-experienced-vet {
   background-color: #b45309 !important;
   color: #ffffff !important;
 }
+
 .link-experienced-vet {
   color: #b45309 !important;
 }
@@ -3349,14 +3370,17 @@ p {
   background: linear-gradient(180deg, #ffffff 0%, #ecfdf5 100%);
   border: 1.5px solid #a7f3d0;
 }
+
 .persona-card-vet-nurse:hover {
   border-color: #059669;
   box-shadow: 0 14px 30px rgba(5, 150, 105, 0.16);
 }
+
 .tag-vet-nurse {
   background-color: #047857 !important;
   color: #ffffff !important;
 }
+
 .link-vet-nurse {
   color: #047857 !important;
 }
@@ -3365,14 +3389,17 @@ p {
   background: linear-gradient(180deg, #ffffff 0%, #fff1f2 100%);
   border: 1.5px solid #fecdd3;
 }
+
 .persona-card-pet-owner:hover {
   border-color: #e11d48;
   box-shadow: 0 14px 30px rgba(225, 29, 72, 0.16);
 }
+
 .tag-pet-owner {
   background-color: #be123c !important;
   color: #ffffff !important;
 }
+
 .link-pet-owner {
   color: #be123c !important;
 }
@@ -3880,7 +3907,7 @@ p {
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .discovery-card:hover {
@@ -12176,13 +12203,28 @@ section#faq .container {
     text-align: center !important;
   }
 
+  .faculty-filter-pill {
+    font-size: 12px !important;
+  }
+
+  .feature-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
   /* 3. #contact-form-section inputs & buttons */
   #contact-form-section {
-    padding-bottom: 110px !important;
+    padding-bottom: 20px !important;
+  }
+
+  section#contact-testimonials .feature-grid-3 {
+    display: grid;
+    grid-template-columns: auto;
   }
 
   #contact-form-section .two-column-media {
     height: 220px !important;
+    position: relative !important;
   }
 
   #contact-form-section .two-column-copy {
@@ -12198,10 +12240,12 @@ section#faq .container {
   }
 
   #contact-form-section form button {
-    width: 100% !important;
-    min-height: 48px !important;
+    width: auto;
+    min-height: 42px !important;
     justify-content: center !important;
     text-align: center !important;
+    font-size: 12px;
+    padding: 8px 12px;
     margin: 0 !important;
   }
 
@@ -12243,9 +12287,14 @@ section#faq .container {
   }
 
   /* 6. #emergency-contacts: 1 card per row on phones */
-  #emergency-contacts .feature-grid-4 {
+  #emergency-contacts .feature-grid-4,
+  .alumni .feature-grid-4 {
     grid-template-columns: 1fr !important;
     gap: 14px !important;
+  }
+
+  .mobile-drawer a.btn.btn-outline.btn-block.btn-counselling-modal {
+    margin-top: 10px;
   }
 
   #emergency-contacts .resource-card {

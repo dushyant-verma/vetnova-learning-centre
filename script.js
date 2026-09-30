@@ -335,6 +335,15 @@ function initMobileMenu() {
           otherBtn.setAttribute('aria-expanded', 'false');
           if (otherBtn.nextElementSibling) {
             otherBtn.nextElementSibling.classList.remove('open');
+            // Close any open nested sub-accordions inside closed parent
+            const siblingSubBtns = otherBtn.nextElementSibling.querySelectorAll('.drawer-sub-accordion-btn');
+            siblingSubBtns.forEach(sBtn => {
+              sBtn.classList.remove('active');
+              sBtn.setAttribute('aria-expanded', 'false');
+              if (sBtn.nextElementSibling) {
+                sBtn.nextElementSibling.classList.remove('open');
+              }
+            });
           }
         }
       });
@@ -342,7 +351,17 @@ function initMobileMenu() {
       if (isOpen) {
         btn.classList.remove('active');
         btn.setAttribute('aria-expanded', 'false');
-        if (content) content.classList.remove('open');
+        if (content) {
+          content.classList.remove('open');
+          const childSubBtns = content.querySelectorAll('.drawer-sub-accordion-btn');
+          childSubBtns.forEach(sBtn => {
+            sBtn.classList.remove('active');
+            sBtn.setAttribute('aria-expanded', 'false');
+            if (sBtn.nextElementSibling) {
+              sBtn.nextElementSibling.classList.remove('open');
+            }
+          });
+        }
       } else {
         btn.classList.add('active');
         btn.setAttribute('aria-expanded', 'true');
@@ -380,6 +399,9 @@ function initMobileMenu() {
         btn.classList.add('active');
         btn.setAttribute('aria-expanded', 'true');
         if (content) content.classList.add('open');
+        setTimeout(() => {
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 150);
       }
     });
   });
