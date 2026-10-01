@@ -844,22 +844,34 @@ function initProgramDiscovery() {
         resultsTitle.textContent = `Relevant Programs for ${topicName}`;
       }
     }
-    if (resultsSubtitle) {
+    if (resultsSubtitle && goal) {
       resultsSubtitle.textContent = `Targeting: "${goal.text}"`;
     }
 
-    // Filter matched programs deterministically strictly based on selected topic + goal + level
-    const targetProgramIds = goal.programIds || [];
-    let matchedPrograms = discoveryDatabase.programs.filter(p => {
-      const matchesGoal = targetProgramIds.includes(p.id);
-      const matchesTopic = discoveryState.selectedTopic === 'all' ? true : p.topics.includes(discoveryState.selectedTopic);
-      const matchesLevel = discoveryState.selectedLevel === 'all' || p.levels.includes(discoveryState.selectedLevel);
-      if (discoveryState.selectedTopic === 'all') return matchesGoal && matchesLevel;
-      return matchesGoal && matchesTopic && matchesLevel;
+    // Filter window.VETNOVA_PROGRAMS_DATA directly - NO duplicate hardcoded database!
+    const topicToTrackMap = {
+      'surgery': ['practicing-vets', 'fresh-graduates'],
+      'radiology': ['diagnostic-specialization'],
+      'emergency': ['emergency-care'],
+      'nurse': ['vet-nurse'],
+      'skill-up': ['fresh-graduates', 'practicing-vets'],
+      'all': ['fresh-graduates', 'practicing-vets', 'diagnostic-specialization', 'emergency-care', 'vet-nurse']
+    };
+
+    const targetTracks = topicToTrackMap[discoveryState.selectedTopic] || topicToTrackMap['all'];
+
+    let matchedPrograms = (window.VETNOVA_PROGRAMS_DATA || []).filter(p => {
+      const matchesTopic = discoveryState.selectedTopic === 'all' ? true : targetTracks.includes(p.track);
+      
+      let matchesLevel = true;
+      if (discoveryState.selectedLevel === 'foundation') matchesLevel = (p.grade === 1);
+      else if (discoveryState.selectedLevel === 'intermediate') matchesLevel = (p.grade === 2 || p.grade === 3);
+      else if (discoveryState.selectedLevel === 'advanced') matchesLevel = (p.grade === 4 || p.grade === 5);
+
+      return matchesTopic && matchesLevel;
     });
 
     if (matchedPrograms.length === 0) {
-      // Clean explicit empty state - DO NOT show all programs as a fallback!
       resultsContainer.innerHTML = `
         <div class="discovery-empty-state" style="text-align: center; padding: 48px 24px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 16px;">
           <i class="fa-solid fa-compass-drafting" style="font-size: 36px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
@@ -874,34 +886,36 @@ function initProgramDiscovery() {
       const emptyResetBtn = document.getElementById('empty-reset-btn');
       if (emptyResetBtn) emptyResetBtn.addEventListener('click', resetToStep1);
     } else {
-      // Render clean, verified matching program cards
-      resultsContainer.innerHTML = matchedPrograms.map(p => `
-        <div class="discovery-card">
-          <div class="discovery-card-img-wrap">
-            <img src="${p.image}" alt="${p.title}" loading="lazy" />
-            <span class="discovery-card-badge">${p.badge}</span>
+      resultsContainer.innerHTML = matchedPrograms.map(p => {
+        const isDemo = p.isDemo;
+        const badgeText = isDemo ? 'Demo Program' : `Grade ${p.grade} — ${p.gradeName}`;
+        const exploreLink = isDemo ? `programs.html?grade=${p.gradeCode}&track=${p.track}` : p.url;
+        
+        return `
+          <div class="discovery-card ${isDemo ? 'demo-program-card' : ''}">
+            <div class="discovery-card-img-wrap" style="position: relative;">
+              <img src="${p.image || 'assets/images/programs/program-skill-up.webp'}" alt="${p.title}" loading="lazy" />
+              <span class="discovery-card-badge ${isDemo ? 'badge-demo-pill' : ''}" style="${isDemo ? 'background: #f59e0b; color: #fff;' : ''}">${badgeText}</span>
+            </div>
+            <div class="discovery-card-body">
+              <div class="discovery-card-meta">
+                <span><i class="fa-solid fa-signal"></i> ${p.gradeLabel}</span>
+                <span><i class="fa-solid fa-book-open"></i> ${p.trackLabel}</span>
+              </div>
+              <h4 class="discovery-card-title">${p.title}</h4>
+              <p class="discovery-card-desc">${p.description}</p>
+              <div class="discovery-card-actions" style="margin-top: 16px; display: flex; gap: 8px;">
+                <a href="${exploreLink}" class="btn btn-primary btn-sm">
+                  Explore Program <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <button type="button" class="btn btn-outline btn-sm btn-show-interest" data-source="Discovery Quiz Enquiry" data-context="${p.title}">
+                  Enquire Now
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="discovery-card-body">
-            <div class="discovery-card-meta">
-              <span><i class="fa-regular fa-clock"></i> ${p.duration}</span>
-              <span><i class="fa-solid fa-layer-group"></i> ${p.level}</span>
-            </div>
-            <h4 class="discovery-card-title">${p.title}</h4>
-            <p class="discovery-card-desc">${p.description}</p>
-            <div class="discovery-card-outcomes">
-              ${p.outcomes.map(o => `<span><i class="fa-solid fa-check-circle"></i> ${o}</span>`).join('')}
-            </div>
-            <div class="discovery-card-actions">
-              <a href="${p.url}" class="btn btn-primary btn-sm">
-                Explore Program <i class="fa-solid fa-arrow-right"></i>
-              </a>
-              <a href="contact.html#enquiry" class="btn btn-outline btn-sm btn-apply-now" data-program-id="${p.formProgram}">
-                Enquire Now
-              </a>
-            </div>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     // Transition view to Step 3
@@ -1662,90 +1676,1143 @@ function initBlogCategoryFilter() {
 /* ==========================================================================
    13. Grade-Based Program Data Model (Requirement 16)
    ========================================================================== */
+
+/* ==========================================================================
+   Program Card Image Taxonomy & Mapping Helper (Requirement 1 & 10)
+   ========================================================================== */
+function getProgramImage(program) {
+  if (program && program.image) return program.image;
+
+  const trackImages = {
+    'fresh-graduates': [
+      'assets/images/programs/program-skill-up.webp',
+      'assets/images/learning-paths/featured-skillup.webp',
+      'assets/images/learning-centre/learning-students.webp',
+      'assets/images/edu-flagship-skillup.webp',
+      'assets/images/learning-path-student.webp',
+      'assets/images/learning-path-graduate.webp',
+      'assets/images/program-clinic-ready.webp',
+      'assets/images/edu-clinic-ready-thumb.webp',
+      'assets/images/learning-centre/learning-classroom.webp',
+      'assets/images/learning-paths/veterinary-skillup.webp'
+    ],
+    'practicing-vets': [
+      'assets/images/programs/program-surgery.webp',
+      'assets/images/learning-paths/soft-tissue-surgery.webp',
+      'assets/images/learning-centre/equipment_surgery.webp',
+      'assets/images/learning-centre/learning-surgery.webp',
+      'assets/images/edu-surgery-thumb.webp',
+      'assets/images/learning-path-doctor.webp',
+      'assets/images/learning-centre/equipment_anesthesia.webp',
+      'assets/images/learning-centre/learning-wetlab.webp',
+      'assets/images/learning-path-specialist.webp',
+      'assets/images/counselling-academic-guidance.webp'
+    ],
+    'diagnostic-specialization': [
+      'assets/images/programs/program-radiology.webp',
+      'assets/images/learning-paths/radiology-ultrasound.webp',
+      'assets/images/learning-centre/equipment_ultrasound.webp',
+      'assets/images/learning-centre/equipment_xray.webp',
+      'assets/images/learning-centre/equipment_laboratory.webp',
+      'assets/images/learning-centre/learning-ultrasound.webp',
+      'assets/images/learning-centre/learning-xray.webp',
+      'assets/images/facility-radiology.webp',
+      'assets/images/edu-radiology-thumb.webp',
+      'assets/images/facility-main.webp'
+    ],
+    'emergency-care': [
+      'assets/images/programs/program-emergency.webp',
+      'assets/images/programs/program-first-aid.webp',
+      'assets/images/learning-paths/emergency-medicine.webp',
+      'assets/images/learning-paths/pet-first-aid.webp',
+      'assets/images/learning-centre/equipment_emergency.webp',
+      'assets/images/edu-emergency-thumb.webp',
+      'assets/images/learning-centre/learning-hospital.webp',
+      'assets/images/hero-veterinary-training.webp',
+      'assets/images/facility-lecture.webp',
+      'assets/images/learning-centre/learning-hero.webp'
+    ],
+    'vet-nurse': [
+      'assets/images/programs/program-nurse.webp',
+      'assets/images/learning-paths/vet-nurse.webp',
+      'assets/images/learning-path-nurse.webp',
+      'assets/images/learning-centre/learning-students.webp',
+      'assets/images/programs/alumni-01.webp',
+      'assets/images/programs/training-formats-featured.webp',
+      'assets/images/programs/hero-programs.webp',
+      'assets/images/learning-centre/equipment_laboratory.webp',
+      'assets/images/edu-clinic-ready-thumb.webp',
+      'assets/images/program-clinic-ready.webp'
+    ]
+  };
+
+  const trackKey = (program && program.track) ? program.track : 'fresh-graduates';
+  const list = trackImages[trackKey] || trackImages['fresh-graduates'];
+  let hash = 0;
+  const key = ((program && (program.id || program.title)) || '') + ((program && program.grade) || '');
+  for (let i = 0; i < key.length; i++) {
+    hash = (hash << 5) - hash + key.charCodeAt(i);
+    hash |= 0;
+  }
+  const index = Math.abs(hash) % list.length;
+  return list[index];
+}
+window.getProgramImage = getProgramImage;
+
 window.VETNOVA_PROGRAMS_DATA = [
+  // ==================== GRADE 1 — BASIC ====================
+  // Track 1: Fresh Graduates & Interns
   {
-    grade: "grade-1",
+    id: "real-skill-up",
+    title: "Veterinary Skill-Up Program",
+    slug: "veterinary-skill-up",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
     gradeLabel: "Grade 1 — Basic",
     track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
     trackLabel: "Fresh Graduates & Interns",
-    program: "Veterinary Skill-Up Program",
-    programSlug: "veterinary-skill-up",
+    description: "Comprehensive 4-week clinical mastery module covering soft tissue surgery, digital radiology, abdominal ultrasound, and emergency triage.",
+    status: "Admissions Open",
+    isDemo: false,
     url: "veterinary-skill-up.html?grade=grade-1",
     deliveryMode: "offline",
-    duration: "4 Weeks",
     price: "₹38,000 + GST",
-    batch: "August 15, 2026",
-    status: "Admissions Open"
+    duration: "4 Weeks (120+ Hrs)",
+    image: "assets/images/programs/program-skill-up.webp",
   },
   {
-    grade: "grade-2",
-    gradeLabel: "Grade 2 — Intermediate",
+    id: "demo-g1-fg-1",
+    title: "Veterinary Clinical Foundations",
+    slug: "veterinary-clinical-foundations",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Foundational clinical principles, patient physical examination protocols, and entry-level practical skill development for new veterinary graduates.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-veterinary-clinical-foundations",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g1-fg-2",
+    title: "Essential Clinical Skills Workshop",
+    slug: "essential-clinical-skills-workshop",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Hands-on introductory workshop covering basic patient handling, diagnostic sampling, catheterization, and essential clinical procedures.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-essential-clinical-skills-workshop",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+  // Track 2: Practicing Veterinarians
+  {
+    id: "demo-g1-pv-1",
+    title: "Everyday Clinical Essentials",
+    slug: "everyday-clinical-essentials",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
     track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
     trackLabel: "Practicing Veterinarians",
-    program: "Soft Tissue Surgery Track",
-    programSlug: "soft-tissue-surgery",
-    url: "soft-tissue-surgery.html?grade=grade-2",
+    description: "Core practical refresher covering routine companion animal consultations, outpatient treatment protocols, and clinic workflow fundamentals.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-everyday-clinical-essentials",
     deliveryMode: "offline",
-    duration: "1 Week",
-    price: "₹18,500 + GST",
-    batch: "September 1, 2026",
-    status: "Admissions Open"
+    duration: "1 Week"
   },
   {
-    grade: "grade-2",
-    gradeLabel: "Grade 2 — Intermediate",
+    id: "demo-g1-pv-2",
+    title: "Basic Practice Skills Refresher",
+    slug: "basic-practice-skills-refresher",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Practical review of essential diagnostic and therapeutic skills for clinicians updating or returning to active small animal practice.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-basic-practice-skills-refresher",
+    deliveryMode: "offline",
+    duration: "3 Days"
+  },
+  // Track 3: Diagnostic Specialization
+  {
+    id: "demo-g1-ds-1",
+    title: "Basic Veterinary Diagnostics",
+    slug: "basic-veterinary-diagnostics",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
     track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
     trackLabel: "Diagnostic Specialization",
-    program: "Radiology & Ultrasound Masterclass",
-    programSlug: "radiology-ultrasound",
-    url: "radiology-ultrasound.html?grade=grade-2",
+    description: "Introduction to in-clinic laboratory diagnostics, blood smear examination, urinalysis, and rapid point-of-care test interpretation.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-basic-veterinary-diagnostics",
     deliveryMode: "offline",
-    duration: "1 Week",
-    price: "₹16,000 + GST",
-    batch: "September 12, 2026",
-    status: "Admissions Open"
+    duration: "1 Week"
   },
   {
-    grade: "grade-3",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "emergency-care",
-    trackLabel: "Emergency & Critical Care",
-    program: "Pet Emergency & Critical Care",
-    programSlug: "emergency-medicine",
-    url: "emergency-medicine.html?grade=grade-3",
-    deliveryMode: "offline",
-    duration: "3 Days",
-    price: "₹12,500 + GST",
-    batch: "September 25, 2026",
-    status: "Admissions Open"
+    id: "demo-g1-ds-2",
+    title: "Introduction to Diagnostic Imaging",
+    slug: "introduction-to-diagnostic-imaging",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "Foundational principles of digital radiography positioning, X-ray safety, and introductory ultrasound probe orientation for beginners.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-introduction-to-diagnostic-imaging",
+    deliveryMode: "workshop",
+    duration: "3 Days"
   },
+  // Track 4: Emergency & Critical Care
   {
-    grade: "grade-1",
+    id: "real-first-aid",
+    title: "Pet Emergency First Aid Workshop",
+    slug: "emergency-medicine",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
     gradeLabel: "Grade 1 — Basic",
     track: "emergency-care",
+    trackName: "Emergency & Critical Care",
     trackLabel: "Emergency & Critical Care",
-    program: "Pet Emergency First Aid Workshop",
-    programSlug: "emergency-medicine",
+    description: "Designed for pet parents, rescuers, and clinic staff to stabilize pets during life-threatening choking, bleeding, or heat stroke emergencies.",
+    status: "Admissions Open",
+    isDemo: false,
     url: "emergency-medicine.html?grade=grade-1",
     deliveryMode: "workshop",
-    duration: "1 Day",
     price: "₹3,500 + GST",
-    batch: "Monthly Intake",
-    status: "Admissions Open"
+    duration: "1 Day Workshop",
+    image: "assets/images/programs/program-first-aid.webp",
   },
   {
-    grade: "grade-1",
+    id: "demo-g1-ec-1",
+    title: "Emergency Care Fundamentals",
+    slug: "emergency-care-fundamentals",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Foundational training in acute patient triage, vital signs assessment, and immediate stabilization protocols for emergency presentations.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-emergency-care-fundamentals",
+    deliveryMode: "offline",
+    duration: "3 Days"
+  },
+  {
+    id: "demo-g1-ec-2",
+    title: "Basic Veterinary First Response",
+    slug: "basic-veterinary-first-response",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Essential skills for acute trauma management, airway maintenance, hemorrhage control, and initial fluid resuscitation algorithms.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-basic-veterinary-first-response",
+    deliveryMode: "workshop",
+    duration: "2 Days"
+  },
+  // Track 5: Vet Nurse & Paravet Staff
+  {
+    id: "real-vet-nurse",
+    title: "Vet Nurse Foundation Certificate",
+    slug: "vet-nurse-programme",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
     gradeLabel: "Grade 1 — Basic",
     track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
     trackLabel: "Vet Nurse & Paravet Staff",
-    program: "Vet Nurse Foundation Certificate",
-    programSlug: "vet-nurse-programme",
+    description: "Foundational practical training for clinic assistants and paravet staff covering animal restraint and sterile OR scrub prep.",
+    status: "Admissions Open",
+    isDemo: false,
     url: "vet-nurse-programme.html?grade=grade-1",
     deliveryMode: "offline",
-    duration: "2 Weeks",
     price: "₹9,500 + GST",
-    batch: "Upcoming Intake",
-    status: "Admissions Open"
+    duration: "2 Weeks",
+    image: "assets/images/programs/program-nurse.webp",
+  },
+  {
+    id: "demo-g1-vn-1",
+    title: "Veterinary Nursing Foundations",
+    slug: "veterinary-nursing-foundations",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "Essential veterinary nursing principles, humane animal restraint, IV catheter placement, and inpatient record maintenance.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-veterinary-nursing-foundations",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g1-vn-2",
+    title: "Essential Paravet Clinical Skills",
+    slug: "essential-paravet-clinical-skills",
+    grade: 1,
+    gradeCode: "grade-1",
+    gradeName: "Basic",
+    gradeLabel: "Grade 1 — Basic",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "Practical workshop focusing on surgical instrument sterilization, operating room prep, and patient vital monitoring.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-essential-paravet-clinical-skills",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+
+  // ==================== GRADE 2 — INTERMEDIATE ====================
+  // Track 1: Fresh Graduates & Interns
+  {
+    id: "demo-g2-fg-1",
+    title: "Clinical Skills Development",
+    slug: "clinical-skills-development",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Intermediate practical module enhancing clinical autonomy, routine surgical assistance, therapeutic dosing, and case management.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-clinical-skills-development",
+    deliveryMode: "offline",
+    duration: "3 Weeks"
+  },
+  {
+    id: "demo-g2-fg-2",
+    title: "Intermediate Veterinary Practice",
+    slug: "intermediate-veterinary-practice",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Building confidence in handling outpatient cases, abdominal diagnostic workups, and standard veterinary procedures.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-intermediate-veterinary-practice",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  // Track 2: Practicing Veterinarians
+  {
+    id: "real-soft-tissue-surgery",
+    title: "Soft Tissue Surgery Track",
+    slug: "soft-tissue-surgery",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Intensive hands-on procedural workshop covering sterile OR setup, tissue handling, suture patterns, spay/neuter, and cystotomy.",
+    status: "Admissions Open",
+    isDemo: false,
+    url: "soft-tissue-surgery.html?grade=grade-2",
+    deliveryMode: "offline",
+    price: "₹18,500 + GST",
+    duration: "1 Week",
+    image: "assets/images/programs/program-surgery.webp",
+  },
+  {
+    id: "demo-g2-pv-1",
+    title: "Intermediate Clinical Practice",
+    slug: "intermediate-clinical-practice",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Refining diagnostic accuracy, anesthesia monitoring, and surgical technique in routine soft tissue interventions.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-intermediate-clinical-practice",
+    deliveryMode: "offline",
+    duration: "1 Week"
+  },
+  {
+    id: "demo-g2-pv-2",
+    title: "Applied Veterinary Skills",
+    slug: "applied-veterinary-skills",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Practical workshop focusing on abdominal organ evaluation, surgical knotting techniques, and patient recovery management.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-applied-veterinary-skills",
+    deliveryMode: "workshop",
+    duration: "3 Days"
+  },
+  // Track 3: Diagnostic Specialization
+  {
+    id: "real-radiology-ultrasound",
+    title: "Radiology & Ultrasound Masterclass",
+    slug: "radiology-ultrasound",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "Systematic abdominal & thoracic radiograph interpretation alongside hands-on abdominal ultrasound probe handling and FAST scanning.",
+    status: "Admissions Open",
+    isDemo: false,
+    url: "radiology-ultrasound.html?grade=grade-2",
+    deliveryMode: "offline",
+    price: "₹16,000 + GST",
+    duration: "1 Week",
+    image: "assets/images/programs/program-radiology.webp",
+  },
+  {
+    id: "demo-g2-ds-1",
+    title: "Diagnostic Imaging Essentials",
+    slug: "diagnostic-imaging-essentials",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "Systematic approach to radiograph reading, abdominal organ evaluation, and digital imaging artifact recognition.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-diagnostic-imaging-essentials",
+    deliveryMode: "offline",
+    duration: "1 Week"
+  },
+  {
+    id: "demo-g2-ds-2",
+    title: "Intermediate Ultrasound Skills",
+    slug: "intermediate-ultrasound-skills",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "Hands-on abdominal FAST scanning, organ gain adjustment, and acoustic window optimization techniques.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-intermediate-ultrasound-skills",
+    deliveryMode: "workshop",
+    duration: "3 Days"
+  },
+  // Track 4: Emergency & Critical Care
+  {
+    id: "demo-g2-ec-1",
+    title: "Intermediate Emergency & ICU Care",
+    slug: "intermediate-emergency-icu-care",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Managing acute dyspnea, fluid resuscitation titration, vascular access, and continuous vital sign monitoring in emergency patients.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-intermediate-emergency-icu-care",
+    deliveryMode: "offline",
+    duration: "1 Week"
+  },
+  {
+    id: "demo-g2-ec-2",
+    title: "Emergency Response Skills",
+    slug: "emergency-response-skills",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Practical algorithms for toxic ingestion triage, traumatic shock stabilization, and emergency blood gas interpretation.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-emergency-response-skills",
+    deliveryMode: "workshop",
+    duration: "2 Days"
+  },
+  // Track 5: Vet Nurse & Paravet Staff
+  {
+    id: "demo-g2-vn-1",
+    title: "Intermediate Veterinary Nursing",
+    slug: "intermediate-veterinary-nursing",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "Advanced nursing protocols for surgical assistant scrub duties, multiparameter vitals monitoring, and ICU inpatient care.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-intermediate-veterinary-nursing",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g2-vn-2",
+    title: "Applied Paravet Clinical Care",
+    slug: "applied-paravet-clinical-care",
+    grade: 2,
+    gradeCode: "grade-2",
+    gradeName: "Intermediate",
+    gradeLabel: "Grade 2 — Intermediate",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "Practical training in anesthesia machine setup, endotracheal intubation assistance, and post-operative recovery care.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-applied-paravet-clinical-care",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+
+  // ==================== GRADE 3 — COMPETITIVE ====================
+  // Track 1: Fresh Graduates & Interns
+  {
+    id: "demo-g3-fg-1",
+    title: "Advanced Clinical Skill Preparation",
+    slug: "advanced-clinical-skill-preparation",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Targeted training to prepare junior clinicians for independent emergency shifts and surgical caseloads.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-clinical-skill-preparation",
+    deliveryMode: "offline",
+    duration: "3 Weeks"
+  },
+  {
+    id: "demo-g3-fg-2",
+    title: "Competitive Veterinary Skills",
+    slug: "competitive-veterinary-skills",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Intensive practical module designed to elevate clinical speed, precision, and multi-system diagnostic confidence.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-competitive-veterinary-skills",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  // Track 2: Practicing Veterinarians
+  {
+    id: "demo-g3-pv-1",
+    title: "Competitive Clinical Skills Program",
+    slug: "competitive-clinical-skills-program",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Comprehensive procedural skill elevation covering complex soft tissue surgeries and diagnostic integration.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-competitive-clinical-skills-program",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g3-pv-2",
+    title: "Advanced Practice Development",
+    slug: "advanced-practice-development",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Mastering advanced surgical approaches, emergency triage algorithms, and clinical case management.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-practice-development",
+    deliveryMode: "offline",
+    duration: "1 Week"
+  },
+  // Track 3: Diagnostic Specialization
+  {
+    id: "demo-g3-ds-1",
+    title: "Advanced Diagnostic Imaging",
+    slug: "advanced-diagnostic-imaging",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "In-depth ultrasonography of abdominal organs, Doppler evaluation, and complex radiograph reading.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-diagnostic-imaging",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g3-ds-2",
+    title: "Competitive Radiology & Ultrasound",
+    slug: "competitive-radiology-ultrasound",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "Advanced diagnostic imaging course focusing on soft tissue pathology mapping and echocardiographic screening.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-competitive-radiology-ultrasound",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+  // Track 4: Emergency & Critical Care
+  {
+    id: "real-emergency-medicine",
+    title: "Pet Emergency & Critical Care",
+    slug: "emergency-medicine",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and multiparameter vitals monitoring.",
+    status: "Admissions Open",
+    isDemo: false,
+    url: "emergency-medicine.html?grade=grade-3",
+    deliveryMode: "offline",
+    price: "₹12,500 + GST",
+    duration: "3 Days",
+    image: "assets/images/programs/program-emergency.webp",
+  },
+  {
+    id: "demo-g3-ec-1",
+    title: "Emergency & Critical Care Mastery",
+    slug: "emergency-critical-care-mastery",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "RECOVER CPR algorithm execution, mechanical ventilation basics, and acute trauma patient resuscitation.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-emergency-critical-care-mastery",
+    deliveryMode: "offline",
+    duration: "1 Week"
+  },
+  {
+    id: "demo-g3-ec-2",
+    title: "Advanced Emergency Response",
+    slug: "advanced-emergency-response",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Managing life-threatening emergencies, acid-base disorders, and intensive care patient monitoring.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-emergency-response",
+    deliveryMode: "workshop",
+    duration: "3 Days"
+  },
+  // Track 5: Vet Nurse & Paravet Staff
+  {
+    id: "demo-g3-vn-1",
+    title: "Advanced Nursing & Paravet Skills",
+    slug: "advanced-nursing-paravet-skills",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "High-level clinical nursing, critical care patient monitoring, and surgical suite management.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-nursing-paravet-skills",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g3-vn-2",
+    title: "Competitive Veterinary Nursing",
+    slug: "competitive-veterinary-nursing",
+    grade: 3,
+    gradeCode: "grade-3",
+    gradeName: "Competitive",
+    gradeLabel: "Grade 3 — Competitive",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "Specialized nursing interventions, emergency drug dosing calculations, and complex wound dressing mastery.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-competitive-veterinary-nursing",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+
+  // ==================== GRADE 4 — ADVANCED ====================
+  // Track 1: Fresh Graduates & Interns
+  {
+    id: "demo-g4-fg-1",
+    title: "Advanced Veterinary Clinical Practice",
+    slug: "advanced-veterinary-clinical-practice",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Intensive clinical transition training for high-volume surgical and emergency practice environments.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-veterinary-clinical-practice",
+    deliveryMode: "offline",
+    duration: "4 Weeks"
+  },
+  {
+    id: "demo-g4-fg-2",
+    title: "Advanced Clinical Skills Workshop",
+    slug: "advanced-clinical-skills-workshop",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Advanced hands-on workshop covering specialized soft tissue procedures, emergency triage, and diagnostic workflows.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-clinical-skills-workshop",
+    deliveryMode: "workshop",
+    duration: "2 Weeks"
+  },
+  // Track 2: Practicing Veterinarians
+  {
+    id: "demo-g4-pv-1",
+    title: "Advanced Surgical Practice",
+    slug: "advanced-surgical-practice",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Complex abdominal surgeries, gastrointestinal resection, reconstructive wound closure, and surgical oncology basics.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-surgical-practice",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g4-pv-2",
+    title: "Advanced Clinical Practice Mastery",
+    slug: "advanced-clinical-practice-mastery",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Mastery-level training for experienced practitioners expanding their surgical and diagnostic clinical portfolio.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-clinical-practice-mastery",
+    deliveryMode: "offline",
+    duration: "1 Week"
+  },
+  // Track 3: Diagnostic Specialization
+  {
+    id: "demo-g4-ds-1",
+    title: "Advanced Radiology & Ultrasound",
+    slug: "advanced-radiology-ultrasound",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "Comprehensive diagnostic imaging covering fine-needle aspiration under ultrasound, cardiac screening, and contrast X-rays.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-radiology-ultrasound",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g4-ds-2",
+    title: "Advanced Diagnostic Imaging Practice",
+    slug: "advanced-diagnostic-imaging-practice",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "Advanced probe manipulation, vascular Doppler, and complex multi-organ pathology interpretation.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-diagnostic-imaging-practice",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+  // Track 4: Emergency & Critical Care
+  {
+    id: "demo-g4-ec-1",
+    title: "Advanced Emergency & ICU Practice",
+    slug: "advanced-emergency-icu-practice",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Intensive critical care training covering sepsis protocols, blood transfusion therapy, and multi-organ dysfunction management.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-emergency-icu-practice",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g4-ec-2",
+    title: "Advanced Critical Care Skills",
+    slug: "advanced-critical-care-skills",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Specialized ICU procedures, central line placement, chest tube insertion, and advanced hemodynamic monitoring.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-critical-care-skills",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+  // Track 5: Vet Nurse & Paravet Staff
+  {
+    id: "demo-g4-vn-1",
+    title: "Advanced Veterinary Nursing Practice",
+    slug: "advanced-veterinary-nursing-practice",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "Senior nursing leadership, emergency triage coordination, and advanced surgical assistant protocols.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-veterinary-nursing-practice",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g4-vn-2",
+    title: "Advanced Paravet Clinical Care",
+    slug: "advanced-paravet-clinical-care",
+    grade: 4,
+    gradeCode: "grade-4",
+    gradeName: "Advanced",
+    gradeLabel: "Grade 4 — Advanced",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "Advanced laboratory diagnostics, cytology slide staining, blood smear evaluation, and intensive inpatient nursing.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-advanced-paravet-clinical-care",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+
+  // ==================== GRADE 5 — PRO ====================
+  // Track 1: Fresh Graduates & Interns
+  {
+    id: "demo-g5-fg-1",
+    title: "Professional Veterinary Clinical Mastery",
+    slug: "professional-veterinary-clinical-mastery",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Masterclass-level transition program preparing top-tier graduates for senior clinical responsibilities.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-professional-veterinary-clinical-mastery",
+    deliveryMode: "offline",
+    duration: "4 Weeks"
+  },
+  {
+    id: "demo-g5-fg-2",
+    title: "Pro-Level Clinical Skills",
+    slug: "pro-level-clinical-skills",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "fresh-graduates",
+    trackName: "Fresh Graduates & Interns",
+    trackLabel: "Fresh Graduates & Interns",
+    description: "Comprehensive expert-led clinical immersion in advanced diagnostic reasoning and complex surgical decision-making.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-pro-level-clinical-skills",
+    deliveryMode: "workshop",
+    duration: "2 Weeks"
+  },
+  // Track 2: Practicing Veterinarians
+  {
+    id: "demo-g5-pv-1",
+    title: "Professional Surgical Masterclass",
+    slug: "professional-surgical-masterclass",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Expert-level surgical suite masterclass focusing on complex reconstructive, thoracic, and emergency surgical procedures.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-professional-surgical-masterclass",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g5-pv-2",
+    title: "Pro Clinical Practice Mastery",
+    slug: "pro-clinical-practice-mastery",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "practicing-vets",
+    trackName: "Practicing Veterinarians",
+    trackLabel: "Practicing Veterinarians",
+    description: "Premier clinical development program for clinic directors and senior veterinary surgeons.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-pro-clinical-practice-mastery",
+    deliveryMode: "offline",
+    duration: "1 Week"
+  },
+  // Track 3: Diagnostic Specialization
+  {
+    id: "demo-g5-ds-1",
+    title: "Professional Diagnostic Imaging Masterclass",
+    slug: "professional-diagnostic-imaging-masterclass",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "Pro-level masterclass in advanced diagnostic ultrasound, echocardiography, and complex radiological interpretation.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-professional-diagnostic-imaging-masterclass",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g5-ds-2",
+    title: "Pro Radiology & Ultrasound",
+    slug: "pro-radiology-ultrasound",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "diagnostic-specialization",
+    trackName: "Diagnostic Specialization",
+    trackLabel: "Diagnostic Specialization",
+    description: "Expert diagnostic imaging refinement for specialists seeking highest-level diagnostic accuracy in small animal practice.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-pro-radiology-ultrasound",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+  // Track 4: Emergency & Critical Care
+  {
+    id: "demo-g5-ec-1",
+    title: "Professional Emergency & Critical Care",
+    slug: "professional-emergency-critical-care",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Pro-level emergency medicine masterclass covering advanced life support, multi-system trauma, and ICU director workflows.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-professional-emergency-critical-care",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g5-ec-2",
+    title: "Pro-Level ICU Mastery",
+    slug: "pro-level-icu-mastery",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "emergency-care",
+    trackName: "Emergency & Critical Care",
+    trackLabel: "Emergency & Critical Care",
+    description: "Mastery of critical care algorithms, continuous invasive monitoring, and emergency surgical stabilization.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-pro-level-icu-mastery",
+    deliveryMode: "workshop",
+    duration: "1 Week"
+  },
+  // Track 5: Vet Nurse & Paravet Staff
+  {
+    id: "demo-g5-vn-1",
+    title: "Professional Veterinary Nursing Masterclass",
+    slug: "professional-veterinary-nursing-masterclass",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "Executive-level nursing management, operating theater direction, and senior paravet clinical leadership.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-professional-veterinary-nursing-masterclass",
+    deliveryMode: "offline",
+    duration: "2 Weeks"
+  },
+  {
+    id: "demo-g5-vn-2",
+    title: "Pro Paravet Clinical Practice",
+    slug: "pro-paravet-clinical-practice",
+    grade: 5,
+    gradeCode: "grade-5",
+    gradeName: "Pro",
+    gradeLabel: "Grade 5 — Pro",
+    track: "vet-nurse",
+    trackName: "Vet Nurse & Paravet Staff",
+    trackLabel: "Vet Nurse & Paravet Staff",
+    description: "Pro-level clinical skills for head veterinary nurses overseeing ICU monitoring, anesthesia safety, and assistant training.",
+    status: "demo",
+    isDemo: true,
+    url: "#demo-pro-paravet-clinical-practice",
+    deliveryMode: "workshop",
+    duration: "1 Week"
   }
 ];
 
@@ -1755,8 +2822,7 @@ function initProgramFilters() {
   const gradeSelect = document.getElementById('filter-grade') || document.getElementById('filter-level');
   const trackSelect = document.getElementById('filter-track') || document.getElementById('filter-topic');
   const modeSelect = document.getElementById('filter-mode');
-  const cards = document.querySelectorAll('.program-card:not(.related-card)');
-  const trackSections = document.querySelectorAll('.track-group-section');
+  const dynamicContainer = document.getElementById('programs-dynamic-grid');
   const noResultsState = document.getElementById('no-programs-match');
   const clearFiltersBtn = document.getElementById('btn-clear-filters');
   const gradeCards = document.querySelectorAll('.grade-card[data-grade]');
@@ -1764,8 +2830,9 @@ function initProgramFilters() {
   const selectedGradeTitle = document.getElementById('selected-grade-title');
   const personaBanner = document.getElementById('persona-discovery-banner');
   const personaCloseBtn = document.getElementById('persona-banner-reset');
+  const countNumberEl = document.getElementById('count-number');
 
-  if (!cards.length && !gradeSelect && !trackSelect) return;
+  if (!dynamicContainer && !gradeSelect && !trackSelect) return;
 
   const gradeNameMap = {
     'all': 'All Grades',
@@ -1790,8 +2857,6 @@ function initProgramFilters() {
     const gradeFilter = gradeSelect ? gradeSelect.value : 'all';
     const trackFilter = trackSelect ? trackSelect.value : 'all';
     const modeFilter = modeSelect ? modeSelect.value : 'all';
-
-    let totalVisible = 0;
 
     // Sync Grade Card UI state
     gradeCards.forEach(gCard => {
@@ -1843,83 +2908,92 @@ function initProgramFilters() {
           }
         }
         if (messageText) {
-          messageText.textContent = `Exploring verified clinical learning tracks matching your selected criteria.`;
+          messageText.textContent = `Exploring practical clinical learning pathways matching your selected criteria.`;
         }
       } else {
         personaBanner.style.display = 'none';
       }
     }
 
-    // Filter Cards using strict AND logic
-    cards.forEach(card => {
-      const cardGrades = (card.dataset.grade || '').split(/\s+/).filter(Boolean);
-      const cardTracks = (card.dataset.track || '').split(/\s+/).filter(Boolean);
-      const cardMode = card.dataset.mode || '';
-
-      const cardTitle = card.querySelector('.program-card-title') ? card.querySelector('.program-card-title').textContent.toLowerCase() : '';
-      const cardDesc = card.querySelector('.program-card-desc') ? card.querySelector('.program-card-desc').textContent.toLowerCase() : '';
-
-      const matchesSearch = query === '' || cardTitle.includes(query) || cardDesc.includes(query);
-      const matchesGrade = gradeFilter === 'all' || cardGrades.includes(gradeFilter);
-      const matchesTrack = trackFilter === 'all' || cardTracks.includes(trackFilter);
-      const matchesMode = modeFilter === 'all' || cardMode === modeFilter;
-
-      if (matchesSearch && matchesGrade && matchesTrack && matchesMode) {
-        card.style.display = 'flex';
-        card.style.animation = 'fadeIn 0.3s ease';
-        totalVisible++;
-      } else {
-        card.style.display = 'none';
-      }
+    // Strict AND Filter execution against window.VETNOVA_PROGRAMS_DATA
+    const matched = window.VETNOVA_PROGRAMS_DATA.filter(p => {
+      const matchesGrade = gradeFilter === 'all' || p.gradeCode === gradeFilter;
+      const matchesTrack = trackFilter === 'all' || p.track === trackFilter;
+      const matchesMode = modeFilter === 'all' || p.deliveryMode === modeFilter || (p.isDemo && modeFilter === 'offline');
+      const matchesQuery = query === '' || p.title.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+      return matchesGrade && matchesTrack && matchesMode && matchesQuery;
     });
 
-    // Toggle track group section visibility based on visible cards inside it
-    trackSections.forEach(section => {
-      const sectionCards = section.querySelectorAll('.program-card:not(.related-card)');
-      let hasVisible = false;
-      sectionCards.forEach(c => {
-        if (c.style.display !== 'none') {
-          hasVisible = true;
-        }
-      });
-      section.style.display = hasVisible ? 'block' : 'none';
-    });
+    // Dynamic Program Count Update
+    if (countNumberEl) {
+      countNumberEl.textContent = matched.length;
+    }
 
-    // Empty state handling
-    if (noResultsState) {
-      if (totalVisible === 0) {
+    // Empty state handling vs render cards
+    if (noResultsState && dynamicContainer) {
+      if (matched.length === 0) {
         noResultsState.style.display = 'block';
-        const titleEl = noResultsState.querySelector('h3');
-        const descEl = noResultsState.querySelector('p');
-
-        const gLabel = gradeNameMap[gradeFilter] || '';
-        const tLabel = trackNameMap[trackFilter] || '';
-
-        if (titleEl && descEl) {
-          if (gradeFilter === 'grade-5') {
-            if (trackFilter !== 'all') {
-              titleEl.textContent = `No Pro-level ${tLabel} program is currently available.`;
-            } else {
-              titleEl.textContent = `No Pro-level programs are currently available.`;
-            }
-            descEl.textContent = `Grade 5 (Pro) clinical pathways are currently under active curriculum development. Register your interest or request intake notification below.`;
-          } else if (gradeFilter === 'grade-4') {
-            if (trackFilter !== 'all') {
-              titleEl.textContent = `No Advanced-level ${tLabel} program is currently available.`;
-            } else {
-              titleEl.textContent = `No Advanced-level programs match your criteria.`;
-            }
-            descEl.textContent = `Advanced (Grade 4) training modules for this track are currently being scheduled. Submit your interest and we will notify you when new seats open.`;
-          } else if (gradeFilter !== 'all' && trackFilter !== 'all') {
-            titleEl.textContent = `No ${gLabel} program is currently available for ${tLabel}.`;
-            descEl.textContent = `We are continuously expanding our practical clinical offerings. Tell us what you're looking for and we'll help you find or customize the right pathway.`;
-          } else {
-            titleEl.textContent = `No programs match your selected criteria.`;
-            descEl.textContent = `Can't find the program you're looking for? Tell us what you're interested in and we'll help you find the right learning pathway.`;
-          }
-        }
+        dynamicContainer.style.display = 'none';
+        dynamicContainer.innerHTML = '';
       } else {
         noResultsState.style.display = 'none';
+        dynamicContainer.style.display = 'grid';
+        
+        dynamicContainer.innerHTML = matched.map(p => {
+          const isDemo = p.isDemo;
+          const badgeHTML = isDemo
+            ? `<span class="badge-demo-pill"><i class="fa-solid fa-flask"></i> Demo Program</span>`
+            : `<span class="badge-grade-pill grade-pill-${p.grade}">GRADE ${p.grade}</span>`;
+
+          const pImg = p.image || getProgramImage(p);
+
+          const footerHTML = isDemo
+            ? `
+              <div class="program-card-footer">
+                <div class="program-card-price-row">
+                  <span class="program-card-price-tag"><i class="fa-solid fa-layer-group"></i> ${p.gradeLabel}</span>
+                </div>
+                <div class="program-card-actions">
+                  <button type="button" class="btn btn-outline btn-sm btn-demo-explore" data-title="${p.title}" data-grade="${p.gradeLabel}" data-track="${p.trackLabel}" data-desc="${p.description}">Explore Program</button>
+                  <button type="button" class="btn btn-primary btn-sm btn-show-interest" data-source="Demo Program Enquiry" data-context="${p.title} (${p.gradeLabel})">Enquire Now</button>
+                </div>
+              </div>
+            `
+            : `
+              <div class="program-card-footer">
+                <div class="program-card-price-row">
+                  <div class="program-card-price">${p.price || '₹38,000'} <small>+ GST</small></div>
+                </div>
+                <div class="program-card-actions">
+                  <a class="btn btn-outline btn-sm" href="${p.url}">Explore Program <i class="fa-solid fa-arrow-right"></i></a>
+                  <button type="button" class="btn btn-primary btn-sm btn-show-interest" data-source="Program Enquiry" data-context="${p.title}">Enquire Now</button>
+                </div>
+              </div>
+            `;
+
+          return `
+            <div class="program-card ${isDemo ? 'demo-program-card' : ''}" data-grade="${p.gradeCode}" data-track="${p.track}">
+              <div class="program-card-media" style="position: relative;">
+                <div class="card-grade-badge-wrap" style="position: absolute; top: 12px; left: 12px; z-index: 2;">
+                  ${badgeHTML}
+                </div>
+                <img src="${pImg}" alt="${p.title}" loading="lazy" decoding="async" />
+              </div>
+              <div class="program-card-body">
+                <div class="card-hierarchy-breadcrumb" style="font-size: 0.8rem; color: #64748b; margin-bottom: 6px; font-weight: 500;">
+                  <span>${p.gradeLabel}</span> &bull; <span>${p.trackLabel}</span>
+                </div>
+                <h3 class="program-card-title">${isDemo ? p.title : `<a href="${p.url}">${p.title}</a>`}</h3>
+                <p class="program-card-desc">${p.description}</p>
+                <div class="program-card-meta" style="margin-top: 12px; font-size: 0.84rem; color: #475569; display: flex; flex-wrap: wrap; gap: 12px;">
+                  <div class="meta-item"><i class="fa-solid fa-signal text-teal"></i> ${p.gradeLabel}</div>
+                  <div class="meta-item"><i class="fa-solid fa-book-open text-teal"></i> ${p.trackLabel}</div>
+                </div>
+                ${footerHTML}
+              </div>
+            </div>
+          `;
+        }).join('');
       }
     }
 
@@ -1974,6 +3048,29 @@ function initProgramFilters() {
     });
   });
 
+  // Demo Program Explore Click Handler
+  document.body.addEventListener('click', (e) => {
+    const demoBtn = e.target.closest('.btn-demo-explore');
+    if (!demoBtn) return;
+    e.preventDefault();
+
+    const title = demoBtn.dataset.title || 'Demo Program';
+    const grade = demoBtn.dataset.grade || 'Grade Level';
+    const track = demoBtn.dataset.track || 'Track Name';
+    const desc = demoBtn.dataset.desc || '';
+
+    // Trigger modal opening via btn-show-interest with custom prefill context
+    const enquireBtn = document.querySelector('.btn-show-interest');
+    if (enquireBtn) {
+      demoBtn.setAttribute('data-source', 'Demo Program Information');
+      demoBtn.setAttribute('data-context', `${title} (${grade} • ${track})`);
+      const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+      demoBtn.dispatchEvent(clickEvent);
+    } else {
+      alert(`[Demo Program Overview]\n\nTitle: ${title}\nLevel: ${grade}\nTrack: ${track}\n\nDescription: ${desc}\n\nNotice: This is a sample/demo program record. Contact academic advisory for upcoming curriculum details.`);
+    }
+  });
+
   // URL Parameter auto-selection
   const urlParams = new URLSearchParams(window.location.search);
   let paramTriggered = false;
@@ -1998,6 +3095,7 @@ function initProgramFilters() {
     }
   }
 }
+
 
 /* Single Program Page Grade Context Representation */
 function initSingleProgramGradeRepresentation() {

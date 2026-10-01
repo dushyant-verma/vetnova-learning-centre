@@ -8855,6 +8855,9 @@ section#faq .container {
   position: relative;
   cursor: pointer;
   height: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .program-card:hover {
@@ -8918,6 +8921,9 @@ section#faq .container {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .program-card-title {
@@ -8984,11 +8990,22 @@ section#faq .container {
 /* Footer & CTA */
 .program-card-footer {
   margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.program-card-price-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .program-card-price {
@@ -9001,6 +9018,50 @@ section#faq .container {
   font-size: 12px;
   font-weight: 400;
   color: var(--muted);
+}
+
+.program-card-price-tag {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.program-card-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+.program-card-actions .btn {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 8px 12px;
+  font-size: 0.83rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+@media (max-width: 640px) {
+  .program-card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .program-card-actions .btn {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 /* Filter Controls Bar */
@@ -13865,8 +13926,18 @@ span.partner-cta-badge i,
   }
 
   #all-programs .program-card-footer {
-    flex-wrap: wrap !important;
+    width: 100% !important;
     gap: 12px !important;
+  }
+
+  #all-programs .program-card-actions {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  #all-programs .program-card-actions .btn {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   /* Faculty Grid */
@@ -20329,5 +20400,85 @@ section#final-cta-program {
     height: 82vh;
     max-height: 540px;
     bottom: 60px;
+  }
+}
+
+/* ==========================================================================
+   VetNova Learning Progression & Demo Program Data System
+   ========================================================================== */
+.badge-demo-pill {
+  background: rgb(30 197 186);
+  color: #fcfdff;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-transform: uppercase;
+}
+
+.demo-program-card {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.demo-program-card:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.12);
+}
+
+.program-count-bar {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.program-count-badge {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy-1, #0f172a);
+  background: #f8fafc;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tracks-preview-head {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.modal-demo-notice {
+  background: #fffbebf5;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 16px 0;
+  font-size: 0.85rem;
+  color: #92400e;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+@media (max-width: 640px) {
+  .program-count-bar {
+    justify-content: center;
   }
 }
