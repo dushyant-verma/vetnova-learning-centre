@@ -21,6 +21,7 @@ function runAllInitializers() {
   initSingleProgramGradeRepresentation();
   initFaqSearch();
   initPopularCoursesFilter();
+  initBatchTabs();
   initSingleFocusJourney();
   initFacultyModal();
   initDesktopDropdowns();
@@ -3245,33 +3246,134 @@ function initPopularCoursesFilter() {
 
   if (!pills.length || !cards.length) return;
 
+  const MAX_CARDS = 4;
+
+  function filterCards(filter) {
+    let matched = 0;
+    cards.forEach(card => {
+      if (card._filterTimeout) {
+        clearTimeout(card._filterTimeout);
+        card._filterTimeout = null;
+      }
+
+      const categories = card.dataset.category ? card.dataset.category.split(' ') : [];
+      const matches = (filter === 'all' || categories.includes(filter));
+
+      if (matches && matched < MAX_CARDS) {
+        matched++;
+        card.style.display = 'flex';
+        requestAnimationFrame(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'scale(1)';
+        });
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        card._filterTimeout = setTimeout(() => {
+          if (card.style.opacity === '0') {
+            card.style.display = 'none';
+          }
+          card._filterTimeout = null;
+        }, 300);
+      }
+    });
+  }
+
+  // Enforce initial 4-card display limit on page load
+  const activePill = document.querySelector('.popular-course-filter-pill.active');
+  const initialFilter = activePill ? (activePill.dataset.filter || 'all') : 'all';
+  filterCards(initialFilter);
+
   pills.forEach(pill => {
     pill.addEventListener('click', () => {
       pills.forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
 
       const filter = pill.dataset.filter || 'all';
-
-      cards.forEach(card => {
-        const categories = card.dataset.category ? card.dataset.category.split(' ') : [];
-        if (filter === 'all' || categories.includes(filter)) {
-          card.style.display = 'flex';
-          requestAnimationFrame(() => {
-            card.style.opacity = '1';
-            card.style.transform = 'scale(1)';
-          });
-        } else {
-          card.style.opacity = '0';
-          card.style.transform = 'scale(0.95)';
-          setTimeout(() => {
-            if (card.style.opacity === '0') {
-              card.style.display = 'none';
-            }
-          }, 300);
-        }
-      });
+      filterCards(filter);
     });
   });
+}
+
+/* ==========================================================================
+   Practical Training Batches Tab Controller (Unified Section)
+   ========================================================================== */
+function initBatchTabs() {
+  const tabButtons = document.querySelectorAll('.batch-tab-btn');
+  const tabPanels = document.querySelectorAll('.batch-tab-panel');
+
+  if (!tabButtons.length || !tabPanels.length) return;
+
+  function switchTab(targetId) {
+    tabButtons.forEach(btn => {
+      const isTarget = btn.getAttribute('aria-controls') === targetId || btn.id === targetId;
+      if (isTarget) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        btn.setAttribute('tabindex', '0');
+      } else {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+        btn.setAttribute('tabindex', '-1');
+      }
+    });
+
+    tabPanels.forEach(panel => {
+      if (panel.id === targetId || panel.getAttribute('aria-labelledby') === targetId) {
+        panel.style.display = 'block';
+        requestAnimationFrame(() => {
+          panel.classList.add('active');
+          panel.style.opacity = '1';
+          panel.style.transform = 'translateY(0)';
+        });
+      } else {
+        panel.classList.remove('active');
+        panel.style.opacity = '0';
+        panel.style.transform = 'translateY(6px)';
+        setTimeout(() => {
+          if (!panel.classList.contains('active')) {
+            panel.style.display = 'none';
+          }
+        }, 200);
+      }
+    });
+  }
+
+  tabButtons.forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+      const targetPanelId = btn.getAttribute('aria-controls');
+      switchTab(targetPanelId);
+    });
+
+    // Keyboard navigation (ArrowLeft / ArrowRight / Home / End)
+    btn.addEventListener('keydown', (e) => {
+      let targetIndex = -1;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        targetIndex = (index + 1) % tabButtons.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        targetIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        targetIndex = 0;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        targetIndex = tabButtons.length - 1;
+      }
+
+      if (targetIndex !== -1) {
+        tabButtons[targetIndex].focus();
+        const targetPanelId = tabButtons[targetIndex].getAttribute('aria-controls');
+        switchTab(targetPanelId);
+      }
+    });
+  });
+
+  // Handle URL hash if user navigated directly to #ongoing-batches
+  if (window.location.hash === '#ongoing-batches') {
+    switchTab('panel-ongoing-batches');
+  }
 }
 
 /* ==========================================================================
