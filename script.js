@@ -39,6 +39,18 @@ function runAllInitializers() {
     document.body.appendChild(cbScript);
   }
   initPartnershipForm();
+  if (typeof window.initVetNovaTranslator === 'function') {
+    window.initVetNovaTranslator();
+  } else {
+    const trScript = document.createElement('script');
+    trScript.src = 'assets/js/translator.js';
+    trScript.onload = () => {
+      if (typeof window.initVetNovaTranslator === 'function') {
+        window.initVetNovaTranslator();
+      }
+    };
+    document.body.appendChild(trScript);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -3325,6 +3337,9 @@ function initBatchTabs() {
           panel.classList.add('active');
           panel.style.opacity = '1';
           panel.style.transform = 'translateY(0)';
+          if (typeof window.getVetNovaLanguage === 'function' && window.getVetNovaLanguage() === 'hi') {
+            window.setVetNovaLanguage('hi');
+          }
         });
       } else {
         panel.classList.remove('active');

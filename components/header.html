@@ -7,9 +7,13 @@
       <a class="top-info-item" href="tel:+912012345678"><i class="fa-solid fa-phone"></i> +91 20 1234 5678</a>
     </div>
     <div class="top-info-right">
-      <a class="top-info-link btn-download-brochure" href="contact.html#contact-form-section"
-        onclick="alert('Downloading VetNova Complete Course Brochure PDF...');">
-        <i class="fa-solid fa-file-pdf"></i> Download Brochure
+      <div class="lang-switcher" id="lang-switcher-top" role="group" aria-label="Language selector">
+        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lang-divider">|</span>
+        <button type="button" class="lang-btn" data-lang="hi" aria-pressed="false">हिंदी</button>
+      </div>
+      <a class="top-info-link btn-partner-cta" href="partnerships.html">
+        <i class="fa-solid fa-handshake"></i> Partner With Us
       </a>
     </div>
   </div>
@@ -212,6 +216,11 @@
     </nav>
 
     <div class="nav-actions">
+      <div class="lang-switcher nav-lang-switcher" id="lang-switcher-nav" role="group" aria-label="Language selector">
+        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lang-divider">|</span>
+        <button type="button" class="lang-btn" data-lang="hi" aria-pressed="false">हिंदी</button>
+      </div>
       <a class="btn btn-outline btn-sm header-counselling-btn btn-counselling-modal" href="contact.html#enquiry">
         <i class="fa-solid fa-calendar-check"></i> Book Counselling
       </a>
@@ -230,9 +239,16 @@
 <div class="mobile-drawer" id="mobile-drawer">
   <div class="drawer-header">
     <img class="drawer-logo" src="assets/vetnova-logo.webp" alt="VetNova Logo" />
-    <button class="drawer-close" id="drawer-close" aria-label="Close menu">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div class="lang-switcher drawer-lang-switcher" id="lang-switcher-drawer" role="group" aria-label="Language selector">
+        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lang-divider">|</span>
+        <button type="button" class="lang-btn" data-lang="hi" aria-pressed="false">हिंदी</button>
+      </div>
+      <button class="drawer-close" id="drawer-close" aria-label="Close menu">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
   </div>
 
   <nav class="drawer-menu">
