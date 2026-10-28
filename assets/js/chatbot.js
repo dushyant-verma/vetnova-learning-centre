@@ -35,7 +35,8 @@
     location: {
       address: 'Gawadewadi, Wagholi, Pune, MH 412207',
       hours: 'Mon - Sat: 9:00 AM - 6:00 PM',
-      phone: '+91 20 1234 5678',
+      phone: '+91 92725 61089',
+      whatsapp: '919272561089',
       email: 'hello@vetnova.in'
     }
   };
@@ -181,10 +182,11 @@
         query.includes('स्थान') || query.includes('पता') || query.includes('पुणे') || query.includes('कहाँ') || query.includes('कैंपस')) {
       return {
         reply: isHi
-          ? "वेटनोवा ट्रेनिंग इंस्टीट्यूट यहाँ स्थित है:\n\n📍 **गावडेवाड़ी, वाघोली, पुणे, महाराष्ट्र 412207**\n🕒 खुला: सोम-शनि: सुबह 9:00 – शाम 6:00\n📞 संपर्क: +91 20 1234 5678\n\nहमारे 3,000 वर्ग फुट के व्यावहारिक परिसर में स्टेराइल सर्जिकल सुइट और डायग्नोस्टिक इमेजिंग सुविधाएं हैं।"
-          : "VetNova Training Institute is located at:\n\n📍 **Gawadewadi, Wagholi, Pune, MH 412207**\n🕒 Open Mon-Sat: 9:00 AM – 6:00 PM\n📞 Contact: +91 20 1234 5678\n\nOur campus features a 3,000 sq. ft. practical facility with sterile surgical suites and diagnostic imaging equipment.",
+          ? "वेटनोवा ट्रेनिंग इंस्टीट्यूट यहाँ स्थित है:\n\n📍 **गावडेवाड़ी, वाघोली, पुणे, महाराष्ट्र 412207**\n🕒 खुला: सोम-शनि: सुबह 9:00 – शाम 6:00\n📞 संपर्क: +91 92725 61089\n💬 व्हाट्सएप: +91 92725 61089\n\nहमारे 3,000 वर्ग फुट के व्यावहारिक परिसर में स्टेराइल सर्जिकल सुइट और डायग्नोस्टिक इमेजिंग सुविधाएं हैं।"
+          : "VetNova Training Institute is located at:\n\n📍 **Gawadewadi, Wagholi, Pune, MH 412207**\n🕒 Open Mon-Sat: 9:00 AM – 6:00 PM\n📞 Contact: +91 92725 61089\n💬 WhatsApp: +91 92725 61089\n\nOur campus features a 3,000 sq. ft. practical facility with sterile surgical suites and diagnostic imaging equipment.",
         ctas: [
-          { label: isHi ? 'दिशा-निर्देश प्राप्त करें (गूगल मैप्स)' : 'Get Directions (Google Maps)', action: 'external', link: 'https://maps.google.com' },
+          { label: isHi ? 'दिशा-निर्देश प्राप्त करें (गूगल मैप्स)' : 'Get Directions (Google Maps)', action: 'external', link: 'https://maps.google.com/?q=Gawadewadi+Wagholi+Pune+Maharashtra+412207' },
+          { label: isHi ? 'व्हाट्सएप पर बात करें' : 'Chat on WhatsApp', action: 'external', link: 'https://wa.me/919272561089' },
           ctaContact
         ]
       };
@@ -223,6 +225,21 @@
           ? "पात्र आवेदकों में शामिल हैं:\n• बीवीएससी एवं एएच स्नातक, इंटर्न और अभ्यास करने वाले पशु चिकित्सक\n• विदेशी पशु चिकित्सा स्नातक\n• वेट नर्स, सहायक और पैरा-वेट स्टाफ (नर्स कार्यक्रम हेतु)"
           : "Eligible applicants include:\n• BVSc & AH graduates, interns, and practicing veterinarians\n• Foreign veterinary graduates looking for practical Indian clinical orientation\n• Vet nurses, assistants, and paravet staff (for Nurse Programme)",
         ctas: [ctaPrograms, ctaCounselling]
+      };
+    }
+
+    // 12. Direct Contact / Phone / WhatsApp
+    if (query.includes('whatsapp') || query.includes('phone') || query.includes('call') || query.includes('mobile') || query.includes('contact number') || query.includes('helpline') ||
+        query.includes('व्हाट्सएप') || query.includes('फोन') || query.includes('कॉल') || query.includes('नंबर') || query.includes('संपर्क')) {
+      return {
+        reply: isHi
+          ? "वेटनोवा अकादमी का आधिकारिक संपर्क विवरण:\n\n📞 मोबाइल / फोन: **+91 92725 61089** (9272561089)\n💬 व्हाट्सएप: **+91 92725 61089**\n✉️ ईमेल: hello@vetnova.in\n🕒 समय: सोम – शनि: सुबह 9:00 से शाम 6:00 तक\n\nआप सीधे कॉल कर सकते हैं या व्हाट्सएप पर संदेश भेज सकते हैं।"
+          : "VetNova Academy Official Contact Details:\n\n📞 Phone: **+91 92725 61089** (Local: 9272561089)\n💬 WhatsApp: **+91 92725 61089**\n✉️ Email: hello@vetnova.in\n🕒 Office Hours: Mon – Sat: 9:00 AM – 6:00 PM\n\nYou can call our admissions desk or chat directly with a counsellor on WhatsApp.",
+        ctas: [
+          { label: isHi ? 'व्हाट्सएप चैट शुरू करें' : 'Chat on WhatsApp', action: 'external', link: 'https://wa.me/919272561089' },
+          { label: isHi ? 'कॉल करें' : 'Call Admissions', action: 'external', link: 'tel:+919272561089' },
+          ctaContact
+        ]
       };
     }
 

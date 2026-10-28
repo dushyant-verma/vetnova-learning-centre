@@ -5,7 +5,7 @@
 function getApiBaseUrl() {
   if (window.API_BASE_URL) return window.API_BASE_URL;
   const hostname = window.location.hostname;
-  if (window.USE_LOCAL_API && (hostname === 'localhost' || hostname === '127.0.0.1')) {
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'http://localhost:5001/api';
   }
   return 'https://vetnova-api-utnd.onrender.com/api';
@@ -148,4 +148,34 @@ async function submitEnquiry(enquiryData) {
   }
 }
 
+/**
+ * VetNova Academy Official Centralized Contact Configuration
+ */
+window.VETNOVA_CONTACT = window.VETNOVA_CONTACT || {
+  phoneLocal: '9272561089',
+  phoneDisplay: '+91 92725 61089',
+  phoneTel: 'tel:+919272561089',
+  whatsappIntl: '919272561089',
+  whatsappUrl: 'https://wa.me/919272561089',
+  email: 'hello@vetnova.in',
+  admissionsEmail: 'admissions@vetnova.in'
+};
 
+/**
+ * Fetch public settings from server with graceful local fallback
+ */
+async function getPublicSettings() {
+  const data = await fetchFromApi('/settings/public');
+  if (data) {
+    window.VETNOVA_CONTACT = {
+      ...window.VETNOVA_CONTACT,
+      phoneDisplay: data.contactPhone || window.VETNOVA_CONTACT.phoneDisplay,
+      phoneLocal: data.contactPhoneLocal || window.VETNOVA_CONTACT.phoneLocal,
+      phoneTel: data.contactPhoneTel || window.VETNOVA_CONTACT.phoneTel,
+      whatsappUrl: data.whatsappUrl || window.VETNOVA_CONTACT.whatsappUrl,
+      email: data.contactEmail || window.VETNOVA_CONTACT.email
+    };
+    return data;
+  }
+  return window.VETNOVA_CONTACT;
+}

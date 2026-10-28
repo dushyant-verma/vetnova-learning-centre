@@ -4,7 +4,7 @@
     <div class="top-info-left">
       <span class="top-info-item"><i class="fa-solid fa-location-dot"></i> Wagholi, Pune</span>
       <a class="top-info-item" href="mailto:hello@vetnova.in"><i class="fa-solid fa-envelope"></i> hello@vetnova.in</a>
-      <a class="top-info-item" href="tel:+912012345678"><i class="fa-solid fa-phone"></i> +91 20 1234 5678</a>
+      <a class="top-info-item" href="tel:+919272561089" data-vetnova-phone><i class="fa-solid fa-phone"></i> +91 92725 61089</a>
     </div>
     <div class="top-info-right">
       <div class="lang-switcher" id="lang-switcher-top" role="group" aria-label="Language selector">
@@ -27,47 +27,8 @@
     </a>
 
     <nav class="menu" aria-label="Main navigation">
-      <!-- Home Submenu (Temporary Development Link) -->
-      <div class="nav-item has-dropdown">
-        <a class="nav-link dropdown-toggle" data-nav="index" href="index.html" aria-haspopup="true"
-          aria-expanded="false">
-          Home <i class="fa-solid fa-chevron-down caret"></i>
-        </a>
-        <div class="dropdown-menu home-dropdown">
-          <div class="dropdown-arrow"></div>
-          <a class="dropdown-item" href="index.html" data-subnav="index">
-            <div class="dropdown-icon"><i class="fa-solid fa-house"></i></div>
-            <div class="dropdown-text">
-              <strong>Home</strong>
-              <small>Original Homepage</small>
-            </div>
-          </a>
-          <a class="dropdown-item" href="index-v2.html" data-subnav="index-v2">
-            <div class="dropdown-icon"> <i class="fa-solid fa-wand-magic-sparkles"></i>
-            </div>
-            <div class="dropdown-text">
-              <strong>Home V2</strong>
-              <small>Redesigned Homepage</small>
-            </div>
-          </a>
-          <a class="dropdown-item" href="index-v3.html" data-subnav="index-v3">
-            <div class="dropdown-icon"> <i class="fa-solid fa-crown"></i>
-            </div>
-            <div class="dropdown-text">
-              <strong>Home V3</strong>
-              <small>Flagship Homepage</small>
-            </div>
-          </a>
-          <a class="dropdown-item" href="index-v4.html" data-subnav="index-v4">
-            <div class="dropdown-icon"> <i class="fa-solid fa-star"></i>
-            </div>
-            <div class="dropdown-text">
-              <strong>Home V4</strong>
-              <small>Clinical Excellence V4</small>
-            </div>
-          </a>
-        </div>
-      </div>
+      <!-- Home -->
+      <a class="nav-link" data-nav="index" href="index.html">Home</a>
 
 
       <!-- About Dropdown -->
@@ -115,91 +76,86 @@
           aria-expanded="false">
           Programs <i class="fa-solid fa-chevron-down caret"></i>
         </a>
-        <div class="dropdown-menu mega-dropdown grade-mega-dropdown">
+        <div class="dropdown-menu mega-dropdown level-mega-dropdown">
           <div class="dropdown-arrow"></div>
           <div class="mega-header-bar">
             <span class="mega-header-tag"><i class="fa-solid fa-graduation-cap"></i> LEARNING PROGRESSION SYSTEM</span>
-            <h3 style="margin: 4px 0 2px 0; font-size: 1.15rem; color: var(--navy-1); font-family: var(--font-heading);">Explore Programs by Learning Grade</h3>
-            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">Structured school/grade-style progression from Grade 1 to Grade 5 across 5 specialized learning tracks.</p>
+            <h3
+              style="margin: 4px 0 2px 0; font-size: 1.18rem; color: var(--navy-1); font-family: var(--font-heading);">
+              Explore Programs by Learning Level</h3>
+            <p style="margin: 0; font-size: 0.86rem; color: #64748b;">Structured three-stage veterinary clinical progression across all 28 program areas.</p>
           </div>
-          <div class="grade-mega-grid">
 
-            <!-- Grade 1 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-1">
-                <span class="grade-col-num">GRADE 1</span>
-                <strong>Basic</strong>
+          <div class="level-mega-grid">
+
+            <!-- Card 1: Foundation -->
+            <div class="level-mega-card level-card-foundation">
+              <div class="level-card-accent-top"></div>
+              <div class="level-card-header">
+                <span class="level-card-badge"><i class="fa-solid fa-seedling"></i> FOUNDATION</span>
+                <div class="level-card-icon-wrap">
+                  <i class="fa-solid fa-stethoscope"></i>
+                </div>
               </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-1&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-1&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-1&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-1&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-1&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a></li>
-              </ul>
+              <h4 class="level-card-title">Build Your Clinical Foundations</h4>
+              <p class="level-card-desc">Develop essential veterinary knowledge, clinical examination skills, diagnostic fundamentals, and safe practical techniques.</p>
+              <div class="level-card-features">
+                <span class="level-feature-item"><i class="fa-solid fa-check"></i> Essential Clinical Exam</span>
+                <span class="level-feature-item"><i class="fa-solid fa-check"></i> Diagnostic Fundamentals</span>
+                <span class="level-feature-item"><i class="fa-solid fa-check"></i> Safe Practical Techniques</span>
+              </div>
+              <a href="programs.html?level=foundation" class="level-card-action">
+                <span>Explore Level</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
             </div>
 
-            <!-- Grade 2 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-2">
-                <span class="grade-col-num">GRADE 2</span>
-                <strong>Intermediate</strong>
+            <!-- Card 2: Intermediate -->
+            <div class="level-mega-card level-card-intermediate">
+              <div class="level-card-accent-top"></div>
+              <div class="level-card-header">
+                <span class="level-card-badge"><i class="fa-solid fa-chart-line"></i> INTERMEDIATE</span>
+                <div class="level-card-icon-wrap">
+                  <i class="fa-solid fa-user-doctor"></i>
+                </div>
               </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-2&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-2&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-2&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-2&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-2&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a></li>
-              </ul>
+              <h4 class="level-card-title">Strengthen Your Clinical Skills</h4>
+              <p class="level-card-desc">Build confidence in clinical decision-making, diagnostics, case management, and commonly performed procedures.</p>
+              <div class="level-card-features">
+                <span class="level-feature-item"><i class="fa-solid fa-check"></i> Clinical Decision-Making</span>
+                <span class="level-feature-item"><i class="fa-solid fa-check"></i> Case Management Confidence</span>
+                <span class="level-feature-item"><i class="fa-solid fa-check"></i> Routine Procedures</span>
+              </div>
+              <a href="programs.html?level=intermediate" class="level-card-action">
+                <span>Explore Level</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
             </div>
 
-            <!-- Grade 3 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-3">
-                <span class="grade-col-num">GRADE 3</span>
-                <strong>Competitive</strong>
+            <!-- Card 3: Advanced -->
+            <div class="level-mega-card level-card-advanced">
+              <div class="level-card-accent-top"></div>
+              <div class="level-card-header">
+                <span class="level-card-badge"><i class="fa-solid fa-award"></i> ADVANCED</span>
+                <div class="level-card-icon-wrap">
+                  <i class="fa-solid fa-brain"></i>
+                </div>
               </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-3&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-3&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-3&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-3&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-3&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a></li>
-              </ul>
-            </div>
-
-            <!-- Grade 4 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-4">
-                <span class="grade-col-num">GRADE 4</span>
-                <strong>Advanced</strong>
+              <h4 class="level-card-title">Advance Your Veterinary Expertise</h4>
+              <p class="level-card-desc">Explore complex cases, advanced procedures, specialist techniques, and evidence-based clinical practice.</p>
+              <div class="level-card-features">
+                <span class="level-feature-item"><i class="fa-solid fa-check"></i> Complex Multisystem Cases</span>
+                <span class="level-feature-item"><i class="fa-solid fa-check"></i> Specialist Interventions</span>
+                <span class="level-feature-item"><i class="fa-solid fa-check"></i> Evidence-Based Practice</span>
               </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-4&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-4&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-4&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-4&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-4&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a></li>
-              </ul>
-            </div>
-
-            <!-- Grade 5 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-5">
-                <span class="grade-col-num">GRADE 5</span>
-                <strong>Pro</strong>
-              </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-5&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-5&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-5&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-5&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-5&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a></li>
-              </ul>
+              <a href="programs.html?level=advanced" class="level-card-action">
+                <span>Explore Level</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
             </div>
 
           </div>
+
           <div class="mega-footer-banner">
             <span>Looking for complete program details &amp; batch schedules?</span>
             <a href="programs.html" class="link-arrow">View Programs Catalogue <i
@@ -209,6 +165,7 @@
       </div>
 
       <a class="nav-link" data-nav="faculty" href="faculty.html">Our Faculty</a>
+      <a class="nav-link" data-nav="inquiry" href="inquiry.html">Find Your Pathway</a>
       <a class="nav-link" data-nav="learning-centre" href="learning-centre.html">Facility Tour</a>
       <!-- <a class="nav-link" data-nav="welfare" href="animal-welfare.html">Animal Welfare</a> -->
       <a class="nav-link" data-nav="blog" href="blog.html">Blog</a>
@@ -216,15 +173,7 @@
     </nav>
 
     <div class="nav-actions">
-      <div class="lang-switcher nav-lang-switcher" id="lang-switcher-nav" role="group" aria-label="Language selector">
-        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
-        <span class="lang-divider">|</span>
-        <button type="button" class="lang-btn" data-lang="hi" aria-pressed="false">हिंदी</button>
-      </div>
-      <a class="btn btn-outline btn-sm header-counselling-btn btn-counselling-modal" href="contact.html#enquiry">
-        <i class="fa-solid fa-calendar-check"></i> Book Counselling
-      </a>
-      <a class="btn btn-primary btn-apply-now" href="contact.html">
+      <a class="btn btn-primary btn-apply-now" href="inquiry.html">
         <span>Apply Now</span>
         <i class="fa-solid fa-arrow-right"></i>
       </a>
@@ -240,7 +189,8 @@
   <div class="drawer-header">
     <img class="drawer-logo" src="assets/vetnova-logo.webp" alt="VetNova Logo" />
     <div style="display: flex; align-items: center; gap: 8px;">
-      <div class="lang-switcher drawer-lang-switcher" id="lang-switcher-drawer" role="group" aria-label="Language selector">
+      <div class="lang-switcher drawer-lang-switcher" id="lang-switcher-drawer" role="group"
+        aria-label="Language selector">
         <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
         <span class="lang-divider">|</span>
         <button type="button" class="lang-btn" data-lang="hi" aria-pressed="false">हिंदी</button>
@@ -252,23 +202,13 @@
   </div>
 
   <nav class="drawer-menu">
-    <!-- Mobile Accordion: Home -->
-    <div class="drawer-accordion">
-      <button type="button" class="drawer-accordion-btn" id="drawer-home-btn" aria-expanded="false" aria-controls="drawer-home-panel">
-        <span><i class="fa-solid fa-house"></i> Home</span>
-        <i class="fa-solid fa-chevron-down accordion-caret"></i>
-      </button>
-      <div class="drawer-accordion-content" id="drawer-home-panel" role="region" aria-labelledby="drawer-home-btn">
-        <a href="index.html" data-subnav="index"><i class="fa-solid fa-house-chimney"></i> Home</a>
-        <a href="index-v2.html" data-subnav="index-v2"><i class="fa-solid fa-crown"></i> Home V2</a>
-        <a href="index-v3.html" data-subnav="index-v3"><i class="fa-solid fa-crown"></i> Home V3</a>
-        <a href="index-v4.html" data-subnav="index-v4"><i class="fa-solid fa-star"></i> Home V4</a>
-      </div>
-    </div>
+    <!-- Mobile Home Link -->
+    <a class="drawer-link" data-nav="index" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
 
     <!-- Mobile Accordion: About -->
     <div class="drawer-accordion">
-      <button type="button" class="drawer-accordion-btn" id="drawer-about-btn" aria-expanded="false" aria-controls="drawer-about-panel">
+      <button type="button" class="drawer-accordion-btn" id="drawer-about-btn" aria-expanded="false"
+        aria-controls="drawer-about-panel">
         <span><i class="fa-solid fa-hospital"></i> About Institute</span>
         <i class="fa-solid fa-chevron-down accordion-caret"></i>
       </button>
@@ -313,89 +253,60 @@
 
     <!-- Mobile Accordion: Programs -->
     <div class="drawer-accordion">
-      <button type="button" class="drawer-accordion-btn" id="drawer-programs-btn" aria-expanded="false" aria-controls="drawer-programs-panel">
-        <span><i class="fa-solid fa-layer-group"></i> Clinical Programs by Grade</span>
+      <button type="button" class="drawer-accordion-btn" id="drawer-programs-btn" aria-expanded="false"
+        aria-controls="drawer-programs-panel">
+        <span><i class="fa-solid fa-layer-group"></i> Clinical Programs by Level</span>
         <i class="fa-solid fa-chevron-down accordion-caret"></i>
       </button>
-      <div class="drawer-accordion-content" id="drawer-programs-panel" role="region" aria-labelledby="drawer-programs-btn">
-        <!-- Grade 1 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-1-btn" aria-expanded="false" aria-controls="drawer-grade-1-panel">
-            <span><strong class="grade-pill grade-pill-1">Grade 1</strong> Basic</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-1-panel" role="region" aria-labelledby="drawer-grade-1-btn">
-            <a href="programs.html?grade=grade-1&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-1&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-1&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-1&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-1&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a>
+      <div class="drawer-accordion-content" id="drawer-programs-panel" role="region"
+        aria-labelledby="drawer-programs-btn">
+        
+        <!-- Foundation Level Link -->
+        <a href="programs.html?level=foundation" class="drawer-level-card drawer-level-foundation">
+          <div class="drawer-level-card-head">
+            <span class="drawer-level-pill pill-foundation"><i class="fa-solid fa-seedling"></i> FOUNDATION</span>
+            <i class="fa-solid fa-stethoscope level-icon-corner"></i>
           </div>
-        </div>
+          <strong>Build Your Clinical Foundations</strong>
+          <p>Develop essential veterinary knowledge, clinical examination skills &amp; safe practical techniques.</p>
+        </a>
 
-        <!-- Grade 2 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-2-btn" aria-expanded="false" aria-controls="drawer-grade-2-panel">
-            <span><strong class="grade-pill grade-pill-2">Grade 2</strong> Intermediate</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-2-panel" role="region" aria-labelledby="drawer-grade-2-btn">
-            <a href="programs.html?grade=grade-2&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-2&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-2&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-2&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-2&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a>
+        <!-- Intermediate Level Link -->
+        <a href="programs.html?level=intermediate" class="drawer-level-card drawer-level-intermediate">
+          <div class="drawer-level-card-head">
+            <span class="drawer-level-pill pill-intermediate"><i class="fa-solid fa-chart-line"></i> INTERMEDIATE</span>
+            <i class="fa-solid fa-user-doctor level-icon-corner"></i>
           </div>
-        </div>
+          <strong>Strengthen Your Clinical Skills</strong>
+          <p>Build confidence in clinical decision-making, diagnostics, case management &amp; procedures.</p>
+        </a>
 
-        <!-- Grade 3 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-3-btn" aria-expanded="false" aria-controls="drawer-grade-3-panel">
-            <span><strong class="grade-pill grade-pill-3">Grade 3</strong> Competitive</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-3-panel" role="region" aria-labelledby="drawer-grade-3-btn">
-            <a href="programs.html?grade=grade-3&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-3&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-3&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-3&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-3&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a>
+        <!-- Advanced Level Link -->
+        <a href="programs.html?level=advanced" class="drawer-level-card drawer-level-advanced">
+          <div class="drawer-level-card-head">
+            <span class="drawer-level-pill pill-advanced"><i class="fa-solid fa-award"></i> ADVANCED</span>
+            <i class="fa-solid fa-brain level-icon-corner"></i>
           </div>
-        </div>
+          <strong>Advance Your Veterinary Expertise</strong>
+          <p>Explore complex cases, advanced procedures, specialist techniques &amp; evidence-based practice.</p>
+        </a>
 
-        <!-- Grade 4 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-4-btn" aria-expanded="false" aria-controls="drawer-grade-4-panel">
-            <span><strong class="grade-pill grade-pill-4">Grade 4</strong> Advanced</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-4-panel" role="region" aria-labelledby="drawer-grade-4-btn">
-            <a href="programs.html?grade=grade-4&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-4&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-4&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-4&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-4&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a>
+        <!-- Complete Catalogue Link -->
+        <a href="programs.html" class="drawer-level-card drawer-level-all">
+          <div class="drawer-level-card-head">
+            <span class="drawer-level-pill pill-all"><i class="fa-solid fa-border-all"></i> COMPLETE CATALOGUE</span>
+            <i class="fa-solid fa-arrow-right level-icon-corner"></i>
           </div>
-        </div>
-
-        <!-- Grade 5 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-5-btn" aria-expanded="false" aria-controls="drawer-grade-5-panel">
-            <span><strong class="grade-pill grade-pill-5">Grade 5</strong> Pro</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-5-panel" role="region" aria-labelledby="drawer-grade-5-btn">
-            <a href="programs.html?grade=grade-5&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-5&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i> Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-5&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-5&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-5&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp; Paravet Staff</a>
-          </div>
-        </div>
+          <strong>All 28 Program Disciplines</strong>
+          <p>Browse the full clinical curriculum directory and upcoming batch options.</p>
+        </a>
       </div>
     </div>
 
-    <a class="drawer-link" data-nav="faculty" href="faculty.html"><i class="fa-solid fa-user-doctor"></i> Our Faculty</a>
+    <a class="drawer-link" data-nav="faculty" href="faculty.html"><i class="fa-solid fa-user-doctor"></i> Our
+      Faculty</a>
+    <a class="drawer-link" data-nav="inquiry" href="inquiry.html"><i class="fa-solid fa-compass"></i> Find Your
+      Pathway</a>
     <a class="drawer-link" data-nav="learning-centre" href="learning-centre.html"><i
         class="fa-solid fa-building-columns"></i> Facility Tour</a>
     <a class="drawer-link" data-nav="welfare" href="animal-welfare.html"><i class="fa-solid fa-shield-cat"></i> Animal
@@ -405,17 +316,18 @@
     <a class="drawer-link" data-nav="contact" href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a>
 
     <div class="drawer-cta-wrap">
-      <a class="btn btn-primary btn-block btn-apply-now" href="contact.html">Apply Now <i
+      <a class="btn btn-primary btn-block btn-apply-now" href="inquiry.html">Apply Now <i
           class="fa-solid fa-arrow-right"></i></a>
-      <a class="btn btn-outline btn-block btn-counselling-modal" href="contact.html#enquiry"><i class="fa-solid fa-calendar-check"></i> Book
-        Counselling</a>
+      <a class="btn btn-outline btn-block btn-counselling-modal" href="inquiry.html"><i class="fa-solid fa-compass"></i>
+        Find
+        Pathway</a>
     </div>
   </nav>
 
   <div class="drawer-footer">
     <p><i class="fa-solid fa-location-dot"></i> Gawadewadi – Wagholi, Pune</p>
     <p><i class="fa-solid fa-envelope"></i> hello@vetnova.in</p>
-    <p><i class="fa-solid fa-phone"></i> +91 20 1234 5678</p>
+    <p><i class="fa-solid fa-phone"></i> <a href="tel:+919272561089" style="color: inherit; text-decoration: none;" data-vetnova-phone>+91 92725 61089</a></p>
   </div>
 </div>
 <div class="drawer-overlay" id="drawer-overlay"></div>

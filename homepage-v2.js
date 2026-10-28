@@ -533,7 +533,7 @@ function initPopularCourses() {
         image: 'assets/images/facility-radiology.webp',
         faculty: 'Dr. Ananya Sharma',
         hours: '60+ Hours',
-        mentorship: 'Diagnostic Wet Lab',
+        mentorship: 'Diagnostic Vet Lab',
         cert: 'Radiology Certified',
         ctaUrl: 'radiology-ultrasound.html'
       },

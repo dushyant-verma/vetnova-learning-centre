@@ -714,7 +714,8 @@ function initProgramDiscovery() {
   // Initialize strictly at Step 1: No cards rendered, Step 2 & 3 locked
   resetToStep1();
 
-  function resetToStep1() {
+  function resetToStep1(shouldScroll = false) {
+    const wasStarted = discoveryState.discoveryStarted;
     discoveryState = {
       discoveryStarted: false,
       selectedTopic: null,
@@ -742,6 +743,13 @@ function initProgramDiscovery() {
     if (progressStep3) {
       progressStep3.classList.add('locked');
       progressStep3.classList.remove('active', 'completed');
+    }
+
+    if (shouldScroll || wasStarted) {
+      const quizSec = document.getElementById('quiz-section');
+      if (quizSec) {
+        quizSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   }
 
@@ -899,21 +907,32 @@ function initProgramDiscovery() {
       const emptyResetBtn = document.getElementById('empty-reset-btn');
       if (emptyResetBtn) emptyResetBtn.addEventListener('click', resetToStep1);
     } else {
+      const trackImageMap = {
+        'practicing-vets': 'assets/images/programs/program-surgery.webp',
+        'fresh-graduates': 'assets/images/programs/program-skill-up.webp',
+        'diagnostic-specialization': 'assets/images/programs/program-radiology.webp',
+        'emergency-care': 'assets/images/programs/program-emergency.webp',
+        'vet-nurse': 'assets/images/programs/program-nurse.webp'
+      };
+
       resultsContainer.innerHTML = matchedPrograms.map(p => {
         const isDemo = p.isDemo;
         const badgeText = isDemo ? 'Demo Program' : `Grade ${p.grade} — ${p.gradeName}`;
-        const exploreLink = isDemo ? `programs.html?grade=${p.gradeCode}&track=${p.track}` : p.url;
+        const levelCode = (p.gradeCode === 'grade-1') ? 'foundation' : (p.gradeCode === 'grade-2' || p.gradeCode === 'grade-3') ? 'intermediate' : 'advanced';
+        const exploreLink = isDemo ? `programs.html?level=${levelCode}&track=${p.track}` : p.url;
+        const cardImg = p.image || trackImageMap[p.track] || 'assets/images/programs/program-skill-up.webp';
         
         return `
           <div class="discovery-card ${isDemo ? 'demo-program-card' : ''}">
             <div class="discovery-card-img-wrap" style="position: relative;">
-              <img src="${p.image || 'assets/images/programs/program-skill-up.webp'}" alt="${p.title}" loading="lazy" />
+              <img src="${cardImg}" alt="${p.title}" loading="lazy" />
               <span class="discovery-card-badge ${isDemo ? 'badge-demo-pill' : ''}" style="${isDemo ? 'background: #f59e0b; color: #fff;' : ''}">${badgeText}</span>
             </div>
             <div class="discovery-card-body">
               <div class="discovery-card-meta">
                 <span><i class="fa-solid fa-signal"></i> ${p.gradeLabel}</span>
                 <span><i class="fa-solid fa-book-open"></i> ${p.trackLabel}</span>
+                <span><i class="fa-solid fa-hospital"></i> Offline Vet Lab</span>
               </div>
               <h4 class="discovery-card-title">${p.title}</h4>
               <p class="discovery-card-desc">${p.description}</p>
@@ -2817,10 +2836,7 @@ window.VETNOVA_PROGRAMS_DATA = [
     gradeCode: "grade-5",
     gradeName: "Pro",
     gradeLabel: "Grade 5 — Pro",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "Pro-level clinical skills for head veterinary nurses overseeing ICU monitoring, anesthesia safety, and assistant training.",
+    description: "Pro-level clinical skills for head veterinary nurses overseeing ICU monitoring, anesthesia safety, and ward supervision.",
     status: "demo",
     isDemo: true,
     url: "#demo-pro-paravet-clinical-practice",
@@ -2829,73 +2845,100 @@ window.VETNOVA_PROGRAMS_DATA = [
   }
 ];
 
-/* Realtime Grade & Track Program Filter Controller */
+/* Realtime Learning Level & Track Program Filter Controller */
 function initProgramFilters() {
   const searchInput = document.getElementById('program-search-input');
-  const gradeSelect = document.getElementById('filter-grade') || document.getElementById('filter-level');
+  const levelSelect = document.getElementById('filter-level') || document.getElementById('filter-grade');
   const trackSelect = document.getElementById('filter-track') || document.getElementById('filter-topic');
   const modeSelect = document.getElementById('filter-mode');
   const dynamicContainer = document.getElementById('programs-dynamic-grid');
   const noResultsState = document.getElementById('no-programs-match');
   const clearFiltersBtn = document.getElementById('btn-clear-filters');
-  const gradeCards = document.querySelectorAll('.grade-card[data-grade]');
-  const trackPills = document.querySelectorAll('.track-pill[data-track]');
-  const selectedGradeTitle = document.getElementById('selected-grade-title');
+  const levelCards = document.querySelectorAll('.level-card[data-level], .grade-card[data-level]');
+  const levelPills = document.querySelectorAll('.level-pill[data-level]');
+  const selectedLevelTitle = document.getElementById('selected-level-title') || document.getElementById('selected-grade-title');
   const personaBanner = document.getElementById('persona-discovery-banner');
   const personaCloseBtn = document.getElementById('persona-banner-reset');
   const countNumberEl = document.getElementById('count-number');
 
-  if (!dynamicContainer && !gradeSelect && !trackSelect) return;
+  if (!dynamicContainer && !levelSelect && !trackSelect) return;
 
-  const gradeNameMap = {
-    'all': 'All Grades',
-    'grade-1': 'Grade 1 — Basic',
-    'grade-2': 'Grade 2 — Intermediate',
-    'grade-3': 'Grade 3 — Competitive',
-    'grade-4': 'Grade 4 — Advanced',
-    'grade-5': 'Grade 5 — Pro'
+  const levelNameMap = {
+    'all': 'All Programs',
+    'foundation': 'Foundation Level',
+    'intermediate': 'Intermediate Level',
+    'advanced': 'Advanced Level'
   };
 
   const trackNameMap = {
-    'all': 'All Tracks',
+    'all': 'All Disciplines',
+    'surgery': 'Surgery & Orthopaedics',
+    'medicine': 'Internal & Specialized Medicine',
+    'diagnostics': 'Diagnostics & Imaging',
+    'emergency': 'Emergency & Critical Care',
     'fresh-graduates': 'Fresh Graduates & Interns',
     'practicing-vets': 'Practicing Veterinarians',
-    'diagnostic-specialization': 'Diagnostic Specialization',
-    'emergency-care': 'Emergency & Critical Care',
     'vet-nurse': 'Vet Nurse & Paravet Staff'
   };
 
+  function updateUrlParam(level) {
+    try {
+      const url = new URL(window.location);
+      if (level && level !== 'all') {
+        url.searchParams.set('level', level);
+        url.searchParams.delete('grade');
+      } else {
+        url.searchParams.delete('level');
+        url.searchParams.delete('grade');
+      }
+      window.history.replaceState({}, '', url);
+    } catch (e) {
+      // Fallback
+    }
+  }
+
   function filterPrograms() {
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const gradeFilter = gradeSelect ? gradeSelect.value : 'all';
+    let rawLevel = levelSelect ? levelSelect.value.toLowerCase().trim() : 'all';
+    // Fallback if legacy grade was passed
+    if (rawLevel === 'grade-1') rawLevel = 'foundation';
+    else if (rawLevel === 'grade-2' || rawLevel === 'grade-3') rawLevel = 'intermediate';
+    else if (rawLevel === 'grade-4' || rawLevel === 'grade-5') rawLevel = 'advanced';
+
+    const levelFilter = ['foundation', 'intermediate', 'advanced'].includes(rawLevel) ? rawLevel : 'all';
     const trackFilter = trackSelect ? trackSelect.value : 'all';
     const modeFilter = modeSelect ? modeSelect.value : 'all';
 
-    // Sync Grade Card UI state
-    gradeCards.forEach(gCard => {
-      const gVal = gCard.dataset.grade;
-      if (gVal === gradeFilter && gradeFilter !== 'all') {
-        gCard.classList.add('active');
+    // Sync Level Card UI state
+    levelCards.forEach(lCard => {
+      const lVal = lCard.dataset.level;
+      if (lVal === levelFilter && levelFilter !== 'all') {
+        lCard.classList.add('active');
       } else {
-        gCard.classList.remove('active');
+        lCard.classList.remove('active');
       }
     });
 
-    // Sync Track Pills UI state
-    trackPills.forEach(tPill => {
-      const tVal = tPill.dataset.track;
-      if (tVal === trackFilter) {
-        tPill.classList.add('active');
+    // Sync Level Pills UI state
+    levelPills.forEach(lPill => {
+      const lVal = lPill.dataset.level;
+      if (lVal === levelFilter) {
+        lPill.classList.add('active');
       } else {
-        tPill.classList.remove('active');
+        lPill.classList.remove('active');
       }
     });
 
-    // Update Grade Selector title text
-    if (selectedGradeTitle) {
-      const gLabel = gradeNameMap[gradeFilter] || 'All Grades';
-      const tLabel = trackNameMap[trackFilter] || 'All Tracks';
-      selectedGradeTitle.innerHTML = `Showing: <strong>${gLabel}</strong> ${trackFilter !== 'all' ? '&bull; ' + tLabel : ''}`;
+    // Sync Level Select UI state
+    if (levelSelect && levelSelect.value !== levelFilter) {
+      levelSelect.value = levelFilter;
+    }
+
+    // Update Level Selector title text
+    if (selectedLevelTitle) {
+      const lLabel = levelNameMap[levelFilter] || 'All Programs';
+      const tLabel = trackNameMap[trackFilter] || 'All Disciplines';
+      selectedLevelTitle.innerHTML = `Active Filter: <strong>${lLabel}</strong> ${trackFilter !== 'all' ? '&bull; ' + tLabel : ''}`;
     }
 
     // Update Persona Adaptive Messaging Banner
@@ -2904,16 +2947,16 @@ function initProgramFilters() {
       const titleText = document.getElementById('persona-title-text');
       const messageText = document.getElementById('persona-message-text');
 
-      if (gradeFilter !== 'all' || trackFilter !== 'all' || modeFilter !== 'all' || query !== '') {
+      if (levelFilter !== 'all' || trackFilter !== 'all' || modeFilter !== 'all' || query !== '') {
         personaBanner.style.display = 'flex';
-        const gName = gradeNameMap[gradeFilter] || '';
+        const lName = levelNameMap[levelFilter] || '';
         const tName = trackNameMap[trackFilter] || '';
-        if (badgeText) badgeText.textContent = 'Filtered Pathway View';
+        if (badgeText) badgeText.textContent = 'Curriculum Level Pathway';
         if (titleText) {
-          if (gradeFilter !== 'all' && trackFilter !== 'all') {
-            titleText.textContent = `${gName} • ${tName}`;
-          } else if (gradeFilter !== 'all') {
-            titleText.textContent = `${gName} Selected`;
+          if (levelFilter !== 'all' && trackFilter !== 'all') {
+            titleText.textContent = `${lName} • ${tName}`;
+          } else if (levelFilter !== 'all') {
+            titleText.textContent = `${lName} Selected`;
           } else if (trackFilter !== 'all') {
             titleText.textContent = `${tName} Selected`;
           } else {
@@ -2921,20 +2964,61 @@ function initProgramFilters() {
           }
         }
         if (messageText) {
-          messageText.textContent = `Exploring practical clinical learning pathways matching your selected criteria.`;
+          if (levelFilter === 'foundation') {
+            messageText.textContent = 'Showing essential clinical examinations, diagnostic fundamentals, and core practical techniques across all programs.';
+          } else if (levelFilter === 'intermediate') {
+            messageText.textContent = 'Showing clinical decision-making, case management, routine surgery, and intermediate diagnostic interpretation.';
+          } else if (levelFilter === 'advanced') {
+            messageText.textContent = 'Showing complex multisystem case management, specialist procedures, advanced surgical interventions, and clinical audits.';
+          } else {
+            messageText.textContent = 'Exploring all 28 accredited veterinary clinical programs and workshops.';
+          }
         }
       } else {
         personaBanner.style.display = 'none';
       }
     }
 
-    // Strict AND Filter execution against window.VETNOVA_PROGRAMS_DATA
-    const matched = window.VETNOVA_PROGRAMS_DATA.filter(p => {
-      const matchesGrade = gradeFilter === 'all' || p.gradeCode === gradeFilter;
-      const matchesTrack = trackFilter === 'all' || p.track === trackFilter;
-      const matchesMode = modeFilter === 'all' || p.deliveryMode === modeFilter || (p.isDemo && modeFilter === 'offline');
-      const matchesQuery = query === '' || p.title.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
-      return matchesGrade && matchesTrack && matchesMode && matchesQuery;
+    // Source dataset: all 28 programs
+    const sourceList = (window.VETNOVA_28_PROGRAMS && window.VETNOVA_28_PROGRAMS.length >= 28) 
+      ? window.VETNOVA_28_PROGRAMS 
+      : (window.VETNOVA_PROGRAMS_DATA || []);
+
+    const matched = sourceList.filter(p => {
+      // 1. Text Search matching
+      const matchesQuery = query === "" || 
+        (p.title && p.title.toLowerCase().includes(query)) || 
+        (p.description && p.description.toLowerCase().includes(query)) ||
+        (p.category && p.category.toLowerCase().includes(query)) ||
+        (p.slug && p.slug.toLowerCase().includes(query));
+
+      // 2. Discipline / Category / Track Filter
+      let matchesTrack = true;
+      if (trackFilter !== "all") {
+        const cat = (p.category || "").toLowerCase();
+        const trk = (p.track || "").toLowerCase();
+        if (trackFilter === "surgery") {
+          matchesTrack = cat.includes("surgery") || trk.includes("surgery") || cat.includes("orthopaedic");
+        } else if (trackFilter === "medicine" || trackFilter === "internal-medicine") {
+          matchesTrack = cat.includes("medicine") || cat.includes("dermatology") || cat.includes("cardiology") || cat.includes("neurology") || cat.includes("oncology") || cat.includes("endocrinology") || cat.includes("nephrology") || cat.includes("gastroenterology");
+        } else if (trackFilter === "diagnostics" || trackFilter === "diagnostic-specialization") {
+          matchesTrack = cat.includes("diagnostic") || cat.includes("imaging") || cat.includes("pathology") || cat.includes("microbiology") || cat.includes("laboratory");
+        } else if (trackFilter === "emergency" || trackFilter === "emergency-care") {
+          matchesTrack = cat.includes("emergency") || cat.includes("critical") || cat.includes("anaesthesia");
+        } else {
+          matchesTrack = cat.includes(trackFilter.toLowerCase()) || trk.includes(trackFilter.toLowerCase());
+        }
+      }
+
+      // 3. Delivery Mode Filter
+      let matchesMode = true;
+      if (modeFilter !== "all") {
+        if (p.deliveryMode) {
+          matchesMode = p.deliveryMode === modeFilter;
+        }
+      }
+
+      return matchesQuery && matchesTrack && matchesMode;
     });
 
     // Dynamic Program Count Update
@@ -2942,71 +3026,191 @@ function initProgramFilters() {
       countNumberEl.textContent = matched.length;
     }
 
-    // Empty state handling vs render cards
+    // Render cards
     if (noResultsState && dynamicContainer) {
       if (matched.length === 0) {
-        noResultsState.style.display = 'block';
-        dynamicContainer.style.display = 'none';
-        dynamicContainer.innerHTML = '';
+        noResultsState.style.display = "block";
+        dynamicContainer.style.display = "none";
+        dynamicContainer.innerHTML = "";
       } else {
-        noResultsState.style.display = 'none';
-        dynamicContainer.style.display = 'grid';
-        
-        dynamicContainer.innerHTML = matched.map(p => {
-          const isDemo = p.isDemo;
-          const badgeHTML = isDemo
-            ? `<span class="badge-demo-pill"><i class="fa-solid fa-flask"></i> Demo Program</span>`
-            : `<span class="badge-grade-pill grade-pill-${p.grade}">GRADE ${p.grade}</span>`;
+        noResultsState.style.display = "none";
+        dynamicContainer.style.display = "grid";
 
-          const pImg = p.image || getProgramImage(p);
+        dynamicContainer.innerHTML = matched.map((p, idx) => {
+          const orderNum = p.order || (idx + 1);
+          const hasSyllabus = p.syllabusStatus === "Available";
+          const programTitle = (p.title || "").replace(/^#?\d+[\.\s\-#]+\s*/, "");
+          const categoryBadge = (p.category || "Clinical Track").replace(/^#?\d+[\s\-\•\.\:]+\s*/, "");
 
-          const footerHTML = isDemo
-            ? `
-              <div class="program-card-footer">
-                <div class="program-card-price-row">
-                  <span class="program-card-price-tag"><i class="fa-solid fa-layer-group"></i> ${p.gradeLabel}</span>
-                </div>
-                <div class="program-card-actions">
-                  <button type="button" class="btn btn-outline btn-sm btn-demo-explore" data-title="${p.title}" data-grade="${p.gradeLabel}" data-track="${p.trackLabel}" data-desc="${p.description}">Explore Program</button>
-                  <button type="button" class="btn btn-primary btn-sm btn-show-interest" data-source="Demo Program Enquiry" data-context="${p.title} (${p.gradeLabel})">Enquire Now</button>
-                </div>
-              </div>
-            `
-            : `
-              <div class="program-card-footer">
-                <div class="program-card-price-row">
-                  <div class="program-card-price">${p.price || '₹38,000'} <small>+ GST</small></div>
-                </div>
-                <div class="program-card-actions">
-                  <a class="btn btn-outline btn-sm" href="${p.url}">Explore Program <i class="fa-solid fa-arrow-right"></i></a>
-                  <button type="button" class="btn btn-primary btn-sm btn-show-interest" data-source="Program Enquiry" data-context="${p.title}">Enquire Now</button>
-                </div>
+          const pImg = p.image || "assets/images/programs/program-skill-up.webp";
+          const progUrl = p.slug ? `${p.slug}.html` : (p.url || `programs-single.html?slug=${p.slug}`);
+
+          // Determine Level Specific URL, Action Text & Content
+          let viewSyllabusUrl = progUrl;
+          let viewSyllabusText = hasSyllabus ? "View Syllabus" : "Explore Program";
+          let stageContentHTML = "";
+          let topBadgeHTML = "";
+          let levelBadgesHTML = "";
+
+          const syllabusFoundation = (p.syllabus && p.syllabus.foundation) || [];
+          const syllabusIntermediate = (p.syllabus && p.syllabus.intermediate) || [];
+          const syllabusAdvanced = (p.syllabus && p.syllabus.advanced) || [];
+
+          if (levelFilter === 'foundation') {
+            viewSyllabusUrl = `${progUrl}?level=foundation#curriculum`;
+            viewSyllabusText = "View Foundation Syllabus";
+            topBadgeHTML = `<span class="badge-grade-pill badge-pill-foundation"><i class="fa-solid fa-seedling"></i> Foundation Stage</span>`;
+            
+            levelBadgesHTML = `
+              <div class="card-level-badges">
+                <span class="level-badge badge-foundation active"><i class="fa-solid fa-check"></i> Foundation Active</span>
+                <span class="level-badge badge-intermediate muted">Intermediate</span>
+                <span class="level-badge badge-advanced muted">Advanced</span>
               </div>
             `;
 
+            if (syllabusFoundation.length > 0) {
+              const previewTopics = syllabusFoundation.slice(0, 3);
+              const remainingCount = syllabusFoundation.length - previewTopics.length;
+              stageContentHTML = `
+                <div class="card-stage-content-box stage-box-foundation">
+                  <div class="stage-content-head"><i class="fa-solid fa-stethoscope"></i> <strong>Foundation Modules:</strong></div>
+                  <ul class="stage-topics-list">
+                    ${previewTopics.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
+                  </ul>
+                  ${remainingCount > 0 ? `<span class="stage-more-topics">+${remainingCount} more foundation clinical topics in syllabus</span>` : ''}
+                </div>
+              `;
+            } else {
+              stageContentHTML = `
+                <div class="card-stage-content-box stage-box-foundation">
+                  <div class="stage-content-head"><i class="fa-solid fa-stethoscope"></i> <strong>Foundation Training Stage:</strong></div>
+                  <p class="stage-content-desc">Essential clinical examination, basic diagnostics, safety protocols, and primary procedural techniques for ${programTitle}.</p>
+                </div>
+              `;
+            }
+          } else if (levelFilter === 'intermediate') {
+            viewSyllabusUrl = `${progUrl}?level=intermediate#curriculum`;
+            viewSyllabusText = "View Intermediate Syllabus";
+            topBadgeHTML = `<span class="badge-grade-pill badge-pill-intermediate"><i class="fa-solid fa-chart-line"></i> Intermediate Stage</span>`;
+
+            levelBadgesHTML = `
+              <div class="card-level-badges">
+                <span class="level-badge badge-foundation muted">Foundation</span>
+                <span class="level-badge badge-intermediate active"><i class="fa-solid fa-check"></i> Intermediate Active</span>
+                <span class="level-badge badge-advanced muted">Advanced</span>
+              </div>
+            `;
+
+            if (syllabusIntermediate.length > 0) {
+              const previewTopics = syllabusIntermediate.slice(0, 3);
+              const remainingCount = syllabusIntermediate.length - previewTopics.length;
+              stageContentHTML = `
+                <div class="card-stage-content-box stage-box-intermediate">
+                  <div class="stage-content-head"><i class="fa-solid fa-user-doctor"></i> <strong>Intermediate Modules:</strong></div>
+                  <ul class="stage-topics-list">
+                    ${previewTopics.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
+                  </ul>
+                  ${remainingCount > 0 ? `<span class="stage-more-topics">+${remainingCount} more intermediate clinical topics in syllabus</span>` : ''}
+                </div>
+              `;
+            } else {
+              stageContentHTML = `
+                <div class="card-stage-content-box stage-box-intermediate">
+                  <div class="stage-content-head"><i class="fa-solid fa-user-doctor"></i> <strong>Intermediate Training Stage:</strong></div>
+                  <p class="stage-content-desc">Clinical decision-making, case management, routine surgery, and intermediate diagnostic interpretation for ${programTitle}.</p>
+                </div>
+              `;
+            }
+          } else if (levelFilter === 'advanced') {
+            viewSyllabusUrl = `${progUrl}?level=advanced#curriculum`;
+            viewSyllabusText = "View Advanced Syllabus";
+            topBadgeHTML = `<span class="badge-grade-pill badge-pill-advanced"><i class="fa-solid fa-award"></i> Advanced Stage</span>`;
+
+            levelBadgesHTML = `
+              <div class="card-level-badges">
+                <span class="level-badge badge-foundation muted">Foundation</span>
+                <span class="level-badge badge-intermediate muted">Intermediate</span>
+                <span class="level-badge badge-advanced active"><i class="fa-solid fa-check"></i> Advanced Active</span>
+              </div>
+            `;
+
+            if (syllabusAdvanced.length > 0) {
+              const previewTopics = syllabusAdvanced.slice(0, 3);
+              const remainingCount = syllabusAdvanced.length - previewTopics.length;
+              stageContentHTML = `
+                <div class="card-stage-content-box stage-box-advanced">
+                  <div class="stage-content-head"><i class="fa-solid fa-brain"></i> <strong>Advanced Modules:</strong></div>
+                  <ul class="stage-topics-list">
+                    ${previewTopics.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
+                  </ul>
+                  ${remainingCount > 0 ? `<span class="stage-more-topics">+${remainingCount} more advanced specialist topics in syllabus</span>` : ''}
+                </div>
+              `;
+            } else {
+              stageContentHTML = `
+                <div class="card-stage-content-box stage-box-advanced">
+                  <div class="stage-content-head"><i class="fa-solid fa-brain"></i> <strong>Advanced Training Stage:</strong></div>
+                  <p class="stage-content-desc">Specialist clinical interventions, complex multisystem cases, advanced surgical complications, and evidence-based practice for ${programTitle}.</p>
+                </div>
+              `;
+            }
+          } else {
+            // 'all' Levels
+            viewSyllabusUrl = progUrl;
+            viewSyllabusText = hasSyllabus ? "View Syllabus" : "Explore Program";
+            topBadgeHTML = hasSyllabus
+              ? `<span class="badge-grade-pill" style="background:#1e7e44;color:#fff;"><i class="fa-solid fa-circle-check"></i> Three-Stage Syllabus</span>`
+              : `<span class="badge-grade-pill" style="background:#b87314;color:#fff;"><i class="fa-solid fa-clock"></i> Syllabus in Review</span>`;
+
+            levelBadgesHTML = `
+              <div class="card-level-badges">
+                <span class="level-badge badge-foundation"><i class="fa-solid fa-seedling"></i> Foundation</span>
+                <span class="level-badge badge-intermediate"><i class="fa-solid fa-chart-line"></i> Intermediate</span>
+                <span class="level-badge badge-advanced"><i class="fa-solid fa-award"></i> Advanced</span>
+              </div>
+            `;
+          }
+
+          const enquireContext = levelFilter !== 'all' 
+            ? `${programTitle} (${levelNameMap[levelFilter]})` 
+            : programTitle;
+
           return `
-            <div class="program-card ${isDemo ? 'demo-program-card' : ''}" data-grade="${p.gradeCode}" data-track="${p.track}">
+            <div class="program-card" data-order="${orderNum}" data-slug="${p.slug || ""}" data-category="${p.category || ""}">
               <div class="program-card-media" style="position: relative;">
                 <div class="card-grade-badge-wrap" style="position: absolute; top: 12px; left: 12px; z-index: 2;">
-                  ${badgeHTML}
+                  <span class="badge-grade-pill" style="background: rgba(15, 45, 74, 0.9); color: #fff;">${categoryBadge}</span>
                 </div>
-                <img src="${pImg}" alt="${p.title}" loading="lazy" decoding="async" />
+                <div style="position: absolute; top: 12px; right: 12px; z-index: 2;">
+                  ${topBadgeHTML}
+                </div>
+                <img src="${pImg}" alt="${programTitle}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='assets/images/programs/program-skill-up.webp';" />
               </div>
               <div class="program-card-body">
-                <div class="card-hierarchy-breadcrumb" style="font-size: 0.8rem; color: #64748b; margin-bottom: 6px; font-weight: 500;">
-                  <span>${p.gradeLabel}</span> &bull; <span>${p.trackLabel}</span>
-                </div>
-                <h3 class="program-card-title">${isDemo ? p.title : `<a href="${p.url}">${p.title}</a>`}</h3>
-                <p class="program-card-desc">${p.description}</p>
+                ${levelBadgesHTML}
+                <h3 class="program-card-title"><a href="${viewSyllabusUrl}">${programTitle}</a></h3>
+                <p class="program-card-desc">${p.description || ""}</p>
+                ${stageContentHTML}
                 <div class="program-card-meta" style="margin-top: 12px; font-size: 0.84rem; color: #475569; display: flex; flex-wrap: wrap; gap: 12px;">
-                  <div class="meta-item"><i class="fa-solid fa-signal text-teal"></i> ${p.gradeLabel}</div>
-                  <div class="meta-item"><i class="fa-solid fa-book-open text-teal"></i> ${p.trackLabel}</div>
+                  <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> ${p.duration || "2 to 4 Weeks"}</div>
+                  <div class="meta-item"><i class="fa-solid fa-hospital text-teal"></i> Offline Vet Lab</div>
                 </div>
-                ${footerHTML}
+                <div class="program-card-footer">
+                  <div class="program-card-price-row">
+                    <span class="program-card-price-tag" style="color: var(--teal); font-weight: 700;">
+                      <i class="fa-solid fa-award"></i> Practical Certificate
+                    </span>
+                  </div>
+                  <div class="program-card-actions">
+                    <a class="btn btn-outline btn-sm" href="${viewSyllabusUrl}">${viewSyllabusText} <i class="fa-solid fa-arrow-right"></i></a>
+                    <button type="button" class="btn btn-primary btn-sm btn-show-interest" data-source="Program Enquiry" data-context="${enquireContext}">Enquire Now</button>
+                  </div>
+                </div>
               </div>
             </div>
           `;
-        }).join('');
+        }).join("");
       }
     }
 
@@ -3015,82 +3219,82 @@ function initProgramFilters() {
 
   function resetAllFilters() {
     if (searchInput) searchInput.value = '';
-    if (gradeSelect) gradeSelect.value = 'all';
+    if (levelSelect) levelSelect.value = 'all';
     if (trackSelect) trackSelect.value = 'all';
     if (modeSelect) modeSelect.value = 'all';
     if (personaBanner) personaBanner.style.display = 'none';
-    gradeCards.forEach(c => c.classList.remove('active'));
-    trackPills.forEach(p => {
-      if (p.dataset.track === 'all') p.classList.add('active');
+    levelCards.forEach(c => c.classList.remove('active'));
+    levelPills.forEach(p => {
+      if (p.dataset.level === 'all') p.classList.add('active');
       else p.classList.remove('active');
     });
+    updateUrlParam('all');
     filterPrograms();
   }
 
   // Bind Event Listeners
   if (searchInput) searchInput.addEventListener('input', filterPrograms);
-  if (gradeSelect) gradeSelect.addEventListener('change', filterPrograms);
+  if (levelSelect) {
+    levelSelect.addEventListener('change', () => {
+      updateUrlParam(levelSelect.value);
+      filterPrograms();
+    });
+  }
   if (trackSelect) trackSelect.addEventListener('change', filterPrograms);
   if (modeSelect) modeSelect.addEventListener('change', filterPrograms);
   if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', resetAllFilters);
   if (personaCloseBtn) personaCloseBtn.addEventListener('click', resetAllFilters);
 
-  // Grade Card Click Handlers
-  gradeCards.forEach(gCard => {
-    gCard.addEventListener('click', () => {
-      const selectedG = gCard.dataset.grade;
-      if (gradeSelect) {
-        if (gradeSelect.value === selectedG) {
-          gradeSelect.value = 'all';
+  // Level Card Click Handlers
+  levelCards.forEach(lCard => {
+    lCard.addEventListener('click', () => {
+      const selectedL = lCard.dataset.level || lCard.dataset.grade;
+      let targetLevel = selectedL;
+      if (selectedL === 'grade-1') targetLevel = 'foundation';
+      else if (selectedL === 'grade-2') targetLevel = 'intermediate';
+      else if (selectedL === 'grade-3' || selectedL === 'grade-4' || selectedL === 'grade-5') targetLevel = 'advanced';
+
+      if (levelSelect) {
+        if (levelSelect.value === targetLevel) {
+          levelSelect.value = 'all';
         } else {
-          gradeSelect.value = selectedG;
+          levelSelect.value = targetLevel;
         }
+        updateUrlParam(levelSelect.value);
         filterPrograms();
       }
     });
   });
 
-  // Track Pill Click Handlers
-  trackPills.forEach(tPill => {
-    tPill.addEventListener('click', () => {
-      const selectedT = tPill.dataset.track;
-      if (trackSelect) {
-        trackSelect.value = selectedT;
+  // Level Pill Click Handlers
+  levelPills.forEach(lPill => {
+    lPill.addEventListener('click', () => {
+      const selectedL = lPill.dataset.level;
+      if (levelSelect) {
+        levelSelect.value = selectedL;
+        updateUrlParam(selectedL);
         filterPrograms();
       }
     });
-  });
-
-  // Demo Program Explore Click Handler
-  document.body.addEventListener('click', (e) => {
-    const demoBtn = e.target.closest('.btn-demo-explore');
-    if (!demoBtn) return;
-    e.preventDefault();
-
-    const title = demoBtn.dataset.title || 'Demo Program';
-    const grade = demoBtn.dataset.grade || 'Grade Level';
-    const track = demoBtn.dataset.track || 'Track Name';
-    const desc = demoBtn.dataset.desc || '';
-
-    // Trigger modal opening via btn-show-interest with custom prefill context
-    const enquireBtn = document.querySelector('.btn-show-interest');
-    if (enquireBtn) {
-      demoBtn.setAttribute('data-source', 'Demo Program Information');
-      demoBtn.setAttribute('data-context', `${title} (${grade} • ${track})`);
-      const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
-      demoBtn.dispatchEvent(clickEvent);
-    } else {
-      alert(`[Demo Program Overview]\n\nTitle: ${title}\nLevel: ${grade}\nTrack: ${track}\n\nDescription: ${desc}\n\nNotice: This is a sample/demo program record. Contact academic advisory for upcoming curriculum details.`);
-    }
   });
 
   // URL Parameter auto-selection
   const urlParams = new URLSearchParams(window.location.search);
   let paramTriggered = false;
-  if (urlParams.has('grade') && gradeSelect) {
-    gradeSelect.value = urlParams.get('grade');
+  if (urlParams.has('level') && levelSelect) {
+    const lvl = urlParams.get('level').toLowerCase().trim();
+    if (['foundation', 'intermediate', 'advanced', 'all'].includes(lvl)) {
+      levelSelect.value = lvl;
+      paramTriggered = true;
+    }
+  } else if (urlParams.has('grade') && levelSelect) {
+    const grd = urlParams.get('grade').toLowerCase();
+    if (grd.includes('1') || grd.includes('basic')) levelSelect.value = 'foundation';
+    else if (grd.includes('2') || grd.includes('intermediate')) levelSelect.value = 'intermediate';
+    else if (grd.includes('3') || grd.includes('4') || grd.includes('5') || grd.includes('advanced')) levelSelect.value = 'advanced';
     paramTriggered = true;
   }
+
   if (urlParams.has('track') && trackSelect) {
     trackSelect.value = urlParams.get('track');
     paramTriggered = true;
@@ -3100,7 +3304,7 @@ function initProgramFilters() {
   filterPrograms();
 
   if (paramTriggered) {
-    const filterSec = document.getElementById('choose-learning-grade') || document.getElementById('program-filters');
+    const filterSec = document.getElementById('choose-learning-level') || document.getElementById('choose-learning-grade') || document.getElementById('all-programs');
     if (filterSec) {
       setTimeout(() => {
         filterSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -3109,35 +3313,38 @@ function initProgramFilters() {
   }
 }
 
-
-/* Single Program Page Grade Context Representation */
+/* Single Program Page Learning Level Context Representation */
 function initSingleProgramGradeRepresentation() {
   const urlParams = new URLSearchParams(window.location.search);
-  const gradeParam = urlParams.get('grade');
-  if (!gradeParam) return;
+  const levelParam = urlParams.get('level') || (urlParams.get('grade') ? (urlParams.get('grade').includes('1') ? 'foundation' : urlParams.get('grade').includes('2') ? 'intermediate' : 'advanced') : null);
+  if (!levelParam) return;
 
-  const gradeLabels = {
-    'grade-1': 'Grade 1 — Basic',
-    'grade-2': 'Grade 2 — Intermediate',
-    'grade-3': 'Grade 3 — Competitive',
-    'grade-4': 'Grade 4 — Advanced',
-    'grade-5': 'Grade 5 — Pro'
+  const levelLabels = {
+    'foundation': 'Foundation Level',
+    'intermediate': 'Intermediate Level',
+    'advanced': 'Advanced Level'
   };
 
-  const gLabel = gradeLabels[gradeParam];
-  if (!gLabel) return;
+  const lLabel = levelLabels[levelParam];
+  if (!lLabel) return;
 
   const heroBreadcrumb = document.querySelector('.breadcrumb');
   if (heroBreadcrumb) {
     const spanEl = heroBreadcrumb.querySelector('span:last-child');
     if (spanEl) {
-      spanEl.innerHTML = `<a href="programs.html?grade=${gradeParam}" style="color: inherit; text-decoration: underline;">${gLabel}</a> &rsaquo; ${spanEl.textContent}`;
+      spanEl.innerHTML = `<a href="programs.html?level=${levelParam}" style="color: inherit; text-decoration: underline;">${lLabel}</a> &rsaquo; ${spanEl.textContent}`;
     }
   }
 
   const eyebrow = document.querySelector('.program-hero .eyebrow, .page-hero .eyebrow');
   if (eyebrow) {
-    eyebrow.innerHTML = `<i class="fa-solid fa-graduation-cap"></i> ${gLabel.toUpperCase()} &bull; ${eyebrow.textContent}`;
+    eyebrow.innerHTML = `<i class="fa-solid fa-graduation-cap"></i> ${lLabel.toUpperCase()} &bull; ${eyebrow.textContent}`;
+  }
+
+  const stageRow = document.querySelector(`.syllabus-stage-row.stage-${levelParam}`);
+  if (stageRow) {
+    stageRow.style.boxShadow = '0 0 0 2px var(--teal, #12C7C1), 0 8px 24px rgba(18, 199, 193, 0.15)';
+    stageRow.style.borderRadius = '12px';
   }
 }
 

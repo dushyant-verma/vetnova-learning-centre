@@ -210,11 +210,12 @@ body.homepage-v3 {
   display: none !important;
 }
 
-/* Single Standalone Floating WhatsApp Button */
+/* Single Standalone Floating WhatsApp Button - Bottom-Left */
 .hp3x-floating-contact {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  left: 24px;
+  bottom: 24px;
+  right: auto;
   z-index: 9999;
   width: 56px;
   height: 56px;

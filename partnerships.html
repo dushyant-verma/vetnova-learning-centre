@@ -135,20 +135,19 @@
     </section>
 
     <!-- Partnership Enquiry Form Section -->
-    <section class="section soft partnership-form-section" id="partnership-enquiry-section">
+    <section class="section partnership-form-section" id="partnership-enquiry-section">
       <div class="container">
-        <div class="partnership-form-wrapper" style="max-width: 800px; margin: 0 auto;">
-          <div class="section-head center" style="margin-bottom: 32px;">
+        <div class="partnership-form-wrapper">
+          <div class="section-head center">
             <span class="eyebrow"><i class="fa-solid fa-paper-plane"></i> ENQUIRE NOW</span>
             <h2>Partnership Enquiry</h2>
-            <p style="color: var(--muted); font-size: 1rem; max-width: 640px; margin: 8px auto 0;">
+            <p class="section-desc">
               Please fill out the form below to explore partnership possibilities with VetNova. Our leadership team will
               review your inquiry and connect with you shortly.
             </p>
           </div>
 
-          <div class="partnership-card-box"
-            style="background: var(--white); padding: 40px; border-radius: 24px; box-shadow: 0 12px 40px rgba(11, 28, 62, 0.08); border: 1px solid rgba(223, 229, 240, 0.8);">
+          <div class="partnership-card-box">
 
             <!-- Error Banner -->
             <div id="partnership-error-banner" class="alert alert-danger"
@@ -164,7 +163,7 @@
               <!-- Name -->
               <div class="form-group form-col-half">
                 <label for="partnership-name">
-                  Full Name <span style="color: var(--red);">*</span>
+                  Full Name <span class="req-star">*</span>
                 </label>
                 <input type="text" id="partnership-name" name="name" required placeholder="Dr. / Mr. / Ms. Full Name"
                   class="form-input" />
@@ -173,7 +172,7 @@
               <!-- Organization / Institution -->
               <div class="form-group form-col-half">
                 <label for="partnership-organization">
-                  Organization / Institution <span style="color: var(--red);">*</span>
+                  Organization / Institution <span class="req-star">*</span>
                 </label>
                 <input type="text" id="partnership-organization" name="organization" required
                   placeholder="Hospital / University / Company Name" class="form-input" />
@@ -182,7 +181,7 @@
               <!-- Email -->
               <div class="form-group form-col-half">
                 <label for="partnership-email">
-                  Email Address <span style="color: var(--red);">*</span>
+                  Email Address <span class="req-star">*</span>
                 </label>
                 <input type="email" id="partnership-email" name="email" required
                   placeholder="official.email@organization.com" class="form-input" />
@@ -191,11 +190,10 @@
               <!-- Phone Number -->
               <div class="form-group form-col-half">
                 <label for="partnership-phone">
-                  Phone Number <span style="color: var(--red);">*</span>
+                  Phone Number <span class="req-star">*</span>
                 </label>
-                <div class="phone-input-wrap" style="display: flex; gap: 8px;">
-                  <select name="countryCode" id="partnership-country-code" class="form-select country-code-select"
-                    style="width: 110px;">
+                <div class="phone-input-wrap">
+                  <select name="countryCode" id="partnership-country-code" class="form-select country-code-select">
                     <option value="+91" selected>🇮🇳 +91</option>
                     <option value="+1">🇺🇸 +1</option>
                     <option value="+44">🇬🇧 +44</option>
@@ -208,14 +206,14 @@
                     <option value="+94">🇱🇰 +94</option>
                   </select>
                   <input type="tel" id="partnership-phone" name="phone" required placeholder="Enter contact number"
-                    class="form-input" style="flex: 1;" />
+                    class="form-input" />
                 </div>
               </div>
 
               <!-- Organization Type -->
               <div class="form-group form-col-half">
                 <label for="partnership-org-type">
-                  Organization Type <span style="color: var(--red);">*</span>
+                  Organization Type <span class="req-star">*</span>
                 </label>
                 <select id="partnership-org-type" name="organizationType" required class="form-select">
                   <option value="" disabled selected>Select Organization Type</option>
@@ -231,7 +229,7 @@
               <!-- Partnership Interest -->
               <div class="form-group form-col-half">
                 <label for="partnership-interest">
-                  Partnership Interest <span style="color: var(--red);">*</span>
+                  Partnership Interest <span class="req-star">*</span>
                 </label>
                 <select id="partnership-interest" name="partnershipInterest" required class="form-select">
                   <option value="" disabled selected>Select Partnership Interest</option>
@@ -246,7 +244,7 @@
               <!-- Message -->
               <div class="form-group form-col-full">
                 <label for="partnership-message">
-                  Message / Collaboration Details <span style="color: var(--red);">*</span>
+                  Message / Collaboration Details <span class="req-star">*</span>
                 </label>
                 <textarea id="partnership-message" name="message" rows="4" required
                   placeholder="Tell us about your organization and how you would like to partner with VetNova..."
@@ -254,9 +252,8 @@
               </div>
 
               <!-- Submit Button -->
-              <div class="form-group form-col-full" style="margin-top: 8px;">
-                <button type="submit" id="partnership-submit-btn" class="btn btn-primary btn-lg btn-block"
-                  style="width: 100%; justify-content: center;">
+              <div class="form-group form-col-full form-submit-group">
+                <button type="submit" id="partnership-submit-btn" class="btn-partnership-submit">
                   <span>Submit Partnership Enquiry</span>
                   <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -265,8 +262,8 @@
             </form>
 
             <!-- Success State (hidden initially) -->
-            <div id="partnership-success-state" style="display: none; text-align: center; padding: 32px 16px;">
-              <div
+            <div id="partnership-success-state" style="display: none; text-align: center; padding: 36px 20px;">
+              <div class="success-icon-wrap"
                 style="width: 64px; height: 64px; background: rgba(18, 199, 193, 0.12); color: var(--teal); border-radius: 50%; display: grid; place-items: center; font-size: 28px; margin: 0 auto 20px;">
                 <i class="fa-solid fa-circle-check"></i>
               </div>
@@ -276,7 +273,7 @@
                 Thank you for your interest in partnering with VetNova. Our leadership team has received your enquiry
                 and will be in touch with your organization shortly.
               </p>
-              <button type="button" id="partnership-reset-btn" class="btn btn-outline">
+              <button type="button" id="partnership-reset-btn" class="btn btn-outline" style="border-radius: 12px; height: 44px; padding: 0 20px;">
                 <i class="fa-solid fa-rotate-left"></i> Submit Another Enquiry
               </button>
             </div>
@@ -289,6 +286,8 @@
 
   <!-- Global Footer Placeholder -->
   <div id="global-footer"></div>
+
+
 
   <!-- Scripts -->
   <script src="assets/js/api.js"></script>
