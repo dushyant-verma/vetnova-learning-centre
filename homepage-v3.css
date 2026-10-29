@@ -118,10 +118,11 @@ body.homepage-v3 {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 15px 30px;
-  border-radius: 9999px;
+  padding: 12px 24px;
+  min-height: 48px;
+  border-radius: 12px;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14px;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;

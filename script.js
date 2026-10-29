@@ -104,7 +104,7 @@ function initActiveNavigation() {
     const dataNav = link.getAttribute('data-nav') || link.getAttribute('href');
     if (dataNav) {
       const cleanDataNav = dataNav.split('#')[0].replace('.html', '').toLowerCase();
-      if (cleanDataNav === cleanPath || ((cleanPath === 'index' || cleanPath === 'index-v2' || cleanPath === 'index-v3' || cleanPath === 'index-v4') && cleanDataNav === 'index')) {
+      if (cleanDataNav === cleanPath || ((cleanPath === 'index' || cleanPath === 'index-v2' || cleanPath === 'index-v3' || cleanPath === 'index-v4') && cleanDataNav === 'index') || (cleanPath === 'learning-centre' && cleanDataNav === 'facility-tour')) {
         link.classList.add('active');
       }
     }
@@ -112,12 +112,25 @@ function initActiveNavigation() {
 
   // Submenu items & mobile drawer content links highlighting
   const subLinks = document.querySelectorAll('.dropdown-menu a, .drawer-accordion-content a');
+  const currentHash = window.location.hash.toLowerCase();
   subLinks.forEach(link => {
     const href = link.getAttribute('href');
     if (href) {
-      const cleanHref = href.split('#')[0].toLowerCase();
+      const [linkPage, linkHash] = href.toLowerCase().split('#');
+      const cleanLinkPage = (linkPage || 'index.html').split('/').pop();
       const currentFile = (path === '' ? 'index.html' : path);
-      if (cleanHref === currentFile) {
+
+      let isActive = false;
+      if (cleanLinkPage === currentFile) {
+        if (linkHash) {
+          isActive = currentHash === ('#' + linkHash) ||
+            ((linkHash === 'vision-mission' || linkHash === 'mission-vision') && (currentHash === '#vision-mission' || currentHash === '#mission-vision'));
+        } else {
+          isActive = !currentHash;
+        }
+      }
+
+      if (isActive) {
         link.classList.add('active');
       } else {
         link.classList.remove('active');
@@ -132,6 +145,7 @@ function initActiveNavigation() {
 function initScrollSpy() {
   const sections = document.querySelectorAll('section[id], header[id]');
   const navLinks = document.querySelectorAll('.dropdown-menu a[href*="#"], .drawer-accordion-content a[href*="#"]');
+  const basePageLinks = document.querySelectorAll('.dropdown-menu a:not([href*="#"]), .drawer-accordion-content a:not([href*="#"])');
 
   if (!sections.length || !navLinks.length) return;
 
@@ -150,10 +164,27 @@ function initScrollSpy() {
     if (currentId) {
       navLinks.forEach(link => {
         const href = link.getAttribute('href');
-        if (href && href.includes('#' + currentId)) {
+        const matches = href && (
+          href.includes('#' + currentId) ||
+          ((currentId === 'mission-vision' || currentId === 'vision-mission') && (href.includes('#vision-mission') || href.includes('#mission-vision')))
+        );
+        if (matches) {
           link.classList.add('active');
         } else {
           link.classList.remove('active');
+        }
+      });
+
+      // Clear active on top base-page items while inside a specific section
+      basePageLinks.forEach(link => link.classList.remove('active'));
+    } else if (window.scrollY < 200) {
+      // Near top of page, restore base page link active
+      navLinks.forEach(link => link.classList.remove('active'));
+      const rawPath = window.location.pathname.split('/').pop() || 'index.html';
+      basePageLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.split('#')[0] === rawPath) {
+          link.classList.add('active');
         }
       });
     }
@@ -168,20 +199,64 @@ function initScrollSpy() {
 function initCurriculumAccordion() {
   const headers = document.querySelectorAll('.curriculum-header');
   headers.forEach(header => {
-    header.addEventListener('click', () => {
-      const parent = header.parentElement;
-      const isActive = parent.classList.contains('active');
+    if (header.dataset.curriculumBound) return;
+    header.dataset.curriculumBound = 'true';
 
-      document.querySelectorAll('.curriculum-item').forEach(item => {
+    // Initial ARIA state
+    const parent = header.closest('.curriculum-item');
+    const isCurrentlyActive = parent && parent.classList.contains('active');
+    header.setAttribute('aria-expanded', isCurrentlyActive ? 'true' : 'false');
+
+    header.addEventListener('click', (e) => {
+      const currentParent = header.closest('.curriculum-item');
+      if (!currentParent) return;
+
+      const listContainer = currentParent.closest('.curriculum-list') || document;
+      const isActive = currentParent.classList.contains('active');
+
+      // Close sibling items in this list container
+      listContainer.querySelectorAll('.curriculum-item').forEach(item => {
         item.classList.remove('active');
+        const h = item.querySelector('.curriculum-header');
+        if (h) h.setAttribute('aria-expanded', 'false');
       });
 
       if (!isActive) {
-        parent.classList.add('active');
+        currentParent.classList.add('active');
+        header.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        header.click();
       }
     });
   });
+
+  // Handle URL query parameter ?level=foundation|intermediate|advanced
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetLevel = (urlParams.get('level') || '').toLowerCase();
+  if (targetLevel) {
+    const matchingBadge = document.querySelector(`.curriculum-mod-badge.stage-${targetLevel}`) ||
+      document.querySelector(`.curriculum-mod-badge[class*="${targetLevel}"]`);
+    if (matchingBadge) {
+      const targetItem = matchingBadge.closest('.curriculum-item');
+      if (targetItem) {
+        document.querySelectorAll('.curriculum-item').forEach(item => {
+          item.classList.remove('active');
+          const h = item.querySelector('.curriculum-header');
+          if (h) h.setAttribute('aria-expanded', 'false');
+        });
+        targetItem.classList.add('active');
+        const h = targetItem.querySelector('.curriculum-header');
+        if (h) h.setAttribute('aria-expanded', 'true');
+      }
+    }
+  }
 }
+window.initCurriculumAccordion = initCurriculumAccordion;
 
 /* ==========================================================================
    Production-Ready Fixed Smart Hide/Show Header Controller
@@ -465,7 +540,7 @@ const concernData = {
       'Assistance during complex orthopedic operations'
     ],
     ctaText: 'Apply Now',
-    ctaLink: 'contact.html',
+    ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_surgery_result.webp'
   },
   radiology: {
@@ -478,7 +553,7 @@ const concernData = {
       'Systematic approach to diagnosing pathology'
     ],
     ctaText: 'Apply Now',
-    ctaLink: 'contact.html',
+    ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_radiology_result.webp'
   },
   'clinic-ready': {
@@ -491,7 +566,7 @@ const concernData = {
       'Effective pet parent communication & counseling'
     ],
     ctaText: 'Apply Now',
-    ctaLink: 'contact.html',
+    ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_foundation_result.webp'
   },
   'first-aid': {
@@ -504,7 +579,7 @@ const concernData = {
       'Heat stroke, poisoning & animal bite protocol'
     ],
     ctaText: 'Apply Now',
-    ctaLink: 'contact.html',
+    ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_petcare_result.webp'
   },
   nurse: {
@@ -517,7 +592,7 @@ const concernData = {
       'Basic medication routes and front desk tasks'
     ],
     ctaText: 'Apply Now',
-    ctaLink: 'contact.html',
+    ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_nurse_result.webp'
   }
 };
@@ -535,24 +610,24 @@ const discoveryDatabase = {
     surgery: {
       name: 'Soft Tissue & Orthopedic Surgery',
       goals: [
-        { text: 'Improve Soft Tissue Surgery Confidence (Spay, Neuter, Organ Resection)', programIds: ['soft-tissue-surgery', 'skill-up'] },
+        { text: 'Improve Soft Tissue Surgery Confidence (Spay, Neuter, Organ Resection)', programIds: ['soft-tissue-surgery'] },
         { text: 'Master Small Animal Orthopaedics (Fracture Stabilization & Bone Plating)', programIds: ['orthopaedics', 'soft-tissue-surgery'] },
-        { text: 'Learn Operating Theater Sterilization & Surgical Protocols', programIds: ['soft-tissue-surgery', 'skill-up'] }
+        { text: 'Learn Operating Theater Sterilization & Surgical Protocols', programIds: ['soft-tissue-surgery', 'veterinary-dentistry'] }
       ]
     },
     radiology: {
       name: 'Radiology & Diagnostic Ultrasound',
       goals: [
-        { text: 'Abdominal Ultrasound FAST Scans & Probe Handling Ergonomics', programIds: ['radiology-ultrasound', 'skill-up'] },
-        { text: 'Digital X-Ray Contrast Reading & Thoracic Radiography', programIds: ['radiology-ultrasound', 'skill-up'] },
-        { text: 'Organ Pathology Mapping & Bedside Ultrasound Diagnostics', programIds: ['radiology-ultrasound'] }
+        { text: 'Abdominal Ultrasound FAST Scans & Probe Handling Ergonomics', programIds: ['radiology-ultrasound', 'diagnostic-imaging'] },
+        { text: 'Digital X-Ray Contrast Reading & Thoracic Radiography', programIds: ['diagnostic-imaging', 'radiology-ultrasound'] },
+        { text: 'Organ Pathology Mapping & Bedside Ultrasound Diagnostics', programIds: ['radiology-ultrasound', 'laboratory-diagnostics', 'clinical-pathology'] }
       ]
     },
     emergency: {
       name: 'Emergency & Critical Care',
       goals: [
-        { text: 'RECOVER CPR Protocols, Triage & Fluid Resuscitation', programIds: ['emergency-care', 'skill-up'] },
-        { text: 'Trauma Patient ICU Monitoring & Shock Therapy', programIds: ['emergency-care'] },
+        { text: 'RECOVER CPR Protocols, Triage & Fluid Resuscitation', programIds: ['emergency-care', 'pet-first-aid'] },
+        { text: 'Trauma Patient ICU Monitoring & Shock Therapy', programIds: ['emergency-care', 'anaesthesia-and-pain-management'] },
         { text: 'Pet First Aid, Choking Release & Home Emergency Response', programIds: ['pet-first-aid', 'emergency-care'] }
       ]
     },
@@ -560,23 +635,23 @@ const discoveryDatabase = {
       name: 'Vet Nursing & Paravet Skills',
       goals: [
         { text: 'Patient Restraint, IV Setup & Scrub Assistant Training', programIds: ['vet-nurse'] },
-        { text: 'OT Sterilization, Anesthesia Monitoring & Wound Dressing', programIds: ['vet-nurse'] },
-        { text: 'Clinic Workflow Readiness & Patient Record Systems', programIds: ['vet-nurse', 'skill-up'] }
+        { text: 'OT Sterilization, Anesthesia Monitoring & Wound Dressing', programIds: ['vet-nurse', 'anaesthesia-and-pain-management'] },
+        { text: 'Clinic Workflow Readiness & Patient Record Systems', programIds: ['vet-nurse', 'veterinary-ethics-and-practice-management'] }
       ]
     },
     'skill-up': {
       name: 'Comprehensive Clinical Skill-Up',
       goals: [
-        { text: 'Full Transition Training for Independent Clinical Mastery', programIds: ['skill-up'] },
-        { text: 'ECG Rhythm Analysis, Prescription Protocols & Diagnostics', programIds: ['skill-up'] },
-        { text: 'Everyday Clinical Essentials & Surgical/Emergency Foundations', programIds: ['skill-up'] }
+        { text: 'Full Transition Training for Independent Clinical Mastery', programIds: ['skill-up', 'general-medicine'] },
+        { text: 'ECG Rhythm Analysis, Prescription Protocols & Diagnostics', programIds: ['skill-up', 'veterinary-cardiology', 'clinical-pathology'] },
+        { text: 'Everyday Clinical Essentials & Surgical/Emergency Foundations', programIds: ['skill-up', 'general-medicine'] }
       ]
     },
     all: {
       name: 'All Learning Tracks',
       goals: [
-        { text: 'Explore Flagship Clinical Programs', programIds: ['skill-up', 'soft-tissue-surgery'] },
-        { text: 'Explore Diagnostic & Imaging Workshops', programIds: ['radiology-ultrasound'] },
+        { text: 'Explore Flagship Clinical Programs', programIds: ['skill-up', 'soft-tissue-surgery', 'general-medicine'] },
+        { text: 'Explore Diagnostic & Imaging Workshops', programIds: ['radiology-ultrasound', 'diagnostic-imaging', 'laboratory-diagnostics'] },
         { text: 'Explore Emergency & Nursing Courses', programIds: ['emergency-care', 'vet-nurse', 'pet-first-aid'] }
       ]
     }
@@ -586,99 +661,239 @@ const discoveryDatabase = {
       id: 'skill-up',
       title: 'Veterinary Skill-Up Program',
       badge: 'FLAGSHIP PROGRAM',
+      category: 'Comprehensive Clinical Track',
       level: 'Foundation to Advanced',
-      duration: '6 Weeks (Hands-on)',
+      duration: '4 Weeks (120+ Hrs)',
       url: 'veterinary-skill-up.html',
-      topics: ['skill-up', 'surgery', 'radiology', 'emergency'],
+      topics: ['skill-up', 'all'],
       levels: ['foundation', 'intermediate', 'advanced'],
-      image: 'assets/images/edu-flagship-skillup.webp',
-      description: 'Comprehensive clinical immersion course focusing on soft tissue surgery assistance, digital radiology, ECG interpretation, and emergency response.',
-      outcomes: ['Soft Tissue Surgery', 'Digital Radiology', 'ECG & Cardiology', 'Emergency Triage'],
-      formProgram: 'skill-up'
+      image: 'assets/images/programs/program-skill-up.webp',
+      description: 'Comprehensive 4-week clinical mastery module covering soft tissue surgery, digital radiology, abdominal ultrasound, and emergency triage.',
+      outcomes: ['Soft Tissue Surgery', 'Digital Radiology', 'ECG & Cardiology', 'Emergency Triage']
     },
     {
       id: 'soft-tissue-surgery',
       title: 'Soft Tissue Surgery Masterclass',
       badge: 'SURGERY TRACK',
+      category: 'Surgery',
       level: 'Intermediate to Advanced',
-      duration: '4 Weeks',
+      duration: '1 to 4 Weeks',
       url: 'soft-tissue-surgery.html',
-      topics: ['surgery'],
-      levels: ['intermediate', 'advanced'],
-      image: 'assets/images/program-surgery.webp',
+      topics: ['surgery', 'all'],
+      levels: ['foundation', 'intermediate', 'advanced'],
+      image: 'assets/images/programs/program-surgery.webp',
       description: 'Master standard surgical incisions, stitching techniques, spay/neuter protocols, and abdominal organ surgeries under direct mentor guidance.',
-      outcomes: ['Independent Surgical Cases', 'OT Sterilization Protocols', 'Abdominal Organ Surgeries', 'Tissue Handling'],
-      formProgram: 'surgery'
+      outcomes: ['Independent Surgical Cases', 'OT Sterilization Protocols', 'Abdominal Organ Surgeries', 'Tissue Handling']
     },
     {
       id: 'orthopaedics',
       title: 'Small Animal Orthopaedics',
       badge: 'SURGERY SPECIALIST',
-      level: 'Advanced',
-      duration: '6 Weeks',
-      url: 'soft-tissue-surgery.html',
-      topics: ['surgery'],
-      levels: ['advanced'],
-      image: 'assets/images/hero-veterinary-training.webp',
-      description: 'Comprehensive training in bone fracture stabilization, dynamic bone plating, IM pinning, and joint injury management in dogs and cats.',
-      outcomes: ['Bone Fracture Fixation', 'Dynamic Bone Plating', 'IM Pinning', 'Post-Op Radiology'],
-      formProgram: 'surgery'
+      category: 'Surgery',
+      level: 'Intermediate to Advanced',
+      duration: '2 to 4 Weeks',
+      url: 'orthopaedics.html',
+      topics: ['surgery', 'all'],
+      levels: ['intermediate', 'advanced'],
+      image: 'assets/images/programs/program-orthopaedics.webp',
+      description: 'Hands-on orthopaedic surgery curriculum covering fracture mechanics, bone splinting, internal/external fixation, and joint stabilization.',
+      outcomes: ['Bone Fracture Fixation', 'Dynamic Bone Plating', 'IM Pinning', 'Post-Op Radiology']
     },
     {
       id: 'radiology-ultrasound',
       title: 'Ultrasound & Diagnostic Radiology',
       badge: 'RADIOLOGY TRACK',
-      level: 'Intermediate',
+      category: 'Diagnostics & Imaging',
+      level: 'Foundation to Intermediate',
       duration: '3 Weeks',
       url: 'radiology-ultrasound.html',
-      topics: ['radiology'],
+      topics: ['radiology', 'all'],
       levels: ['foundation', 'intermediate'],
       image: 'assets/images/facility-radiology.webp',
       description: 'Hands-on probe handling, acoustic windows, systematic abdominal scanning, and digital radiograph contrast reading.',
-      outcomes: ['Abdominal FAST Scanning', 'Probe Ergonomics', 'X-Ray Contrast Interpretation', 'Organ Mapping'],
-      formProgram: 'surgery'
+      outcomes: ['Abdominal FAST Scanning', 'Probe Ergonomics', 'X-Ray Contrast Interpretation', 'Organ Mapping']
+    },
+    {
+      id: 'diagnostic-imaging',
+      title: 'Diagnostic Imaging',
+      badge: 'DIAGNOSTIC SPECIALIZATION',
+      category: 'Diagnostics & Imaging',
+      level: 'Foundation to Advanced',
+      duration: '3 to 4 Weeks',
+      url: 'diagnostic-imaging.html',
+      topics: ['radiology', 'all'],
+      levels: ['foundation', 'intermediate', 'advanced'],
+      image: 'assets/images/facility-radiology.webp',
+      description: 'In-depth radiographic positioning, contrast studies, thoracic evaluation, and abdominal ultrasonography interpretation.',
+      outcomes: ['Thoracic & Abdominal X-Ray', 'Ultrasound Interpretation', 'Artifact Recognition', 'Case Auditing']
     },
     {
       id: 'emergency-care',
       title: 'Emergency & Critical Care Triage',
       badge: 'EMERGENCY TRACK',
+      category: 'Emergency & Critical Care',
       level: 'Intermediate to Advanced',
       duration: '2 Weeks',
-      url: 'emergency-medicine.html',
-      topics: ['emergency'],
-      levels: ['intermediate', 'advanced'],
+      url: 'emergency-and-critical-care.html',
+      topics: ['emergency', 'all'],
+      levels: ['foundation', 'intermediate', 'advanced'],
       image: 'assets/images/learning-path-specialist.webp',
       description: 'Rapid patient triage, RECOVER CPR resuscitation protocols, fluid therapy management, and ICU monitoring for small animals.',
-      outcomes: ['RECOVER CPR Protocols', 'IV Catheterization & Shock', 'Fluid Resuscitation', 'ICU Monitoring'],
-      formProgram: 'first-aid'
+      outcomes: ['RECOVER CPR Protocols', 'IV Catheterization & Shock', 'Fluid Resuscitation', 'ICU Monitoring']
     },
     {
       id: 'pet-first-aid',
       title: 'Pet First Aid & Emergency Response',
       badge: 'PET CARE WORKSHOP',
+      category: 'Emergency & Critical Care',
       level: 'Foundational',
       duration: '2 Days Workshop',
       url: 'emergency-medicine.html',
       topics: ['emergency', 'all'],
       levels: ['foundation'],
       image: 'assets/vet_selector_petcare_card.webp',
-      description: 'Essential hands-on training for pet owners, rescuers, and shelter volunteers on wound dressing, toxin response, choking release, and pet CPR.',
-      outcomes: ['Choking & CPR Simulation', 'Wound Bandaging', 'Toxin Emergency Action', 'First Aid Kit Usage'],
-      formProgram: 'first-aid'
+      description: 'Essential hands-on training for pet owners, rescuers, and clinic assistants on wound dressing, toxin response, choking release, and pet CPR.',
+      outcomes: ['Choking & CPR Simulation', 'Wound Bandaging', 'Toxin Emergency Action', 'First Aid Kit Usage']
     },
     {
       id: 'vet-nurse',
       title: 'Certified Vet Nursing & Paravet Skills',
       badge: 'VET NURSE TRACK',
+      category: 'Veterinary Nursing',
       level: 'Foundational',
       duration: '4 Weeks',
       url: 'vet-nurse-programme.html',
-      topics: ['nurse'],
+      topics: ['nurse', 'all'],
       levels: ['foundation', 'intermediate'],
       image: 'assets/images/learning-path-nurse.webp',
       description: 'Designed for clinic assistants and nursing staff to master patient restraint, surgical scrub prep, anesthesia monitoring, and wound care.',
-      outcomes: ['Patient Restraint & IV Setup', 'OT Scrub & Sterilization', 'Anesthesia Monitoring', 'Clinic Workflow'],
-      formProgram: 'nurse'
+      outcomes: ['Patient Restraint & IV Setup', 'OT Scrub & Sterilization', 'Anesthesia Monitoring', 'Clinic Workflow']
+    },
+    {
+      id: 'anaesthesia-and-pain-management',
+      title: 'Anaesthesia and Pain Management',
+      badge: 'ANAESTHESIA TRACK',
+      category: 'Anaesthesia',
+      level: 'Foundation to Advanced',
+      duration: '2 to 4 Weeks',
+      url: 'anaesthesia-and-pain-management.html',
+      topics: ['emergency', 'nurse', 'all'],
+      levels: ['foundation', 'intermediate', 'advanced'],
+      image: 'assets/images/programs/program-anaesthesia.webp',
+      description: 'Pre-anaesthetic patient evaluation, multi-modal analgesia, inhalation anaesthesia protocols, and intra-operative monitoring.',
+      outcomes: ['Inhalation Anaesthesia', 'Multi-Modal Analgesia', 'Vapour Machine Setup', 'Emergency Reversal']
+    },
+    {
+      id: 'general-medicine',
+      title: 'General Medicine',
+      badge: 'INTERNAL MEDICINE',
+      category: 'Internal Medicine',
+      level: 'Foundation to Advanced',
+      duration: '4 Weeks / Modular',
+      url: 'general-medicine.html',
+      topics: ['skill-up', 'all'],
+      levels: ['foundation', 'intermediate', 'advanced'],
+      image: 'assets/images/programs/program-skill-up.webp',
+      description: 'Systematic clinical diagnostic and therapeutic protocols for small animal internal medicine practice.',
+      outcomes: ['Clinical Exam & History', 'Fluid Therapy Plans', 'Diagnostic Workups', 'Rational Drug Use']
+    },
+    {
+      id: 'veterinary-cardiology',
+      title: 'Veterinary Cardiology',
+      badge: 'CARDIOLOGY TRACK',
+      category: 'Internal Medicine',
+      level: 'Intermediate to Advanced',
+      duration: '2 to 4 Weeks',
+      url: 'veterinary-cardiology.html',
+      topics: ['skill-up', 'all'],
+      levels: ['intermediate', 'advanced'],
+      image: 'assets/images/programs/program-cardiology.webp',
+      description: 'Cardiac auscultation, ECG rhythm interpretation, cardiac ultrasound Doppler basics, and heart failure management.',
+      outcomes: ['ECG Lead Placement', 'Arrhythmia Recognition', 'Heart Failure Triage', 'Cardiology Prescriptions']
+    },
+    {
+      id: 'laboratory-diagnostics',
+      title: 'Laboratory Diagnostics',
+      badge: 'LAB DIAGNOSTICS',
+      category: 'Diagnostics & Imaging',
+      level: 'Foundation to Intermediate',
+      duration: '2 Weeks',
+      url: 'laboratory-diagnostics.html',
+      topics: ['radiology', 'all'],
+      levels: ['foundation', 'intermediate'],
+      image: 'assets/images/programs/program-laboratory-diagnostics.webp',
+      description: 'Microscope calibration, rapid in-house test kits, gram staining, skin scraping, and cytological preparation techniques.',
+      outcomes: ['In-House Test Kits', 'Microscope Alignment', 'Skin Scraping Cytology', 'Sample Preservation']
+    },
+    {
+      id: 'clinical-pathology',
+      title: 'Clinical Pathology',
+      badge: 'PATHOLOGY TRACK',
+      category: 'Pathology & Diagnostics',
+      level: 'Foundation to Advanced',
+      duration: '2 to 3 Weeks',
+      url: 'clinical-pathology.html',
+      topics: ['radiology', 'all'],
+      levels: ['foundation', 'intermediate', 'advanced'],
+      image: 'assets/images/programs/program-clinical-pathology.webp',
+      description: 'Complete blood count, peripheral blood smear cytology, biochemical profiles, urinalysis, and body fluid interpretation.',
+      outcomes: ['Blood Smear Cytology', 'Biochemistry Reading', 'Urine Sediment Exam', 'Rapid Lab Staining']
+    },
+    {
+      id: 'clinical-microbiology',
+      title: 'Clinical Microbiology',
+      badge: 'MICROBIOLOGY TRACK',
+      category: 'Pathology & Diagnostics',
+      level: 'Intermediate to Advanced',
+      duration: '2 Weeks',
+      url: 'clinical-microbiology.html',
+      topics: ['radiology', 'all'],
+      levels: ['intermediate', 'advanced'],
+      image: 'assets/images/programs/program-microbiology.webp',
+      description: 'Bacterial culture techniques, antibiotic sensitivity testing, fungal identification, and antimicrobial resistance monitoring.',
+      outcomes: ['Culture & Sensitivity', 'Gram Staining', 'Fungal Diagnostics', 'Antimicrobial Stewardship']
+    },
+    {
+      id: 'veterinary-dentistry',
+      title: 'Veterinary Dentistry',
+      badge: 'DENTISTRY TRACK',
+      category: 'Dentistry & Oral Surgery',
+      level: 'Foundation to Advanced',
+      duration: '2 Weeks',
+      url: 'veterinary-dentistry.html',
+      topics: ['surgery', 'all'],
+      levels: ['foundation', 'intermediate', 'advanced'],
+      image: 'assets/images/programs/program-dentistry.webp',
+      description: 'Ultrasonic scaling, dental charting, nerve blocks, simple and surgical extractions, and periodontal disease therapy.',
+      outcomes: ['Dental Charting', 'Local Nerve Blocks', 'Surgical Extractions', 'Ultrasonic Scaling']
+    },
+    {
+      id: 'veterinary-ethics-and-practice-management',
+      title: 'Veterinary Ethics & Practice Management',
+      badge: 'PRACTICE MANAGEMENT',
+      category: 'Practice Management',
+      level: 'Foundation to Intermediate',
+      duration: '1 to 2 Weeks',
+      url: 'veterinary-ethics-and-practice-management.html',
+      topics: ['nurse', 'all'],
+      levels: ['foundation', 'intermediate'],
+      image: 'assets/images/programs/program-ethics-practice.webp',
+      description: 'Client communication, clinical consent protocols, medical record keeping, inventory control, and veterinary professional ethics.',
+      outcomes: ['Client Communication', 'Informed Consent Forms', 'Medical Records', 'Inventory Control']
+    },
+    {
+      id: 'veterinary-dermatology',
+      title: 'Veterinary Dermatology',
+      badge: 'DERMATOLOGY TRACK',
+      category: 'Dermatology',
+      level: 'Foundation to Advanced',
+      duration: '2 to 4 Weeks',
+      url: 'veterinary-dermatology.html',
+      topics: ['skill-up', 'all'],
+      levels: ['foundation', 'intermediate', 'advanced'],
+      image: 'assets/images/programs/program-dermatology.webp',
+      description: 'Clinical approach to pruritus, deep pyoderma, atopic dermatitis, allergy testing, and cytology of skin and ear lesions.',
+      outcomes: ['Skin & Ear Cytology', 'Allergy Workups', 'Ectoparasite Scrapes', 'Atopy Protocols']
     }
   ]
 };
@@ -689,6 +904,48 @@ let discoveryState = {
   selectedGoal: null,
   selectedLevel: 'all'
 };
+
+let discoveryMatchedPrograms = [];
+let discoveryVisibleCount = 3;
+
+function getDiscoveryCatalog() {
+  const baseCatalog = (discoveryDatabase.programs || []).filter(p => !p.isDemo);
+
+  // If window.VETNOVA_28_PROGRAMS is loaded, incorporate any published programs not yet in baseCatalog
+  if (Array.isArray(window.VETNOVA_28_PROGRAMS) && window.VETNOVA_28_PROGRAMS.length > 0) {
+    const existingSlugs = new Set(baseCatalog.map(p => p.url ? p.url.replace('.html', '').toLowerCase() : ''));
+    window.VETNOVA_28_PROGRAMS.forEach(p => {
+      const slug = (p.slug || '').toLowerCase();
+      if (!existingSlugs.has(slug) && p.title) {
+        const cat = (p.category || '').toLowerCase();
+        const topics = ['all'];
+        if (cat.includes('surgery')) topics.push('surgery');
+        if (cat.includes('imaging') || cat.includes('diagnostic') || cat.includes('pathology')) topics.push('radiology');
+        if (cat.includes('emergency') || cat.includes('anaesthesia')) topics.push('emergency');
+        if (cat.includes('nurse') || cat.includes('nursing')) topics.push('nurse');
+        if (cat.includes('medicine') || cat.includes('skill')) topics.push('skill-up');
+
+        baseCatalog.push({
+          id: slug,
+          title: p.title,
+          badge: (p.category || 'CLINICAL SPECIALTY').toUpperCase(),
+          category: p.category || 'Clinical Discipline',
+          level: 'Foundation to Advanced',
+          duration: p.duration || '2 to 4 Weeks',
+          url: `${slug}.html`,
+          topics: topics,
+          levels: ['foundation', 'intermediate', 'advanced'],
+          image: p.image || 'assets/images/programs/program-skill-up.webp',
+          description: p.description || 'Structured clinical training with hands-on practice under expert guidance.',
+          outcomes: ['Clinical Case Discussion', 'Hands-on Skill Practice', 'Diagnostic Assessment', 'Mentored Feedback']
+        });
+        existingSlugs.add(slug);
+      }
+    });
+  }
+
+  return baseCatalog;
+}
 
 function initQuiz() {
   initProgramDiscovery();
@@ -708,11 +965,21 @@ function initProgramDiscovery() {
   const backBtn = document.getElementById('quiz-back-btn');
   const resetBtn = document.getElementById('quiz-reset-btn');
   const levelPills = document.querySelectorAll('.discovery-level-filter .level-pill');
+  const loadMoreBtn = document.getElementById('discovery-load-more-btn');
 
   if (!topicButtons || topicButtons.length === 0 || !step1) return;
 
   // Initialize strictly at Step 1: No cards rendered, Step 2 & 3 locked
   resetToStep1();
+
+  // Attach Load More button listener
+  if (loadMoreBtn && !loadMoreBtn.dataset.bound) {
+    loadMoreBtn.dataset.bound = 'true';
+    loadMoreBtn.addEventListener('click', () => {
+      discoveryVisibleCount += 3;
+      renderDiscoveryCards();
+    });
+  }
 
   function resetToStep1(shouldScroll = false) {
     const wasStarted = discoveryState.discoveryStarted;
@@ -722,11 +989,21 @@ function initProgramDiscovery() {
       selectedGoal: null,
       selectedLevel: 'all'
     };
+    discoveryMatchedPrograms = [];
+    discoveryVisibleCount = 3;
 
     topicButtons.forEach(b => b.classList.remove('selected'));
+    if (levelPills) {
+      levelPills.forEach(p => {
+        if (p.dataset.level === 'all') p.classList.add('active');
+        else p.classList.remove('active');
+      });
+    }
     if (goalContainer) goalContainer.innerHTML = '';
     const resultsContainer = document.getElementById('discovery-program-cards');
     if (resultsContainer) resultsContainer.innerHTML = '';
+    const loadMoreWrap = document.getElementById('discovery-load-more-wrap');
+    if (loadMoreWrap) loadMoreWrap.style.display = 'none';
 
     if (step1) step1.classList.add('active');
     if (step2) step2.classList.remove('active');
@@ -763,6 +1040,7 @@ function initProgramDiscovery() {
       discoveryState.selectedTopic = topicKey;
       discoveryState.discoveryStarted = true;
       discoveryState.selectedGoal = null;
+      discoveryVisibleCount = 3;
 
       populateGoals(topicKey);
 
@@ -792,6 +1070,12 @@ function initProgramDiscovery() {
         levelPills.forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
         discoveryState.selectedLevel = pill.dataset.level || 'all';
+        discoveryVisibleCount = 3;
+
+        // If Step 3 is already active, re-calculate and re-render
+        if (step3 && step3.classList.contains('active')) {
+          renderDiscoveryResults(discoveryState.selectedGoal);
+        }
       });
     });
   }
@@ -822,7 +1106,7 @@ function initProgramDiscovery() {
 
   // Reset Button (Step 3 -> Step 1)
   if (resetBtn) {
-    resetBtn.addEventListener('click', resetToStep1);
+    resetBtn.addEventListener('click', () => resetToStep1(true));
   }
 
   function populateGoals(topicKey) {
@@ -843,6 +1127,7 @@ function initProgramDiscovery() {
         `;
         btn.addEventListener('click', () => {
           discoveryState.selectedGoal = goal;
+          discoveryVisibleCount = 3;
           renderDiscoveryResults(goal);
         });
         goalContainer.appendChild(btn);
@@ -850,12 +1135,90 @@ function initProgramDiscovery() {
     }
   }
 
-  function renderDiscoveryResults(goal) {
+  function renderDiscoveryCards() {
     const resultsContainer = document.getElementById('discovery-program-cards');
+    const loadMoreWrap = document.getElementById('discovery-load-more-wrap');
+    const loadMoreBtn = document.getElementById('discovery-load-more-btn');
+    if (!resultsContainer) return;
+
+    if (discoveryMatchedPrograms.length === 0) {
+      resultsContainer.innerHTML = `
+        <div class="discovery-empty-state" style="text-align: center; padding: 48px 24px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 16px; grid-column: 1 / -1;">
+          <i class="fa-solid fa-compass-drafting" style="font-size: 36px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
+          <h3 style="font-size: 1.15rem; color: #334155; margin-bottom: 8px; font-weight: 600;">No programs currently match these exact selections.</h3>
+          <p style="font-size: 0.95rem; color: #64748b; margin: 0 0 20px 0;">We couldn't find a program matching your exact level refinement. Would you like to reset your selections or speak with our academic advisors?</p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline btn-sm" id="empty-reset-btn"><i class="fa-solid fa-rotate-right"></i> Reset Selections</button>
+            <a href="contact.html#contact-form" class="btn btn-primary btn-sm"><i class="fa-solid fa-calendar-check"></i> Book Free Counselling</a>
+          </div>
+        </div>
+      `;
+      const emptyResetBtn = document.getElementById('empty-reset-btn');
+      if (emptyResetBtn) emptyResetBtn.addEventListener('click', () => resetToStep1(false));
+      if (loadMoreWrap) loadMoreWrap.style.display = 'none';
+      return;
+    }
+
+    const visibleSlice = discoveryMatchedPrograms.slice(0, discoveryVisibleCount);
+
+    resultsContainer.innerHTML = visibleSlice.map(p => {
+      const badgeText = p.badge || 'VERIFIED PROGRAM';
+      const cardImg = p.image || 'assets/images/programs/program-skill-up.webp';
+      const outcomesHtml = (p.outcomes && p.outcomes.length > 0)
+        ? `<div class="discovery-card-outcomes">
+            ${p.outcomes.slice(0, 3).map(o => `<span><i class="fa-solid fa-check"></i> ${o}</span>`).join('')}
+          </div>`
+        : '';
+
+      const programSlug = p.slug || p.id || p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      return `
+        <div class="discovery-card">
+          <div class="discovery-card-img-wrap" style="position: relative;">
+            <img src="${cardImg}" alt="${p.title}" loading="lazy" />
+            <span class="discovery-card-badge">${badgeText}</span>
+          </div>
+          <div class="discovery-card-body">
+            <div class="discovery-card-meta">
+              <span><i class="fa-solid fa-signal"></i> ${p.level || 'All Levels'}</span>
+              <span><i class="fa-solid fa-book-open"></i> ${p.category || 'Clinical Track'}</span>
+              <span><i class="fa-solid fa-hospital"></i> Offline Vet Lab</span>
+            </div>
+            <h4 class="discovery-card-title">${p.title}</h4>
+            <p class="discovery-card-desc">${p.description}</p>
+            ${outcomesHtml}
+            <div class="discovery-card-actions" style="margin-top: 16px; display: flex; gap: 8px;">
+              <a href="${p.url}" class="btn btn-primary btn-sm">
+                Explore Program <i class="fa-solid fa-arrow-right"></i>
+              </a>
+              <a href="contact.html?program=${encodeURIComponent(programSlug)}#contact-form" class="btn btn-outline btn-sm">
+                Enquire Now
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Re-bind modal triggers for dynamically created enquire buttons
+    if (typeof bindModalTriggers === 'function') {
+      bindModalTriggers();
+    }
+
+    // Update Load More Programs button visibility and text
+    if (loadMoreWrap && loadMoreBtn) {
+      if (discoveryMatchedPrograms.length > discoveryVisibleCount) {
+        loadMoreWrap.style.display = 'block';
+        loadMoreBtn.disabled = false;
+        loadMoreBtn.innerHTML = `<i class="fa-solid fa-plus-circle" style="margin-right: 6px;"></i> Load More Programs (${discoveryMatchedPrograms.length - discoveryVisibleCount} remaining)`;
+      } else {
+        loadMoreWrap.style.display = 'none';
+      }
+    }
+  }
+
+  function renderDiscoveryResults(goal) {
     const resultsTitle = document.getElementById('discovery-results-title');
     const resultsSubtitle = document.getElementById('discovery-results-subtitle');
-
-    if (!resultsContainer) return;
 
     if (resultsTitle) {
       if (discoveryState.selectedTopic === 'all') {
@@ -865,92 +1228,48 @@ function initProgramDiscovery() {
         resultsTitle.textContent = `Relevant Programs for ${topicName}`;
       }
     }
-    if (resultsSubtitle && goal) {
-      resultsSubtitle.textContent = `Targeting: "${goal.text}"`;
+    if (resultsSubtitle) {
+      if (goal && goal.text) {
+        resultsSubtitle.textContent = `Targeting: "${goal.text}"`;
+      } else {
+        resultsSubtitle.textContent = 'Official VetNova clinical programs aligned with your clinical learning goals.';
+      }
     }
 
-    // Filter window.VETNOVA_PROGRAMS_DATA directly - NO duplicate hardcoded database!
-    const topicToTrackMap = {
-      'surgery': ['practicing-vets', 'fresh-graduates'],
-      'radiology': ['diagnostic-specialization'],
-      'emergency': ['emergency-care'],
-      'nurse': ['vet-nurse'],
-      'skill-up': ['fresh-graduates', 'practicing-vets'],
-      'all': ['fresh-graduates', 'practicing-vets', 'diagnostic-specialization', 'emergency-care', 'vet-nurse']
-    };
+    // 1. Retrieve all genuine published discovery programs (no demos)
+    const catalog = getDiscoveryCatalog();
 
-    const targetTracks = topicToTrackMap[discoveryState.selectedTopic] || topicToTrackMap['all'];
-
-    let matchedPrograms = (window.VETNOVA_PROGRAMS_DATA || []).filter(p => {
-      const matchesTopic = discoveryState.selectedTopic === 'all' ? true : targetTracks.includes(p.track);
-      
-      let matchesLevel = true;
-      if (discoveryState.selectedLevel === 'foundation') matchesLevel = (p.grade === 1);
-      else if (discoveryState.selectedLevel === 'intermediate') matchesLevel = (p.grade === 2 || p.grade === 3);
-      else if (discoveryState.selectedLevel === 'advanced') matchesLevel = (p.grade === 4 || p.grade === 5);
-
-      return matchesTopic && matchesLevel;
+    // 2. Filter programs by topic
+    let filtered = catalog.filter(p => {
+      if (!p || p.isDemo) return false;
+      if (discoveryState.selectedTopic === 'all') return true;
+      return p.topics && p.topics.includes(discoveryState.selectedTopic);
     });
 
-    if (matchedPrograms.length === 0) {
-      resultsContainer.innerHTML = `
-        <div class="discovery-empty-state" style="text-align: center; padding: 48px 24px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 16px;">
-          <i class="fa-solid fa-compass-drafting" style="font-size: 36px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
-          <h3 style="font-size: 1.15rem; color: #334155; margin-bottom: 8px; font-weight: 600;">No programs currently match these exact selections.</h3>
-          <p style="font-size: 0.95rem; color: #64748b; margin: 0 0 20px 0;">We couldn't find a program matching your exact level refinement. Would you like to reset your selections or speak with our academic advisors?</p>
-          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn btn-outline btn-sm" id="empty-reset-btn"><i class="fa-solid fa-rotate-right"></i> Reset Selections</button>
-            <a href="contact.html#enquiry" class="btn btn-primary btn-sm"><i class="fa-solid fa-calendar-check"></i> Book Free Counselling</a>
-          </div>
-        </div>
-      `;
-      const emptyResetBtn = document.getElementById('empty-reset-btn');
-      if (emptyResetBtn) emptyResetBtn.addEventListener('click', resetToStep1);
-    } else {
-      const trackImageMap = {
-        'practicing-vets': 'assets/images/programs/program-surgery.webp',
-        'fresh-graduates': 'assets/images/programs/program-skill-up.webp',
-        'diagnostic-specialization': 'assets/images/programs/program-radiology.webp',
-        'emergency-care': 'assets/images/programs/program-emergency.webp',
-        'vet-nurse': 'assets/images/programs/program-nurse.webp'
-      };
-
-      resultsContainer.innerHTML = matchedPrograms.map(p => {
-        const isDemo = p.isDemo;
-        const badgeText = isDemo ? 'Demo Program' : `Grade ${p.grade} — ${p.gradeName}`;
-        const levelCode = (p.gradeCode === 'grade-1') ? 'foundation' : (p.gradeCode === 'grade-2' || p.gradeCode === 'grade-3') ? 'intermediate' : 'advanced';
-        const exploreLink = isDemo ? `programs.html?level=${levelCode}&track=${p.track}` : p.url;
-        const cardImg = p.image || trackImageMap[p.track] || 'assets/images/programs/program-skill-up.webp';
-        
-        return `
-          <div class="discovery-card ${isDemo ? 'demo-program-card' : ''}">
-            <div class="discovery-card-img-wrap" style="position: relative;">
-              <img src="${cardImg}" alt="${p.title}" loading="lazy" />
-              <span class="discovery-card-badge ${isDemo ? 'badge-demo-pill' : ''}" style="${isDemo ? 'background: #f59e0b; color: #fff;' : ''}">${badgeText}</span>
-            </div>
-            <div class="discovery-card-body">
-              <div class="discovery-card-meta">
-                <span><i class="fa-solid fa-signal"></i> ${p.gradeLabel}</span>
-                <span><i class="fa-solid fa-book-open"></i> ${p.trackLabel}</span>
-                <span><i class="fa-solid fa-hospital"></i> Offline Vet Lab</span>
-              </div>
-              <h4 class="discovery-card-title">${p.title}</h4>
-              <p class="discovery-card-desc">${p.description}</p>
-              <div class="discovery-card-actions" style="margin-top: 16px; display: flex; gap: 8px;">
-                <a href="${exploreLink}" class="btn btn-primary btn-sm">
-                  Explore Program <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                <button type="button" class="btn btn-outline btn-sm btn-show-interest" data-source="Discovery Quiz Enquiry" data-context="${p.title}">
-                  Enquire Now
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
+    // 3. Prioritize by goal if goal has specific programIds
+    if (goal && goal.programIds && goal.programIds.length > 0) {
+      filtered.sort((a, b) => {
+        const aMatch = goal.programIds.includes(a.id);
+        const bMatch = goal.programIds.includes(b.id);
+        if (aMatch && !bMatch) return -1;
+        if (!aMatch && bMatch) return 1;
+        return 0;
+      });
     }
 
-    // Transition view to Step 3
+    // 4. Apply Level Refinement (Step 2)
+    if (discoveryState.selectedLevel && discoveryState.selectedLevel !== 'all') {
+      filtered = filtered.filter(p => p.levels && p.levels.includes(discoveryState.selectedLevel));
+    }
+
+    // 5. Save matching results and reset visible count to 3
+    discoveryMatchedPrograms = filtered;
+    discoveryVisibleCount = 3;
+
+    // 6. Render the first 3 cards initially
+    renderDiscoveryCards();
+
+    // 7. Transition view to Step 3
     if (step2 && step3) {
       step2.classList.remove('active');
       step3.classList.add('active');
@@ -958,11 +1277,11 @@ function initProgramDiscovery() {
 
     if (progressStep1) {
       progressStep1.classList.add('completed');
-      progressStep1.classList.remove('active');
+      progressStep1.classList.remove('active', 'locked');
     }
     if (progressStep2) {
       progressStep2.classList.add('completed');
-      progressStep2.classList.remove('active');
+      progressStep2.classList.remove('active', 'locked');
     }
     if (progressStep3) {
       progressStep3.classList.add('active');
@@ -1182,250 +1501,535 @@ function initContactForm() {
    Smooth Scrolling for Page Anchors
    ========================================================================== */
 function initSmoothScroll() {
-  const links = document.querySelectorAll('a[href^="#"]');
+  function scrollToElementWithOffset(targetElement, behavior = 'smooth') {
+    if (!targetElement) return;
+    const header = document.getElementById('global-header') || document.querySelector('.site-header');
+    const headerHeight = header ? header.getBoundingClientRect().height : 90;
+    const elementPosition = targetElement.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - (headerHeight + 16);
+
+    window.scrollTo({
+      top: Math.max(0, offsetPosition),
+      behavior: behavior
+    });
+
+    if (!targetElement.hasAttribute('tabindex')) {
+      targetElement.setAttribute('tabindex', '-1');
+    }
+    targetElement.focus({ preventScroll: true });
+  }
+
+  // Intercept all anchor links targeting same-page elements or hashes
+  const links = document.querySelectorAll('a[href*="#"]');
+  const currentPath = window.location.pathname.replace(/^\//, '').split('/').pop() || 'index.html';
 
   links.forEach(link => {
     link.addEventListener('click', (e) => {
-      const targetId = link.getAttribute('href');
-      if (targetId === '#') return;
+      const rawHref = link.getAttribute('href');
+      if (!rawHref || rawHref === '#') return;
 
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        e.preventDefault();
+      let linkPath = '';
+      let hash = '';
 
-        const headerOffset = 90;
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      if (rawHref.startsWith('#')) {
+        hash = rawHref;
+        linkPath = currentPath;
+      } else {
+        const parts = rawHref.split('#');
+        linkPath = parts[0].replace(/^\.\//, '').replace(/^\//, '').split('/').pop() || 'index.html';
+        hash = parts[1] ? '#' + parts[1] : '';
+      }
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
+      // Check if this link targets an anchor on the current page
+      const isCurrentPage = !linkPath || linkPath === currentPath ||
+        (linkPath === 'index.html' && (currentPath === '' || currentPath === 'index.html')) ||
+        (linkPath === 'about.html' && currentPath === 'about.html');
+
+      if (isCurrentPage && hash && hash !== '#') {
+        const targetId = hash.slice(1);
+        let targetElement = document.getElementById(targetId) || document.querySelector(hash);
+
+        // Fallback for mission-vision / vision-mission alias
+        if (!targetElement && (targetId === 'vision-mission' || targetId === 'mission-vision')) {
+          targetElement = document.getElementById('vision-mission') || document.getElementById('mission-vision');
+        }
+
+        if (targetElement) {
+          e.preventDefault();
+          scrollToElementWithOffset(targetElement, 'smooth');
+
+          if (window.history && window.history.pushState) {
+            window.history.pushState(null, '', hash);
+          } else {
+            window.location.hash = hash;
+          }
+
+          if (typeof initActiveNavigation === 'function') {
+            initActiveNavigation();
+          }
+        }
       }
     });
   });
+
+  // Handle direct navigation or page refresh with a hash (e.g., about.html#vision-mission)
+  function handleInitialHash() {
+    if (window.location.hash) {
+      const hash = window.location.hash;
+      const targetId = hash.slice(1);
+      let targetElement = document.getElementById(targetId) || document.querySelector(hash);
+
+      if (!targetElement && (targetId === 'vision-mission' || targetId === 'mission-vision')) {
+        targetElement = document.getElementById('vision-mission') || document.getElementById('mission-vision');
+      }
+
+      if (targetElement) {
+        setTimeout(() => {
+          scrollToElementWithOffset(targetElement, 'smooth');
+        }, 120);
+      }
+    }
+  }
+
+  handleInitialHash();
+  window.addEventListener('hashchange', handleInitialHash);
 }
 
 /* ==========================================================================
    Popup Enquiry Modal Controller (with Show Interest & Notify Me Prefill Support)
    ========================================================================== */
+/* ==========================================================================
+   Popup Counselling / Enquiry Modal Controller
+   ========================================================================== */
 function initEnquiryModal() {
-  const modal = document.getElementById('enquiry-modal');
-  const closeBtn = document.getElementById('modal-close-btn');
-  const successCloseBtn = document.getElementById('modal-success-close');
-  const form = document.getElementById('modal-enquiry-form');
-  const successState = document.getElementById('modal-success-state');
-  const modalHead = modal ? modal.querySelector('.modal-head') : null;
+  let lastFocusedElement = null;
+  let isSubmitting = false;
 
-  const enquireButtons = document.querySelectorAll('.btn-counselling-modal, .header-counselling-btn, .btn-enquire-now');
+  function getModalElements() {
+    const modal = document.getElementById('enquiry-modal');
+    if (!modal) return null;
+    return {
+      modal,
+      closeBtn: document.getElementById('modal-close-btn'),
+      successCloseBtn: document.getElementById('modal-success-close'),
+      form: document.getElementById('modal-enquiry-form'),
+      successState: document.getElementById('modal-success-state'),
+      errorBanner: document.getElementById('modal-error-banner'),
+      errorText: document.getElementById('modal-error-text'),
+      modalHead: modal.querySelector('.modal-head'),
+      modalTitle: document.getElementById('modal-title'),
+      modalDesc: document.getElementById('modal-desc'),
+      nameInput: document.getElementById('modal-name'),
+      emailInput: document.getElementById('modal-email'),
+      phoneInput: document.getElementById('modal-phone'),
+      countryCodeSelect: document.getElementById('modal-country-code') || modal.querySelector('select[name="modal_country_code"]'),
+      programSelect: document.getElementById('modal-program'),
+      modeSelect: document.getElementById('modal-mode'),
+      messageInput: document.getElementById('modal-message'),
+      submitBtn: document.getElementById('modal-submit-btn') || modal.querySelector('button[type="submit"]')
+    };
+  }
 
-  if (!modal) return;
+  function closeModal() {
+    const els = getModalElements();
+    if (!els || !els.modal) return;
+    els.modal.classList.remove('open');
+    document.body.style.overflow = '';
+    if (els.form) {
+      delete els.form.dataset.source;
+      delete els.form.dataset.targetProgram;
+    }
+    if (els.errorBanner) els.errorBanner.style.display = 'none';
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      try { lastFocusedElement.focus(); } catch (e) {}
+    }
+  }
 
   function openModal(e, options = {}) {
     if (e && e.preventDefault) e.preventDefault();
 
-    modal.classList.add('open');
+    const els = getModalElements();
+    if (!els || !els.modal) {
+      console.warn('[EnquiryModal] Modal element not found in DOM');
+      return;
+    }
+
+    lastFocusedElement = options.triggerEl || (e ? e.currentTarget || e.target : document.activeElement);
+
+    // Reset visibility states
+    if (els.form) {
+      els.form.style.display = 'grid';
+      if (options.source) {
+        els.form.dataset.source = options.source;
+      } else {
+        delete els.form.dataset.source;
+      }
+    }
+    if (els.successState) els.successState.style.display = 'none';
+    if (els.errorBanner) els.errorBanner.style.display = 'none';
+    if (els.modalHead) els.modalHead.style.display = '';
+
+    // Clear input error highlights
+    els.modal.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+
+    // Configure Header Texts
+    if (els.modalTitle) {
+      els.modalTitle.textContent = options.title || 'Book a Counselling Session';
+    }
+    if (els.modalDesc) {
+      els.modalDesc.textContent = options.subtitle || 'Speak with our team to find the right veterinary learning programme for your goals.';
+    }
+
+    // Configure Submit Button Text
+    if (els.submitBtn) {
+      const btnTextSpan = els.submitBtn.querySelector('span');
+      const textToSet = options.submitText || (options.isEnquiry ? 'Submit Enquiry' : 'Request Counselling');
+      if (btnTextSpan) {
+        btnTextSpan.textContent = textToSet;
+      } else {
+        els.submitBtn.innerHTML = `<span>${textToSet}</span> <i class="fa-solid fa-arrow-right"></i>`;
+      }
+      els.submitBtn.disabled = false;
+    }
+
+    // Preselect Program if specified or detected
+    if (els.programSelect) {
+      let targetProgram = options.program || '';
+      if (!targetProgram) {
+        // Auto-detect from page URL/slug if on an individual program page
+        const path = window.location.pathname.split('/').pop().replace('.html', '');
+        if (window.VETNOVA_28_PROGRAMS && Array.isArray(window.VETNOVA_28_PROGRAMS)) {
+          const match = window.VETNOVA_28_PROGRAMS.find(p => p.slug === path);
+          if (match) targetProgram = match.title;
+        }
+        if (!targetProgram) {
+          const h1 = document.querySelector('h1');
+          if (h1) {
+            const h1Text = h1.textContent.trim().toLowerCase();
+            for (let i = 0; i < els.programSelect.options.length; i++) {
+              const optVal = els.programSelect.options[i].value.toLowerCase();
+              if (optVal && h1Text.includes(optVal)) {
+                targetProgram = els.programSelect.options[i].value;
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      if (targetProgram) {
+        const lowerTarget = targetProgram.toLowerCase();
+        for (let i = 0; i < els.programSelect.options.length; i++) {
+          const opt = els.programSelect.options[i];
+          if (opt.value && (opt.value.toLowerCase() === lowerTarget || opt.text.toLowerCase().includes(lowerTarget))) {
+            els.programSelect.selectedIndex = i;
+            break;
+          }
+        }
+      }
+    }
+
+    // Prefill Message
+    if (options.message && els.messageInput) {
+      els.messageInput.value = options.message;
+    }
+
+    // Open Modal & Lock Body Scroll
+    els.modal.classList.add('open');
     document.body.style.overflow = 'hidden';
 
-    if (form) {
-      form.style.display = 'grid';
-      if (options.source) {
-        form.dataset.source = options.source;
-      } else {
-        delete form.dataset.source;
-      }
-    }
-    if (successState) successState.style.display = 'none';
-
-    if (modalHead) {
-      modalHead.style.display = '';
-      const headTitle = modalHead.querySelector('h3');
-      const headSub = modalHead.querySelector('p');
-
-      if (options.title && headTitle) {
-        headTitle.textContent = options.title;
-      } else if (headTitle) {
-        headTitle.textContent = 'Enquire Now';
-      }
-
-      if (options.subtitle && headSub) {
-        headSub.textContent = options.subtitle;
-      } else if (headSub) {
-        headSub.textContent = 'Fill out the form below, and our academic counsellor will get in touch with you shortly.';
-      }
-    }
-
-    if (options.message) {
-      const messageEl = document.getElementById('modal-message');
-      if (messageEl) messageEl.value = options.message;
-    }
+    // Set initial focus to Name field
+    setTimeout(() => {
+      if (els.nameInput) els.nameInput.focus();
+    }, 120);
   }
 
-  function closeModal() {
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
-    if (form) delete form.dataset.source;
-  }
+  // Expose globally so external components or chatbots can open it
+  window.openCounsellingModal = function(options = {}) {
+    openModal(null, options);
+  };
 
-  enquireButtons.forEach(btn => {
-    btn.addEventListener('click', openModal);
+  // Keyboard navigation: Escape key closes modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const els = getModalElements();
+      if (els && els.modal && els.modal.classList.contains('open')) {
+        closeModal();
+      }
+    }
   });
 
-  // Attach handlers for Show Interest & Notify Me buttons dynamically
-  document.body.addEventListener('click', (e) => {
+  // Delegated Global Click Interceptor for Book Counselling & Modal Triggers
+  document.addEventListener('click', (e) => {
+    // 1. Close Button
+    if (e.target.closest('#modal-close-btn, #modal-success-close')) {
+      e.preventDefault();
+      closeModal();
+      return;
+    }
+
+    // 2. Backdrop click
+    const els = getModalElements();
+    if (els && els.modal && e.target === els.modal) {
+      closeModal();
+      return;
+    }
+
+    // 3. Book Counselling triggers
+    const triggerBtn = e.target.closest(
+      '.btn-counselling-pill, #header-counselling-btn, .header-counselling-btn, .btn-counselling-modal, .btn-book-counselling, [data-action="book-counselling"]'
+    ) || (e.target.closest('a, button') && (e.target.closest('a, button').textContent || '').trim().toLowerCase().includes('book counselling') ? e.target.closest('a, button') : null);
+
+    if (triggerBtn) {
+      const href = triggerBtn.getAttribute('href') || '';
+      // Don't intercept telephone dialing links
+      if (href.startsWith('tel:')) return;
+
+      // Check if on contact.html and clicking internal section anchor
+      const isContactPage = window.location.pathname.endsWith('contact.html');
+      const isNavOrSticky = triggerBtn.closest('#global-header, .topbar, .drawer-menu, .mobile-stick');
+      if (isContactPage && (href === '#contact-form' || href === '#enquiry') && !isNavOrSticky) {
+        return; // Allow smooth in-page jump
+      }
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      openModal(e, {
+        title: 'Book a Counselling Session',
+        subtitle: 'Speak with our team to find the right veterinary learning programme for your goals.',
+        source: triggerBtn.dataset.source || 'Book Counselling Button',
+        program: triggerBtn.dataset.program || '',
+        triggerEl: triggerBtn
+      });
+      return;
+    }
+
+    // 4. Show Interest & Notify Me button triggers
     const interestBtn = e.target.closest('.btn-show-interest');
     const notifyBtn = e.target.closest('.btn-notify-me');
-
-    if (!interestBtn && !notifyBtn) return;
-
-    e.preventDefault();
-
-    const triggerBtn = interestBtn || notifyBtn;
-    const isNotify = !!notifyBtn;
-    const customSource = triggerBtn.dataset.source || (isNotify ? 'Program Notify Me' : 'Program Interest');
-    const context = triggerBtn.dataset.context || '';
-
-    // Read active filter selections
-    const gradeSelect = document.getElementById('filter-grade') || document.getElementById('filter-level');
-    const trackSelect = document.getElementById('filter-track') || document.getElementById('filter-topic');
-    const modeSelect = document.getElementById('filter-mode');
-    const searchInput = document.getElementById('program-search-input');
-
-    const gradeMap = {
-      'grade-1': 'Grade 1 — Basic',
-      'grade-2': 'Grade 2 — Intermediate',
-      'grade-3': 'Grade 3 — Competitive',
-      'grade-4': 'Grade 4 — Advanced',
-      'grade-5': 'Grade 5 — Pro'
-    };
-
-    const trackMap = {
-      'fresh-graduates': 'Fresh Graduates & Interns',
-      'practicing-vets': 'Practicing Veterinarians',
-      'diagnostic-specialization': 'Diagnostic Specialization',
-      'emergency-care': 'Emergency & Critical Care',
-      'vet-nurse': 'Vet Nurse & Paravet Staff'
-    };
-
-    const modeMap = {
-      offline: '100% Offline Campus',
-      hybrid: 'Hybrid Learning',
-      workshop: 'Weekend Workshop'
-    };
-
-    const rawGrade = gradeSelect ? gradeSelect.value : 'all';
-    const rawTrack = trackSelect ? trackSelect.value : 'all';
-    const rawMode = modeSelect ? modeSelect.value : 'all';
-    const keyword = searchInput ? searchInput.value.trim() : '';
-
-    const gradeName = gradeMap[rawGrade] || (rawGrade !== 'all' ? rawGrade : '');
-    const trackName = trackMap[rawTrack] || (rawTrack !== 'all' ? rawTrack : '');
-    const modeName = modeMap[rawMode] || (rawMode !== 'all' ? rawMode : '');
-
-    let activeFilterSummary = [];
-    if (gradeName) activeFilterSummary.push(`Grade: ${gradeName}`);
-    if (trackName) activeFilterSummary.push(`Track: ${trackName}`);
-    if (modeName) activeFilterSummary.push(`Mode: ${modeName}`);
-    if (keyword) activeFilterSummary.push(`Keyword: "${keyword}"`);
-
-    const summaryStr = activeFilterSummary.length > 0 ? activeFilterSummary.join(' | ') : 'General Clinical Programs';
-
-    let prefilledMessage = '';
-    let modalTitle = '';
-    let modalSubtitle = '';
-
-    if (isNotify) {
-      modalTitle = 'Get Notified for Upcoming Batches';
-      modalSubtitle = 'We will notify you immediately as soon as a new batch or seat opens for your selected course.';
-      prefilledMessage = `Please notify me when the next batch/intake opens for: [${summaryStr}].${context ? ' Context: ' + context : ''}`;
-    } else {
-      modalTitle = 'Show Interest in a Course';
-      modalSubtitle = 'Tell us your learning goals and our academic team will connect with you to explore customized options.';
-      prefilledMessage = `I am interested in a clinical training program matching: [${summaryStr}]. Please share details on upcoming options.${context ? ' Context: ' + context : ''}`;
-    }
-
-    openModal(e, {
-      source: customSource,
-      title: modalTitle,
-      subtitle: modalSubtitle,
-      message: prefilledMessage
-    });
-  });
-
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (successCloseBtn) successCloseBtn.addEventListener('click', closeModal);
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-
-  if (form) {
-    form.addEventListener('submit', async (e) => {
+    if (interestBtn || notifyBtn) {
       e.preventDefault();
+      const btn = interestBtn || notifyBtn;
+      const isNotify = !!notifyBtn;
+      const customSource = btn.dataset.source || (isNotify ? 'Program Notify Me' : 'Program Interest');
+      const context = btn.dataset.context || '';
 
-      const ccSelect = form.querySelector('select[name="modal_country_code"]');
-      const countryCode = ccSelect ? ccSelect.value : '';
+      const gradeSelect = document.getElementById('filter-grade') || document.getElementById('filter-level');
+      const trackSelect = document.getElementById('filter-track') || document.getElementById('filter-topic');
+      const modeSelect = document.getElementById('filter-mode');
+      const searchInput = document.getElementById('program-search-input');
 
-      const phoneEl = document.getElementById('modal-phone');
-      const nameEl = document.getElementById('modal-name');
-      const emailEl = document.getElementById('modal-email');
-      const roleEl = document.getElementById('modal-role');
-      const messageEl = document.getElementById('modal-message');
+      const gradeMap = {
+        'grade-1': 'Grade 1 — Basic',
+        'grade-2': 'Grade 2 — Intermediate',
+        'grade-3': 'Grade 3 — Competitive',
+        'grade-4': 'Grade 4 — Advanced',
+        'grade-5': 'Grade 5 — Pro'
+      };
 
-      const phoneVal = phoneEl ? phoneEl.value.trim() : '';
-      const nameVal = nameEl ? nameEl.value.trim() : '';
-      const emailVal = emailEl ? emailEl.value.trim() : '';
+      const trackMap = {
+        'fresh-graduates': 'Fresh Graduates & Interns',
+        'practicing-vets': 'Practicing Veterinarians',
+        'diagnostic-specialization': 'Diagnostic Specialization',
+        'emergency-care': 'Emergency & Critical Care',
+        'vet-nurse': 'Vet Nurse & Paravet Staff'
+      };
 
-      if (!nameVal || !emailVal || !phoneVal) {
-        alert('Please fill in all required fields.');
+      const modeMap = {
+        offline: '100% Offline Campus',
+        hybrid: 'Hybrid Learning',
+        workshop: 'Weekend Workshop'
+      };
+
+      const rawGrade = gradeSelect ? gradeSelect.value : 'all';
+      const rawTrack = trackSelect ? trackSelect.value : 'all';
+      const rawMode = modeSelect ? modeSelect.value : 'all';
+      const keyword = searchInput ? searchInput.value.trim() : '';
+
+      const gradeName = gradeMap[rawGrade] || (rawGrade !== 'all' ? rawGrade : '');
+      const trackName = trackMap[rawTrack] || (rawTrack !== 'all' ? rawTrack : '');
+      const modeName = modeMap[rawMode] || (rawMode !== 'all' ? rawMode : '');
+
+      let activeFilterSummary = [];
+      if (gradeName) activeFilterSummary.push(`Grade: ${gradeName}`);
+      if (trackName) activeFilterSummary.push(`Track: ${trackName}`);
+      if (modeName) activeFilterSummary.push(`Mode: ${modeName}`);
+      if (keyword) activeFilterSummary.push(`Keyword: "${keyword}"`);
+
+      const summaryStr = activeFilterSummary.length > 0 ? activeFilterSummary.join(' | ') : 'General Clinical Programs';
+
+      let prefilledMessage = '';
+      let modalTitle = '';
+      let modalSubtitle = '';
+
+      if (isNotify) {
+        modalTitle = 'Get Notified for Upcoming Batches';
+        modalSubtitle = 'We will notify you immediately as soon as a new batch or seat opens for your selected course.';
+        prefilledMessage = `Please notify me when the next batch/intake opens for: [${summaryStr}].${context ? ' Context: ' + context : ''}`;
+      } else {
+        modalTitle = 'Show Interest in a Course';
+        modalSubtitle = 'Tell us your learning goals and our academic team will connect with you to explore customized options.';
+        prefilledMessage = `I am interested in a clinical training program matching: [${summaryStr}]. Please share details on upcoming options.${context ? ' Context: ' + context : ''}`;
+      }
+
+      openModal(e, {
+        source: customSource,
+        title: modalTitle,
+        subtitle: modalSubtitle,
+        message: prefilledMessage,
+        isEnquiry: true,
+        submitText: 'Submit Enquiry',
+        triggerEl: btn
+      });
+    }
+  });
+
+  // Delegated Form Submission Handler
+  document.addEventListener('submit', async (e) => {
+    if (e.target && e.target.id === 'modal-enquiry-form') {
+      e.preventDefault();
+      const form = e.target;
+      const els = getModalElements();
+      if (!els) return;
+
+      if (isSubmitting) return;
+
+      const nameVal = els.nameInput ? els.nameInput.value.trim() : '';
+      const emailVal = els.emailInput ? els.emailInput.value.trim() : '';
+      const phoneVal = els.phoneInput ? els.phoneInput.value.trim() : '';
+      const countryCode = els.countryCodeSelect ? els.countryCodeSelect.value.trim() : '+91';
+      const programVal = els.programSelect ? els.programSelect.value.trim() : '';
+      const modeVal = els.modeSelect ? els.modeSelect.value.trim() : '';
+      const messageVal = els.messageInput ? els.messageInput.value.trim() : '';
+
+      // Reset previous error classes
+      [els.nameInput, els.emailInput, els.phoneInput, els.programSelect, els.modeSelect].forEach(input => {
+        if (input) input.classList.remove('input-error');
+      });
+      if (els.errorBanner) els.errorBanner.style.display = 'none';
+
+      // Validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneDigits = phoneVal.replace(/\D/g, '');
+
+      let errorMsg = '';
+      let firstInvalid = null;
+
+      if (!nameVal || nameVal.length < 2) {
+        errorMsg = 'Please enter your full name.';
+        firstInvalid = els.nameInput;
+      } else if (!emailVal || !emailRegex.test(emailVal)) {
+        errorMsg = 'Please enter a valid email address.';
+        firstInvalid = els.emailInput;
+      } else if (!phoneVal || phoneDigits.length < 7 || phoneDigits.length > 15) {
+        errorMsg = 'Please enter a valid phone number (at least 7 to 10 digits).';
+        firstInvalid = els.phoneInput;
+      } else if (!programVal) {
+        errorMsg = 'Please select an interested program.';
+        firstInvalid = els.programSelect;
+      } else if (!modeVal) {
+        errorMsg = 'Please choose your preferred counselling mode (Online or Phone Call).';
+        firstInvalid = els.modeSelect;
+      }
+
+      if (errorMsg) {
+        if (els.errorBanner && els.errorText) {
+          els.errorText.textContent = errorMsg;
+          els.errorBanner.style.display = 'flex';
+        }
+        if (firstInvalid) {
+          firstInvalid.classList.add('input-error');
+          firstInvalid.focus();
+        }
         return;
       }
 
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn ? submitBtn.innerText : 'Submit Enquiry';
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'Submitting...';
+      // Prepare UI for submission
+      isSubmitting = true;
+      const originalBtnHTML = els.submitBtn ? els.submitBtn.innerHTML : '<span>Request Counselling</span>';
+      if (els.submitBtn) {
+        els.submitBtn.disabled = true;
+        els.submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Submitting Request...</span>';
       }
 
-      const pagePath = window.location.pathname || 'programs.html';
-      const sourceTag = form.dataset.source || 'popup';
+      const pagePath = window.location.pathname || 'website';
+      const sourceTag = form.dataset.source || 'Book Counselling Modal';
 
       const payload = {
         name: nameVal,
         email: emailVal,
         phone: phoneVal,
         countryCode: countryCode,
-        profile: roleEl ? roleEl.value : '',
-        course: document.title || 'VetNova Programs',
-        message: messageEl ? messageEl.value.trim() : '',
+        course: programVal,
+        profile: 'Counselling Lead',
+        message: messageVal ? `${messageVal}\n[Preferred Counselling Mode: ${modeVal}]` : `[Preferred Counselling Mode: ${modeVal}]`,
+        formData: {
+          counsellingMode: modeVal,
+          preferredMode: modeVal,
+          interestedProgram: programVal,
+          rawMessage: messageVal
+        },
         source: sourceTag,
         sourcePage: pagePath
       };
 
       try {
         if (typeof submitEnquiry !== 'function') {
-          throw new Error('API client script (api.js) failed to load. Please refresh the page and try again.');
+          throw new Error('API client script (api.js) failed to load. Please check your connection and try again.');
         }
+
         await submitEnquiry(payload);
 
+        // On Success
         form.style.display = 'none';
-        if (successState) successState.style.display = 'flex';
-        if (modalHead) modalHead.style.display = 'none';
-        form.reset();
+        if (els.modalHead) els.modalHead.style.display = 'none';
+        if (els.errorBanner) els.errorBanner.style.display = 'none';
+        if (els.successState) {
+          els.successState.style.display = 'flex';
+          const successBtn = els.successState.querySelector('button');
+          if (successBtn) successBtn.focus();
+        }
+        if (typeof form.reset === 'function') form.reset();
       } catch (err) {
-        console.error('Modal Enquiry Submission error:', err);
-        alert(err.message || 'Unable to submit enquiry. Please check your connection and try again.');
+        console.error('Counselling Submission Error:', err);
+        if (els.errorBanner && els.errorText) {
+          els.errorText.textContent = err.message || 'Unable to submit your counselling request. Please check your connection and try again.';
+          els.errorBanner.style.display = 'flex';
+        } else {
+          alert(err.message || 'Unable to submit enquiry. Please check your connection and try again.');
+        }
       } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerText = originalText;
+        isSubmitting = false;
+        if (els.submitBtn) {
+          els.submitBtn.disabled = false;
+          els.submitBtn.innerHTML = originalBtnHTML;
         }
       }
-    });
-  }
+    }
+  });
+
+  // Clear input-error on input/change
+  document.addEventListener('input', (e) => {
+    if (e.target && e.target.classList.contains('input-error')) {
+      e.target.classList.remove('input-error');
+      const banner = document.getElementById('modal-error-banner');
+      if (banner) banner.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('change', (e) => {
+    if (e.target && e.target.classList.contains('input-error')) {
+      e.target.classList.remove('input-error');
+      const banner = document.getElementById('modal-error-banner');
+      if (banner) banner.style.display = 'none';
+    }
+  });
+
+  // Re-check whenever components.js loads a shared component
+  document.addEventListener('vetnova:componentLoaded', (e) => {
+    // Component loaded hook
+  });
 }
 
 /* ==========================================================================
@@ -1792,8 +2396,7 @@ function getProgramImage(program) {
 window.getProgramImage = getProgramImage;
 
 window.VETNOVA_PROGRAMS_DATA = [
-  // ==================== GRADE 1 — BASIC ====================
-  // Track 1: Fresh Graduates & Interns
+  // ==================== GENUINE CLINICAL PROGRAMS (DEMOS PURGED) ====================
   {
     id: "real-skill-up",
     title: "Veterinary Skill-Up Program",
@@ -1812,119 +2415,8 @@ window.VETNOVA_PROGRAMS_DATA = [
     deliveryMode: "offline",
     price: "₹38,000 + GST",
     duration: "4 Weeks (120+ Hrs)",
-    image: "assets/images/programs/program-skill-up.webp",
+    image: "assets/images/programs/program-skill-up.webp"
   },
-  {
-    id: "demo-g1-fg-1",
-    title: "Veterinary Clinical Foundations",
-    slug: "veterinary-clinical-foundations",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Foundational clinical principles, patient physical examination protocols, and entry-level practical skill development for new veterinary graduates.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-veterinary-clinical-foundations",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g1-fg-2",
-    title: "Essential Clinical Skills Workshop",
-    slug: "essential-clinical-skills-workshop",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Hands-on introductory workshop covering basic patient handling, diagnostic sampling, catheterization, and essential clinical procedures.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-essential-clinical-skills-workshop",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-  // Track 2: Practicing Veterinarians
-  {
-    id: "demo-g1-pv-1",
-    title: "Everyday Clinical Essentials",
-    slug: "everyday-clinical-essentials",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Core practical refresher covering routine companion animal consultations, outpatient treatment protocols, and clinic workflow fundamentals.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-everyday-clinical-essentials",
-    deliveryMode: "offline",
-    duration: "1 Week"
-  },
-  {
-    id: "demo-g1-pv-2",
-    title: "Basic Practice Skills Refresher",
-    slug: "basic-practice-skills-refresher",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Practical review of essential diagnostic and therapeutic skills for clinicians updating or returning to active small animal practice.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-basic-practice-skills-refresher",
-    deliveryMode: "offline",
-    duration: "3 Days"
-  },
-  // Track 3: Diagnostic Specialization
-  {
-    id: "demo-g1-ds-1",
-    title: "Basic Veterinary Diagnostics",
-    slug: "basic-veterinary-diagnostics",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "Introduction to in-clinic laboratory diagnostics, blood smear examination, urinalysis, and rapid point-of-care test interpretation.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-basic-veterinary-diagnostics",
-    deliveryMode: "offline",
-    duration: "1 Week"
-  },
-  {
-    id: "demo-g1-ds-2",
-    title: "Introduction to Diagnostic Imaging",
-    slug: "introduction-to-diagnostic-imaging",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "Foundational principles of digital radiography positioning, X-ray safety, and introductory ultrasound probe orientation for beginners.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-introduction-to-diagnostic-imaging",
-    deliveryMode: "workshop",
-    duration: "3 Days"
-  },
-  // Track 4: Emergency & Critical Care
   {
     id: "real-first-aid",
     title: "Pet Emergency First Aid Workshop",
@@ -1943,45 +2435,8 @@ window.VETNOVA_PROGRAMS_DATA = [
     deliveryMode: "workshop",
     price: "₹3,500 + GST",
     duration: "1 Day Workshop",
-    image: "assets/images/programs/program-first-aid.webp",
+    image: "assets/images/programs/program-first-aid.webp"
   },
-  {
-    id: "demo-g1-ec-1",
-    title: "Emergency Care Fundamentals",
-    slug: "emergency-care-fundamentals",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "Foundational training in acute patient triage, vital signs assessment, and immediate stabilization protocols for emergency presentations.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-emergency-care-fundamentals",
-    deliveryMode: "offline",
-    duration: "3 Days"
-  },
-  {
-    id: "demo-g1-ec-2",
-    title: "Basic Veterinary First Response",
-    slug: "basic-veterinary-first-response",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "Essential skills for acute trauma management, airway maintenance, hemorrhage control, and initial fluid resuscitation algorithms.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-basic-veterinary-first-response",
-    deliveryMode: "workshop",
-    duration: "2 Days"
-  },
-  // Track 5: Vet Nurse & Paravet Staff
   {
     id: "real-vet-nurse",
     title: "Vet Nurse Foundation Certificate",
@@ -2000,84 +2455,8 @@ window.VETNOVA_PROGRAMS_DATA = [
     deliveryMode: "offline",
     price: "₹9,500 + GST",
     duration: "2 Weeks",
-    image: "assets/images/programs/program-nurse.webp",
+    image: "assets/images/programs/program-nurse.webp"
   },
-  {
-    id: "demo-g1-vn-1",
-    title: "Veterinary Nursing Foundations",
-    slug: "veterinary-nursing-foundations",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "Essential veterinary nursing principles, humane animal restraint, IV catheter placement, and inpatient record maintenance.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-veterinary-nursing-foundations",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g1-vn-2",
-    title: "Essential Paravet Clinical Skills",
-    slug: "essential-paravet-clinical-skills",
-    grade: 1,
-    gradeCode: "grade-1",
-    gradeName: "Basic",
-    gradeLabel: "Grade 1 — Basic",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "Practical workshop focusing on surgical instrument sterilization, operating room prep, and patient vital monitoring.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-essential-paravet-clinical-skills",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-
-  // ==================== GRADE 2 — INTERMEDIATE ====================
-  // Track 1: Fresh Graduates & Interns
-  {
-    id: "demo-g2-fg-1",
-    title: "Clinical Skills Development",
-    slug: "clinical-skills-development",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Intermediate practical module enhancing clinical autonomy, routine surgical assistance, therapeutic dosing, and case management.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-clinical-skills-development",
-    deliveryMode: "offline",
-    duration: "3 Weeks"
-  },
-  {
-    id: "demo-g2-fg-2",
-    title: "Intermediate Veterinary Practice",
-    slug: "intermediate-veterinary-practice",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Building confidence in handling outpatient cases, abdominal diagnostic workups, and standard veterinary procedures.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-intermediate-veterinary-practice",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  // Track 2: Practicing Veterinarians
   {
     id: "real-soft-tissue-surgery",
     title: "Soft Tissue Surgery Track",
@@ -2096,45 +2475,8 @@ window.VETNOVA_PROGRAMS_DATA = [
     deliveryMode: "offline",
     price: "₹18,500 + GST",
     duration: "1 Week",
-    image: "assets/images/programs/program-surgery.webp",
+    image: "assets/images/programs/program-surgery.webp"
   },
-  {
-    id: "demo-g2-pv-1",
-    title: "Intermediate Clinical Practice",
-    slug: "intermediate-clinical-practice",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Refining diagnostic accuracy, anesthesia monitoring, and surgical technique in routine soft tissue interventions.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-intermediate-clinical-practice",
-    deliveryMode: "offline",
-    duration: "1 Week"
-  },
-  {
-    id: "demo-g2-pv-2",
-    title: "Applied Veterinary Skills",
-    slug: "applied-veterinary-skills",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Practical workshop focusing on abdominal organ evaluation, surgical knotting techniques, and patient recovery management.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-applied-veterinary-skills",
-    deliveryMode: "workshop",
-    duration: "3 Days"
-  },
-  // Track 3: Diagnostic Specialization
   {
     id: "real-radiology-ultrasound",
     title: "Radiology & Ultrasound Masterclass",
@@ -2153,232 +2495,8 @@ window.VETNOVA_PROGRAMS_DATA = [
     deliveryMode: "offline",
     price: "₹16,000 + GST",
     duration: "1 Week",
-    image: "assets/images/programs/program-radiology.webp",
+    image: "assets/images/programs/program-radiology.webp"
   },
-  {
-    id: "demo-g2-ds-1",
-    title: "Diagnostic Imaging Essentials",
-    slug: "diagnostic-imaging-essentials",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "Systematic approach to radiograph reading, abdominal organ evaluation, and digital imaging artifact recognition.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-diagnostic-imaging-essentials",
-    deliveryMode: "offline",
-    duration: "1 Week"
-  },
-  {
-    id: "demo-g2-ds-2",
-    title: "Intermediate Ultrasound Skills",
-    slug: "intermediate-ultrasound-skills",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "Hands-on abdominal FAST scanning, organ gain adjustment, and acoustic window optimization techniques.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-intermediate-ultrasound-skills",
-    deliveryMode: "workshop",
-    duration: "3 Days"
-  },
-  // Track 4: Emergency & Critical Care
-  {
-    id: "demo-g2-ec-1",
-    title: "Intermediate Emergency & ICU Care",
-    slug: "intermediate-emergency-icu-care",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "Managing acute dyspnea, fluid resuscitation titration, vascular access, and continuous vital sign monitoring in emergency patients.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-intermediate-emergency-icu-care",
-    deliveryMode: "offline",
-    duration: "1 Week"
-  },
-  {
-    id: "demo-g2-ec-2",
-    title: "Emergency Response Skills",
-    slug: "emergency-response-skills",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "Practical algorithms for toxic ingestion triage, traumatic shock stabilization, and emergency blood gas interpretation.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-emergency-response-skills",
-    deliveryMode: "workshop",
-    duration: "2 Days"
-  },
-  // Track 5: Vet Nurse & Paravet Staff
-  {
-    id: "demo-g2-vn-1",
-    title: "Intermediate Veterinary Nursing",
-    slug: "intermediate-veterinary-nursing",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "Advanced nursing protocols for surgical assistant scrub duties, multiparameter vitals monitoring, and ICU inpatient care.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-intermediate-veterinary-nursing",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g2-vn-2",
-    title: "Applied Paravet Clinical Care",
-    slug: "applied-paravet-clinical-care",
-    grade: 2,
-    gradeCode: "grade-2",
-    gradeName: "Intermediate",
-    gradeLabel: "Grade 2 — Intermediate",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "Practical training in anesthesia machine setup, endotracheal intubation assistance, and post-operative recovery care.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-applied-paravet-clinical-care",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-
-  // ==================== GRADE 3 — COMPETITIVE ====================
-  // Track 1: Fresh Graduates & Interns
-  {
-    id: "demo-g3-fg-1",
-    title: "Advanced Clinical Skill Preparation",
-    slug: "advanced-clinical-skill-preparation",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Targeted training to prepare junior clinicians for independent emergency shifts and surgical caseloads.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-clinical-skill-preparation",
-    deliveryMode: "offline",
-    duration: "3 Weeks"
-  },
-  {
-    id: "demo-g3-fg-2",
-    title: "Competitive Veterinary Skills",
-    slug: "competitive-veterinary-skills",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Intensive practical module designed to elevate clinical speed, precision, and multi-system diagnostic confidence.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-competitive-veterinary-skills",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  // Track 2: Practicing Veterinarians
-  {
-    id: "demo-g3-pv-1",
-    title: "Competitive Clinical Skills Program",
-    slug: "competitive-clinical-skills-program",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Comprehensive procedural skill elevation covering complex soft tissue surgeries and diagnostic integration.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-competitive-clinical-skills-program",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g3-pv-2",
-    title: "Advanced Practice Development",
-    slug: "advanced-practice-development",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Mastering advanced surgical approaches, emergency triage algorithms, and clinical case management.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-practice-development",
-    deliveryMode: "offline",
-    duration: "1 Week"
-  },
-  // Track 3: Diagnostic Specialization
-  {
-    id: "demo-g3-ds-1",
-    title: "Advanced Diagnostic Imaging",
-    slug: "advanced-diagnostic-imaging",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "In-depth ultrasonography of abdominal organs, Doppler evaluation, and complex radiograph reading.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-diagnostic-imaging",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g3-ds-2",
-    title: "Competitive Radiology & Ultrasound",
-    slug: "competitive-radiology-ultrasound",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "Advanced diagnostic imaging course focusing on soft tissue pathology mapping and echocardiographic screening.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-competitive-radiology-ultrasound",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-  // Track 4: Emergency & Critical Care
   {
     id: "real-emergency-medicine",
     title: "Pet Emergency & Critical Care",
@@ -2397,451 +2515,7 @@ window.VETNOVA_PROGRAMS_DATA = [
     deliveryMode: "offline",
     price: "₹12,500 + GST",
     duration: "3 Days",
-    image: "assets/images/programs/program-emergency.webp",
-  },
-  {
-    id: "demo-g3-ec-1",
-    title: "Emergency & Critical Care Mastery",
-    slug: "emergency-critical-care-mastery",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "RECOVER CPR algorithm execution, mechanical ventilation basics, and acute trauma patient resuscitation.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-emergency-critical-care-mastery",
-    deliveryMode: "offline",
-    duration: "1 Week"
-  },
-  {
-    id: "demo-g3-ec-2",
-    title: "Advanced Emergency Response",
-    slug: "advanced-emergency-response",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "Managing life-threatening emergencies, acid-base disorders, and intensive care patient monitoring.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-emergency-response",
-    deliveryMode: "workshop",
-    duration: "3 Days"
-  },
-  // Track 5: Vet Nurse & Paravet Staff
-  {
-    id: "demo-g3-vn-1",
-    title: "Advanced Nursing & Paravet Skills",
-    slug: "advanced-nursing-paravet-skills",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "High-level clinical nursing, critical care patient monitoring, and surgical suite management.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-nursing-paravet-skills",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g3-vn-2",
-    title: "Competitive Veterinary Nursing",
-    slug: "competitive-veterinary-nursing",
-    grade: 3,
-    gradeCode: "grade-3",
-    gradeName: "Competitive",
-    gradeLabel: "Grade 3 — Competitive",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "Specialized nursing interventions, emergency drug dosing calculations, and complex wound dressing mastery.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-competitive-veterinary-nursing",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-
-  // ==================== GRADE 4 — ADVANCED ====================
-  // Track 1: Fresh Graduates & Interns
-  {
-    id: "demo-g4-fg-1",
-    title: "Advanced Veterinary Clinical Practice",
-    slug: "advanced-veterinary-clinical-practice",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Intensive clinical transition training for high-volume surgical and emergency practice environments.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-veterinary-clinical-practice",
-    deliveryMode: "offline",
-    duration: "4 Weeks"
-  },
-  {
-    id: "demo-g4-fg-2",
-    title: "Advanced Clinical Skills Workshop",
-    slug: "advanced-clinical-skills-workshop",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Advanced hands-on workshop covering specialized soft tissue procedures, emergency triage, and diagnostic workflows.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-clinical-skills-workshop",
-    deliveryMode: "workshop",
-    duration: "2 Weeks"
-  },
-  // Track 2: Practicing Veterinarians
-  {
-    id: "demo-g4-pv-1",
-    title: "Advanced Surgical Practice",
-    slug: "advanced-surgical-practice",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Complex abdominal surgeries, gastrointestinal resection, reconstructive wound closure, and surgical oncology basics.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-surgical-practice",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g4-pv-2",
-    title: "Advanced Clinical Practice Mastery",
-    slug: "advanced-clinical-practice-mastery",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Mastery-level training for experienced practitioners expanding their surgical and diagnostic clinical portfolio.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-clinical-practice-mastery",
-    deliveryMode: "offline",
-    duration: "1 Week"
-  },
-  // Track 3: Diagnostic Specialization
-  {
-    id: "demo-g4-ds-1",
-    title: "Advanced Radiology & Ultrasound",
-    slug: "advanced-radiology-ultrasound",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "Comprehensive diagnostic imaging covering fine-needle aspiration under ultrasound, cardiac screening, and contrast X-rays.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-radiology-ultrasound",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g4-ds-2",
-    title: "Advanced Diagnostic Imaging Practice",
-    slug: "advanced-diagnostic-imaging-practice",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "Advanced probe manipulation, vascular Doppler, and complex multi-organ pathology interpretation.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-diagnostic-imaging-practice",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-  // Track 4: Emergency & Critical Care
-  {
-    id: "demo-g4-ec-1",
-    title: "Advanced Emergency & ICU Practice",
-    slug: "advanced-emergency-icu-practice",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "Intensive critical care training covering sepsis protocols, blood transfusion therapy, and multi-organ dysfunction management.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-emergency-icu-practice",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g4-ec-2",
-    title: "Advanced Critical Care Skills",
-    slug: "advanced-critical-care-skills",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "Specialized ICU procedures, central line placement, chest tube insertion, and advanced hemodynamic monitoring.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-critical-care-skills",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-  // Track 5: Vet Nurse & Paravet Staff
-  {
-    id: "demo-g4-vn-1",
-    title: "Advanced Veterinary Nursing Practice",
-    slug: "advanced-veterinary-nursing-practice",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "Senior nursing leadership, emergency triage coordination, and advanced surgical assistant protocols.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-veterinary-nursing-practice",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g4-vn-2",
-    title: "Advanced Paravet Clinical Care",
-    slug: "advanced-paravet-clinical-care",
-    grade: 4,
-    gradeCode: "grade-4",
-    gradeName: "Advanced",
-    gradeLabel: "Grade 4 — Advanced",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "Advanced laboratory diagnostics, cytology slide staining, blood smear evaluation, and intensive inpatient nursing.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-advanced-paravet-clinical-care",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-
-  // ==================== GRADE 5 — PRO ====================
-  // Track 1: Fresh Graduates & Interns
-  {
-    id: "demo-g5-fg-1",
-    title: "Professional Veterinary Clinical Mastery",
-    slug: "professional-veterinary-clinical-mastery",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Masterclass-level transition program preparing top-tier graduates for senior clinical responsibilities.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-professional-veterinary-clinical-mastery",
-    deliveryMode: "offline",
-    duration: "4 Weeks"
-  },
-  {
-    id: "demo-g5-fg-2",
-    title: "Pro-Level Clinical Skills",
-    slug: "pro-level-clinical-skills",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    track: "fresh-graduates",
-    trackName: "Fresh Graduates & Interns",
-    trackLabel: "Fresh Graduates & Interns",
-    description: "Comprehensive expert-led clinical immersion in advanced diagnostic reasoning and complex surgical decision-making.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-pro-level-clinical-skills",
-    deliveryMode: "workshop",
-    duration: "2 Weeks"
-  },
-  // Track 2: Practicing Veterinarians
-  {
-    id: "demo-g5-pv-1",
-    title: "Professional Surgical Masterclass",
-    slug: "professional-surgical-masterclass",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Expert-level surgical suite masterclass focusing on complex reconstructive, thoracic, and emergency surgical procedures.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-professional-surgical-masterclass",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g5-pv-2",
-    title: "Pro Clinical Practice Mastery",
-    slug: "pro-clinical-practice-mastery",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    track: "practicing-vets",
-    trackName: "Practicing Veterinarians",
-    trackLabel: "Practicing Veterinarians",
-    description: "Premier clinical development program for clinic directors and senior veterinary surgeons.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-pro-clinical-practice-mastery",
-    deliveryMode: "offline",
-    duration: "1 Week"
-  },
-  // Track 3: Diagnostic Specialization
-  {
-    id: "demo-g5-ds-1",
-    title: "Professional Diagnostic Imaging Masterclass",
-    slug: "professional-diagnostic-imaging-masterclass",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "Pro-level masterclass in advanced diagnostic ultrasound, echocardiography, and complex radiological interpretation.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-professional-diagnostic-imaging-masterclass",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g5-ds-2",
-    title: "Pro Radiology & Ultrasound",
-    slug: "pro-radiology-ultrasound",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    track: "diagnostic-specialization",
-    trackName: "Diagnostic Specialization",
-    trackLabel: "Diagnostic Specialization",
-    description: "Expert diagnostic imaging refinement for specialists seeking highest-level diagnostic accuracy in small animal practice.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-pro-radiology-ultrasound",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-  // Track 4: Emergency & Critical Care
-  {
-    id: "demo-g5-ec-1",
-    title: "Professional Emergency & Critical Care",
-    slug: "professional-emergency-critical-care",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "Pro-level emergency medicine masterclass covering advanced life support, multi-system trauma, and ICU director workflows.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-professional-emergency-critical-care",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g5-ec-2",
-    title: "Pro-Level ICU Mastery",
-    slug: "pro-level-icu-mastery",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    track: "emergency-care",
-    trackName: "Emergency & Critical Care",
-    trackLabel: "Emergency & Critical Care",
-    description: "Mastery of critical care algorithms, continuous invasive monitoring, and emergency surgical stabilization.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-pro-level-icu-mastery",
-    deliveryMode: "workshop",
-    duration: "1 Week"
-  },
-  // Track 5: Vet Nurse & Paravet Staff
-  {
-    id: "demo-g5-vn-1",
-    title: "Professional Veterinary Nursing Masterclass",
-    slug: "professional-veterinary-nursing-masterclass",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    track: "vet-nurse",
-    trackName: "Vet Nurse & Paravet Staff",
-    trackLabel: "Vet Nurse & Paravet Staff",
-    description: "Executive-level nursing management, operating theater direction, and senior paravet clinical leadership.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-professional-veterinary-nursing-masterclass",
-    deliveryMode: "offline",
-    duration: "2 Weeks"
-  },
-  {
-    id: "demo-g5-vn-2",
-    title: "Pro Paravet Clinical Practice",
-    slug: "pro-paravet-clinical-practice",
-    grade: 5,
-    gradeCode: "grade-5",
-    gradeName: "Pro",
-    gradeLabel: "Grade 5 — Pro",
-    description: "Pro-level clinical skills for head veterinary nurses overseeing ICU monitoring, anesthesia safety, and ward supervision.",
-    status: "demo",
-    isDemo: true,
-    url: "#demo-pro-paravet-clinical-practice",
-    deliveryMode: "workshop",
-    duration: "1 Week"
+    image: "assets/images/programs/program-emergency.webp"
   }
 ];
 
@@ -2860,6 +2534,15 @@ function initProgramFilters() {
   const personaBanner = document.getElementById('persona-discovery-banner');
   const personaCloseBtn = document.getElementById('persona-banner-reset');
   const countNumberEl = document.getElementById('count-number');
+  const loadMoreContainer = document.getElementById('load-more-container');
+  const loadMoreBtn = document.getElementById('btn-load-more-programs');
+  const showingCurrentEl = document.getElementById('showing-count-current');
+  const showingTotalEl = document.getElementById('showing-count-total');
+
+  // Pagination Configuration: Initial 6 programs visible
+  const PROGRAMS_PAGE_SIZE = 6;
+  let visibleLimit = PROGRAMS_PAGE_SIZE;
+  let currentFilteredPrograms = [];
 
   if (!dynamicContainer && !levelSelect && !trackSelect) return;
 
@@ -2897,7 +2580,10 @@ function initProgramFilters() {
     }
   }
 
-  function filterPrograms() {
+  function filterPrograms(resetPagination = true) {
+    if (resetPagination) {
+      visibleLimit = PROGRAMS_PAGE_SIZE;
+    }
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     let rawLevel = levelSelect ? levelSelect.value.toLowerCase().trim() : 'all';
     // Fallback if legacy grade was passed
@@ -2980,14 +2666,14 @@ function initProgramFilters() {
     }
 
     // Source dataset: all 28 programs
-    const sourceList = (window.VETNOVA_28_PROGRAMS && window.VETNOVA_28_PROGRAMS.length >= 28) 
-      ? window.VETNOVA_28_PROGRAMS 
+    const sourceList = (window.VETNOVA_28_PROGRAMS && window.VETNOVA_28_PROGRAMS.length >= 28)
+      ? window.VETNOVA_28_PROGRAMS
       : (window.VETNOVA_PROGRAMS_DATA || []);
 
     const matched = sourceList.filter(p => {
       // 1. Text Search matching
-      const matchesQuery = query === "" || 
-        (p.title && p.title.toLowerCase().includes(query)) || 
+      const matchesQuery = query === "" ||
+        (p.title && p.title.toLowerCase().includes(query)) ||
         (p.description && p.description.toLowerCase().includes(query)) ||
         (p.category && p.category.toLowerCase().includes(query)) ||
         (p.slug && p.slug.toLowerCase().includes(query));
@@ -3021,22 +2707,31 @@ function initProgramFilters() {
       return matchesQuery && matchesTrack && matchesMode;
     });
 
-    // Dynamic Program Count Update
+    // Store current filtered list for Load More pagination
+    currentFilteredPrograms = matched;
+
+    // Dynamic Program Count Update - Always reflects TOTAL matching programs
     if (countNumberEl) {
       countNumberEl.textContent = matched.length;
     }
 
-    // Render cards
+    // Render cards with incremental Load More pagination (max 6 initially)
     if (noResultsState && dynamicContainer) {
       if (matched.length === 0) {
         noResultsState.style.display = "block";
         dynamicContainer.style.display = "none";
         dynamicContainer.innerHTML = "";
+        if (loadMoreContainer) {
+          loadMoreContainer.style.display = "none";
+        }
       } else {
         noResultsState.style.display = "none";
         dynamicContainer.style.display = "grid";
 
-        dynamicContainer.innerHTML = matched.map((p, idx) => {
+        // Slice to display up to visibleLimit programs (first 6 initially)
+        const visiblePrograms = matched.slice(0, visibleLimit);
+
+        dynamicContainer.innerHTML = visiblePrograms.map((p, idx) => {
           const orderNum = p.order || (idx + 1);
           const hasSyllabus = p.syllabusStatus === "Available";
           const programTitle = (p.title || "").replace(/^#?\d+[\.\s\-#]+\s*/, "");
@@ -3047,7 +2742,7 @@ function initProgramFilters() {
 
           // Determine Level Specific URL, Action Text & Content
           let viewSyllabusUrl = progUrl;
-          let viewSyllabusText = hasSyllabus ? "View Syllabus" : "Explore Program";
+          let viewSyllabusText = "Syllabus";
           let stageContentHTML = "";
           let topBadgeHTML = "";
           let levelBadgesHTML = "";
@@ -3058,9 +2753,9 @@ function initProgramFilters() {
 
           if (levelFilter === 'foundation') {
             viewSyllabusUrl = `${progUrl}?level=foundation#curriculum`;
-            viewSyllabusText = "View Foundation Syllabus";
+            viewSyllabusText = "Syllabus";
             topBadgeHTML = `<span class="badge-grade-pill badge-pill-foundation"><i class="fa-solid fa-seedling"></i> Foundation Stage</span>`;
-            
+
             levelBadgesHTML = `
               <div class="card-level-badges">
                 <span class="level-badge badge-foundation active"><i class="fa-solid fa-check"></i> Foundation Active</span>
@@ -3091,7 +2786,7 @@ function initProgramFilters() {
             }
           } else if (levelFilter === 'intermediate') {
             viewSyllabusUrl = `${progUrl}?level=intermediate#curriculum`;
-            viewSyllabusText = "View Intermediate Syllabus";
+            viewSyllabusText = "Syllabus";
             topBadgeHTML = `<span class="badge-grade-pill badge-pill-intermediate"><i class="fa-solid fa-chart-line"></i> Intermediate Stage</span>`;
 
             levelBadgesHTML = `
@@ -3124,7 +2819,7 @@ function initProgramFilters() {
             }
           } else if (levelFilter === 'advanced') {
             viewSyllabusUrl = `${progUrl}?level=advanced#curriculum`;
-            viewSyllabusText = "View Advanced Syllabus";
+            viewSyllabusText = "Syllabus";
             topBadgeHTML = `<span class="badge-grade-pill badge-pill-advanced"><i class="fa-solid fa-award"></i> Advanced Stage</span>`;
 
             levelBadgesHTML = `
@@ -3158,7 +2853,7 @@ function initProgramFilters() {
           } else {
             // 'all' Levels
             viewSyllabusUrl = progUrl;
-            viewSyllabusText = hasSyllabus ? "View Syllabus" : "Explore Program";
+            viewSyllabusText = "Syllabus";
             topBadgeHTML = hasSyllabus
               ? `<span class="badge-grade-pill" style="background:#1e7e44;color:#fff;"><i class="fa-solid fa-circle-check"></i> Three-Stage Syllabus</span>`
               : `<span class="badge-grade-pill" style="background:#b87314;color:#fff;"><i class="fa-solid fa-clock"></i> Syllabus in Review</span>`;
@@ -3172,8 +2867,8 @@ function initProgramFilters() {
             `;
           }
 
-          const enquireContext = levelFilter !== 'all' 
-            ? `${programTitle} (${levelNameMap[levelFilter]})` 
+          const enquireContext = levelFilter !== 'all'
+            ? `${programTitle} (${levelNameMap[levelFilter]})`
             : programTitle;
 
           return `
@@ -3204,13 +2899,24 @@ function initProgramFilters() {
                   </div>
                   <div class="program-card-actions">
                     <a class="btn btn-outline btn-sm" href="${viewSyllabusUrl}">${viewSyllabusText} <i class="fa-solid fa-arrow-right"></i></a>
-                    <button type="button" class="btn btn-primary btn-sm btn-show-interest" data-source="Program Enquiry" data-context="${enquireContext}">Enquire Now</button>
+                    <a href="contact.html?program=${encodeURIComponent(p.slug || p.id || programTitle)}#contact-form" class="btn btn-primary btn-sm">Enquire Now</a>
                   </div>
                 </div>
               </div>
             </div>
           `;
         }).join("");
+
+        // Manage Load More button visibility and showing status
+        if (loadMoreContainer) {
+          if (visibleLimit < matched.length) {
+            loadMoreContainer.style.display = "flex";
+            if (showingCurrentEl) showingCurrentEl.textContent = visiblePrograms.length;
+            if (showingTotalEl) showingTotalEl.textContent = matched.length;
+          } else {
+            loadMoreContainer.style.display = "none";
+          }
+        }
       }
     }
 
@@ -3229,19 +2935,40 @@ function initProgramFilters() {
       else p.classList.remove('active');
     });
     updateUrlParam('all');
-    filterPrograms();
+    filterPrograms(true);
   }
 
-  // Bind Event Listeners
-  if (searchInput) searchInput.addEventListener('input', filterPrograms);
+  // Bind Load More button handler
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+      if (visibleLimit < currentFilteredPrograms.length) {
+        const prevCount = visibleLimit;
+        visibleLimit += PROGRAMS_PAGE_SIZE;
+        filterPrograms(false); // keep previously displayed cards, reveal next chunk
+
+        // Keyboard accessibility: gently move focus to first newly revealed card without layout jump
+        const allCards = dynamicContainer.querySelectorAll('.program-card');
+        if (allCards && allCards[prevCount]) {
+          const firstNewLink = allCards[prevCount].querySelector('.program-card-title a') || allCards[prevCount];
+          if (firstNewLink) {
+            firstNewLink.setAttribute('tabindex', '-1');
+            firstNewLink.focus({ preventScroll: true });
+          }
+        }
+      }
+    });
+  }
+
+  // Bind Event Listeners (all reset pagination to initial 6)
+  if (searchInput) searchInput.addEventListener('input', () => filterPrograms(true));
   if (levelSelect) {
     levelSelect.addEventListener('change', () => {
       updateUrlParam(levelSelect.value);
-      filterPrograms();
+      filterPrograms(true);
     });
   }
-  if (trackSelect) trackSelect.addEventListener('change', filterPrograms);
-  if (modeSelect) modeSelect.addEventListener('change', filterPrograms);
+  if (trackSelect) trackSelect.addEventListener('change', () => filterPrograms(true));
+  if (modeSelect) modeSelect.addEventListener('change', () => filterPrograms(true));
   if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', resetAllFilters);
   if (personaCloseBtn) personaCloseBtn.addEventListener('click', resetAllFilters);
 
@@ -3592,10 +3319,32 @@ function initBatchTabs() {
     });
   });
 
-  // Handle URL hash if user navigated directly to #ongoing-batches
-  if (window.location.hash === '#ongoing-batches') {
-    switchTab('panel-ongoing-batches');
+  // In-tab button switchers (e.g. View Upcoming Batches inside Ongoing Batches tab)
+  document.addEventListener('click', (e) => {
+    const switchBtn = e.target.closest('.btn-switch-upcoming, [data-switch-tab]');
+    if (switchBtn) {
+      e.preventDefault();
+      const targetPanelId = switchBtn.dataset.switchTab || 'panel-upcoming-batches';
+      switchTab(targetPanelId);
+      const targetSec = document.getElementById('practical-batches') || document.getElementById('upcoming-batches');
+      if (targetSec) {
+        const top = targetSec.getBoundingClientRect().top + window.pageYOffset - 90;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+  });
+
+  // Handle URL hash if user navigated directly to #ongoing-batches or #upcoming-batches
+  function handleBatchHash() {
+    if (window.location.hash === '#ongoing-batches') {
+      switchTab('panel-ongoing-batches');
+    } else if (window.location.hash === '#upcoming-batches') {
+      switchTab('panel-upcoming-batches');
+    }
   }
+
+  handleBatchHash();
+  window.addEventListener('hashchange', handleBatchHash);
 }
 
 /* ==========================================================================
@@ -4338,10 +4087,10 @@ function initFacultyModal() {
     `;
     document.body.appendChild(modal);
   }
-  
+
   const closeBtn = document.getElementById('faculty-modal-close');
   const profileBtns = document.querySelectorAll('.faculty-profile-btn');
-  
+
   // Modal elements
   const imgEl = document.getElementById('faculty-modal-image');
   const nameEl = document.getElementById('faculty-modal-name');
@@ -4350,11 +4099,11 @@ function initFacultyModal() {
   const expEl = document.getElementById('faculty-modal-exp');
   const introEl = document.getElementById('faculty-modal-intro');
   const expertiseEl = document.getElementById('faculty-modal-expertise');
-  
+
   function openModal(facultyId) {
     const data = (window.loadedFacultyMap && window.loadedFacultyMap[facultyId]) || facultyProfiles[facultyId];
     if (!data) return;
-    
+
     // Populate data
     const photo = data.image || data.img || 'assets/images/about/about-faculty-01.webp';
     const name = data.name || 'Faculty Specialist';
@@ -4370,7 +4119,7 @@ function initFacultyModal() {
     qualEl.textContent = qual;
     expEl.textContent = exp;
     introEl.textContent = intro;
-    
+
     // Populate expertise chips
     expertiseEl.innerHTML = '';
     const tags = data.department || data.specialization
@@ -4383,7 +4132,7 @@ function initFacultyModal() {
       chip.textContent = item;
       expertiseEl.appendChild(chip);
     });
-    
+
     // Show modal and prevent scroll
     // Small timeout to allow display block to apply before adding transition class
     setTimeout(() => {
@@ -4391,7 +4140,7 @@ function initFacultyModal() {
     }, 10);
     document.body.style.overflow = 'hidden';
   }
-  
+
   function closeModal() {
     modal.classList.remove('open');
     // Wait for transition
@@ -4399,7 +4148,7 @@ function initFacultyModal() {
       document.body.style.overflow = '';
     }, 300);
   }
-  
+
   profileBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -4407,15 +4156,15 @@ function initFacultyModal() {
       if (facultyId) openModal(facultyId);
     });
   });
-  
+
   closeBtn.addEventListener('click', closeModal);
-  
+
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       closeModal();
     }
   });
-  
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal.classList.contains('open')) {
       closeModal();
@@ -4592,7 +4341,12 @@ function initConnectWidget() {
   const actionLinks = widgetPanel.querySelectorAll('.connect-action-item');
   actionLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-      if (link.classList.contains('btn-counselling-modal') || link.getAttribute('href') === 'contact.html#enquiry') {
+      const href = link.getAttribute('href') || '';
+      if (href.includes('contact.html')) {
+        closePanel();
+        return;
+      }
+      if (link.classList.contains('btn-counselling-modal') || href === 'contact.html#enquiry') {
         const modal = document.getElementById('enquiry-modal');
         if (modal) {
           e.preventDefault();

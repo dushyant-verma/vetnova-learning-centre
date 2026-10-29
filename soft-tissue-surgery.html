@@ -113,17 +113,15 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=soft-tissue-surgery#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Syllabus</a>
               </div>
             </div>
 
             <!-- Right Side Image Frame + 4 Floating Badges -->
             <div class="ps-hero-media-wrapper">
               <div class="ps-hero-image-frame">
-                <img src="assets/programs/soft-tissue-surgery-hero.webp"
+                <img src="assets/images/programs/program-surgery.webp"
                   alt="Indian veterinary surgeon performing delicate soft tissue surgery under bright sterile OR lights"
                   loading="lazy" decoding="async" />
                 <div class="ps-hero-overlay"></div>
@@ -574,7 +572,7 @@
                 <p>Complete this programme with the confidence, procedural skills, and practical experience expected inside modern veterinary hospitals.</p>
               </div>
               <div class="ccm-cta-actions">
-                <a href="contact.html" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="contact.html?program=soft-tissue-surgery#contact-form" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
                 <a href="#all-programs" class="btn btn-white-outline">Download Curriculum</a>
               </div>
             </div>
@@ -620,62 +618,88 @@
         </div>
       </section>
 
-      <!-- SECTION 5: Course Curriculum Accordion -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Surgical Modules</span>
-            <h2>Surgical Workshop Curriculum</h2>
-            <p>Intensive 1-week syllabus structured for maximum tactile repetition and live procedure guidance.</p>
+            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
+            <h2>Course Curriculum</h2>
+            <p>Hands-on surgical training progression from aseptic technique and core suture patterns to complex abdominal and reconstructive procedures.</p>
           </div>
 
           <div id="three-stage-syllabus-container">
-    <div class="three-stage-syllabus-card" id="three-stage-syllabus-card">
-      <div class="syllabus-subject-header">
-        <h3 class="syllabus-subject-title">
-          <i class="fa-solid fa-graduation-cap"></i>
-          <span>2. Soft Tissue Surgery</span>
-        </h3>
-        <span class="syllabus-subject-badge">Three-Stage Curriculum</span>
-      </div>
+          <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
+            <div class="curriculum-item active">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-soft-tissue-surgery">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Surgical Asepsis, Instrumentation & Core Minor Procedures</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-soft-tissue-surgery" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">Operating theatre protocols, sterile draping, instrument handling, suture patterns, and routine neutering procedures.</p>
+                <ul class="curriculum-topics">
+                  <li>Surgical asepsis, instruments and suture materials</li>
+                  <li>Pre-operative assessment and surgical planning</li>
+                  <li>Ovariohysterectomy and castration (dog, cat)</li>
+                  <li>Wound classification, healing and dressings</li>
+                  <li>Abscess, lacerations and simple wound closure</li>
+                  <li>Cystotomy and enterotomy basics</li>
+                  <li>Post-operative care and complications</li>
+                </ul>
+              </div>
+            </div>
 
-      <div class="syllabus-stage-row stage-foundation">
-        <div class="syllabus-stage-label">
-          <span>Foundation</span>
-          <span class="syllabus-stage-subtext">Core Clinical Principles</span>
-        </div>
-        <div class="syllabus-stage-content">
-          <ul class="syllabus-topic-list">
-            <li>Surgical asepsis, instruments and suture materials</li><li>Pre-operative assessment and surgical planning</li><li>Ovariohysterectomy and castration (dog, cat)</li><li>Wound classification, healing and dressings</li><li>Abscess, lacerations and simple wound closure</li><li>Cystotomy and enterotomy basics</li><li>Post-operative care and complications</li>
-          </ul>
-        </div>
-      </div>
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-soft-tissue-surgery">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Abdominal Surgical Procedures & Soft Tissue Reconstruction</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-soft-tissue-surgery" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Emergency abdominal surgery, GDV gastropexy, enterotomy, splenectomy, herniorrhaphies, and skin flap reconstruction.</p>
+                <ul class="curriculum-topics">
+                  <li>Pyometra, uterine and ovarian emergencies</li>
+                  <li>Gastric dilatation-volvulus and gastropexy</li>
+                  <li>Intestinal resection and anastomosis, foreign bodies</li>
+                  <li>Splenectomy, hepatic and biliary surgery</li>
+                  <li>Perineal, inguinal and diaphragmatic hernias</li>
+                  <li>Urethrostomy and urethral obstruction surgery</li>
+                  <li>Reconstructive techniques: skin flaps, grafts, drains</li>
+                </ul>
+              </div>
+            </div>
 
-      <div class="syllabus-stage-row stage-intermediate">
-        <div class="syllabus-stage-label">
-          <span>Intermediate</span>
-          <span class="syllabus-stage-subtext">Diagnostics &amp; Management</span>
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-soft-tissue-surgery">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>Advanced Thoracic, Portosystemic & Oncologic Surgical Interventions</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-soft-tissue-surgery" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Thoracic procedures, portosystemic shunt attenuation, oncologic margin resection, and revision surgery complications.</p>
+                <ul class="curriculum-topics">
+                  <li>Thoracic surgery: lung lobectomy, pericardiectomy, thoracotomy</li>
+                  <li>Portosystemic shunt and complex hepatobiliary surgery</li>
+                  <li>Tumour resection: mastectomy, margins and oncologic surgery</li>
+                  <li>Anal sac, rectal and perineal reconstruction</li>
+                  <li>Laparoscopy and minimally invasive surgery</li>
+                  <li>Management of surgical complications and revision surgery</li>
+                  <li>Surgical audit and training of junior surgeons</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
-        <div class="syllabus-stage-content">
-          <ul class="syllabus-topic-list">
-            <li>Pyometra, uterine and ovarian emergencies</li><li>Gastric dilatation-volvulus and gastropexy</li><li>Intestinal resection and anastomosis, foreign bodies</li><li>Splenectomy, hepatic and biliary surgery</li><li>Perineal, inguinal and diaphragmatic hernias</li><li>Urethrostomy and urethral obstruction surgery</li><li>Reconstructive techniques: skin flaps, grafts, drains</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="syllabus-stage-row stage-advanced">
-        <div class="syllabus-stage-label">
-          <span>Advanced</span>
-          <span class="syllabus-stage-subtext">Specialist Decision-Making</span>
-        </div>
-        <div class="syllabus-stage-content">
-          <ul class="syllabus-topic-list">
-            <li>Thoracic surgery: lung lobectomy, pericardiectomy, thoracotomy</li><li>Portosystemic shunt and complex hepatobiliary surgery</li><li>Tumour resection: mastectomy, margins and oncologic surgery</li><li>Anal sac, rectal and perineal reconstruction</li><li>Laparoscopy and minimally invasive surgery</li><li>Management of surgical complications and revision surgery</li><li>Surgical audit and training of junior surgeons</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
       </section>
 
       <!-- SECTION 6: Training Format -->
@@ -846,7 +870,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=soft-tissue-surgery#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> Chat with Surgical Advisor</a>
@@ -915,7 +939,7 @@
             </div>
             <div class="single-batch-footer">
               <div class="batch-price-tag">₹18,500 <small>+ GST</small></div>
-              <a class="btn btn-primary btn-sm btn-apply-now" href="contact.html">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+              <a class="btn btn-primary btn-sm btn-apply-now" href="contact.html?program=soft-tissue-surgery#contact-form">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
             </div>
           </div>
         </div>
@@ -1069,9 +1093,9 @@
               <p>Seats are strictly capped at 8 doctors per batch for maximum mentor attention. Apply now for the
                 upcoming surgical workshop.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=soft-tissue-surgery#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=soft-tissue-surgery#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

@@ -134,11 +134,11 @@ body.homepage-v4-page {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 16px 32px;
+  padding: 12px 24px;
   font-family: var(--hp4-font-display);
   font-size: 0.95rem;
   font-weight: 700;
-  border-radius: var(--hp4-radius-full);
+  border-radius: 12px;
   text-decoration: none;
   transition: all var(--hp4-transition-smooth);
   cursor: pointer;

@@ -74,17 +74,15 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=laboratory-diagnostics">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=laboratory-diagnostics#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html?program=laboratory-diagnostics#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Brochure</a>
               </div>
             </div>
 
             <!-- Right Side Image Frame + 4 Floating Badges -->
             <div class="ps-hero-media-wrapper">
               <div class="ps-hero-image-frame">
-                <img src="assets/vet_facility_diagnostics_room.webp"
+                <img src="assets/images/programs/program-laboratory-diagnostics.webp"
                   alt="Indian veterinary surgeons teaching practical surgery to veterinary students inside a modern veterinary hospital"
                   loading="lazy" decoding="async" />
                 <div class="ps-hero-overlay"></div>
@@ -408,24 +406,87 @@
         </div>
       </section>
             <!-- SECTION 4: Three-Stage Syllabus (Foundation, Intermediate, Advanced) -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> Clinical Progression</span>
-            <h2>Three-Stage Syllabus</h2>
-            <p>Structured clinical training progression covering Foundation, Intermediate, and Advanced specialist levels.</p>
+            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
+            <h2>Course Curriculum</h2>
+            <p>Operational laboratory diagnostics training covering analyzer calibration, point-of-care rapid assays, and quality control systems.</p>
           </div>
 
           <div id="three-stage-syllabus-container">
-      <div class="syllabus-pending-box">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        <h4>Detailed syllabus coming soon. Please contact VetNova for current program information.</h4>
-        <p>The verified curriculum and clinical wet-lab schedule for <strong>Laboratory Diagnostics</strong> is currently being scheduled. Contact our academic office for provisional details.</p>
-        <a href="contact.html?program=laboratory-diagnostics" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-envelope"></i> Request Current Program Info
-        </a>
-      </div>
-    </div>
+          <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
+            <div class="curriculum-item active">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-laboratory-diagnostics">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Lab Safety, Pre-Analytical Error Control & Analyzer Daily Calibration</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-laboratory-diagnostics" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">Clinical laboratory safety, sample integrity (avoiding hemolysis/lipemia), centrifuge controls, automated hematology calibration, and pipetting.</p>
+                <ul class="curriculum-topics">
+                  <li>Clinical laboratory biosafety guidelines, chemical hygiene, and personal protection</li>
+                  <li>Pre-analytical error identification and prevention: hemolysis, lipemia, and clots</li>
+                  <li>Centrifuge selection, relative centrifugal force (RCF) calculations, and maintenance</li>
+                  <li>Automated hematology analyzer: fluidics, aperture cleaning, and reagent priming</li>
+                  <li>Clinical chemistry benchtop analyzer: dry chemistry vs wet chemistry slide handling</li>
+                  <li>Precision micro-pipetting technique, volume verification, and ergonomic handling</li>
+                  <li>Daily calibration, control runs, and operating standard operating procedure (SOP) logs</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-laboratory-diagnostics">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Point-of-Care Rapid Assays, Digital Microscopy & Blood Gas Testing</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-laboratory-diagnostics" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Point-of-care rapid ELISA/lateral flow assays, benchtop blood gas analyzers, digital microscopy, and automated urinalysis equipment.</p>
+                <ul class="curriculum-topics">
+                  <li>Point-of-care (POC) rapid diagnostic assays: lateral flow, ELISA, and antigen cartridges</li>
+                  <li>Point-of-care blood gas, acid-base, and electrolyte analyzer operation and sample handling</li>
+                  <li>Digital in-house microscope operation, digital camera capture, and telecytology</li>
+                  <li>Automated urinalysis analyzers vs manual sediment microscopy cross-validation</li>
+                  <li>Point-of-care coagulation analyzers (ACT, PT/aPTT) operational procedure</li>
+                  <li>Specimen preservation, storage temperatures, and transport media for referral labs</li>
+                  <li>Documenting diagnostic findings in electronic medical records and lab logbooks</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-laboratory-diagnostics">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>Diagnostic Result Troubleshooting, Quality Control Charts & Lab Workflows</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-laboratory-diagnostics" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Troubleshooting analyzer flags and discrepancy resolution, Levey-Jennings quality charts, coagulation testing, and establishing 24/7 hospital workflows.</p>
+                <ul class="curriculum-topics">
+                  <li>Comprehensive troubleshooting of aberrant and conflicting laboratory test values</li>
+                  <li>Statistical quality control: implementing Levey-Jennings charts and Westgard rules</li>
+                  <li>Sample linearity checks, dilution protocols, and analytical interference mitigation</li>
+                  <li>In-clinic blood gas and acid-base diagnostic algorithm interpretation in ICU patients</li>
+                  <li>Design and physical workflow layout for an efficient in-hospital diagnostic laboratory</li>
+                  <li>Equipment vendor evaluation, maintenance contracts, and cost-per-test economics</li>
+                  <li>Continuous quality improvement (CQI) and proficiency testing for clinical lab staff</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
       </section>\n\n      <!-- SECTION 5: Training Format (Infographic Cards) -->
       <section class="section soft" id="training-format">
@@ -655,7 +716,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=laboratory-diagnostics">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=laboratory-diagnostics#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> Enquire via WhatsApp</a>
@@ -807,9 +868,9 @@
               <p>Join the next batch of the Veterinary Skill-Up Program and transform your surgical and diagnostic
                 confidence with direct specialist mentorship.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=laboratory-diagnostics">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=laboratory-diagnostics#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=laboratory-diagnostics#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

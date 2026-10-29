@@ -114,17 +114,15 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=veterinary-skill-up#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Brochure</a>
               </div>
             </div>
 
             <!-- Right Side Image Frame + 4 Floating Badges -->
             <div class="ps-hero-media-wrapper">
               <div class="ps-hero-image-frame">
-                <img src="assets/programs/veterinary-skill-up-hero.webp"
+                <img src="assets/images/programs/program-skill-up.webp"
                   alt="Indian veterinary surgeon teaching practical clinical skills to veterinary students"
                   loading="lazy" decoding="async" />
                 <div class="ps-hero-overlay"></div>
@@ -576,7 +574,7 @@
                 <p>Complete this programme with the confidence, procedural skills, and practical experience expected inside modern veterinary hospitals.</p>
               </div>
               <div class="ccm-cta-actions">
-                <a href="contact.html" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="contact.html?program=veterinary-skill-up#contact-form" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
                 <a href="#all-programs" class="btn btn-white-outline">Download Curriculum</a>
               </div>
             </div>
@@ -622,95 +620,77 @@
         </div>
       </section>
 
-      <!-- SECTION 5: Course Curriculum Accordion -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
             <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
             <h2>Course Curriculum</h2>
-            <p>Step-by-step 4-week syllabus designed for maximum procedural exposure and tactile repetition.</p>
+            <p>Flagship 3-stage clinical progression covering surgical dexterity, soft tissue surgery, diagnostic imaging, and emergency triage.</p>
           </div>
 
+          <div id="three-stage-syllabus-container">
           <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
             <div class="curriculum-item active">
-              <div class="curriculum-header">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-veterinary-skill-up">
                 <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 1 • WEEK 1</span>
-                  <h3>Surgical Dexterity &amp; Sterile Technique</h3>
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Surgical Dexterity, Instrument Handling & Suture Patterns</h3>
                 </div>
                 <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Mastering instrument handling, suture pattern
-                  selection, sterile field preparation, and tissue handling mechanics on anatomical models.</p>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-veterinary-skill-up" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">Mastering instrument handling, suture pattern selection, sterile field preparation, and tissue handling mechanics on anatomical models.</p>
                 <ul class="curriculum-topics">
-                  <li>Instrument ergonomics: Needle holder grips, thumb forceps, tissue scissors.</li>
-                  <li>Suture patterns: Simple interrupted, continuous, Ford interlocking, subcuticular.</li>
-                  <li>Aseptic gowning, scrubbing, draping &amp; instrument tray setup.</li>
-                  <li>Practical Lab: 20+ hours knot-tying and model incision closure practice.</li>
+                  <li>Instrument ergonomics: Needle holder grips, thumb forceps, and tissue scissors</li>
+                  <li>Suture patterns: Simple interrupted, continuous, Ford interlocking, and subcuticular</li>
+                  <li>Aseptic gowning, scrubbing, draping, and instrument tray layout setup</li>
+                  <li>Practical Lab: 20+ hours knot-tying and anatomical model incision closure practice</li>
                 </ul>
               </div>
             </div>
 
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
             <div class="curriculum-item">
-              <div class="curriculum-header">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-veterinary-skill-up">
                 <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 2 • WEEK 2</span>
-                  <h3>Soft Tissue Procedures &amp; Abdominal Surgery</h3>
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Soft Tissue Procedures & Abdominal Surgical Interventions</h3>
                 </div>
                 <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Step-by-step procedural execution for common canine and
-                  feline surgeries with specialist mentor supervision.</p>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-veterinary-skill-up" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Step-by-step procedural execution for canine and feline spay/neuter, cystotomy, and gastrointestinal enterotomy with mentor guidance.</p>
                 <ul class="curriculum-topics">
-                  <li>Canine &amp; Feline Spay (Ovariohysterectomy) and Neuter (Castration) techniques.</li>
-                  <li>Cystotomy for urolith removal and bladder closure integrity testing.</li>
-                  <li>Intestinal gastrotomy &amp; enterotomy closure protocols.</li>
-                  <li>Practical Lab: Hands-on surgical suite procedural execution.</li>
+                  <li>Canine and feline spay (ovariohysterectomy) and neuter (castration) techniques</li>
+                  <li>Cystotomy for urolith removal and bladder wall closure integrity testing</li>
+                  <li>Intestinal gastrotomy and enterotomy closure protocols and leak testing</li>
+                  <li>Practical Lab: Hands-on surgical suite procedural execution on clinical models</li>
                 </ul>
               </div>
             </div>
 
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
             <div class="curriculum-item">
-              <div class="curriculum-header">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-veterinary-skill-up">
                 <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 3 • WEEK 3</span>
-                  <h3>Diagnostic Radiology &amp; Ultrasound Scanning</h3>
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>Diagnostic Imaging, Emergency Triage, Anesthesia & Capstone Practice</h3>
                 </div>
                 <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Systematic interpretation of abdominal and thoracic
-                  X-rays alongside abdominal ultrasound probe positioning.</p>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-veterinary-skill-up" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Systematic radiograph interpretation, abdominal ultrasound scanning, emergency patient triage, and simulated night-shift resuscitation drills.</p>
                 <ul class="curriculum-topics">
-                  <li>X-Ray positioning: Orthogonal views, contrast studies, radiograph artifact identification.</li>
-                  <li>Thoracic &amp; abdominal radiograph reading: Heart size, lung patterns, foreign bodies.</li>
-                  <li>AFAST &amp; TFAST ultrasound protocols for fluid accumulation identification.</li>
-                  <li>Practical Lab: Live machine scanning and X-ray case study library reading.</li>
+                  <li>Digital X-Ray positioning and thoracic/abdominal radiograph interpretation</li>
+                  <li>AFAST and TFAST ultrasound scanning protocols for emergency fluid identification</li>
+                  <li>Emergency patient triage, endotracheal intubation, and CPR crash cart calculations</li>
+                  <li>Practical Lab: Simulated emergency patient resuscitation and capstone practical evaluation</li>
                 </ul>
               </div>
             </div>
-
-            <div class="curriculum-item">
-              <div class="curriculum-header">
-                <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 4 • WEEK 4</span>
-                  <h3>Emergency Triage, Anesthesia &amp; Clinic Practice</h3>
-                </div>
-                <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">High-pressure emergency response, anesthetic
-                  monitoring, and client consultation communication strategies.</p>
-                <ul class="curriculum-topics">
-                  <li>Endotracheal intubation, IV catheter placement &amp; fluid rate calculations.</li>
-                  <li>Managing hypotension, hypothermia, and anesthetic arrest (CPR).</li>
-                  <li>Client communication, surgical consent, and post-op analgesia plans.</li>
-                  <li>Practical Lab: Simulated emergency patient triage and capstone practical exam.</li>
-                </ul>
-              </div>
-            </div>
+          </div>
           </div>
         </div>
       </section>
@@ -887,7 +867,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=veterinary-skill-up#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> Enquire via WhatsApp</a>
@@ -956,7 +936,7 @@
             </div>
             <div class="single-batch-footer">
               <div class="batch-price-tag">₹38,000 <small>+ GST</small></div>
-              <a class="btn btn-primary btn-sm btn-apply-now" href="contact.html">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+              <a class="btn btn-primary btn-sm btn-apply-now" href="contact.html?program=veterinary-skill-up#contact-form">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
             </div>
           </div>
         </div>
@@ -1112,9 +1092,9 @@
               <p>Join the next batch of the Veterinary Skill-Up Program and transform your surgical and diagnostic
                 confidence with direct specialist mentorship.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=veterinary-skill-up#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=veterinary-skill-up#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

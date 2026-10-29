@@ -118,17 +118,15 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=vet-nurse-programme#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Syllabus</a>
               </div>
             </div>
 
             <!-- Right Side Image Frame + 4 Floating Badges -->
             <div class="ps-hero-media-wrapper">
               <div class="ps-hero-image-frame">
-                <img src="assets/programs/vet-nurse-programme-hero.webp"
+                <img src="assets/images/programs/program-nursing.webp"
                   alt="Gentle Indian veterinary nurse carefully restraining a cat on examination table while monitoring vitals"
                   loading="lazy" decoding="async" />
                 <div class="ps-hero-overlay"></div>
@@ -580,7 +578,7 @@
                 <p>Complete this programme with the confidence, procedural skills, and practical experience expected inside modern veterinary hospitals.</p>
               </div>
               <div class="ccm-cta-actions">
-                <a href="contact.html" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="contact.html?program=vet-nurse-programme#contact-form" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
                 <a href="#all-programs" class="btn btn-white-outline">Download Curriculum</a>
               </div>
             </div>
@@ -626,95 +624,77 @@
         </div>
       </section>
 
-      <!-- SECTION 5: Course Curriculum Accordion -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Nursing Modules</span>
-            <h2>Vet Nurse Course Syllabus</h2>
-            <p>Step-by-step 2-week practical curriculum designed for maximum hands-on hospital task execution.</p>
+            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
+            <h2>Course Curriculum</h2>
+            <p>Comprehensive 3-stage veterinary nursing curriculum covering animal restraint, operating room preparation, laboratory support, and ward care.</p>
           </div>
 
+          <div id="three-stage-syllabus-container">
           <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
             <div class="curriculum-item active">
-              <div class="curriculum-header">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-vet-nurse-programme">
                 <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 1 • WEEK 1</span>
-                  <h3>Animal Behavior, Low-Stress Restraint &amp; Vitals</h3>
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Animal Behavior, Low-Stress Restraint & Vital Sign Monitoring</h3>
                 </div>
                 <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Understanding canine/feline body language, Fear-Free
-                  handling, towel wraps, muzzle positioning, and vital sign measuring.</p>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-vet-nurse-programme" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">Understanding canine/feline stress body language, Fear-Free handling, towel wraps, safe muzzle positioning, and accurate TPR recording.</p>
                 <ul class="curriculum-topics">
-                  <li>Recognizing stress signals, aggression signs, and defensive feline postures.</li>
-                  <li>Canine cephalic, saphenous, and jugular vein restraint techniques.</li>
-                  <li>Feline burrito wrap, cat bag usage, and Elizabethan collar fitting.</li>
-                  <li>Practical Lab: 15+ hours live animal handling and TPR monitoring practice.</li>
+                  <li>Recognizing stress signals, defensive body language, and feline postures</li>
+                  <li>Canine cephalic, saphenous, and jugular vein gentle restraint techniques</li>
+                  <li>Feline burrito towel wrap, cat bag usage, and Elizabethan collar fitting</li>
+                  <li>Practical Lab: 15+ hours live animal handling and temperature, pulse, respiration (TPR) monitoring</li>
                 </ul>
               </div>
             </div>
 
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
             <div class="curriculum-item">
-              <div class="curriculum-header">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-vet-nurse-programme">
                 <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 2 • WEEK 1</span>
-                  <h3>Operating Theater Prep, Sterilization &amp; Scrubbing</h3>
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Operating Theater Prep, Sterilization, Scrubbing & Medication Administration</h3>
                 </div>
                 <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Mastering autoclave sterilization, instrument tray
-                  organization, patient surgical site shaving/scrubbing, and circulating nurse duties.</p>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-vet-nurse-programme" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Mastering autoclave sterilization, instrument pack pouching, surgical site clipping/scrubbing, circulating nurse duties, and fluid math.</p>
                 <ul class="curriculum-topics">
-                  <li>Autoclave pouching, chemical indicator strips, and sterile pack shelf life.</li>
-                  <li>Patient surgical prep: Clipper technique, chlorhexidine/povidone scrub protocol.</li>
-                  <li>Circulating nurse role: Opening sterile packs, adjusting surgical lights, monitoring fluids.</li>
-                  <li>Practical Lab: Complete OT scrub suite setup and sterilization drills.</li>
+                  <li>Autoclave operation, chemical indicator validation, and sterile pack shelf life</li>
+                  <li>Patient surgical site preparation: clipping technique and antiseptic scrub protocols</li>
+                  <li>Circulating nurse role: opening sterile surgical packs and adjusting equipment</li>
+                  <li>IV fluid bag setup, infusion line priming, and drip rate (drops/min) calculations</li>
                 </ul>
               </div>
             </div>
 
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
             <div class="curriculum-item">
-              <div class="curriculum-header">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-vet-nurse-programme">
                 <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 3 • WEEK 2</span>
-                  <h3>Medication Administration &amp; Laboratory Support</h3>
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>Inpatient Ward Management, Lab Testing Support & Emergency Triage Assistance</h3>
                 </div>
                 <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Preparing prescribed oral/topical/subcutaneous
-                  medications, IV catheterization assist, fluid drip calculation, and basic lab tests.</p>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-vet-nurse-programme" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Managing inpatient wards, biohazard isolation, blood/urine sample collection assistance, centrifuge operation, and emergency triage support.</p>
                 <ul class="curriculum-topics">
-                  <li>Preparing IV fluid bags, infusion set priming, and drip rate (drops/min) math.</li>
-                  <li>Assisting veterinarians during IV catheter placement and tape securing.</li>
-                  <li>Sample collection assist: Blood tube handling (EDTA, Serum), urine strip testing.</li>
-                  <li>Practical Lab: Drip rate calculation drills and lab centrifuge operation.</li>
+                  <li>Hospital kennel sanitization, biohazard waste disposal, and cross-contamination prevention</li>
+                  <li>Inpatient monitoring logs: recording daily vital parameters, food/water intake, and medications</li>
+                  <li>Sample collection support: blood collection tubes (EDTA, Serum) and urine strip testing</li>
+                  <li>Emergency triage assistance: crash cart kit preparation and oxygen support delivery</li>
                 </ul>
               </div>
             </div>
-
-            <div class="curriculum-item">
-              <div class="curriculum-header">
-                <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 4 • WEEK 2</span>
-                  <h3>Hospital Ward Management, Hygiene &amp; Communication</h3>
-                </div>
-                <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Managing hospital inpatient wards, infection control
-                  isolation protocols, patient record keeping, and client discharge updates.</p>
-                <ul class="curriculum-topics">
-                  <li>Kennel sanitization, biohazard waste disposal, and hospital cross-contamination prevention.</li>
-                  <li>Inpatient care charts: Daily food/water intake, urination, defecation, and medication logs.</li>
-                  <li>Client communication: Explaining post-op wound care instructions and medication schedules.</li>
-                  <li>Practical Lab: Simulated hospital ward management capstone evaluation.</li>
-                </ul>
-              </div>
-            </div>
+          </div>
           </div>
         </div>
       </section>
@@ -886,7 +866,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=vet-nurse-programme#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> WhatsApp Enquiry</a>
@@ -1078,9 +1058,9 @@
               <p>Join the next Vet Nurse Foundation Certificate batch and gain hands-on clinical confidence in modern
                 animal healthcare.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=vet-nurse-programme#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=vet-nurse-programme#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

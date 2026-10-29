@@ -236,6 +236,17 @@
           <!-- Dynamic Program Cards Container -->
           <div id="programs-dynamic-grid" class="feature-grid-3"></div>
 
+          <!-- Load More Programs Action Container -->
+          <div id="load-more-container" class="load-more-container" style="display: none;">
+            <button id="btn-load-more-programs" class="btn btn-outline btn-load-more" type="button" aria-label="Load more veterinary programs">
+              <span>Load More Programs</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <p id="programs-showing-count" class="programs-showing-count" aria-live="polite">
+              Showing <span id="showing-count-current">6</span> of <span id="showing-count-total">28</span> programs
+            </p>
+          </div>
+
         </div>
       </section>
 
@@ -300,111 +311,136 @@
         </div>
       </section>
 
-      <!-- SECTION 5: Upcoming Practical Batches Schedule -->
-      <section class="section soft" id="upcoming-batches">
+      <!-- SECTION 5: Practical Training Batches (Unified Two-Tab Schedule) -->
+      <section class="section soft" id="practical-batches">
+        <div id="upcoming-batches"></div>
+        <div id="ongoing-batches"></div>
         <div class="container">
           <div class="section-head center">
             <span class="eyebrow"><i class="fa-solid fa-calendar-days"></i> BATCH CALENDAR</span>
-            <h2>Upcoming Practical Batches (2026)</h2>
+            <h2>Practical Training Batches</h2>
             <p>Strictly capped at 12 doctors per batch for 1-on-1 mentor guidance. Reserve your seat early.</p>
           </div>
 
-          <div
-            style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #e2e8f0; overflow: hidden; box-shadow: var(--soft-shadow);">
-            <div style="overflow-x-auto;">
-              <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 15px;">
-                <thead>
-                  <tr style="background-color: var(--navy-2); color: var(--white);">
-                    <th style="padding: 16px 20px;">Program Track</th>
-                    <th style="padding: 16px 20px;">Start Date</th>
-                    <th style="padding: 16px 20px;">Duration</th>
-                    <th style="padding: 16px 20px;">Seat Status</th>
-                    <th style="padding: 16px 20px;">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style="border-bottom: 1px solid #f1f5f9;">
-                    <td style="padding: 18px 20px;"><strong>Veterinary Skill-Up Program</strong></td>
-                    <td style="padding: 18px 20px; color: var(--navy-2);">August 15, 2026</td>
-                    <td style="padding: 18px 20px;">4 Weeks</td>
-                    <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 4 Seats
-                        Remaining</span></td>
-                    <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
-                        href="contact.html">Apply Now</a></td>
-                  </tr>
-                  <tr style="border-bottom: 1px solid #f1f5f9; background-color: #fafcfd;">
-                    <td style="padding: 18px 20px;"><strong>Soft Tissue Surgery Track</strong></td>
-                    <td style="padding: 18px 20px; color: var(--navy-2);">September 1, 2026</td>
-                    <td style="padding: 18px 20px;">1 Week</td>
-                    <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢 Admissions
-                        Open</span></td>
-                    <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
-                        href="contact.html">Apply Now</a></td>
-                  </tr>
-                  <tr style="border-bottom: 1px solid #f1f5f9;">
-                    <td style="padding: 18px 20px;"><strong>Radiology &amp; Ultrasound Masterclass</strong></td>
-                    <td style="padding: 18px 20px; color: var(--navy-2);">September 12, 2026</td>
-                    <td style="padding: 18px 20px;">1 Week</td>
-                    <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢 Admissions
-                        Open</span></td>
-                    <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
-                        href="contact.html">Apply Now</a></td>
-                  </tr>
-                  <tr style="background-color: #fafcfd;">
-                    <td style="padding: 18px 20px;"><strong>Pet Emergency &amp; Critical Care</strong></td>
-                    <td style="padding: 18px 20px; color: var(--navy-2);">September 25, 2026</td>
-                    <td style="padding: 18px 20px;">3 Days</td>
-                    <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 3 Seats
-                        Remaining</span></td>
-                    <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
-                        href="contact.html">Apply Now</a></td>
-                  </tr>
-                </tbody>
-              </table>
+          <!-- Tab Navigation Controls (Matching Homepage Batch Tabs Design) -->
+          <div class="batch-tabs-wrapper">
+            <div class="batch-tabs-nav" role="tablist" aria-label="Batch Schedule Selection">
+              <button type="button" class="batch-tab-btn active" id="tab-upcoming-batches" role="tab"
+                aria-selected="true" aria-controls="panel-upcoming-batches" tabindex="0">
+                <i class="fa-solid fa-calendar-check"></i> Upcoming Practical Batches (2026)
+              </button>
+              <button type="button" class="batch-tab-btn" id="tab-ongoing-batches" role="tab" aria-selected="false"
+                aria-controls="panel-ongoing-batches" tabindex="-1">
+                <i class="fa-solid fa-circle-play"></i> Ongoing Batches
+              </button>
             </div>
           </div>
 
-          <!-- Upcoming Batch Schedule Fallback Banner -->
-          <div class="upcoming-batch-fallback" id="upcoming-batch-fallback">
-            <div class="batch-fallback-content">
-              <div class="batch-fallback-icon"><i class="fa-solid fa-calendar-plus"></i></div>
-              <div class="batch-fallback-text">
-                <h3>Can't find a suitable upcoming batch?</h3>
-                <p>Don't see your preferred dates or schedule? Let us know when you'd like to join and we'll notify you as soon as new intake dates open.</p>
+          <!-- Tab Panels Container -->
+          <div class="batch-tab-panels">
+            <!-- TAB 1: Upcoming Practical Batches (2026) -->
+            <div class="batch-tab-panel active" id="panel-upcoming-batches" role="tabpanel"
+              aria-labelledby="tab-upcoming-batches">
+              <div
+                style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #e2e8f0; overflow: hidden; box-shadow: var(--soft-shadow);">
+                <div style="overflow-x: auto;">
+                  <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 15px;">
+                    <thead>
+                      <tr style="background-color: var(--navy-2); color: var(--white);">
+                        <th style="padding: 16px 20px;">Program Track</th>
+                        <th style="padding: 16px 20px;">Start Date</th>
+                        <th style="padding: 16px 20px;">Duration</th>
+                        <th style="padding: 16px 20px;">Seat Status</th>
+                        <th style="padding: 16px 20px;">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 18px 20px;"><strong>Veterinary Skill-Up Program</strong></td>
+                        <td style="padding: 18px 20px; color: var(--navy-2);">August 15, 2026</td>
+                        <td style="padding: 18px 20px;">4 Weeks</td>
+                        <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 4 Seats
+                            Remaining</span></td>
+                        <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
+                            href="contact.html?program=veterinary-skill-up#contact-form">Apply Now</a></td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #f1f5f9; background-color: #fafcfd;">
+                        <td style="padding: 18px 20px;"><strong>Soft Tissue Surgery Track</strong></td>
+                        <td style="padding: 18px 20px; color: var(--navy-2);">September 1, 2026</td>
+                        <td style="padding: 18px 20px;">1 Week</td>
+                        <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢 Admissions
+                            Open</span></td>
+                        <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
+                            href="contact.html?program=soft-tissue-surgery#contact-form">Apply Now</a></td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 18px 20px;"><strong>Radiology &amp; Ultrasound Masterclass</strong></td>
+                        <td style="padding: 18px 20px; color: var(--navy-2);">September 12, 2026</td>
+                        <td style="padding: 18px 20px;">1 Week</td>
+                        <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢 Admissions
+                            Open</span></td>
+                        <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
+                            href="contact.html?program=radiology-ultrasound#contact-form">Apply Now</a></td>
+                      </tr>
+                      <tr style="background-color: #fafcfd;">
+                        <td style="padding: 18px 20px;"><strong>Pet Emergency &amp; Critical Care</strong></td>
+                        <td style="padding: 18px 20px; color: var(--navy-2);">September 25, 2026</td>
+                        <td style="padding: 18px 20px;">3 Days</td>
+                        <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 3 Seats
+                            Remaining</span></td>
+                        <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
+                            href="contact.html?program=emergency-medicine#contact-form">Apply Now</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Upcoming Batch Schedule Fallback Banner -->
+              <div class="upcoming-batch-fallback" id="upcoming-batch-fallback">
+                <div class="batch-fallback-content">
+                  <div class="batch-fallback-icon"><i class="fa-solid fa-calendar-plus"></i></div>
+                  <div class="batch-fallback-text">
+                    <h3>Can't find a suitable upcoming batch?</h3>
+                    <p>Don't see your preferred dates or schedule? Let us know when you'd like to join and we'll notify you as soon as new intake dates open.</p>
+                  </div>
+                </div>
+                <div class="batch-fallback-actions">
+                  <button class="btn btn-primary btn-sm btn-show-interest" data-source="Program Interest" data-context="Upcoming Batch Schedule">
+                    <i class="fa-solid fa-paper-plane"></i> Show Interest
+                  </button>
+                  <button class="btn btn-outline btn-sm btn-notify-me" data-source="Program Notify Me" data-context="Upcoming Batch Schedule">
+                    <i class="fa-solid fa-bell"></i> Notify Me
+                  </button>
+                </div>
               </div>
             </div>
-            <div class="batch-fallback-actions">
-              <button class="btn btn-primary btn-sm btn-show-interest" data-source="Program Interest" data-context="Upcoming Batch Schedule">
-                <i class="fa-solid fa-paper-plane"></i> Show Interest
-              </button>
-              <button class="btn btn-outline btn-sm btn-notify-me" data-source="Program Notify Me" data-context="Upcoming Batch Schedule">
-                <i class="fa-solid fa-bell"></i> Notify Me
-              </button>
+
+            <!-- TAB 2: Ongoing Batches -->
+            <div class="batch-tab-panel" id="panel-ongoing-batches" role="tabpanel"
+              aria-labelledby="tab-ongoing-batches" style="display: none;">
+              <div class="ongoing-batch-tab-wrap" style="padding-top: 10px;">
+                <div class="section-head center" style="margin-bottom: 24px;">
+                  <span class="ongoing-status-badge"><i class="fa-solid fa-circle"></i> ACTIVE SESSIONS</span>
+                  <h3 style="margin-top: 12px; font-size: 1.6rem; color: var(--navy-2);">Ongoing Batches</h3>
+                  <p style="margin: 0 auto; max-width: 600px;">Currently running practical clinical workshops at our Pune learning facility.</p>
+                </div>
+
+                <div class="ongoing-empty-card">
+                  <i class="fa-solid fa-clock-rotate-left"
+                    style="font-size: 36px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
+                  <h4 style="font-size: 1.15rem; color: #334155; margin-bottom: 6px; font-weight: 600;">July &amp; August
+                    Batches Currently In Session</h4>
+                  <p
+                    style="font-size: 0.95rem; color: #64748b; margin: 0 0 20px 0; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                    Active clinical cohorts are undergoing supervised surgical and diagnostic training on campus. Explore
+                    upcoming batches to reserve your seat in the next scheduled intake.</p>
+                  <button type="button" class="btn btn-outline btn-sm btn-switch-upcoming" data-switch-tab="panel-upcoming-batches">
+                    View Upcoming Batches <i class="fa-solid fa-arrow-left" style="margin-left: 6px;"></i>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 6: Ongoing Batches -->
-      <section class="section" id="ongoing-batches" style="padding: 50px 0;">
-        <div class="container">
-          <div class="section-head center">
-            <span class="ongoing-status-badge"><i class="fa-solid fa-circle"></i> ACTIVE SESSIONS</span>
-            <h2 style="margin-top: 12px;">Ongoing Batches</h2>
-            <p>Currently running practical clinical workshops at our Pune learning facility.</p>
-          </div>
-
-          <div class="ongoing-empty-card">
-            <i class="fa-solid fa-clock-rotate-left"
-              style="font-size: 36px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
-            <h3 style="font-size: 1.15rem; color: #334155; margin-bottom: 6px; font-weight: 600;">July &amp; August
-              Batches Currently In Session</h3>
-            <p
-              style="font-size: 0.95rem; color: #64748b; margin: 0 0 16px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
-              Active clinical cohorts are undergoing supervised surgical and diagnostic training on campus. Explore
-              upcoming batches above to reserve your seat in the next scheduled intake.</p>
-            <a href="#upcoming-batches" class="btn btn-outline btn-sm">View Upcoming Batches <i
-                class="fa-solid fa-arrow-up" style="margin-left: 6px;"></i></a>
           </div>
         </div>
       </section>
@@ -658,9 +694,9 @@
               <p>Connect with our academic counsellors to discuss your clinical background, experience goals, and batch
                 availability.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

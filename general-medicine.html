@@ -74,10 +74,8 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=general-medicine">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=general-medicine#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html?program=general-medicine#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Brochure</a>
               </div>
             </div>
 
@@ -408,61 +406,87 @@
         </div>
       </section>
             <!-- SECTION 4: Three-Stage Syllabus (Foundation, Intermediate, Advanced) -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> Clinical Progression</span>
-            <h2>Three-Stage Syllabus</h2>
-            <p>Structured clinical training progression covering Foundation, Intermediate, and Advanced specialist levels.</p>
+            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
+            <h2>Course Curriculum</h2>
+            <p>Comprehensive 3-stage clinical medicine curriculum covering vital triage, problem-oriented workups, and complex multisystem care.</p>
           </div>
 
           <div id="three-stage-syllabus-container">
-    <div class="three-stage-syllabus-card" id="three-stage-syllabus-card">
-      <div class="syllabus-subject-header">
-        <h3 class="syllabus-subject-title">
-          <i class="fa-solid fa-graduation-cap"></i>
-          <span>1. General Medicine</span>
-        </h3>
-        <span class="syllabus-subject-badge">Three-Stage Curriculum</span>
-      </div>
+          <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
+            <div class="curriculum-item active">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-general-medicine">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Clinical Examination, Patient Assessment & Baseline Therapeutics</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-general-medicine" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">Core clinical history taking, systematic physical exam, triage scoring, and first-line emergency fluid and drug protocols.</p>
+                <ul class="curriculum-topics">
+                  <li>Clinical history taking and systematic physical examination</li>
+                  <li>Vital signs, hydration, body condition and pain scoring</li>
+                  <li>Fever of unknown origin: basic approach</li>
+                  <li>Anaemia: types and first-line workup</li>
+                  <li>Fluid therapy basics: fluids, routes, rates</li>
+                  <li>Rational use of antibiotics, NSAIDs and steroids</li>
+                  <li>Prescription writing and case record keeping</li>
+                </ul>
+              </div>
+            </div>
 
-      <div class="syllabus-stage-row stage-foundation">
-        <div class="syllabus-stage-label">
-          <span>Foundation</span>
-          <span class="syllabus-stage-subtext">Core Clinical Principles</span>
-        </div>
-        <div class="syllabus-stage-content">
-          <ul class="syllabus-topic-list">
-            <li>Clinical history taking and systematic physical examination</li><li>Vital signs, hydration, body condition and pain scoring</li><li>Fever of unknown origin: basic approach</li><li>Anaemia: types and first-line workup</li><li>Fluid therapy basics: fluids, routes, rates</li><li>Rational use of antibiotics, NSAIDs and steroids</li><li>Prescription writing and case record keeping</li>
-          </ul>
-        </div>
-      </div>
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-general-medicine">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Problem-Oriented Internal Medicine & Systematic Workup</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-general-medicine" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Problem-oriented diagnostic pathways, electrolyte/acid-base balances, organ disease workups, and cross-matching.</p>
+                <ul class="curriculum-topics">
+                  <li>Problem-oriented medical record and differential diagnosis</li>
+                  <li>Fluid therapy in electrolyte and acid-base disorders</li>
+                  <li>Immune-mediated haemolytic anaemia and thrombocytopaenia</li>
+                  <li>Hepatobiliary disease: diagnosis and management</li>
+                  <li>Pancreatitis and pyrexia of complex origin</li>
+                  <li>Blood transfusion practice and cross-matching</li>
+                  <li>Toxicology: organophosphate, rodenticide, snakebite, paracetamol</li>
+                </ul>
+              </div>
+            </div>
 
-      <div class="syllabus-stage-row stage-intermediate">
-        <div class="syllabus-stage-label">
-          <span>Intermediate</span>
-          <span class="syllabus-stage-subtext">Diagnostics &amp; Management</span>
-        </div>
-        <div class="syllabus-stage-content">
-          <ul class="syllabus-topic-list">
-            <li>Problem-oriented medical record and differential diagnosis</li><li>Fluid therapy in electrolyte and acid-base disorders</li><li>Immune-mediated haemolytic anaemia and thrombocytopaenia</li><li>Hepatobiliary disease: diagnosis and management</li><li>Pancreatitis and pyrexia of complex origin</li><li>Blood transfusion practice and cross-matching</li><li>Toxicology: organophosphate, rodenticide, snakebite, paracetamol</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="syllabus-stage-row stage-advanced">
-        <div class="syllabus-stage-label">
-          <span>Advanced</span>
-          <span class="syllabus-stage-subtext">Specialist Decision-Making</span>
-        </div>
-        <div class="syllabus-stage-content">
-          <ul class="syllabus-topic-list">
-            <li>Management of complex multisystem cases</li><li>Evidence-based veterinary medicine and critical appraisal of literature</li><li>Antimicrobial stewardship and resistance in Indian practice</li><li>Immunosuppressive protocols and monitoring</li><li>Sepsis, SIRS and multiple organ dysfunction</li><li>Palliative and hospice care planning</li><li>Clinical audit and morbidity-mortality rounds</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-general-medicine">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>Complex Multisystem Management & Critical Decision-Making</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-general-medicine" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Comprehensive management of multisystem failures, antimicrobial stewardship, immunosuppression, and morbidity-mortality rounds.</p>
+                <ul class="curriculum-topics">
+                  <li>Management of complex multisystem cases</li>
+                  <li>Evidence-based veterinary medicine and critical appraisal of literature</li>
+                  <li>Antimicrobial stewardship and resistance in Indian practice</li>
+                  <li>Immunosuppressive protocols and monitoring</li>
+                  <li>Sepsis, SIRS and multiple organ dysfunction</li>
+                  <li>Palliative and hospice care planning</li>
+                  <li>Clinical audit and morbidity-mortality rounds</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
       </section>\n\n      <!-- SECTION 5: Training Format (Infographic Cards) -->
       <section class="section soft" id="training-format">
@@ -692,7 +716,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=general-medicine">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=general-medicine#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> Enquire via WhatsApp</a>
@@ -844,9 +868,9 @@
               <p>Join the next batch of the Veterinary Skill-Up Program and transform your surgical and diagnostic
                 confidence with direct specialist mentorship.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=general-medicine">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=general-medicine#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=general-medicine#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

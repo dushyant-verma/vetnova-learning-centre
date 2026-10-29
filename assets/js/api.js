@@ -144,6 +144,24 @@ async function submitEnquiry(enquiryData) {
     }
     return data;
   } catch (error) {
+    // If local dev server is offline (Connection Refused), fallback to live backend
+    if (primaryUrl.includes('localhost') || primaryUrl.includes('127.0.0.1')) {
+      try {
+        const fallbackUrl = 'https://vetnova-api-utnd.onrender.com/api/enquiries';
+        const fallbackRes = await fetch(fallbackUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(enquiryData)
+        });
+        const fallbackData = await fallbackRes.json().catch(() => ({}));
+        if (!fallbackRes.ok) {
+          throw new Error(fallbackData.message || 'Failed to submit enquiry. Please try again.');
+        }
+        return fallbackData;
+      } catch (fallbackError) {
+        throw fallbackError;
+      }
+    }
     throw error;
   }
 }

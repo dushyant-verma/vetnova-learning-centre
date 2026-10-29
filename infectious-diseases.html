@@ -74,17 +74,15 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=infectious-diseases">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=infectious-diseases#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html?program=infectious-diseases#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Brochure</a>
               </div>
             </div>
 
             <!-- Right Side Image Frame + 4 Floating Badges -->
             <div class="ps-hero-media-wrapper">
               <div class="ps-hero-image-frame">
-                <img src="assets/images/about/about-facility-02.webp"
+                <img src="assets/images/programs/program-infectious-diseases.webp"
                   alt="Indian veterinary surgeons teaching practical surgery to veterinary students inside a modern veterinary hospital"
                   loading="lazy" decoding="async" />
                 <div class="ps-hero-overlay"></div>
@@ -408,61 +406,87 @@
         </div>
       </section>
             <!-- SECTION 4: Three-Stage Syllabus (Foundation, Intermediate, Advanced) -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> Clinical Progression</span>
-            <h2>Three-Stage Syllabus</h2>
-            <p>Structured clinical training progression covering Foundation, Intermediate, and Advanced specialist levels.</p>
+            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
+            <h2>Course Curriculum</h2>
+            <p>Structured clinical management of companion animal viral, vector-borne, and bacterial infections with outbreak biosecurity protocols.</p>
           </div>
 
           <div id="three-stage-syllabus-container">
-    <div class="three-stage-syllabus-card" id="three-stage-syllabus-card">
-      <div class="syllabus-subject-header">
-        <h3 class="syllabus-subject-title">
-          <i class="fa-solid fa-graduation-cap"></i>
-          <span>5. Infectious Diseases</span>
-        </h3>
-        <span class="syllabus-subject-badge">Three-Stage Curriculum</span>
-      </div>
+          <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
+            <div class="curriculum-item active">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-infectious-diseases">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Viral Pathogenesis, Outbreak Containment & Biosecurity Protocols</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-infectious-diseases" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">Canine parvo, distemper, feline panleukopenia, rabies post-exposure protocols, barrier nursing, and hospital disinfection.</p>
+                <ul class="curriculum-topics">
+                  <li>Canine parvovirus and distemper</li>
+                  <li>Rabies: pathogenesis, post-exposure and legal aspects</li>
+                  <li>Infectious canine hepatitis and kennel cough</li>
+                  <li>Feline panleukopenia and upper respiratory complex</li>
+                  <li>Leptospirosis</li>
+                  <li>Isolation, barrier nursing and biosecurity</li>
+                  <li>Zoonoses: public health awareness</li>
+                </ul>
+              </div>
+            </div>
 
-      <div class="syllabus-stage-row stage-foundation">
-        <div class="syllabus-stage-label">
-          <span>Foundation</span>
-          <span class="syllabus-stage-subtext">Core Clinical Principles</span>
-        </div>
-        <div class="syllabus-stage-content">
-          <ul class="syllabus-topic-list">
-            <li>Canine parvovirus and distemper</li><li>Rabies: pathogenesis, post-exposure and legal aspects</li><li>Infectious canine hepatitis and kennel cough</li><li>Feline panleukopenia and upper respiratory complex</li><li>Leptospirosis</li><li>Isolation, barrier nursing and biosecurity</li><li>Zoonoses: public health awareness</li>
-          </ul>
-        </div>
-      </div>
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-infectious-diseases">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Vector-Borne Diagnostics, Retroviruses & Antiviral Management</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-infectious-diseases" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Vector-borne panels (Ehrlichia, Babesia, Anaplasma), feline retroviruses, FIP antiviral protocols, and kennel outbreak management.</p>
+                <ul class="curriculum-topics">
+                  <li>Tick-borne diseases: Ehrlichia, Babesia, Hepatozoon, Anaplasma</li>
+                  <li>Canine distemper neurological form</li>
+                  <li>Feline leukaemia and FIV testing and counselling</li>
+                  <li>FIP: diagnosis and current antiviral options</li>
+                  <li>Heartworm and microfilaria in India</li>
+                  <li>Tetanus, salmonellosis, campylobacteriosis</li>
+                  <li>Surveillance of outbreaks in kennels and shelters</li>
+                </ul>
+              </div>
+            </div>
 
-      <div class="syllabus-stage-row stage-intermediate">
-        <div class="syllabus-stage-label">
-          <span>Intermediate</span>
-          <span class="syllabus-stage-subtext">Diagnostics &amp; Management</span>
-        </div>
-        <div class="syllabus-stage-content">
-          <ul class="syllabus-topic-list">
-            <li>Tick-borne diseases: Ehrlichia, Babesia, Hepatozoon, Anaplasma</li><li>Canine distemper neurological form</li><li>Feline leukaemia and FIV testing and counselling</li><li>FIP: diagnosis and current antiviral options</li><li>Heartworm and microfilaria in India</li><li>Tetanus, salmonellosis, campylobacteriosis</li><li>Surveillance of outbreaks in kennels and shelters</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="syllabus-stage-row stage-advanced">
-        <div class="syllabus-stage-label">
-          <span>Advanced</span>
-          <span class="syllabus-stage-subtext">Specialist Decision-Making</span>
-        </div>
-        <div class="syllabus-stage-content">
-          <ul class="syllabus-topic-list">
-            <li>Chronic and refractory ehrlichiosis, babesiosis co-infections</li><li>Leishmaniasis and emerging vector-borne diseases in India</li><li>Hospital-acquired infection control programmes</li><li>One Health approach: zoonoses, rabies elimination, ABC programme</li><li>Antimicrobial resistance surveillance</li><li>Outbreak investigation and epidemiology</li><li>Management of shelter and multi-pet household disease</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-infectious-diseases">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>Refractory Co-Infections, Hospital Epidemiology & One Health Programs</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-infectious-diseases" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Complex multi-pathogen co-infections, leishmaniasis, antimicrobial resistance surveillance, and One Health community rabies strategies.</p>
+                <ul class="curriculum-topics">
+                  <li>Chronic and refractory ehrlichiosis, babesiosis co-infections</li>
+                  <li>Leishmaniasis and emerging vector-borne diseases in India</li>
+                  <li>Hospital-acquired infection control programmes</li>
+                  <li>One Health approach: zoonoses, rabies elimination, ABC programme</li>
+                  <li>Antimicrobial resistance surveillance</li>
+                  <li>Outbreak investigation and epidemiology</li>
+                  <li>Management of shelter and multi-pet household disease</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
       </section>\n\n      <!-- SECTION 5: Training Format (Infographic Cards) -->
       <section class="section soft" id="training-format">
@@ -692,7 +716,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=infectious-diseases">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=infectious-diseases#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> Enquire via WhatsApp</a>
@@ -844,9 +868,9 @@
               <p>Join the next batch of the Veterinary Skill-Up Program and transform your surgical and diagnostic
                 confidence with direct specialist mentorship.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=infectious-diseases">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=infectious-diseases#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=infectious-diseases#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

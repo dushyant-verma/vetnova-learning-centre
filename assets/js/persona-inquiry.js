@@ -91,20 +91,36 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   }
 
+  function formatProgramName(str) {
+    if (!str) return '';
+    return decodeURIComponent(str)
+      .replace(/[-_]+/g, ' ')
+      .replace(/\b\w/g, l => l.toUpperCase())
+      .replace(/\b(And|Or|Of|In|For|The)\b/g, m => m.toLowerCase())
+      .trim();
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   // Initialize Persona Inquiry Widget
   function initPersonaInquiry(containerId = 'persona-inquiry-widget') {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    // Determine initial persona from URL param or hash
+    // Determine initial persona and program from URL params or hash
     const urlParams = new URLSearchParams(window.location.search);
-    const paramPersona = urlParams.get('persona') || window.location.hash.replace('#', '');
+    const rawProgram = urlParams.get('program') || urlParams.get('course') || urlParams.get('context') || '';
+    const programName = formatProgramName(rawProgram);
+    const paramPersona = urlParams.get('persona') || (window.location.hash ? window.location.hash.replace('#', '') : '');
     let activePersona = PERSONA_CONFIGS[paramPersona] ? paramPersona : 'student';
 
-    renderWidget(container, activePersona);
+    renderWidget(container, activePersona, programName);
   }
 
-  function renderWidget(container, activePersona) {
+  function renderWidget(container, activePersona, programName = '') {
     container.innerHTML = `
       <div class="persona-inquiry-box">
         <!-- Section Header -->
@@ -116,6 +132,12 @@
           <p class="persona-main-sub">
             Tell us about yourself and what you hope to achieve. We'll help you explore relevant veterinary training opportunities or partnership options.
           </p>
+          ${programName ? `
+            <div class="persona-program-banner">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <span>Enquiring for Program: <strong>${escapeHtml(programName)}</strong></span>
+            </div>
+          ` : ''}
         </div>
 
         <!-- Four Audience Cards / Tab Selector -->
@@ -144,7 +166,7 @@
 
         <!-- Active Persona Form Container -->
         <div class="persona-form-wrapper" id="persona-form-container">
-          ${renderFormContent(activePersona)}
+          ${renderFormContent(activePersona, programName)}
         </div>
 
         <!-- Optional WhatsApp Contact Box -->
@@ -168,10 +190,10 @@
       </div>
     `;
 
-    bindWidgetEvents(container);
+    bindWidgetEvents(container, programName);
   }
 
-  function renderFormContent(personaKey) {
+  function renderFormContent(personaKey, programName = '') {
     const config = PERSONA_CONFIGS[personaKey];
 
     let fieldsHtml = '';
@@ -516,6 +538,7 @@
 
         <!-- Form Element -->
         <form id="persona-inquiry-form" class="persona-form" novalidate data-persona="${config.key}">
+          ${programName ? `<input type="hidden" name="enquiredProgram" value="${escapeHtml(programName)}" />` : ''}
           ${fieldsHtml}
 
           <!-- Privacy Notice -->
@@ -571,7 +594,7 @@
     `;
   }
 
-  function bindWidgetEvents(container) {
+  function bindWidgetEvents(container, programName = '') {
     // 1. Tab / Audience Card Clicking
     const cardBtns = container.querySelectorAll('.persona-card-btn');
     cardBtns.forEach(btn => {
@@ -589,7 +612,7 @@
         // Re-render form container
         const formContainer = document.getElementById('persona-form-container');
         if (formContainer) {
-          formContainer.innerHTML = renderFormContent(targetPersona);
+          formContainer.innerHTML = renderFormContent(targetPersona, programName);
           bindFormEvents(container, targetPersona);
         }
       });
@@ -810,9 +833,24 @@
   // Export globally
   window.initPersonaInquiry = initPersonaInquiry;
 
+  function scrollToContactForm() {
+    const hash = window.location.hash;
+    if (hash === '#contact-form' || hash === '#contact-form-section' || hash === '#enquiry') {
+      setTimeout(() => {
+        const target = document.querySelector(hash) || document.getElementById('contact-form') || document.getElementById('persona-inquiry-widget');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 150);
+    }
+  }
+
   // Auto initialize on DOMContentLoaded if widget exists
   document.addEventListener('DOMContentLoaded', () => {
     initPersonaInquiry('persona-inquiry-widget');
     initPersonaInquiry('persona-inquiry-section-widget');
+    scrollToContactForm();
   });
+
+  window.addEventListener('hashchange', scrollToContactForm);
 })();

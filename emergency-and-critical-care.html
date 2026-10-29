@@ -116,17 +116,15 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=emergency-and-critical-care#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Syllabus</a>
               </div>
             </div>
 
             <!-- Right Side Image Frame + 4 Floating Badges -->
             <div class="ps-hero-media-wrapper">
               <div class="ps-hero-image-frame">
-                <img src="assets/programs/emergency-medicine-hero.webp"
+                <img src="assets/images/programs/program-emergency.webp"
                   alt="Indian veterinary emergency doctor team performing CPR and fluid resuscitation on a canine patient in ICU"
                   loading="lazy" decoding="async" />
                 <div class="ps-hero-overlay"></div>
@@ -583,7 +581,7 @@
                 <p>Complete this programme with the confidence, procedural skills, and practical experience expected inside modern veterinary hospitals.</p>
               </div>
               <div class="ccm-cta-actions">
-                <a href="contact.html" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="contact.html?program=emergency-and-critical-care#contact-form" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
                 <a href="#curriculum" class="btn btn-white-outline">Download Curriculum</a>
               </div>
             </div>
@@ -629,62 +627,87 @@
         </div>
       </section>
 
-      <!-- SECTION 5: Course Curriculum Accordion -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Intensive Syllabus</span>
-            <h2>Emergency &amp; ICU Curriculum</h2>
-            <p>Intensive 3-day schedule packed with high-fidelity emergency drills and clinical case simulations.</p>
+            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
+            <h2>Course Curriculum</h2>
+            <p>High-intensity emergency and ICU curriculum covering rapid ABC triage, shock resuscitation, mechanical ventilation, and CPR leadership.</p>
           </div>
 
           <div id="three-stage-syllabus-container">
-  <div class="three-stage-syllabus-card" id="three-stage-syllabus-card">
-    <div class="syllabus-subject-header">
-      <h3 class="syllabus-subject-title">
-        <i class="fa-solid fa-graduation-cap"></i>
-        <span>6. Emergency and Critical Care</span>
-      </h3>
-      <span class="syllabus-subject-badge">Three-Stage Curriculum</span>
-    </div>
+          <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
+            <div class="curriculum-item active">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-emergency-and-critical-care">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Triage Algorithms, Primary ABC Resuscitation & Crash Cart Setup</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-emergency-and-critical-care" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">Primary trauma surveys, shock recognition, peripheral and IO vascular access, basic CPR, and emergency crash cart dosing.</p>
+                <ul class="curriculum-topics">
+                  <li>Triage and primary survey (ABC approach)</li>
+                  <li>Shock recognition and initial stabilisation</li>
+                  <li>Basic cardiopulmonary resuscitation (CPR)</li>
+                  <li>IV and intraosseous catheterisation</li>
+                  <li>Oxygen supplementation</li>
+                  <li>Heatstroke, road traffic accident first aid</li>
+                  <li>Emergency drugs and crash cart setup</li>
+                </ul>
+              </div>
+            </div>
 
-    <div class="syllabus-stage-row stage-foundation">
-      <div class="syllabus-stage-label">
-        <span>Foundation</span>
-        <span class="syllabus-stage-subtext">Core Clinical Principles</span>
-      </div>
-      <div class="syllabus-stage-content">
-        <ul class="syllabus-topic-list">
-          <li>Triage and primary survey (ABC approach)</li><li>Shock recognition and initial stabilisation</li><li>Basic cardiopulmonary resuscitation (CPR)</li><li>IV and intraosseous catheterisation</li><li>Oxygen supplementation</li><li>Heatstroke, road traffic accident first aid</li><li>Emergency drugs and crash cart setup</li>
-        </ul>
-      </div>
-    </div>
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-emergency-and-critical-care">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Shock Fluid Resuscitation, Dynamic Profiling & Emergency Procedures</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-emergency-and-critical-care" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Goal-directed fluid titration, blood gas/lactate monitoring, thoracocentesis, GDV emergency stabilization, and toxicology.</p>
+                <ul class="curriculum-topics">
+                  <li>Fluid resuscitation strategies and monitoring</li>
+                  <li>Blood gas, lactate and electrolyte interpretation</li>
+                  <li>Thoracic and abdominal trauma management</li>
+                  <li>Gastric dilatation-volvulus, urethral obstruction emergencies</li>
+                  <li>Diabetic ketoacidosis and Addisonian crisis</li>
+                  <li>Poisoning and snakebite emergencies</li>
+                  <li>Analgesia and sedation in emergency patients</li>
+                </ul>
+              </div>
+            </div>
 
-    <div class="syllabus-stage-row stage-intermediate">
-      <div class="syllabus-stage-label">
-        <span>Intermediate</span>
-        <span class="syllabus-stage-subtext">Diagnostics &amp; Management</span>
-      </div>
-      <div class="syllabus-stage-content">
-        <ul class="syllabus-topic-list">
-          <li>Fluid resuscitation strategies and monitoring</li><li>Blood gas, lactate and electrolyte interpretation</li><li>Thoracic and abdominal trauma management</li><li>Gastric dilatation-volvulus, urethral obstruction emergencies</li><li>Diabetic ketoacidosis and Addisonian crisis</li><li>Poisoning and snakebite emergencies</li><li>Analgesia and sedation in emergency patients</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="syllabus-stage-row stage-advanced">
-      <div class="syllabus-stage-label">
-        <span>Advanced</span>
-        <span class="syllabus-stage-subtext">Specialist Decision-Making</span>
-      </div>
-      <div class="syllabus-stage-content">
-        <ul class="syllabus-topic-list">
-          <li>Mechanical ventilation and advanced respiratory support</li><li>Transfusion, plasma and blood component therapy</li><li>Management of sepsis and DIC</li><li>Traumatic brain injury and status epilepticus</li><li>Advanced haemodynamic monitoring: invasive blood pressure, ScvO2</li><li>Setting up ICU: protocols, staffing, equipment</li><li>Advanced CPR leadership and post-arrest care</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-emergency-and-critical-care">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>Mechanical Ventilation, Sepsis Protocols & RECOVER CPR Leadership</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-emergency-and-critical-care" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Invasive hemodynamic monitoring, lung-protective mechanical ventilation, DIC management, and advanced post-cardiac arrest ICU care.</p>
+                <ul class="curriculum-topics">
+                  <li>Mechanical ventilation and advanced respiratory support</li>
+                  <li>Transfusion, plasma and blood component therapy</li>
+                  <li>Management of sepsis and DIC</li>
+                  <li>Traumatic brain injury and status epilepticus</li>
+                  <li>Advanced haemodynamic monitoring: invasive blood pressure, ScvO2</li>
+                  <li>Setting up ICU: protocols, staffing, equipment</li>
+                  <li>Advanced CPR leadership and post-arrest care</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
       </section>
 
@@ -855,7 +878,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=emergency-and-critical-care#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> WhatsApp Enquiry</a>
@@ -924,7 +947,7 @@
             </div>
             <div class="single-batch-footer">
               <div class="batch-price-tag">₹12,500 <small>+ GST</small></div>
-              <a class="btn btn-primary btn-sm btn-apply-now" href="contact.html">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+              <a class="btn btn-primary btn-sm btn-apply-now" href="contact.html?program=emergency-and-critical-care#contact-form">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
             </div>
           </div>
         </div>
@@ -1078,9 +1101,9 @@
               <p>Join the next Pet Emergency &amp; Critical Care batch and transform your clinical night shift response
                 with expert mentorship.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=emergency-and-critical-care#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=emergency-and-critical-care#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

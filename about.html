@@ -66,8 +66,8 @@
             <div class="two-column-media"
               style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow); background: #f8fafc; display: flex; align-items: center; justify-content: center;">
               <img src="assets/images/vetnova-institute-building.webp"
-                alt="VetNova Training Institute building with branding in Pune" loading="lazy" decoding="async"
-                style="width: 100%; height: auto; max-height: 520px; object-fit: contain; display: block;" />
+                alt="VetNova Clinical Training Institute — Modern Laboratory and Clinical Training Facilities" loading="lazy" decoding="async"
+                style="width: 100%; height: auto; max-height: 520px; object-fit: cover; display: block;" />
             </div>
 
             <div class="two-column-copy">
@@ -97,8 +97,9 @@
         </div>
       </section>
 
-      <!-- SECTION 3: OUR MISSION & OUR VISION -->
-      <section class="section soft" id="mission-vision">
+      <!-- SECTION 3: OUR VISION & OUR MISSION -->
+      <section class="section soft" id="vision-mission">
+        <span id="mission-vision" style="position: absolute; top: -110px; visibility: hidden; pointer-events: none;" aria-hidden="true"></span>
         <div class="container">
           <div class="section-head center">
             <span class="eyebrow"><i class="fa-solid fa-compass"></i> PURPOSE &amp; DIRECTION</span>
@@ -195,8 +196,91 @@
         </div>
       </section>
 
+      <!-- SECTION: OUR APPROACH TO VETERINARY EDUCATION (Learning Philosophy) -->
+      <section class="section soft about-approach-section" id="educational-approach">
+        <div class="container">
+          <div class="section-head center approach-section-head">
+            <span class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> LEARNING PHILOSOPHY</span>
+            <h2>Our Approach to Veterinary Education</h2>
+            <p>
+              How VetNova connects theoretical knowledge, practical skill development, expert mentorship and structured career-stage learning.
+            </p>
+          </div>
+
+          <div class="approach-cards-grid">
+            <!-- Card 1: Clinical Competence -->
+            <div class="approach-card">
+              <div class="approach-card-header">
+                <div class="approach-icon-wrap" aria-hidden="true">
+                  <i class="fa-solid fa-stethoscope"></i>
+                </div>
+                <span class="approach-step-badge">Clinical Competence</span>
+              </div>
+              <div class="approach-card-content">
+                <h3 class="approach-card-title">From Knowledge to Clinical Competence</h3>
+                <div class="approach-card-subtitle">Learn it. Practise it. Apply it.</div>
+                <p class="approach-card-desc">
+                  Veterinary excellence begins with theory, but true clinical confidence is forged in the procedure room. Our educational model connects classroom understanding with tactile execution through case simulations, supervised procedure handling, and structured diagnostic workflows that prepare clinicians for everyday patient challenges.
+                </p>
+              </div>
+            </div>
+
+            <!-- Card 2: Flexible & Purposeful -->
+            <div class="approach-card">
+              <div class="approach-card-header">
+                <div class="approach-icon-wrap" aria-hidden="true">
+                  <i class="fa-solid fa-laptop-medical"></i>
+                </div>
+                <span class="approach-step-badge">Flexible &amp; Purposeful</span>
+              </div>
+              <div class="approach-card-content">
+                <h3 class="approach-card-title">Flexible Learning. Meaningful Practice.</h3>
+                <div class="approach-card-subtitle">Accessible study combined with tactile depth.</div>
+                <p class="approach-card-desc">
+                  Recognizing the intensive schedules of working veterinarians and students, we integrate digital theoretical preparation with in-person clinical wet-lab sessions wherever the curriculum supports a hybrid format. This structure ensures foundational learning is flexible while preserving uncompromising tactile standards during in-person training.
+                </p>
+              </div>
+            </div>
+
+            <!-- Card 3: Specialist Mentorship -->
+            <div class="approach-card">
+              <div class="approach-card-header">
+                <div class="approach-icon-wrap" aria-hidden="true">
+                  <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <span class="approach-step-badge">Specialist Mentorship</span>
+              </div>
+              <div class="approach-card-content">
+                <h3 class="approach-card-title">Learn with Experienced Veterinary Mentors</h3>
+                <div class="approach-card-subtitle">Expert guidance. Relevant clinical insights.</div>
+                <p class="approach-card-desc">
+                  Clinical intuition develops best when guided by practitioners who navigate complex cases daily. Trainees learn directly from seasoned veterinary educators and clinical specialists through procedure demonstrations, structured case reviews, constructive feedback, and small-batch mentorship focused on sound medical judgement.
+                </p>
+              </div>
+            </div>
+
+            <!-- Card 4: Structured Progression -->
+            <div class="approach-card">
+              <div class="approach-card-header">
+                <div class="approach-icon-wrap" aria-hidden="true">
+                  <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <span class="approach-step-badge">Structured Progression</span>
+              </div>
+              <div class="approach-card-content">
+                <h3 class="approach-card-title">Learning Pathways for Every Career Stage</h3>
+                <div class="approach-card-subtitle">Start with the basics. Progress towards advanced skills.</div>
+                <p class="approach-card-desc">
+                  Professional growth is an evolving journey. VetNova provides structured, progressive curricula tailored to veterinary students building basic dexterity, recent graduates transitioning to independent practice, established clinicians mastering advanced interventions, and veterinary nurses developing specialized patient care capabilities.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- SECTION 5: ADVISORY BOARD (Connected to MERN CMS Data Flow) -->
-      <section class="section soft" id="advisory-board">
+      <section class="section" id="advisory-board">
         <div class="container">
           <div class="section-head center">
             <span class="eyebrow"><i class="fa-solid fa-award"></i> SENIOR GUIDANCE</span>
@@ -336,24 +420,6 @@
               </div>
             </div>
 
-            <div class="faculty-card">
-              <div class="faculty-photo">
-                <img src="assets/images/about/about-faculty-04.webp" alt="Dr. Sneha Nair" loading="lazy" decoding="async" />
-              </div>
-              <div class="faculty-body">
-                <h3>Dr. Sneha Nair</h3>
-                <span class="faculty-qual">BVSc &amp; AH, PgDip (Dermatology)</span>
-                <p class="faculty-spec">Feline Clinical Practice &amp; Dermatology Instructor.</p>
-                <div class="faculty-tags">
-                  <span class="chip">Feline Medicine</span>
-                  <span class="chip">Dermatology</span>
-                </div>
-                <div class="faculty-footer">
-                  <span class="faculty-exp">9+ Yrs Exp</span>
-                  <a class="btn btn-outline btn-sm faculty-profile-btn" href="javascript:void(0)" data-faculty-id="sneha-nair">View Profile</a>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div style="text-align: center; margin-top: 36px;">
@@ -398,6 +464,24 @@
             </div>
           </div>
 
+          <!-- Campus Building Exterior Showcase -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px;">
+            <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--soft-shadow); position: relative; height: 260px; border: 1px solid #e2e8f0;">
+              <img src="assets/images/vetnova-building-exterior.webp" alt="VetNova Training Institute Wagholi Pune Campus Building Exterior"
+                loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;" />
+              <div style="position: absolute; bottom: 12px; left: 14px; background: rgba(11,34,64,0.85); color: #fff; padding: 6px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; backdrop-filter: blur(4px);">
+                <i class="fa-solid fa-sun" style="color: #f59e0b; margin-right: 6px;"></i> Wagholi Campus (Daytime Exterior)
+              </div>
+            </div>
+            <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--soft-shadow); position: relative; height: 260px; border: 1px solid #e2e8f0;">
+              <img src="assets/images/vetnova-building-golden-hour.webp" alt="VetNova Training Institute Golden Hour Architecture"
+                loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;" />
+              <div style="position: absolute; bottom: 12px; left: 14px; background: rgba(11,34,64,0.85); color: #fff; padding: 6px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; backdrop-filter: blur(4px);">
+                <i class="fa-solid fa-city" style="color: #38bdf8; margin-right: 6px;"></i> Institute Architecture (Golden Hour)
+              </div>
+            </div>
+          </div>
+
           <!-- Location & Directions Block -->
           <div class="two-column-layout" style="align-items: center; gap: 40px; margin-top: 48px;">
             <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--soft-shadow); border: 1px solid #e2e8f0; height: 320px;">
@@ -417,7 +501,7 @@
                   target="_blank" rel="noopener noreferrer">
                   Get Directions <i class="fa-solid fa-location-arrow"></i>
                 </a>
-                <a class="btn btn-outline" href="contact.html">
+                <a class="btn btn-outline" href="contact.html#contact-form">
                   Schedule Campus Visit <i class="fa-solid fa-calendar-check"></i>
                 </a>
               </div>

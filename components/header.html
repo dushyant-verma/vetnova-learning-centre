@@ -7,11 +7,6 @@
       <a class="top-info-item" href="tel:+919272561089" data-vetnova-phone><i class="fa-solid fa-phone"></i> +91 92725 61089</a>
     </div>
     <div class="top-info-right">
-      <div class="lang-switcher" id="lang-switcher-top" role="group" aria-label="Language selector">
-        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
-        <span class="lang-divider">|</span>
-        <button type="button" class="lang-btn" data-lang="hi" aria-pressed="false">हिंदी</button>
-      </div>
       <a class="top-info-link btn-partner-cta" href="partnerships.html">
         <i class="fa-solid fa-handshake"></i> Partner With Us
       </a>
@@ -34,37 +29,37 @@
       <!-- About Dropdown -->
       <div class="nav-item has-dropdown">
         <a class="nav-link dropdown-toggle" data-nav="about" href="about.html" aria-haspopup="true"
-          aria-expanded="false">
+          aria-expanded="false" id="about-dropdown-toggle">
           About <i class="fa-solid fa-chevron-down caret"></i>
         </a>
-        <div class="dropdown-menu">
+        <div class="dropdown-menu about-dropdown-menu" role="menu" aria-labelledby="about-dropdown-toggle">
           <div class="dropdown-arrow"></div>
-          <a class="dropdown-item" href="about.html">
+          <a class="dropdown-item" href="about.html" role="menuitem">
             <div class="dropdown-icon"><i class="fa-solid fa-hospital"></i></div>
             <div class="dropdown-text">
               <strong>About VetNova</strong>
-              <small>India's practical learning hub for vet skills</small>
+              <small>Practical learning hub for clinical vet skills</small>
             </div>
           </a>
-          <a class="dropdown-item" href="about.html#vision-mission">
+          <a class="dropdown-item" href="about.html#vision-mission" role="menuitem">
             <div class="dropdown-icon"><i class="fa-solid fa-bullseye"></i></div>
             <div class="dropdown-text">
               <strong>Vision &amp; Mission</strong>
               <small>Empowering compassionate care &amp; excellence</small>
             </div>
           </a>
-          <a class="dropdown-item" href="about.html#advisory-board">
+          <a class="dropdown-item" href="about.html#advisory-board" role="menuitem">
             <div class="dropdown-icon"><i class="fa-solid fa-award"></i></div>
             <div class="dropdown-text">
               <strong>Advisory Board</strong>
               <small>Guided by senior veterinary leaders</small>
             </div>
           </a>
-          <a class="dropdown-item" href="partnerships.html">
+          <a class="dropdown-item" href="partnerships.html" role="menuitem">
             <div class="dropdown-icon"><i class="fa-solid fa-handshake"></i></div>
             <div class="dropdown-text">
               <strong>Partnerships</strong>
-              <small>Partner with VetNova for education &amp; clinical growth</small>
+              <small>Collaborate for education &amp; clinical growth</small>
             </div>
           </a>
         </div>
@@ -165,15 +160,18 @@
       </div>
 
       <a class="nav-link" data-nav="faculty" href="faculty.html">Our Faculty</a>
-      <a class="nav-link" data-nav="inquiry" href="inquiry.html">Find Your Pathway</a>
-      <a class="nav-link" data-nav="learning-centre" href="learning-centre.html">Facility Tour</a>
+      <a class="nav-link" data-nav="facility-tour" href="facility-tour.html">Facility Tour</a>
       <!-- <a class="nav-link" data-nav="welfare" href="animal-welfare.html">Animal Welfare</a> -->
       <a class="nav-link" data-nav="blog" href="blog.html">Blog</a>
       <a class="nav-link" data-nav="contact" href="contact.html">Contact</a>
     </nav>
 
     <div class="nav-actions">
-      <a class="btn btn-primary btn-apply-now" href="inquiry.html">
+      <a class="btn btn-counselling-pill" href="contact.html#contact-form" id="header-counselling-btn">
+        <i class="fa-solid fa-calendar-check"></i>
+        <span>Book Counselling</span>
+      </a>
+      <a class="btn btn-primary btn-apply-now" href="contact.html#contact-form">
         <span>Apply Now</span>
         <i class="fa-solid fa-arrow-right"></i>
       </a>
@@ -188,17 +186,9 @@
 <div class="mobile-drawer" id="mobile-drawer">
   <div class="drawer-header">
     <img class="drawer-logo" src="assets/vetnova-logo.webp" alt="VetNova Logo" />
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <div class="lang-switcher drawer-lang-switcher" id="lang-switcher-drawer" role="group"
-        aria-label="Language selector">
-        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
-        <span class="lang-divider">|</span>
-        <button type="button" class="lang-btn" data-lang="hi" aria-pressed="false">हिंदी</button>
-      </div>
-      <button class="drawer-close" id="drawer-close" aria-label="Close menu">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
+    <button class="drawer-close" id="drawer-close" aria-label="Close menu">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
   </div>
 
   <nav class="drawer-menu">
@@ -227,13 +217,6 @@
           <span>Vision &amp; Mission</span>
         </a>
 
-        <a href="learning-centre.html">
-          <span class="drawer-item-icon">
-            <i class="fa-solid fa-microscope"></i>
-          </span>
-          <span>Infrastructure &amp; Labs</span>
-        </a>
-
         <a href="about.html#advisory-board">
           <span class="drawer-item-icon">
             <i class="fa-solid fa-users"></i>
@@ -247,7 +230,6 @@
           </span>
           <span>Partnerships</span>
         </a>
-
       </div>
     </div>
 
@@ -305,9 +287,7 @@
 
     <a class="drawer-link" data-nav="faculty" href="faculty.html"><i class="fa-solid fa-user-doctor"></i> Our
       Faculty</a>
-    <a class="drawer-link" data-nav="inquiry" href="inquiry.html"><i class="fa-solid fa-compass"></i> Find Your
-      Pathway</a>
-    <a class="drawer-link" data-nav="learning-centre" href="learning-centre.html"><i
+    <a class="drawer-link" data-nav="facility-tour" href="facility-tour.html"><i
         class="fa-solid fa-building-columns"></i> Facility Tour</a>
     <a class="drawer-link" data-nav="welfare" href="animal-welfare.html"><i class="fa-solid fa-shield-cat"></i> Animal
       Welfare</a>
@@ -316,11 +296,10 @@
     <a class="drawer-link" data-nav="contact" href="contact.html"><i class="fa-solid fa-envelope"></i> Contact Us</a>
 
     <div class="drawer-cta-wrap">
-      <a class="btn btn-primary btn-block btn-apply-now" href="inquiry.html">Apply Now <i
+      <a class="btn btn-primary btn-block btn-apply-now" href="contact.html#contact-form">Apply Now <i
           class="fa-solid fa-arrow-right"></i></a>
-      <a class="btn btn-outline btn-block btn-counselling-modal" href="inquiry.html"><i class="fa-solid fa-compass"></i>
-        Find
-        Pathway</a>
+      <a class="btn btn-outline btn-block" href="contact.html#contact-form"><i
+          class="fa-solid fa-calendar-check"></i> Book Counselling</a>
     </div>
   </nav>
 

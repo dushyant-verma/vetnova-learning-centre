@@ -63,7 +63,7 @@
 
             <!-- Primary & Secondary CTA Buttons -->
             <div class="hero-cta-group">
-              <a href="contact.html" class="btn btn-primary btn-apply-now hero-btn-main">
+              <a href="contact.html#contact-form" class="btn btn-primary btn-apply-now hero-btn-main">
                 <span>Apply Now</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </a>
@@ -132,7 +132,7 @@
                   <span class="glass-label">Upcoming Clinical Track</span>
                   <strong>Skill-Up Program • Aug 15</strong>
                   <span class="glass-status"><i class="fa-solid fa-chair"></i> 4 Seats Remaining</span>
-                  <a href="contact.html#enquiry" class="glass-cta-btn btn-counselling-modal">
+                  <a href="contact.html#contact-form" class="glass-cta-btn">
                     <span>Book Counselling</span>
                     <i class="fa-solid fa-arrow-right"></i>
                   </a>
@@ -412,6 +412,12 @@
                   <!-- Dynamically populated via JS with real verified program cards -->
                 </div>
 
+                <div class="discovery-load-more-wrap" id="discovery-load-more-wrap" style="text-align: center; margin-top: 24px; display: none;">
+                  <button type="button" class="btn btn-outline" id="discovery-load-more-btn" style="min-width: 220px; font-weight: 700;">
+                    <i class="fa-solid fa-plus-circle" style="margin-right: 6px;"></i> Load More Programs
+                  </button>
+                </div>
+
                 <div class="quiz-actions result-ctas" style="margin-top: 32px; justify-content: center;">
                   <button class="btn btn-outline" id="quiz-reset-btn">
                     <i class="fa-solid fa-rotate-right"></i> Start New Exploration
@@ -491,7 +497,7 @@
                 </ul>
                 <div class="popular-course-card-actions">
                   <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm"
-                    href="contact.html#enquiry">Enquire</a>
+                    href="contact.html?program=soft-tissue-surgery#contact-form">Enquire</a>
                   <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm"
                     href="soft-tissue-surgery.html">Enroll Now</a>
                 </div>
@@ -522,7 +528,7 @@
                 </ul>
                 <div class="popular-course-card-actions">
                   <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm"
-                    href="contact.html#enquiry">Enquire</a>
+                    href="contact.html?program=radiology-ultrasound#contact-form">Enquire</a>
                   <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm"
                     href="radiology-ultrasound.html">Enroll Now</a>
                 </div>
@@ -553,7 +559,7 @@
                 </ul>
                 <div class="popular-course-card-actions">
                   <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm"
-                    href="contact.html#enquiry">Enquire</a>
+                    href="contact.html?program=emergency-medicine#contact-form">Enquire</a>
                   <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm"
                     href="emergency-medicine.html">Enroll Now</a>
                 </div>
@@ -584,7 +590,7 @@
                 </ul>
                 <div class="popular-course-card-actions">
                   <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm"
-                    href="contact.html#enquiry">Enquire</a>
+                    href="contact.html?program=orthopaedics#contact-form">Enquire</a>
                   <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm"
                     href="soft-tissue-surgery.html">Enroll Now</a>
                 </div>
@@ -615,7 +621,7 @@
                 </ul>
                 <div class="popular-course-card-actions">
                   <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm"
-                    href="contact.html#enquiry">Enquire</a>
+                    href="contact.html?program=veterinary-cardiology#contact-form">Enquire</a>
                   <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm"
                     href="veterinary-skill-up.html">Enroll Now</a>
                 </div>
@@ -646,7 +652,7 @@
                 </ul>
                 <div class="popular-course-card-actions">
                   <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm"
-                    href="contact.html#enquiry">Enquire</a>
+                    href="contact.html?program=clinical-pathology#contact-form">Enquire</a>
                   <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm"
                     href="veterinary-skill-up.html">Enroll Now</a>
                 </div>
@@ -677,7 +683,7 @@
                 </ul>
                 <div class="popular-course-card-actions">
                   <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm"
-                    href="contact.html#enquiry">Enquire</a>
+                    href="contact.html?program=vet-nurse-programme#contact-form">Enquire</a>
                   <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm"
                     href="vet-nurse-programme.html">Enroll Now</a>
                 </div>
@@ -708,7 +714,7 @@
                 </ul>
                 <div class="popular-course-card-actions">
                   <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm"
-                    href="contact.html#enquiry">Enquire</a>
+                    href="contact.html?program=emergency-medicine#contact-form">Enquire</a>
                   <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm"
                     href="emergency-medicine.html">Enroll Now</a>
                 </div>
@@ -732,10 +738,8 @@
                   goals.</p>
               </div>
               <div class="popular-course-cta-actions">
-                <a class="popular-course-btn popular-course-btn-primary" href="contact.html#enquiry"><i
+                <a class="popular-course-btn popular-course-btn-primary" href="contact.html#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Free Counselling</a>
-                <!-- <a class="popular-course-btn popular-course-btn-white-outline" href="contact.html#brochure"><i
-                    class="fa-solid fa-file-arrow-down"></i> Download Brochure</a> -->
               </div>
             </div>
           </div>
@@ -793,7 +797,7 @@
                         <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 4 Seats
                             Remaining</span></td>
                         <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
-                            href="contact.html">Apply Now</a></td>
+                            href="contact.html#contact-form">Apply Now</a></td>
                       </tr>
                       <tr style="border-bottom: 1px solid #f1f5f9; background-color: #fafcfd;">
                         <td style="padding: 18px 20px;"><strong>Soft Tissue Surgery Track</strong></td>
@@ -803,7 +807,7 @@
                             Admissions
                             Open</span></td>
                         <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
-                            href="contact.html">Apply Now</a></td>
+                            href="contact.html#contact-form">Apply Now</a></td>
                       </tr>
                       <tr style="border-bottom: 1px solid #f1f5f9;">
                         <td style="padding: 18px 20px;"><strong>Radiology &amp; Ultrasound Masterclass</strong></td>
@@ -813,7 +817,7 @@
                             Admissions
                             Open</span></td>
                         <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
-                            href="contact.html">Apply Now</a></td>
+                            href="contact.html#contact-form">Apply Now</a></td>
                       </tr>
                       <tr style="background-color: #fafcfd;">
                         <td style="padding: 18px 20px;"><strong>Pet Emergency &amp; Critical Care</strong></td>
@@ -822,7 +826,7 @@
                         <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 3 Seats
                             Remaining</span></td>
                         <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
-                            href="contact.html">Apply Now</a></td>
+                            href="contact.html#contact-form">Apply Now</a></td>
                       </tr>
                     </tbody>
                   </table>
@@ -853,7 +857,7 @@
                             style="display: inline-block; margin-left: 6px; font-size: 12px; font-weight: 600; color: #0d9488; background: rgba(18, 199, 193, 0.1); padding: 2px 8px; border-radius: 12px;">In
                             Session</span></td>
                         <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm"
-                            href="contact.html#enquiry">Contact Now</a></td>
+                            href="contact.html#contact-form">Contact Now</a></td>
                       </tr>
                       <tr style="background-color: #fafcfd;">
                         <td style="padding: 18px 20px;"><strong>Soft Tissue Surgery Track</strong></td>
@@ -862,7 +866,7 @@
                             style="display: inline-block; margin-left: 6px; font-size: 12px; font-weight: 600; color: #0d9488; background: rgba(18, 199, 193, 0.1); padding: 2px 8px; border-radius: 12px;">In
                             Session</span></td>
                         <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm"
-                            href="contact.html#enquiry">Contact Now</a></td>
+                            href="contact.html#contact-form">Contact Now</a></td>
                       </tr>
                     </tbody>
                   </table>
@@ -870,7 +874,7 @@
               </div>
               <p style="margin: 16px 0 0; text-align: center; font-size: 14px; color: var(--muted, #64748b);">
                 Looking to enquire about active workshop observer seats or custom scheduling?
-                <a href="contact.html#enquiry"
+                <a href="contact.html#contact-form"
                   style="color: var(--teal, #12c7c1); font-weight: 600; text-decoration: underline; margin-left: 4px;">Contact
                   Us <i class="fa-solid fa-arrow-right" style="font-size: 11px;"></i></a>
               </p>
@@ -1066,7 +1070,7 @@
               <div class="jm-cta-actions">
                 <a href="programs.html" class="btn btn-primary">Explore Programs <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a href="contact.html" class="btn btn-white-outline">Book Counselling</a>
+                <a href="contact.html#contact-form" class="btn btn-white-outline">Book Counselling</a>
               </div>
             </div>
           </div>
@@ -1170,8 +1174,8 @@
 
             <div class="facility-main-card">
               <img src="assets/images/vetnova-institute-building.webp"
-                alt="VetNova Training Institute building with branding in Pune"
-                loading="lazy" decoding="async" style="object-position: center top;" />
+                alt="VetNova Training Institute building with branding in Pune" loading="lazy" decoding="async"
+                style="object-position: center top;" />
               <div class="facility-main-overlay">
                 <span class="facility-img-tag">
                   <i class="fa-solid fa-building-columns"></i> Institute Campus
@@ -1187,8 +1191,7 @@
             <div class="facility-side-collage">
               <div class="facility-side-card">
                 <img src="assets/images/vetnova-building-exterior.webp"
-                  alt="VetNova Training Institute Campus Building Exterior"
-                  loading="lazy" decoding="async" />
+                  alt="VetNova Training Institute Campus Building Exterior" loading="lazy" decoding="async" />
                 <div class="facility-side-overlay">
                   <span class="facility-img-tag">
                     <i class="fa-solid fa-sun"></i> Building Exterior
@@ -1198,8 +1201,7 @@
 
               <div class="facility-side-card">
                 <img src="assets/images/vetnova-building-golden-hour.webp"
-                  alt="VetNova Training Institute Building in Golden-Hour Lighting"
-                  loading="lazy" decoding="async" />
+                  alt="VetNova Training Institute Building in Golden-Hour Lighting" loading="lazy" decoding="async" />
                 <div class="facility-side-overlay">
                   <span class="facility-img-tag">
                     <i class="fa-solid fa-city"></i> Golden-Hour Architecture
@@ -1402,7 +1404,8 @@
               <div class="partner-area-card">
                 <div class="partner-area-icon"><i class="fa-solid fa-briefcase"></i></div>
                 <h4>Industry Partners</h4>
-                <p>Collaborating with veterinary industry leaders, pet-care businesses, pharmaceutical companies, and animal health organizations to strengthen practical training and career opportunities.</p>
+                <p>Collaborating with veterinary industry leaders, pet-care businesses, pharmaceutical companies, and
+                  animal health organizations to strengthen practical training and career opportunities.</p>
                 <ul class="partner-area-list">
                   <li><i class="fa-solid fa-check"></i> Industry-led training initiatives</li>
                   <li><i class="fa-solid fa-check"></i> Corporate collaborations and sponsorships</li>
@@ -1512,7 +1515,7 @@
                   </button>
                   <div class="faq-answer">
                     <p>You can fill out the enquiry form on our website or use the interactive Program Explorer above.
-                      Our academic counsellors will share batch schedules, curriculum brochures, and fee details within
+                      Our academic counsellors will share batch schedules, curriculum details, and fee details within
                       24 hours.</p>
                   </div>
                 </div>
@@ -1534,6 +1537,7 @@
 
 
   <!-- Interactive JavaScript -->
+  <script src="assets/js/programs-data.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/homepage-faculty.js"></script>
   <script src="assets/js/persona-inquiry.js"></script>

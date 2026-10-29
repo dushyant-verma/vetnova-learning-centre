@@ -162,12 +162,12 @@ body.homepage-v2 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 20px 40px;
-  min-height: 52px;
-  font-size: 16px;
+  gap: 10px;
+  padding: 12px 24px;
+  min-height: 48px;
+  font-size: 14px;
   font-weight: 600;
-  border-radius: var(--v2-radius-pill);
+  border-radius: 12px;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
   cursor: pointer;

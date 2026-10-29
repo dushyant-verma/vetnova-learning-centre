@@ -101,6 +101,7 @@ window.VETNOVA_CONTACT = window.VETNOVA_CONTACT || {
         if (container && (!container.children || container.children.length === 0)) {
           container.innerHTML = html;
           syncContactElements(window.VETNOVA_CONTACT);
+          document.dispatchEvent(new CustomEvent('vetnova:componentLoaded', { detail: { containerId } }));
         }
       })
       .catch(error => {

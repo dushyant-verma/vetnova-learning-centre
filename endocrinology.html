@@ -74,17 +74,15 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=endocrinology">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=endocrinology#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html?program=endocrinology#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Brochure</a>
               </div>
             </div>
 
             <!-- Right Side Image Frame + 4 Floating Badges -->
             <div class="ps-hero-media-wrapper">
               <div class="ps-hero-image-frame">
-                <img src="assets/images/about/about-facility-02.webp"
+                <img src="assets/images/programs/program-endocrinology.webp"
                   alt="Indian veterinary surgeons teaching practical surgery to veterinary students inside a modern veterinary hospital"
                   loading="lazy" decoding="async" />
                 <div class="ps-hero-overlay"></div>
@@ -408,24 +406,87 @@
         </div>
       </section>
             <!-- SECTION 4: Three-Stage Syllabus (Foundation, Intermediate, Advanced) -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> Clinical Progression</span>
-            <h2>Three-Stage Syllabus</h2>
-            <p>Structured clinical training progression covering Foundation, Intermediate, and Advanced specialist levels.</p>
+            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
+            <h2>Course Curriculum</h2>
+            <p>Systematic workups for canine and feline endocrine diseases including diabetes regulation, thyroid testing, and adrenal disorders.</p>
           </div>
 
           <div id="three-stage-syllabus-container">
-      <div class="syllabus-pending-box">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        <h4>Detailed syllabus coming soon. Please contact VetNova for current program information.</h4>
-        <p>The verified curriculum and clinical wet-lab schedule for <strong>Endocrinology</strong> is currently being scheduled. Contact our academic office for provisional details.</p>
-        <a href="contact.html?program=endocrinology" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-envelope"></i> Request Current Program Info
-        </a>
-      </div>
-    </div>
+          <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
+            <div class="curriculum-item active">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-endocrinology">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Endocrine Screening, Blood Glucose Curves & Insulin Administration</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-endocrinology" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">Recognizing endocrine clinical signs (PU/PD, polyphagia, alopecia), glucose curve interpretation, glucometer calibration, and insulin handling.</p>
+                <ul class="curriculum-topics">
+                  <li>Endocrine system physiology, feedback loops, and clinical PU/PD quantification</li>
+                  <li>Clinical signs of canine and feline diabetes mellitus and diagnostic confirmation</li>
+                  <li>Blood glucose curves: collection technique, portable vet glucometer calibration</li>
+                  <li>Insulin types (regular, NPH, glargine, PZI), syringe sizing (U-40 vs U-100), and storage</li>
+                  <li>Educating pet parents on home monitoring, injection technique, and hypoglycemia first aid</li>
+                  <li>Recognizing bilateral symmetrical endocrine alopecia and coat changes</li>
+                  <li>Nutritional principles and feeding consistency for diabetic patients</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-endocrinology">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Thyroid & Adrenal Testing (LDDST/ACTH Stim) & Drug Monitoring</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-endocrinology" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Diagnostic testing for Cushing's disease (LDDST, ACTH stim), Addison's disease stabilization, feline hyperthyroidism, and canine hypothyroidism.</p>
+                <ul class="curriculum-topics">
+                  <li>Canine hypothyroidism: total T4, free T4 by equilibrium dialysis, and cTSH evaluation</li>
+                  <li>Levothyroxine replacement therapy, dose titration, and post-pill monitoring</li>
+                  <li>Feline hyperthyroidism: diagnosis, methimazole medical therapy, and renal monitoring</li>
+                  <li>Canine hyperadrenocorticism (Cushing's): LDDST, HDDST, and ACTH stimulation tests</li>
+                  <li>Trilostane dosing protocols, pre-pill cortisol monitoring, and side-effect recognition</li>
+                  <li>Hypoadrenocorticism (Addison's disease): electrolyte ratios and acute crisis recognition</li>
+                  <li>Long-term mineralocorticoid and glucocorticoid replacement therapy in Addisonians</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-endocrinology">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>Diabetic Ketoacidosis ICU Care, Atypical Endocrine & Calcium Disorders</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-endocrinology" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Intensive diabetic ketoacidosis (DKA) management, continuous insulin infusions, pheochromocytoma, and primary hyperparathyroidism.</p>
+                <ul class="curriculum-topics">
+                  <li>Critical intensive care management of diabetic ketoacidosis (DKA)</li>
+                  <li>Regular insulin constant rate infusions (CRI) and potassium/phosphate monitoring</li>
+                  <li>Hyperosmolar hyperglycemic state (HHS) diagnostic criteria and gentle rehydration</li>
+                  <li>Disorders of calcium homeostasis: primary hyperparathyroidism and hypocalcemia</li>
+                  <li>Atypical Cushing's syndrome, sex-hormone alopecia, and adrenal tumor workups</li>
+                  <li>Pheochromocytoma diagnosis, blood pressure control, and pre-op phenoxybenzamine</li>
+                  <li>Central and nephrogenic diabetes insipidus diagnostic water deprivation trials</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
       </section>\n\n      <!-- SECTION 5: Training Format (Infographic Cards) -->
       <section class="section soft" id="training-format">
@@ -655,7 +716,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=endocrinology">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=endocrinology#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> Enquire via WhatsApp</a>
@@ -807,9 +868,9 @@
               <p>Join the next batch of the Veterinary Skill-Up Program and transform your surgical and diagnostic
                 confidence with direct specialist mentorship.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=endocrinology">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=endocrinology#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=endocrinology#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

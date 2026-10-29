@@ -17,6 +17,7 @@ async function initAboutPageData() {
     loadAdvisoryBoardSection()
   ]);
   
+  bindFacultyProfileButtons();
   initFacultyModalEvents();
 }
 
@@ -27,7 +28,8 @@ async function loadFacultySection() {
   const facultyList = await getFaculty({ status: 'Published' });
   if (!facultyList || facultyList.length === 0) return; // Keep fallback HTML if empty
 
-  facultyGrid.innerHTML = facultyList.map(member => {
+  // Display only the first 3 faculty members on the about page
+  facultyGrid.innerHTML = facultyList.slice(0, 3).map(member => {
     const idKey = member._id || member.slug || slugify(member.name);
     window.loadedFacultyMap[idKey] = member;
 

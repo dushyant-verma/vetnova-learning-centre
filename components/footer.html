@@ -12,14 +12,10 @@
             structured programs.</p>
         </div>
         <div class="footer-cta-actions">
-          <a class="btn btn-primary btn-apply-now" href="contact.html">
+          <a class="btn btn-primary btn-apply-now" href="contact.html#contact-form">
             <span>Apply Now</span>
             <i class="fa-solid fa-arrow-right"></i>
           </a>
-          <!-- <a class="btn btn-white-outline" href="contact.html#enquiry" onclick="alert('Downloading VetNova Complete Course Brochure PDF...');">
-            <i class="fa-solid fa-file-pdf"></i>
-            <span>Download Brochure</span>
-          </a> -->
           <a href="tel:+919272561089" class="btn btn-white-outline" data-vetnova-phone>
             <i class=" fa-solid fa-phone"></i>
             <span>Call For Admissions</span>
@@ -58,7 +54,7 @@
               aria-label="VetNova on WhatsApp" data-vetnova-whatsapp><i class="fa-brands fa-whatsapp"></i></a>
           </div>
 
-          <a class="btn btn-outline btn-sm footer-quick-btn" href="contact.html#enquiry">
+          <a class="btn btn-outline btn-sm footer-quick-btn" href="contact.html#contact-form">
             <i class="fa-solid fa-headset"></i> Quick Enquiry
           </a>
         </div>
@@ -85,7 +81,7 @@
           <ul class="footer-links">
             <li><a href="about.html"><i class="fa-solid fa-chevron-right"></i> About VetNova</a></li>
             <li><a href="faculty.html"><i class="fa-solid fa-chevron-right"></i> Our Faculty</a></li>
-            <li><a href="learning-centre.html"><i class="fa-solid fa-chevron-right"></i> Facility Tour</a></li>
+            <li><a href="facility-tour.html"><i class="fa-solid fa-chevron-right"></i> Facility Tour</a></li>
             <li><a href="partnerships.html"><i class="fa-solid fa-chevron-right"></i> Partner With Us</a></li>
             <li><a href="blog.html"><i class="fa-solid fa-chevron-right"></i> Knowledge Hub (Blog)</a></li>
             <li><a href="faq.html"><i class="fa-solid fa-chevron-right"></i> FAQs</a></li>
@@ -98,11 +94,8 @@
           <h4>Resources</h4>
           <ul class="footer-links">
             <li><a href="programs.html"><i class="fa-solid fa-chevron-right"></i> Upcoming Workshops</a></li>
-            <li><a href="contact.html#enquiry"
-                onclick="alert('Downloading VetNova Complete Course Brochure PDF...');"><i
-                  class="fa-solid fa-chevron-right"></i> Download Brochure</a></li>
-            <li><a href="contact.html#enquiry"><i class="fa-solid fa-chevron-right"></i> Admissions Guide</a></li>
-            <li><a href="learning-centre.html"><i class="fa-solid fa-chevron-right"></i> Infrastructure &amp; Labs</a>
+            <li><a href="contact.html#contact-form"><i class="fa-solid fa-chevron-right"></i> Admissions Guide</a></li>
+            <li><a href="facility-tour.html"><i class="fa-solid fa-chevron-right"></i> Infrastructure &amp; Labs</a>
             </li>
             <li><a href="privacy-policy.html"><i class="fa-solid fa-chevron-right"></i> Privacy Policy</a></li>
             <li><a href="terms-and-conditions.html"><i class="fa-solid fa-chevron-right"></i> Terms &amp; Conditions</a>
@@ -218,24 +211,40 @@
 
 </footer>
 
-<!-- Popup Enquiry Modal -->
-<div class="modal-overlay" id="enquiry-modal">
+<!-- Popup Counselling / Enquiry Modal -->
+<div class="modal-overlay" id="enquiry-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
   <div class="modal-box">
     <button class="modal-close" id="modal-close-btn" aria-label="Close modal">&times;</button>
     <div class="modal-content">
       <div class="modal-head">
-        <h3>Enquire Now</h3>
-        <p>Fill out the form below, and our academic counsellor will get in touch with you shortly.</p>
+        <h3 id="modal-title">Book a Counselling Session</h3>
+        <p id="modal-desc">Speak with our team to find the right veterinary learning programme for your goals.</p>
       </div>
-      <form class="modal-form" id="modal-enquiry-form">
+
+      <!-- Inline Error Banner -->
+      <div class="modal-error-banner" id="modal-error-banner" style="display: none;" role="alert">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span class="modal-error-text" id="modal-error-text">Please fill out all required fields correctly.</span>
+      </div>
+
+      <form class="modal-form" id="modal-enquiry-form" novalidate>
+        <!-- Full Name -->
         <div class="form-group">
           <label for="modal-name">Full Name *</label>
-          <input type="text" id="modal-name" required placeholder="Enter your full name">
+          <input type="text" id="modal-name" name="name" required placeholder="Enter your full name" autocomplete="name">
         </div>
+
+        <!-- Email Address -->
+        <div class="form-group">
+          <label for="modal-email">Email Address *</label>
+          <input type="email" id="modal-email" name="email" required placeholder="name@example.com" autocomplete="email">
+        </div>
+
+        <!-- Phone Number -->
         <div class="form-group">
           <label for="modal-phone">Phone Number *</label>
           <div class="phone-input-wrap">
-            <select class="country-code" name="modal_country_code">
+            <select class="country-code" id="modal-country-code" name="modal_country_code" aria-label="Country Code">
               <option value="+91" selected>🇮🇳 +91</option>
               <option value="+1">🇺🇸 +1</option>
               <option value="+44">🇬🇧 +44</option>
@@ -247,37 +256,78 @@
               <option value="+880">🇧🇩 +880</option>
               <option value="+94">🇱🇰 +94</option>
             </select>
-            <input type="tel" id="modal-phone" required placeholder="Enter your number">
+            <input type="tel" id="modal-phone" name="phone" required placeholder="Enter your number" autocomplete="tel">
           </div>
         </div>
+
+        <!-- Interested Program -->
         <div class="form-group">
-          <label for="modal-email">Email Address *</label>
-          <input type="email" id="modal-email" required placeholder="Enter your email address">
-        </div>
-        <div class="form-group">
-          <label for="modal-role">What is your current profile? *</label>
-          <select id="modal-role" required>
-            <option value="" disabled selected>Select your profile</option>
-            <option value="doctor">Early-Career Doctor (1-3 yrs experience)</option>
-            <option value="exp-doctor">Experienced Doctor (5-10 yrs experience)</option>
-            <option value="student">Final-Year Student</option>
-            <option value="graduate">Recently Passed Graduate</option>
-            <option value="parent">Pet Owner / Rescuer</option>
-            <option value="nurse">Vet Nurse / Assistant</option>
+          <label for="modal-program">Interested Program *</label>
+          <select id="modal-program" name="course" required>
+            <option value="" disabled selected>Select an interested program</option>
+            <option value="General Counselling / Undecided">General Counselling / Not Decided Yet</option>
+            <option value="General Medicine">01. General Medicine</option>
+            <option value="Soft Tissue Surgery">02. Soft Tissue Surgery</option>
+            <option value="Orthopaedics">03. Orthopaedics</option>
+            <option value="Veterinary Dermatology">04. Veterinary Dermatology</option>
+            <option value="Infectious Diseases">05. Infectious Diseases</option>
+            <option value="Emergency and Critical Care">06. Emergency and Critical Care</option>
+            <option value="Anaesthesia and Pain Management">07. Anaesthesia and Pain Management</option>
+            <option value="Veterinary Cardiology">08. Veterinary Cardiology</option>
+            <option value="Veterinary Neurology">09. Veterinary Neurology</option>
+            <option value="Veterinary Ophthalmology">10. Veterinary Ophthalmology</option>
+            <option value="Veterinary Dentistry">11. Veterinary Dentistry</option>
+            <option value="Feline Medicine">12. Feline Medicine</option>
+            <option value="Exotic Pet Medicine">13. Exotic Pet Medicine</option>
+            <option value="Diagnostic Imaging">14. Diagnostic Imaging</option>
+            <option value="Clinical Pathology">15. Clinical Pathology</option>
+            <option value="Clinical Microbiology">16. Clinical Microbiology</option>
+            <option value="Nephrology and Urology">17. Nephrology and Urology</option>
+            <option value="Gastroenterology">18. Gastroenterology</option>
+            <option value="Oncology">19. Oncology</option>
+            <option value="Endocrinology">20. Endocrinology</option>
+            <option value="Reproduction and Obstetrics">21. Reproduction and Obstetrics</option>
+            <option value="Veterinary Nutrition">22. Veterinary Nutrition</option>
+            <option value="Preventive Medicine and Vaccinology">23. Preventive Medicine and Vaccinology</option>
+            <option value="Behavioural Medicine">24. Behavioural Medicine</option>
+            <option value="Geriatric Medicine">25. Geriatric Medicine</option>
+            <option value="Laboratory Diagnostics">26. Laboratory Diagnostics</option>
+            <option value="Veterinary Physiotherapy and Rehabilitation">27. Veterinary Physiotherapy and Rehabilitation</option>
+            <option value="Veterinary Ethics and Practice Management">28. Veterinary Ethics and Practice Management</option>
           </select>
         </div>
+
+        <!-- Preferred Counselling Mode -->
         <div class="form-group">
-          <label for="modal-message">Your Message (Optional)</label>
-          <textarea id="modal-message" rows="3" placeholder="Tell us about your learning goals..."></textarea>
+          <label for="modal-mode">Preferred Counselling Mode *</label>
+          <select id="modal-mode" name="counselling_mode" required>
+            <option value="" disabled selected>Select counselling mode</option>
+            <option value="Online Video Consultation">Online Video Consultation (Google Meet)</option>
+            <option value="Phone Call">Phone Call</option>
+          </select>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Submit Enquiry</button>
+
+        <!-- Message or Questions (Optional) -->
+        <div class="form-group">
+          <label for="modal-message">Message or Questions (Optional)</label>
+          <textarea id="modal-message" name="message" rows="2" placeholder="Tell us about your learning goals or questions..."></textarea>
+        </div>
+
+        <!-- Hidden Profile field fallback for backwards compatibility -->
+        <input type="hidden" id="modal-role" name="profile" value="Counselling Lead">
+
+        <button type="submit" class="btn btn-primary btn-block" id="modal-submit-btn">
+          <span>Request Counselling</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
       </form>
+
       <!-- Success State -->
       <div class="modal-success" id="modal-success-state" style="display: none;">
         <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
-        <h3>Enquiry Submitted!</h3>
-        <p>Thank you for reaching out. Our team will contact you shortly to guide you through the next steps.</p>
-        <button type="button" class="btn btn-primary" id="modal-success-close">Close</button>
+        <h3>Counselling Request Received!</h3>
+        <p>Thank you for reaching out. Our academic team will contact you shortly to guide you through the next steps.</p>
+        <button type="button" class="btn btn-primary" id="modal-success-close">Done</button>
       </div>
     </div>
   </div>
@@ -300,7 +350,7 @@
 </div>
 
 <!-- Fixed/Float Interactions -->
-<a href="contact.html" class="floating-apply-now" aria-label="Apply Now">APPLY NOW</a>
+<a href="contact.html#contact-form" class="floating-apply-now" aria-label="Apply Now">APPLY NOW</a>
 
 <a class="whatsapp-float-widget" 
    href="https://wa.me/919272561089?text=Hello%20VetNova%2C%20I%20would%20like%20to%20know%20more%20about%20your%20veterinary%20training%20programs." 
@@ -315,9 +365,9 @@
 
 <!-- Mobile Sticky Call to Actions -->
 <div class="mobile-stick">
-  <a class="btn btn-outline btn-counselling-modal" href="contact.html#enquiry"><i
+  <a class="btn btn-outline" href="contact.html#contact-form"><i
       class="fa-solid fa-calendar-check"></i> Book Counselling</a>
-  <a class="btn btn-primary btn-apply-now" href="contact.html"><i class="fa-solid fa-arrow-right"></i> Apply Now</a>
+  <a class="btn btn-primary btn-apply-now" href="contact.html#contact-form"><i class="fa-solid fa-arrow-right"></i> Apply Now</a>
 </div>
 
 <!-- VetNova Assistant Conversational Chatbot Widget -->

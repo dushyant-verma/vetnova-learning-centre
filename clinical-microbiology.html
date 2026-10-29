@@ -74,17 +74,15 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=clinical-microbiology">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=clinical-microbiology#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html?program=clinical-microbiology#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Brochure</a>
               </div>
             </div>
 
             <!-- Right Side Image Frame + 4 Floating Badges -->
             <div class="ps-hero-media-wrapper">
               <div class="ps-hero-image-frame">
-                <img src="assets/images/facility-main.webp"
+                <img src="assets/images/programs/program-microbiology.webp"
                   alt="Indian veterinary surgeons teaching practical surgery to veterinary students inside a modern veterinary hospital"
                   loading="lazy" decoding="async" />
                 <div class="ps-hero-overlay"></div>
@@ -408,24 +406,87 @@
         </div>
       </section>
             <!-- SECTION 4: Three-Stage Syllabus (Foundation, Intermediate, Advanced) -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> Clinical Progression</span>
-            <h2>Three-Stage Syllabus</h2>
-            <p>Structured clinical training progression covering Foundation, Intermediate, and Advanced specialist levels.</p>
+            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
+            <h2>Course Curriculum</h2>
+            <p>Hands-on clinical microbiology training from aseptic collection and Gram staining to antimicrobial susceptibility testing and mycology.</p>
           </div>
 
           <div id="three-stage-syllabus-container">
-      <div class="syllabus-pending-box">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        <h4>Detailed syllabus coming soon. Please contact VetNova for current program information.</h4>
-        <p>The verified curriculum and clinical wet-lab schedule for <strong>Clinical Microbiology</strong> is currently being scheduled. Contact our academic office for provisional details.</p>
-        <a href="contact.html?program=clinical-microbiology" class="btn btn-primary btn-sm">
-          <i class="fa-solid fa-envelope"></i> Request Current Program Info
-        </a>
-      </div>
-    </div>
+          <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
+            <div class="curriculum-item active">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-clinical-microbiology">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Aseptic Sample Collection, In-Clinic Stains & Media Preparation</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-clinical-microbiology" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">Sterile sample swabbing, cystocentesis collection, smear preparation, Gram staining, culture media inoculation, and biosafety protocols.</p>
+                <ul class="curriculum-topics">
+                  <li>Aseptic sampling protocols for wounds, abscesses, otitis, and body fluids</li>
+                  <li>Cystocentesis and sterile urine collection for microbiological culture</li>
+                  <li>Microbial smear preparation, heat fixation, and Gram staining technique</li>
+                  <li>Preparation and storage of common culture media (Blood, Nutrient, MacConkey)</li>
+                  <li>Inoculation and streak plating techniques for isolated bacterial colonies</li>
+                  <li>Incubator operation, temperature monitoring, and Biosafety Level 2 practices</li>
+                  <li>Disinfection, autoclave validation, and laboratory contamination prevention</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-clinical-microbiology">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Bacterial Identification, Antimicrobial Susceptibility (CLSI) & Mycology</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-clinical-microbiology" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Colony morphology evaluation, biochemical tests (catalase, oxidase), Kirby-Bauer disk diffusion AST, and dermatophyte fungus diagnosis.</p>
+                <ul class="curriculum-topics">
+                  <li>Colony morphology recognition and differential growth on selective media</li>
+                  <li>Rapid biochemical identification tests: catalase, oxidase, coagulase, and indole</li>
+                  <li>Antimicrobial susceptibility testing: Kirby-Bauer disk diffusion method</li>
+                  <li>Zone of inhibition measurement and interpretation following CLSI veterinary guidelines</li>
+                  <li>Dermatophyte culture diagnosis: DTM media color changes and macroconidia</li>
+                  <li>Direct microscopic identification of Malassezia and Candida yeast species</li>
+                  <li>Reporting culture and sensitivity results clearly to treating clinicians</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
+            <div class="curriculum-item">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-clinical-microbiology">
+                <div class="curriculum-title-wrap">
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>MIC Automated Systems, Multidrug Resistance (MRSP) & Hospital Audits</h3>
+                </div>
+                <i class="fa-solid fa-chevron-down caret"></i>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-clinical-microbiology" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Minimum inhibitory concentration (MIC) interpretations, detecting MRSA/MRSP/ESBL strains, molecular diagnostics, and hospital outbreak containment.</p>
+                <ul class="curriculum-topics">
+                  <li>Minimum inhibitory concentration (MIC) testing and automated broth microdilution</li>
+                  <li>Surveillance and management of multidrug-resistant pathogens (MRSA, MRSP, ESBL)</li>
+                  <li>Anaerobic bacteriology: specialized transport media and jar incubation</li>
+                  <li>Subcutaneous and systemic mycology diagnostics: Sporothrix, Aspergillus, Cryptococcus</li>
+                  <li>Molecular microbiology: PCR test indications and interpreting viral/bacterial panels</li>
+                  <li>Nosocomial infection surveillance and hospital biosecurity compliance audits</li>
+                  <li>Antimicrobial stewardship program implementation for veterinary hospitals</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
       </section>\n\n      <!-- SECTION 5: Training Format (Infographic Cards) -->
       <section class="section soft" id="training-format">
@@ -655,7 +716,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=clinical-microbiology">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=clinical-microbiology#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> Enquire via WhatsApp</a>
@@ -807,9 +868,9 @@
               <p>Join the next batch of the Veterinary Skill-Up Program and transform your surgical and diagnostic
                 confidence with direct specialist mentorship.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html?program=clinical-microbiology">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=clinical-microbiology#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=clinical-microbiology#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

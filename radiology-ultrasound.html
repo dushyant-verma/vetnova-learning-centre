@@ -115,17 +115,15 @@
 
               <!-- Action CTAs -->
               <div class="ps-hero-actions">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=radiology-ultrasound#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-outline" href="contact.html#brochure"><i class="fa-solid fa-file-arrow-down"></i>
-                  Download Syllabus</a>
               </div>
             </div>
 
             <!-- Right Side Image Frame + 4 Floating Badges -->
             <div class="ps-hero-media-wrapper">
               <div class="ps-hero-image-frame">
-                <img src="assets/programs/radiology-ultrasound-hero.webp"
+                <img src="assets/images/programs/program-radiology.webp"
                   alt="Indian female veterinary radiologist explaining digital chest X-ray and ultrasound scans on modern monitors"
                   loading="lazy" decoding="async" />
                 <div class="ps-hero-overlay"></div>
@@ -576,7 +574,7 @@
                 <p>Complete this programme with the confidence, procedural skills, and practical experience expected inside modern veterinary hospitals.</p>
               </div>
               <div class="ccm-cta-actions">
-                <a href="contact.html" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="contact.html?program=radiology-ultrasound#contact-form" class="btn btn-primary btn-apply-now">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
                 <a href="#all-programs" class="btn btn-white-outline">Download Curriculum</a>
               </div>
             </div>
@@ -622,96 +620,86 @@
         </div>
       </section>
 
-      <!-- SECTION 5: Course Curriculum Accordion -->
+            <!-- SECTION: Course Curriculum Accordion -->
       <section class="section" id="curriculum">
         <div class="container">
           <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Imaging Modules</span>
-            <h2>Radiology &amp; Ultrasound Syllabus</h2>
-            <p>Step-by-step 1-week curriculum focusing on live machine handling and systematic image interpretation.</p>
+            <span class="eyebrow"><i class="fa-solid fa-book-open"></i> Detailed Modules</span>
+            <h2>Course Curriculum</h2>
+            <p>Comprehensive imaging curriculum covering digital radiography exposure, systematic thoracic/abdominal interpretation, and ultrasound scanning.</p>
           </div>
 
+          <div id="three-stage-syllabus-container">
           <div class="curriculum-list">
+            <!-- Stage 1 — Foundation (Open by default) -->
             <div class="curriculum-item active">
-              <div class="curriculum-header">
+              <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-diagnostic-imaging">
                 <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 1 • DAY 1-2</span>
-                  <h3>Digital Radiography Principles &amp; Thoracic Reading</h3>
+                  <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
+                  <h3>Digital Radiography Physics, Radiation Safety & Machine Knobology</h3>
                 </div>
                 <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Mastering DR exposure parameters, orthogonal
-                  positioning, radiation protection gear, and thoracic radiograph interpretation.</p>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-1-diagnostic-imaging" role="region" aria-label="Stage 1 Foundation Details">
+                <p class="curriculum-stage-desc">DR/CR machine physics, radiation safety regulations, orthogonal patient positioning, ultrasound transducer selection, and knobology controls.</p>
                 <ul class="curriculum-topics">
-                  <li>Digital X-Ray physics, kvp/mAs settings, and artifact recognition.</li>
-                  <li>Patient positioning: Right lateral, left lateral, ventrodorsal (VD), dorsoventral (DV).</li>
-                  <li>Thoracic reading: Cardiac size measurement (VHS), bronchial/vascular/interstitial lung patterns.
-                  </li>
-                  <li>Practical Lab: 10+ hours patient positioning and DICOM image viewer case reading.</li>
+                  <li>Digital radiography (DR/CR) physics, exposure settings, and artifact recognition</li>
+                  <li>Radiation protection standards, lead PPE protocols, and regulatory compliance</li>
+                  <li>Patient positioning: orthogonal thoracic, abdominal, and skeletal projections</li>
+                  <li>Ultrasound machine controls: gain, depth, frequency, and focal zone optimization</li>
+                  <li>Transducer types and mechanics: microconvex, curvilinear, and linear probes</li>
+                  <li>Patient acoustic preparation, clipping, acoustic gel, and positioning aids</li>
+                  <li>DICOM viewer software navigation and digital image archiving standards</li>
                 </ul>
               </div>
             </div>
 
+            <!-- Stage 2 — Intermediate (Collapsed by default) -->
             <div class="curriculum-item">
-              <div class="curriculum-header">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-diagnostic-imaging">
                 <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 2 • DAY 3</span>
-                  <h3>Abdominal &amp; Musculoskeletal Radiograph Interpretation</h3>
+                  <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
+                  <h3>Thoracic, Abdominal & Skeletal X-Ray Interpretation & Organ Ultrasound</h3>
                 </div>
                 <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Systematic evaluation of gastrointestinal foreign
-                  bodies, organomegaly, uroliths, and orthopedic fracture patterns.</p>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-2-diagnostic-imaging" role="region" aria-label="Stage 2 Intermediate Details">
+                <p class="curriculum-stage-desc">Thoracic lung and cardiac silhouette reading, abdominal foreign body/calculi checks, systematic abdominal ultrasound organ sweeps.</p>
                 <ul class="curriculum-topics">
-                  <li>Abdominal contrast studies, GI obstruction patterns, and free abdominal gas.</li>
-                  <li>Renal, bladder, and urethral calculus radiopacities.</li>
-                  <li>Musculoskeletal positioning: Joint dysplasia, bone fractures, and osteosarcoma signs.</li>
-                  <li>Practical Lab: Guided review of 200+ real clinical radiograph cases.</li>
+                  <li>Systematic thoracic radiograph reading: vertebral heart score and lung patterns</li>
+                  <li>Abdominal radiograph interpretation: obstructive patterns, organomegaly, stones</li>
+                  <li>Musculoskeletal radiography: fractures, joint luxations, and osteoarthritic changes</li>
+                  <li>Complete abdominal ultrasound protocol: liver, gallbladder, spleen, and GI tract</li>
+                  <li>Renal architecture, urinary bladder wall evaluation, and prostate scanning</li>
+                  <li>Reproductive tract ultrasound: pregnancy confirmation and pyometra detection</li>
+                  <li>Spectral and color Doppler application for abdominal vascular flow analysis</li>
                 </ul>
               </div>
             </div>
 
+            <!-- Stage 3 — Advanced (Collapsed by default) -->
             <div class="curriculum-item">
-              <div class="curriculum-header">
+              <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-diagnostic-imaging">
                 <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 3 • DAY 4</span>
-                  <h3>Ultrasound Knobology &amp; Abdominal Scanning</h3>
+                  <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
+                  <h3>Emergency AFAST/TFAST Protocols, Contrast Studies & Guided Sampling</h3>
                 </div>
                 <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">Hands-on ultrasound transducer control, frequency
-                  adjustment, gain management, and systematic organ evaluation.</p>
+              </button>
+              <div class="curriculum-body" id="curriculum-stage-3-diagnostic-imaging" role="region" aria-label="Stage 3 Advanced Details">
+                <p class="curriculum-stage-desc">Emergency trauma scans (AFAST & TFAST), ultrasound-guided fine needle aspirates, gastrointestinal contrast studies, and CT/MRI cross-sectional basics.</p>
                 <ul class="curriculum-topics">
-                  <li>Machine knobology: Frequency selection, focal zones, depth, and gain optimization.</li>
-                  <li>Organ scanning protocols: Liver parenchyma, gallbladder, spleen, left &amp; right kidneys.</li>
-                  <li>Bladder wall thickness evaluation, prostate assessment, and pyometra identification.</li>
-                  <li>Practical Lab: Live machine scanning on patient models with mentor supervision.</li>
+                  <li>Emergency point-of-care ultrasonography: focused AFAST and TFAST protocols</li>
+                  <li>Fluid scoring systems for hemoperitoneum, pleural effusion, and pneumothorax</li>
+                  <li>Ultrasound-guided fine needle aspiration and cystocentesis biopsy techniques</li>
+                  <li>Gastrointestinal and urinary tract positive/negative contrast radiography</li>
+                  <li>Musculoskeletal ultrasonography: tendon and superficial soft tissue evaluation</li>
+                  <li>Cross-sectional imaging principles: introductory CT and MRI slice interpretation</li>
+                  <li>Advanced diagnostic imaging case library review and radiologic reporting</li>
                 </ul>
               </div>
             </div>
-
-            <div class="curriculum-item">
-              <div class="curriculum-header">
-                <div class="curriculum-title-wrap">
-                  <span class="curriculum-mod-badge">MODULE 4 • DAY 5</span>
-                  <h3>Emergency AFAST &amp; TFAST Protocols</h3>
-                </div>
-                <i class="fa-solid fa-chevron-down caret"></i>
-              </div>
-              <div class="curriculum-body">
-                <p style="color: var(--muted); font-size: 14px;">High-speed emergency ultrasonography for rapid fluid
-                  detection in trauma and critical care patients.</p>
-                <ul class="curriculum-topics">
-                  <li>AFAST 4-site examination: Diaphragm-hepatic, splenorenal, cysto-colic, hepatorenal.</li>
-                  <li>TFAST thoracic acoustic windows: Pericardial site, chest tube site, lung gliding sign.</li>
-                  <li>Fluid scoring system for internal hemorrhage &amp; cardiac tamponade assessment.</li>
-                  <li>Practical Lab: Simulated emergency trauma scan challenge and capstone assessment.</li>
-                </ul>
-              </div>
-            </div>
+          </div>
           </div>
         </div>
       </section>
@@ -885,7 +873,7 @@
             </ul>
 
             <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html">Apply Now <i
+              <a class="btn btn-primary btn-block btn-apply-now" href="contact.html?program=radiology-ultrasound#contact-form">Apply Now <i
                   class="fa-solid fa-arrow-right"></i></a>
               <a class="btn btn-outline btn-block" href="https://wa.me/919272561089" target="_blank"><i
                   class="fa-brands fa-whatsapp"></i> WhatsApp Enquiry</a>
@@ -954,7 +942,7 @@
             </div>
             <div class="single-batch-footer">
               <div class="batch-price-tag">₹16,000 <small>+ GST</small></div>
-              <a class="btn btn-primary btn-sm btn-apply-now" href="contact.html">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
+              <a class="btn btn-primary btn-sm btn-apply-now" href="contact.html?program=radiology-ultrasound#contact-form">Apply Now <i class="fa-solid fa-arrow-right"></i></a>
             </div>
           </div>
         </div>
@@ -1108,9 +1096,9 @@
               <p>Join the upcoming Radiology &amp; Ultrasound Masterclass batch and elevate your clinical diagnostic
                 accuracy.</p>
               <div class="dark-cta-buttons">
-                <a class="btn btn-primary btn-apply-now" href="contact.html">Apply Now <i
+                <a class="btn btn-primary btn-apply-now" href="contact.html?program=radiology-ultrasound#contact-form">Apply Now <i
                     class="fa-solid fa-arrow-right"></i></a>
-                <a class="btn btn-white-outline btn-counselling-modal" href="contact.html#enquiry"><i
+                <a class="btn btn-white-outline" href="contact.html?program=radiology-ultrasound#contact-form"><i
                     class="fa-solid fa-calendar-check"></i> Book Counselling</a>
               </div>
             </div>

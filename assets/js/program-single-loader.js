@@ -73,6 +73,9 @@ async function initProgramSinglePage() {
   // Update Syllabus Container
   if (syllabusContainer && typeof window.renderThreeStageSyllabusHTML === "function") {
     syllabusContainer.innerHTML = window.renderThreeStageSyllabusHTML(program);
+    if (typeof window.initCurriculumAccordion === "function") {
+      window.initCurriculumAccordion();
+    }
   }
 
   // Update inquiry CTAs to include clean program context
@@ -80,7 +83,7 @@ async function initProgramSinglePage() {
   applyBtns.forEach(btn => {
     btn.setAttribute("data-context", cleanTitle);
     if (btn.tagName.toLowerCase() === "a" && btn.getAttribute("href")?.includes("contact.html")) {
-      btn.setAttribute("href", `contact.html?program=${encodeURIComponent(program.slug)}`);
+      btn.setAttribute("href", `contact.html?program=${encodeURIComponent(program.slug)}#contact-form`);
     }
   });
 
