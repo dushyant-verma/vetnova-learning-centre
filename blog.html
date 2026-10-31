@@ -18,240 +18,6 @@
 
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="styles.css" />
-
-  <style>
-    /* Scoped blog-listing layout: filters left, cards right */
-    #latest-articles .blog-listing-layout {
-      display: grid;
-      grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
-      align-items: start;
-      gap: clamp(24px, 3vw, 40px)
-    }
-
-    #latest-articles .blog-filter-sidebar {
-      position: sticky;
-      top: 24px;
-      padding: 24px;
-      border: 1px solid rgba(22, 67, 58, .14);
-      border-radius: 16px;
-      background: #fff;
-      box-shadow: 0 8px 28px rgba(18, 47, 41, .06)
-    }
-
-    #latest-articles .blog-filter-heading,
-    #latest-articles .blog-results-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px
-    }
-
-    #latest-articles .blog-filter-heading {
-      margin-bottom: 22px
-    }
-
-    #latest-articles .blog-filter-heading h3 {
-      margin: 0;
-      font-size: 1.08rem
-    }
-
-    #latest-articles .blog-clear-filters {
-      border: 0;
-      padding: 4px 0;
-      background: transparent;
-      color: var(--primary, #176b56);
-      font: inherit;
-      font-size: .86rem;
-      font-weight: 600;
-      cursor: pointer
-    }
-
-    #latest-articles .blog-search-label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: .9rem;
-      font-weight: 600
-    }
-
-    #latest-articles .blog-search-wrap {
-      position: relative
-    }
-
-    #latest-articles .blog-search-wrap>i {
-      position: absolute;
-      top: 50%;
-      left: 13px;
-      transform: translateY(-50%);
-      color: #77817e;
-      pointer-events: none
-    }
-
-    #latest-articles #blog-search {
-      box-sizing: border-box;
-      width: 100%;
-      min-height: 46px;
-      padding: 11px 12px 11px 38px;
-      border: 1px solid #dce4e1;
-      border-radius: 9px;
-      background: #fff;
-      color: #202a27;
-      font: inherit;
-      font-size: .92rem
-    }
-
-    #latest-articles .blog-category-filters {
-      display: grid;
-      gap: 13px;
-      margin: 24px 0 0;
-      padding: 0;
-      border: 0
-    }
-
-    #latest-articles .blog-category-filters legend {
-      margin-bottom: 14px;
-      font-weight: 700
-    }
-
-    #latest-articles .blog-filter-option {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      color: #384541;
-      font-size: .92rem;
-      line-height: 1.4;
-      cursor: pointer
-    }
-
-    #latest-articles .blog-filter-option input {
-      flex: 0 0 auto;
-      width: 16px;
-      height: 16px;
-      margin: 2px 0 0;
-      accent-color: var(--primary, #176b56)
-    }
-
-    #latest-articles .blog-results {
-      min-width: 0
-    }
-
-    #latest-articles .blog-results-toolbar {
-      margin: 0 0 16px
-    }
-
-    #latest-articles #blog-results-count {
-      margin: 0;
-      color: #65716d;
-      font-size: .9rem
-    }
-
-    #latest-articles #latest-articles-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px
-    }
-
-    /* [hidden] must always win over display:grid / flex */
-    #latest-articles #latest-articles-grid[hidden],
-    #latest-articles .blog-card[hidden],
-    #latest-articles .blog-empty-state[hidden] {
-      display: none !important
-    }
-
-    #latest-articles .blog-empty-state {
-      padding: 48px 20px;
-      border: 1px dashed #ccd8d3;
-      border-radius: 14px;
-      text-align: center
-    }
-
-    #latest-articles .blog-empty-state>i {
-      color: var(--primary, #176b56);
-      font-size: 2rem
-    }
-
-    #latest-articles .blog-empty-state h3 {
-      margin: 12px 0 8px
-    }
-
-    #latest-articles .blog-empty-state p {
-      margin: 0 0 18px
-    }
-
-    #latest-articles .blog-filter-toggle {
-      display: none
-    }
-
-    #latest-articles #blog-search:focus-visible,
-    #latest-articles button:focus-visible,
-    #latest-articles input:focus-visible {
-      outline: 3px solid rgba(23, 107, 86, .24);
-      outline-offset: 2px
-    }
-
-    @media(min-width:1440px) {
-      #latest-articles #latest-articles-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr))
-      }
-    }
-
-    @media(max-width:1100px) {
-      #latest-articles .blog-listing-layout {
-        grid-template-columns: 230px minmax(0, 1fr);
-        gap: 22px
-      }
-
-      #latest-articles .blog-filter-sidebar {
-        padding: 19px
-      }
-
-      #latest-articles #latest-articles-grid {
-        gap: 18px
-      }
-    }
-
-    @media(max-width:760px) {
-      #latest-articles .blog-filter-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 9px;
-        margin: 0 0 16px;
-        padding: 11px 16px;
-        border: 1px solid #dce4e1;
-        border-radius: 9px;
-        background: #fff;
-        color: inherit;
-        font: inherit;
-        font-weight: 600;
-        cursor: pointer
-      }
-
-      #latest-articles .blog-listing-layout {
-        grid-template-columns: minmax(0, 1fr)
-      }
-
-      #latest-articles .blog-filter-sidebar {
-        display: none;
-        position: static
-      }
-
-      #latest-articles .blog-filter-sidebar.is-open {
-        display: block
-      }
-
-      #latest-articles #latest-articles-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr))
-      }
-    }
-
-    @media(max-width:520px) {
-      #latest-articles #latest-articles-grid {
-        grid-template-columns: minmax(0, 1fr)
-      }
-
-      #latest-articles .blog-filter-sidebar {
-        padding: 18px
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -274,6 +40,40 @@
         </div>
 
       </div>
+
+
+      <!-- SECTION 1: Knowledge Hub Hero -->
+      <!-- <section class="inner-hero" id="blog-hero">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb navigation">
+            <a href="index.html">Home</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Knowledge Hub</span>
+          </nav>
+
+          <div class="inner-hero-wrap">
+            <div class="inner-hero-copy">
+              <span class="eyebrow"><i class="fa-solid fa-book-open"></i> KNOWLEDGE HUB</span>
+              <h1>Veterinary Knowledge Hub</h1>
+              <p>
+                Clinical education, surgical techniques, radiology interpretation, emergency triage protocols, pet
+                wellness research, and practical insights designed for practicing veterinarians and students.
+              </p>
+              <div class="hero-ctas">
+                <a class="btn btn-primary" href="#latest-articles">Browse Articles <i
+                    class="fa-solid fa-arrow-down"></i></a>
+                <a class="btn btn-outline" href="#categories"><i class="fa-solid fa-layer-group"></i> Explore
+                  Categories</a>
+              </div>
+            </div>
+
+            <div class="inner-hero-image">
+              <img src="assets/vet_selector_petcare_card.webp" alt="Veterinary doctor reviewing surgical case study"
+                loading="lazy" decoding="async" />
+            </div>
+          </div>
+        </div>
+      </section> -->
 
       <!-- SECTION 2: Featured Article -->
       <section class="section" id="featured-article">
@@ -317,8 +117,30 @@
         </div>
       </section>
 
-      <!-- SECTION 3 + 4: Filters on the LEFT, article cards on the RIGHT
-           (replaces the old horizontal category pills) -->
+      <!-- SECTION 3: Interactive Categories -->
+      <section class="section soft" id="categories">
+        <div class="container">
+          <div class="section-head center">
+            <span class="eyebrow"><i class="fa-solid fa-filter"></i> TOPIC NAVIGATION</span>
+            <h2>Explore By Category</h2>
+            <p>Filter clinical guides, surgical tutorials, and diagnostic resources by specialty topic.</p>
+          </div>
+
+          <div class="category-pills-wrap">
+            <button class="category-pill active" data-category="all">All Articles</button>
+            <button class="category-pill" data-category="surgery">Surgery</button>
+            <button class="category-pill" data-category="radiology">Radiology & Imaging</button>
+            <button class="category-pill" data-category="emergency">Emergency Care</button>
+            <button class="category-pill" data-category="clinical-skills">Clinical Skills</button>
+            <button class="category-pill" data-category="pet-care">Pet Care & Wellness</button>
+            <button class="category-pill" data-category="welfare">Animal Welfare</button>
+            <button class="category-pill" data-category="nurse">Vet Nurses</button>
+            <button class="category-pill" data-category="career">Career Advice</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Latest Articles Grid -->
       <section class="section" id="latest-articles">
         <div class="container">
           <div class="section-head">
@@ -326,229 +148,166 @@
             <h2>Latest Knowledge Articles</h2>
           </div>
 
-          <!-- Mobile-only filter toggle -->
-          <button class="blog-filter-toggle" id="blog-filter-toggle" type="button" aria-expanded="false"
-            aria-controls="blog-filter-sidebar">
-            <i class="fa-solid fa-filter" aria-hidden="true"></i> Filters
-          </button>
+          <div class="feature-grid-3" id="latest-articles-grid">
 
-          <div class="blog-listing-layout">
-
-            <!-- LEFT: filters -->
-            <aside class="blog-filter-sidebar" id="blog-filter-sidebar" aria-label="Filter blog articles">
-              <div class="blog-filter-heading">
-                <h3>Filter Articles</h3>
-                <button type="button" id="blog-clear-filters" class="blog-clear-filters">Clear all</button>
+            <!-- Card 1 -->
+            <div class="blog-card" data-category="radiology">
+              <div class="blog-card-media">
+                <img src="assets/images/blog/blog-radiology-reading.webp"
+                  alt="Indian veterinary radiologist studying digital X-Ray images of a dog" loading="lazy"
+                  decoding="async" />
               </div>
-
-              <label class="blog-search-label" for="blog-search">Search articles</label>
-              <div class="blog-search-wrap">
-                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                <input id="blog-search" type="search" placeholder="Search blogs..." autocomplete="off">
-              </div>
-
-              <fieldset class="blog-category-filters">
-                <legend>Categories</legend>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="all" checked>
-                  <span>All articles</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="surgery">
-                  <span>Surgery</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="radiology">
-                  <span>Radiology &amp; Imaging</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="emergency">
-                  <span>Emergency Care</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="clinical-skills">
-                  <span>Clinical Skills</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="pet-care">
-                  <span>Pet Care &amp; Wellness</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="welfare">
-                  <span>Animal Welfare</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="nurse">
-                  <span>Vet Nurses</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="career">
-                  <span>Career Advice</span></label>
-              </fieldset>
-            </aside>
-
-            <!-- RIGHT: cards -->
-            <div class="blog-results">
-              <div class="blog-results-toolbar">
-                <p id="blog-results-count" aria-live="polite">Showing articles</p>
-              </div>
-
-              <div class="feature-grid-3" id="latest-articles-grid">
-
-                <!-- Card 1 -->
-                <div class="blog-card" data-category="radiology">
-                  <div class="blog-card-media">
-                    <img src="assets/images/blog/blog-radiology-reading.webp"
-                      alt="Indian veterinary radiologist studying digital X-Ray images of a dog" loading="lazy"
-                      decoding="async" />
-                  </div>
-                  <div class="blog-card-body">
-                    <div class="post-meta">
-                      <span class="post-category-badge">RADIOLOGY</span>
-                      <span>6 Min Read</span>
-                    </div>
-                    <h3><a href="blog-single.html">Diagnostic X-Ray Reading: Identifying Thoracic &amp; Abdominal
-                        Lesions</a>
-                    </h3>
-                    <p>Systematic approach to evaluating cardiomegaly, pulmonary opacities, and intestinal foreign
-                      bodies in small animal radiographs.</p>
-                    <div class="post-author" style="margin-top: auto;">
-                      <img src="assets/images/blog/blog-author-priya.webp" alt="Dr. Priya Sharma" loading="lazy"
-                        decoding="async" />
-                      <div class="post-author-info">
-                        <strong>Dr. Priya Sharma</strong>
-                        <small>Radiology Educator</small>
-                      </div>
-                    </div>
+              <div class="blog-card-body">
+                <div class="post-meta">
+                  <span class="post-category-badge">RADIOLOGY</span>
+                  <span>6 Min Read</span>
+                </div>
+                <h3><a href="blog-single.html">Diagnostic X-Ray Reading: Identifying Thoracic &amp; Abdominal
+                    Lesions</a>
+                </h3>
+                <p>Systematic approach to evaluating cardiomegaly, pulmonary opacities, and intestinal foreign bodies in
+                  small animal radiographs.</p>
+                <div class="post-author" style="margin-top: auto;">
+                  <img src="assets/images/blog/blog-author-priya.webp" alt="Dr. Priya Sharma" loading="lazy"
+                    decoding="async" />
+                  <div class="post-author-info">
+                    <strong>Dr. Priya Sharma</strong>
+                    <small>Radiology Educator</small>
                   </div>
                 </div>
-
-                <!-- Card 2 -->
-                <div class="blog-card" data-category="emergency">
-                  <div class="blog-card-media">
-                    <img src="assets/images/hero-veterinary-training.webp"
-                      alt="Indian emergency veterinary doctors stabilizing an injured dog in ICU" loading="lazy"
-                      decoding="async" />
-                  </div>
-                  <div class="blog-card-body">
-                    <div class="post-meta">
-                      <span class="post-category-badge">EMERGENCY CARE</span>
-                      <span>7 Min Read</span>
-                    </div>
-                    <h3><a href="blog-single.html">Emergency Triage &amp; Rapid Fluid Resuscitation Protocols</a></h3>
-                    <p>How to triage acute hypovolemic shock, toxic ingestion, and respiratory distress cases during
-                      emergency hospital admissions.</p>
-                    <div class="post-author" style="margin-top: auto;">
-                      <img src="assets/images/blog/blog-author-rajesh.webp" alt="Dr. Rajesh Verma" loading="lazy"
-                        decoding="async" />
-                      <div class="post-author-info">
-                        <strong>Dr. Rajesh Verma</strong>
-                        <small>Critical Care Lead</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="blog-card" data-category="surgery">
-                  <div class="blog-card-media">
-                    <img src="assets/images/blog/blog-soft-tissue-surgery.webp"
-                      alt="Indian veterinary surgeon performing canine spay surgery" loading="lazy" decoding="async" />
-                  </div>
-                  <div class="blog-card-body">
-                    <div class="post-meta">
-                      <span class="post-category-badge">SURGERY</span>
-                      <span>10 Min Read</span>
-                    </div>
-                    <h3><a href="blog-single.html">Canine Ovariohysterectomy: Suture Selection &amp; Vessel Ligation</a>
-                    </h3>
-                    <p>Detailed breakdown of pedicle ligation, friction knots, subcuticular closure patterns, and
-                      postoperative recovery monitoring.</p>
-                    <div class="post-author" style="margin-top: auto;">
-                      <img src="assets/images/blog/blog-author-amit.webp" alt="Dr. Amit Kulkarni" loading="lazy"
-                        decoding="async" />
-                      <div class="post-author-info">
-                        <strong>Dr. Amit Kulkarni</strong>
-                        <small>Senior Surgeon</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="blog-card" data-category="radiology">
-                  <div class="blog-card-media">
-                    <img src="assets/images/blog/blog-ultrasound-fast.webp"
-                      alt="Indian veterinarian performing abdominal ultrasound on a Labrador" loading="lazy"
-                      decoding="async" />
-                  </div>
-                  <div class="blog-card-body">
-                    <div class="post-meta">
-                      <span class="post-category-badge">RADIOLOGY</span>
-                      <span>5 Min Read</span>
-                    </div>
-                    <h3><a href="blog-single.html">Ultrasound Probe Positioning for Abdominal AFAST Scans</a></h3>
-                    <p>Mastering the 4 cardinal acoustic windows (diaphragmatico-hepatic, spleno-renal, cysto-colic,
-                      hepatorenal) to detect free abdominal fluid.</p>
-                    <div class="post-author" style="margin-top: auto;">
-                      <img src="assets/images/blog/blog-author-priya.webp" alt="Dr. Priya Sharma" loading="lazy"
-                        decoding="async" />
-                      <div class="post-author-info">
-                        <strong>Dr. Priya Sharma</strong>
-                        <small>Radiology Specialist</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Card 5 -->
-                <div class="blog-card" data-category="nurse">
-                  <div class="blog-card-media">
-                    <img src="assets/images/blog/blog-vet-nurse-or.webp"
-                      alt="Indian veterinary nurse preparing surgical instruments in OT" loading="lazy"
-                      decoding="async" />
-                  </div>
-                  <div class="blog-card-body">
-                    <div class="post-meta">
-                      <span class="post-category-badge">VET NURSES</span>
-                      <span>4 Min Read</span>
-                    </div>
-                    <h3><a href="blog-single.html">Role of Vet Nurses in Sterile OR Preparation &amp; Patient
-                        Recovery</a>
-                    </h3>
-                    <p>Essential checklist for clinic assistants: autoclaving cycles, patient positioning, IV catheter
-                      placement, and vitals logging.</p>
-                    <div class="post-author" style="margin-top: auto;">
-                      <img src="assets/images/blog/blog-author-rahul.webp" alt="Dr. Rahul Deshmukh" loading="lazy"
-                        decoding="async" />
-                      <div class="post-author-info">
-                        <strong>Dr. Rahul Deshmukh</strong>
-                        <small>Clinical Director</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Card 6 -->
-                <div class="blog-card" data-category="clinical-skills">
-                  <div class="blog-card-media">
-                    <img src="assets/images/blog/blog-post-op-pain.webp"
-                      alt="Indian veterinarian examining a recovering dog after surgery" loading="lazy"
-                      decoding="async" />
-                  </div>
-                  <div class="blog-card-body">
-                    <div class="post-meta">
-                      <span class="post-category-badge">CLINICAL SKILLS</span>
-                      <span>8 Min Read</span>
-                    </div>
-                    <h3><a href="blog-single.html">Post-Op Pain Management &amp; Analgesia Protocols in Small
-                        Animals</a>
-                    </h3>
-                    <p>Combining NSAIDs, opioids, and local nerve blocks for multimodal pain control during
-                      post-surgical recovery.</p>
-                    <div class="post-author" style="margin-top: auto;">
-                      <img src="assets/images/blog/blog-author-amit.webp" alt="Dr. Amit Kulkarni" loading="lazy"
-                        decoding="async" />
-                      <div class="post-author-info">
-                        <strong>Dr. Amit Kulkarni</strong>
-                        <small>Senior Surgeon</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-              <div class="blog-empty-state" id="blog-empty-state" hidden>
-                <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
-                <h3>No articles found</h3>
-                <p>Try another search term or choose a different category.</p>
-                <button type="button" id="blog-empty-reset" class="btn btn-primary btn-sm">Clear filters</button>
               </div>
             </div>
+
+            <!-- Card 2 -->
+            <div class="blog-card" data-category="emergency">
+              <div class="blog-card-media">
+                <img src="assets/images/hero-veterinary-training.webp"
+                  alt="Indian emergency veterinary doctors stabilizing an injured dog in ICU" loading="lazy"
+                  decoding="async" />
+              </div>
+              <div class="blog-card-body">
+                <div class="post-meta">
+                  <span class="post-category-badge">EMERGENCY CARE</span>
+                  <span>7 Min Read</span>
+                </div>
+                <h3><a href="blog-single.html">Emergency Triage &amp; Rapid Fluid Resuscitation Protocols</a></h3>
+                <p>How to triage acute hypovolemic shock, toxic ingestion, and respiratory distress cases during
+                  emergency hospital admissions.</p>
+                <div class="post-author" style="margin-top: auto;">
+                  <img src="assets/images/blog/blog-author-rajesh.webp" alt="Dr. Rajesh Verma" loading="lazy"
+                    decoding="async" />
+                  <div class="post-author-info">
+                    <strong>Dr. Rajesh Verma</strong>
+                    <small>Critical Care Lead</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="blog-card" data-category="surgery">
+              <div class="blog-card-media">
+                <img src="assets/images/blog/blog-soft-tissue-surgery.webp"
+                  alt="Indian veterinary surgeon performing canine spay surgery" loading="lazy" decoding="async" />
+              </div>
+              <div class="blog-card-body">
+                <div class="post-meta">
+                  <span class="post-category-badge">SURGERY</span>
+                  <span>10 Min Read</span>
+                </div>
+                <h3><a href="blog-single.html">Canine Ovariohysterectomy: Suture Selection &amp; Vessel Ligation</a>
+                </h3>
+                <p>Detailed breakdown of pedicle ligation, friction knots, subcuticular closure patterns, and
+                  postoperative recovery monitoring.</p>
+                <div class="post-author" style="margin-top: auto;">
+                  <img src="assets/images/blog/blog-author-amit.webp" alt="Dr. Amit Kulkarni" loading="lazy"
+                    decoding="async" />
+                  <div class="post-author-info">
+                    <strong>Dr. Amit Kulkarni</strong>
+                    <small>Senior Surgeon</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="blog-card" data-category="radiology">
+              <div class="blog-card-media">
+                <img src="assets/images/blog/blog-ultrasound-fast.webp"
+                  alt="Indian veterinarian performing abdominal ultrasound on a Labrador" loading="lazy"
+                  decoding="async" />
+              </div>
+              <div class="blog-card-body">
+                <div class="post-meta">
+                  <span class="post-category-badge">RADIOLOGY</span>
+                  <span>5 Min Read</span>
+                </div>
+                <h3><a href="blog-single.html">Ultrasound Probe Positioning for Abdominal AFAST Scans</a></h3>
+                <p>Mastering the 4 cardinal acoustic windows (diaphragmatico-hepatic, spleno-renal, cysto-colic,
+                  hepatorenal) to detect free abdominal fluid.</p>
+                <div class="post-author" style="margin-top: auto;">
+                  <img src="assets/images/blog/blog-author-priya.webp" alt="Dr. Priya Sharma" loading="lazy"
+                    decoding="async" />
+                  <div class="post-author-info">
+                    <strong>Dr. Priya Sharma</strong>
+                    <small>Radiology Specialist</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="blog-card" data-category="nurse">
+              <div class="blog-card-media">
+                <img src="assets/images/blog/blog-vet-nurse-or.webp"
+                  alt="Indian veterinary nurse preparing surgical instruments in OT" loading="lazy" decoding="async" />
+              </div>
+              <div class="blog-card-body">
+                <div class="post-meta">
+                  <span class="post-category-badge">VET NURSES</span>
+                  <span>4 Min Read</span>
+                </div>
+                <h3><a href="blog-single.html">Role of Vet Nurses in Sterile OR Preparation &amp; Patient Recovery</a>
+                </h3>
+                <p>Essential checklist for clinic assistants: autoclaving cycles, patient positioning, IV catheter
+                  placement, and vitals logging.</p>
+                <div class="post-author" style="margin-top: auto;">
+                  <img src="assets/images/blog/blog-author-rahul.webp" alt="Dr. Rahul Deshmukh" loading="lazy"
+                    decoding="async" />
+                  <div class="post-author-info">
+                    <strong>Dr. Rahul Deshmukh</strong>
+                    <small>Clinical Director</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="blog-card" data-category="clinical-skills">
+              <div class="blog-card-media">
+                <img src="assets/images/blog/blog-post-op-pain.webp"
+                  alt="Indian veterinarian examining a recovering dog after surgery" loading="lazy" decoding="async" />
+              </div>
+              <div class="blog-card-body">
+                <div class="post-meta">
+                  <span class="post-category-badge">CLINICAL SKILLS</span>
+                  <span>8 Min Read</span>
+                </div>
+                <h3><a href="blog-single.html">Post-Op Pain Management &amp; Analgesia Protocols in Small Animals</a>
+                </h3>
+                <p>Combining NSAIDs, opioids, and local nerve blocks for multimodal pain control during post-surgical
+                  recovery.</p>
+                <div class="post-author" style="margin-top: auto;">
+                  <img src="assets/images/blog/blog-author-amit.webp" alt="Dr. Amit Kulkarni" loading="lazy"
+                    decoding="async" />
+                  <div class="post-author-info">
+                    <strong>Dr. Amit Kulkarni</strong>
+                    <small>Senior Surgeon</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -586,62 +345,6 @@
   <script src="script.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/blog.js"></script>
-
-  <script>
-    (() => {
-      const section = document.getElementById('latest-articles');
-      if (!section) return;
-
-      const search = document.getElementById('blog-search');
-      const grid = document.getElementById('latest-articles-grid');
-      const count = document.getElementById('blog-results-count');
-      const empty = document.getElementById('blog-empty-state');
-      const categoryInputs = Array.from(section.querySelectorAll('input[name="blog-category"]'));
-      const sidebar = document.getElementById('blog-filter-sidebar');
-      const toggle = document.getElementById('blog-filter-toggle');
-
-      function applyFilters() {
-        // Query cards live so cards re-rendered by blog.js / api.js are still filtered
-        const cards = Array.from(grid.querySelectorAll('.blog-card'));
-        const term = (search.value || '').toLocaleLowerCase().trim();
-        const category = categoryInputs.find(input => input.checked)?.value || 'all';
-        let visible = 0;
-
-        cards.forEach(card => {
-          const matchesCategory = category === 'all' || card.dataset.category === category;
-          const matchesSearch = !term || card.textContent.toLocaleLowerCase().includes(term);
-          const show = matchesCategory && matchesSearch;
-          card.hidden = !show;
-          if (show) visible++;
-        });
-
-        count.textContent = `Showing ${visible} of ${cards.length} articles`;
-        empty.hidden = visible !== 0;
-        grid.hidden = visible === 0;
-      }
-
-      function clearFilters() {
-        search.value = '';
-        const all = categoryInputs.find(input => input.value === 'all');
-        if (all) all.checked = true;
-        applyFilters();
-      }
-
-      search.addEventListener('input', applyFilters);
-      categoryInputs.forEach(input => input.addEventListener('change', applyFilters));
-      document.getElementById('blog-clear-filters').addEventListener('click', clearFilters);
-      document.getElementById('blog-empty-reset').addEventListener('click', clearFilters);
-      toggle.addEventListener('click', () => {
-        const open = sidebar.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', String(open));
-      });
-
-      // Re-apply when other scripts add/replace cards (childList only, so no loop)
-      new MutationObserver(applyFilters).observe(grid, { childList: true });
-
-      applyFilters();
-    })();
-  </script>
 </body>
 
 </html>
