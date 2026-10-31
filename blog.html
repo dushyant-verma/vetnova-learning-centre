@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="styles.css" />
 
   <style>
-    /* Scoped blog-listing layout */
+    /* Scoped blog-listing layout: filters left, cards right */
     #latest-articles .blog-listing-layout {
       display: grid;
       grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
@@ -149,7 +149,7 @@
       gap: 24px
     }
 
-    /* FIX: make sure the [hidden] attribute always wins over display:grid / display:flex */
+    /* [hidden] must always win over display:grid / flex */
     #latest-articles #latest-articles-grid[hidden],
     #latest-articles .blog-card[hidden],
     #latest-articles .blog-empty-state[hidden] {
@@ -237,13 +237,11 @@
         display: block
       }
 
-      /* FIX: closing parenthesis was missing here */
       #latest-articles #latest-articles-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr))
       }
     }
 
-    /* FIX: this block was nested inside the 760px block; it must stand alone */
     @media(max-width:520px) {
       #latest-articles #latest-articles-grid {
         grid-template-columns: minmax(0, 1fr)
@@ -254,7 +252,6 @@
       }
     }
   </style>
-
 </head>
 
 <body>
@@ -278,30 +275,78 @@
 
       </div>
 
+      <!-- SECTION 2: Featured Article -->
+      <section class="section" id="featured-article">
+        <div class="container" id="featured-post-container">
+          <div class="section-head">
+            <span class="eyebrow"><i class="fa-solid fa-star"></i> FEATURED GUIDE</span>
+            <h2>Editor's Pick</h2>
+          </div>
 
-      <!-- BLOG LISTING: Filters on the left, cards on the right -->
+          <div class="featured-post-card">
+            <div class="featured-post-media">
+              <img src="assets/images/blog/blog-featured-guide.webp"
+                alt="Indian veterinary surgeons demonstrating surgical hand scrubbing and sterile OT preparation"
+                loading="lazy" decoding="async" />
+            </div>
+            <div class="featured-post-content">
+              <div class="post-meta">
+                <span class="post-category-badge">SURGICAL MASTERY</span>
+                <span><i class="fa-regular fa-clock"></i> 8 Min Read</span>
+                <span>• August 1, 2026</span>
+              </div>
+              <h2><a href="blog-single.html">Step-by-Step Soft Tissue Surgical Preparation &amp; Aseptic Scrubbing
+                  Protocols</a>
+              </h2>
+              <p class="featured-post-excerpt">
+                A comprehensive tactical guide for junior veterinary surgeons on sterile OR setup, instrument
+                ergonomics, scrub mechanics, and patient draping to eliminate surgical site infection risks.
+              </p>
+              <div class="post-author">
+                <img src="assets/images/blog/blog-author-amit.webp" alt="Dr. Amit Kulkarni" loading="lazy"
+                  decoding="async" />
+                <div class="post-author-info">
+                  <strong>Dr. Amit Kulkarni</strong>
+                  <small>Senior Veterinary Surgeon &amp; Lead Faculty</small>
+                </div>
+                <a class="btn btn-primary btn-sm" style="margin-left: auto;" href="blog-single.html">Read Article <i
+                    class="fa-solid fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3 + 4: Filters on the LEFT, article cards on the RIGHT
+           (replaces the old horizontal category pills) -->
       <section class="section" id="latest-articles">
         <div class="container">
           <div class="section-head">
+            <span class="eyebrow"><i class="fa-solid fa-newspaper"></i> RECENT ARTICLES</span>
             <h2>Latest Knowledge Articles</h2>
           </div>
 
+          <!-- Mobile-only filter toggle -->
           <button class="blog-filter-toggle" id="blog-filter-toggle" type="button" aria-expanded="false"
             aria-controls="blog-filter-sidebar">
             <i class="fa-solid fa-filter" aria-hidden="true"></i> Filters
           </button>
 
           <div class="blog-listing-layout">
+
+            <!-- LEFT: filters -->
             <aside class="blog-filter-sidebar" id="blog-filter-sidebar" aria-label="Filter blog articles">
               <div class="blog-filter-heading">
                 <h3>Filter Articles</h3>
                 <button type="button" id="blog-clear-filters" class="blog-clear-filters">Clear all</button>
               </div>
+
               <label class="blog-search-label" for="blog-search">Search articles</label>
               <div class="blog-search-wrap">
                 <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 <input id="blog-search" type="search" placeholder="Search blogs..." autocomplete="off">
               </div>
+
               <fieldset class="blog-category-filters">
                 <legend>Categories</legend>
                 <label class="blog-filter-option"><input type="radio" name="blog-category" value="all" checked>
@@ -314,21 +359,23 @@
                   <span>Emergency Care</span></label>
                 <label class="blog-filter-option"><input type="radio" name="blog-category" value="clinical-skills">
                   <span>Clinical Skills</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="pet-care"> <span>Pet
-                    Care &amp; Wellness</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="welfare"> <span>Animal
-                    Welfare</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="nurse"> <span>Vet
-                    Nurses</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="career"> <span>Career
-                    Advice</span></label>
+                <label class="blog-filter-option"><input type="radio" name="blog-category" value="pet-care">
+                  <span>Pet Care &amp; Wellness</span></label>
+                <label class="blog-filter-option"><input type="radio" name="blog-category" value="welfare">
+                  <span>Animal Welfare</span></label>
+                <label class="blog-filter-option"><input type="radio" name="blog-category" value="nurse">
+                  <span>Vet Nurses</span></label>
+                <label class="blog-filter-option"><input type="radio" name="blog-category" value="career">
+                  <span>Career Advice</span></label>
               </fieldset>
             </aside>
 
+            <!-- RIGHT: cards -->
             <div class="blog-results">
               <div class="blog-results-toolbar">
                 <p id="blog-results-count" aria-live="polite">Showing articles</p>
               </div>
+
               <div class="feature-grid-3" id="latest-articles-grid">
 
                 <!-- Card 1 -->
@@ -347,8 +394,7 @@
                         Lesions</a>
                     </h3>
                     <p>Systematic approach to evaluating cardiomegaly, pulmonary opacities, and intestinal foreign
-                      bodies in
-                      small animal radiographs.</p>
+                      bodies in small animal radiographs.</p>
                     <div class="post-author" style="margin-top: auto;">
                       <img src="assets/images/blog/blog-author-priya.webp" alt="Dr. Priya Sharma" loading="lazy"
                         decoding="async" />
@@ -482,8 +528,7 @@
                         Animals</a>
                     </h3>
                     <p>Combining NSAIDs, opioids, and local nerve blocks for multimodal pain control during
-                      post-surgical
-                      recovery.</p>
+                      post-surgical recovery.</p>
                     <div class="post-author" style="margin-top: auto;">
                       <img src="assets/images/blog/blog-author-amit.webp" alt="Dr. Amit Kulkarni" loading="lazy"
                         decoding="async" />
@@ -496,6 +541,7 @@
                 </div>
 
               </div>
+
               <div class="blog-empty-state" id="blog-empty-state" hidden>
                 <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
                 <h3>No articles found</h3>
@@ -508,7 +554,7 @@
       </section>
 
 
-      <!-- Final CTA Banner -->
+      <!-- SECTION 7: Final CTA Banner -->
       <section class="section dark-cta-section" id="blog-cta-final">
         <div class="container">
           <div class="dark-cta-card">
@@ -555,7 +601,7 @@
       const toggle = document.getElementById('blog-filter-toggle');
 
       function applyFilters() {
-        // FIX: query cards live each time, so re-rendered cards (blog.js / api.js) are still filtered
+        // Query cards live so cards re-rendered by blog.js / api.js are still filtered
         const cards = Array.from(grid.querySelectorAll('.blog-card'));
         const term = (search.value || '').toLocaleLowerCase().trim();
         const category = categoryInputs.find(input => input.checked)?.value || 'all';
@@ -590,14 +636,12 @@
         toggle.setAttribute('aria-expanded', String(open));
       });
 
-      // FIX: re-apply filters whenever blog.js / api.js adds or replaces cards.
-      // childList only, so toggling the `hidden` attribute can't trigger a loop.
+      // Re-apply when other scripts add/replace cards (childList only, so no loop)
       new MutationObserver(applyFilters).observe(grid, { childList: true });
 
       applyFilters();
     })();
   </script>
-
 </body>
 
 </html>
