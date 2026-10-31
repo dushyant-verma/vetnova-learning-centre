@@ -149,6 +149,8 @@
       gap: 24px
     }
 
+    /* FIX: make sure the [hidden] attribute always wins over display:grid / display:flex */
+    #latest-articles #latest-articles-grid[hidden],
     #latest-articles .blog-card[hidden],
     #latest-articles .blog-empty-state[hidden] {
       display: none !important
@@ -235,20 +237,22 @@
         display: block
       }
 
+      /* FIX: closing parenthesis was missing here */
       #latest-articles #latest-articles-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)
-        }
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+    }
+
+    /* FIX: this block was nested inside the 760px block; it must stand alone */
+    @media(max-width:520px) {
+      #latest-articles #latest-articles-grid {
+        grid-template-columns: minmax(0, 1fr)
       }
 
-      @media(max-width:520px) {
-        #latest-articles #latest-articles-grid {
-          grid-template-columns:minmax(0, 1fr)
-        }
-
-        #latest-articles .blog-filter-sidebar {
-          padding:18px
-        }
+      #latest-articles .blog-filter-sidebar {
+        padding: 18px
       }
+    }
   </style>
 
 </head>
@@ -275,88 +279,11 @@
       </div>
 
 
-      <!-- SECTION 1: Knowledge Hub Hero -->
-      <!-- <section class="inner-hero" id="blog-hero">
-        <div class="container">
-          <nav class="breadcrumb" aria-label="Breadcrumb navigation">
-            <a href="index.html">Home</a>
-            <i class="fa-solid fa-chevron-right"></i>
-            <span>Knowledge Hub</span>
-          </nav>
-
-          <div class="inner-hero-wrap">
-            <div class="inner-hero-copy">
-              <span class="eyebrow"><i class="fa-solid fa-book-open"></i> KNOWLEDGE HUB</span>
-              <h1>Veterinary Knowledge Hub</h1>
-              <p>
-                Clinical education, surgical techniques, radiology interpretation, emergency triage protocols, pet
-                wellness research, and practical insights designed for practicing veterinarians and students.
-              </p>
-              <div class="hero-ctas">
-                <a class="btn btn-primary" href="#latest-articles">Browse Articles <i
-                    class="fa-solid fa-arrow-down"></i></a>
-                <a class="btn btn-outline" href="#categories"><i class="fa-solid fa-layer-group"></i> Explore
-                  Categories</a>
-              </div>
-            </div>
-
-            <div class="inner-hero-image">
-              <img src="assets/vet_selector_petcare_card.webp" alt="Veterinary doctor reviewing surgical case study"
-                loading="lazy" decoding="async" />
-            </div>
-          </div>
-        </div>
-      </section> -->
-
-      <!-- SECTION 2: Featured Article -->
-      <!-- <section class="section" id="featured-article">
-        <div class="container" id="featured-post-container">
-          <div class="section-head">
-            <span class="eyebrow"><i class="fa-solid fa-star"></i> FEATURED GUIDE</span>
-            <h2>Editor's Pick</h2>
-          </div>
-
-          <div class="featured-post-card">
-            <div class="featured-post-media">
-              <img src="assets/images/blog/blog-featured-guide.webp"
-                alt="Indian veterinary surgeons demonstrating surgical hand scrubbing and sterile OT preparation"
-                loading="lazy" decoding="async" />
-            </div>
-            <div class="featured-post-content">
-              <div class="post-meta">
-                <span class="post-category-badge">SURGICAL MASTERY</span>
-                <span><i class="fa-regular fa-clock"></i> 8 Min Read</span>
-                <span>• August 1, 2026</span>
-              </div>
-              <h2><a href="blog-single.html">Step-by-Step Soft Tissue Surgical Preparation &amp; Aseptic Scrubbing
-                  Protocols</a>
-              </h2>
-              <p class="featured-post-excerpt">
-                A comprehensive tactical guide for junior veterinary surgeons on sterile OR setup, instrument
-                ergonomics, scrub mechanics, and patient draping to eliminate surgical site infection risks.
-              </p>
-              <div class="post-author">
-                <img src="assets/images/blog/blog-author-amit.webp" alt="Dr. Amit Kulkarni" loading="lazy"
-                  decoding="async" />
-                <div class="post-author-info">
-                  <strong>Dr. Amit Kulkarni</strong>
-                  <small>Senior Veterinary Surgeon &amp; Lead Faculty</small>
-                </div>
-                <a class="btn btn-primary btn-sm" style="margin-left: auto;" href="blog-single.html">Read Article <i
-                    class="fa-solid fa-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> -->
-
       <!-- BLOG LISTING: Filters on the left, cards on the right -->
       <section class="section" id="latest-articles">
         <div class="container">
           <div class="section-head">
-            <!-- <span class="eyebrow"><i class="fa-solid fa-newspaper"></i> RECENT ARTICLES</span> -->
             <h2>Latest Knowledge Articles</h2>
-            <!-- <p>Search clinical guides and explore articles by specialty.</p> -->
           </div>
 
           <button class="blog-filter-toggle" id="blog-filter-toggle" type="button" aria-expanded="false"
@@ -581,7 +508,7 @@
       </section>
 
 
-      <!-- SECTION 7: Final CTA Banner -->
+      <!-- Final CTA Banner -->
       <section class="section dark-cta-section" id="blog-cta-final">
         <div class="container">
           <div class="dark-cta-card">
@@ -618,9 +545,9 @@
     (() => {
       const section = document.getElementById('latest-articles');
       if (!section) return;
+
       const search = document.getElementById('blog-search');
       const grid = document.getElementById('latest-articles-grid');
-      const cards = Array.from(grid.querySelectorAll('.blog-card'));
       const count = document.getElementById('blog-results-count');
       const empty = document.getElementById('blog-empty-state');
       const categoryInputs = Array.from(section.querySelectorAll('input[name="blog-category"]'));
@@ -628,9 +555,12 @@
       const toggle = document.getElementById('blog-filter-toggle');
 
       function applyFilters() {
+        // FIX: query cards live each time, so re-rendered cards (blog.js / api.js) are still filtered
+        const cards = Array.from(grid.querySelectorAll('.blog-card'));
         const term = (search.value || '').toLocaleLowerCase().trim();
         const category = categoryInputs.find(input => input.checked)?.value || 'all';
         let visible = 0;
+
         cards.forEach(card => {
           const matchesCategory = category === 'all' || card.dataset.category === category;
           const matchesSearch = !term || card.textContent.toLocaleLowerCase().includes(term);
@@ -638,6 +568,7 @@
           card.hidden = !show;
           if (show) visible++;
         });
+
         count.textContent = `Showing ${visible} of ${cards.length} articles`;
         empty.hidden = visible !== 0;
         grid.hidden = visible === 0;
@@ -658,6 +589,11 @@
         const open = sidebar.classList.toggle('is-open');
         toggle.setAttribute('aria-expanded', String(open));
       });
+
+      // FIX: re-apply filters whenever blog.js / api.js adds or replaces cards.
+      // childList only, so toggling the `hidden` attribute can't trigger a loop.
+      new MutationObserver(applyFilters).observe(grid, { childList: true });
+
       applyFilters();
     })();
   </script>
