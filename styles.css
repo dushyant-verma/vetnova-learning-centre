@@ -18975,7 +18975,8 @@ section.outcomes-dashboard-redesign {
 
 .section#certification-program,
 section#pricing,
-section#related-programs {
+section#related-programs,
+.hero-batch-link {
   display: none !important;
 }
 
