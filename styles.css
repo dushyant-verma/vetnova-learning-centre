@@ -18973,6 +18973,12 @@ section.outcomes-dashboard-redesign {
   transform: scale(1.04);
 }
 
+.section#certification-program,
+section#pricing,
+section#related-programs {
+  display: none !important;
+}
+
 .outcomes-dashboard-redesign .ccm-floating-badge {
   position: absolute;
   top: 20px;
