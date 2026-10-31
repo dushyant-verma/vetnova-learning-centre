@@ -412,8 +412,10 @@
                   <!-- Dynamically populated via JS with real verified program cards -->
                 </div>
 
-                <div class="discovery-load-more-wrap" id="discovery-load-more-wrap" style="text-align: center; margin-top: 24px; display: none;">
-                  <button type="button" class="btn btn-outline" id="discovery-load-more-btn" style="min-width: 220px; font-weight: 700;">
+                <div class="discovery-load-more-wrap" id="discovery-load-more-wrap"
+                  style="text-align: center; margin-top: 24px; display: none;">
+                  <button type="button" class="btn btn-outline" id="discovery-load-more-btn"
+                    style="min-width: 220px; font-weight: 700;">
                     <i class="fa-solid fa-plus-circle" style="margin-right: 6px;"></i> Load More Programs
                   </button>
                 </div>
@@ -1437,10 +1439,118 @@
 
 
       <!-- Global Footer Container -->
-      <!-- SECTION 5: Find Your Pathway (Persona-Specific Inquiry System) -->
-      <section class="section soft" id="contact" style="padding: 70px 0 80px; background: #f8fafc;">
-        <div class="container">
-          <div id="persona-inquiry-section-widget"></div>
+      <section class="section selector_bg" id="contact">
+        <div id="enquire-form"></div>
+        <div class="container contact-container">
+          <div class="contact-grid">
+            <div class="contact-info">
+              <span class="eyebrow">Connect With Us</span>
+              <h2>Start your practical learning journey</h2>
+              <p>Confused which module fits your career goals? Fill out this enquiry form, and our academic
+                coordinators
+                will assist you in mapping your path.</p>
+
+              <div class="info-list">
+                <div class="info-item">
+                  <span class="icon"><i class="fa-solid fa-location-dot"></i></span>
+                  <div>
+                    <b>Location:</b>
+                    <p>Gawadewadi – Wagholi, Pune, Maharashtra 412207</p>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <span class="icon"><i class="fa-solid fa-phone"></i></span>
+                  <div>
+                    <b>Phone Support:</b>
+                    <p>+91 99999 99999 (9 AM - 6 PM)</p>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+                  <div>
+                    <b>Email Enquiries:</b>
+                    <p>hello@vetnova.in</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-form-wrap">
+              <form class="contact-form" id="enquiry-form" action="#" method="POST">
+                <div class="form-group">
+                  <label for="form-name">Full Name *</label>
+                  <input type="text" id="form-name" name="name" placeholder="Enter your full name" required="">
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="form-email">Email Address *</label>
+                    <input type="email" id="form-email" name="email" placeholder="name@domain.com" required="">
+                  </div>
+                  <div class="form-group">
+                    <label for="form-phone">Phone Number *</label>
+                    <div class="phone-input-wrap">
+                      <select class="country-code" name="country_code">
+                        <option value="+91" selected="">🇮🇳 +91</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+61">🇦🇺 +61</option>
+                        <option value="+971">🇦🇪 +971</option>
+                        <option value="+966">🇸🇦 +966</option>
+                        <option value="+65">🇸🇬 +65</option>
+                        <option value="+977">🇳🇵 +977</option>
+                        <option value="+880">🇧🇩 +880</option>
+                        <option value="+94">🇱🇰 +94</option>
+                      </select>
+                      <input type="tel" id="form-phone" name="phone" placeholder="Enter your number" required="">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-role">Your Role / Profile *</label>
+                  <select id="form-role" name="role" required="">
+                    <option value="" disabled="" selected="">Select your profile</option>
+                    <option value="early-career">Early-Career Veterinary Doctor (1-3 yrs)</option>
+                    <option value="experienced">Experienced Veterinary Doctor (5-10 yrs)</option>
+                    <option value="student">Final-Year Veterinary Student</option>
+                    <option value="graduate">Recently Passed-Out Graduate (0-1 yr)</option>
+                    <option value="pet-owner">Pet Owner / Rescuer / NGO Volunteer</option>
+                    <option value="nurse">Vet Nurse / Paravet Aspirant</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-program">Select Program of Interest *</label>
+                  <select id="form-program" name="program" required="">
+                    <option value="" disabled="" selected="">Select program</option>
+                    <option value="skill-up">Veterinary Skill-Up Program</option>
+                    <option value="surgery">Surgery &amp; Radiology Workshops</option>
+                    <option value="foundation">Clinic-Ready Foundation Program</option>
+                    <option value="first-aid">Pet Emergency First Aid Workshop</option>
+                    <option value="nurse">Online Vet Nurse Program</option>
+                    <option value="counselling">Undecided / Career Counselling</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-message">Custom Query or Concerns</label>
+                  <textarea id="form-message" name="message" rows="4"
+                    placeholder="Let us know your learning requirements or experience goals..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Submit Enquiry <i
+                    class="fa-solid fa-paper-plane"></i></button>
+              </form>
+              <div class="form-success-state" id="form-success-message" style="display:none">
+                <i class="fa-solid fa-circle-check success-icon"></i>
+                <h3>Thank you for your enquiry!</h3>
+                <p>Our academic coordinators have received your details. We will reach out to you within 24 business
+                  hours to discuss your matched curriculum brochure, schedules, and pricing packages.</p>
+                <button class="btn btn-outline" id="form-reset-btn">Send Another Message</button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -123,7 +123,8 @@
           <div class="partner-area-card">
             <div class="partner-area-icon"><i class="fa-solid fa-shield-cat"></i></div>
             <h3>Industry Partners</h3>
-            <p>Collaborating with veterinary industry leaders, pet-care businesses, pharmaceutical companies, and animal health organizations to strengthen practical training and career opportunities.</p>
+            <p>Collaborating with veterinary industry leaders, pet-care businesses, pharmaceutical companies, and animal
+              health organizations to strengthen practical training and career opportunities.</p>
             <ul class="partner-area-list">
               <li><i class="fa-solid fa-check"></i> Industry-led training initiatives</li>
               <li><i class="fa-solid fa-check"></i> Corporate collaborations and sponsorships</li>
@@ -134,154 +135,276 @@
       </div>
     </section>
 
-    <!-- Partnership Enquiry Form Section -->
-    <section class="section partnership-form-section" id="partnership-enquiry-section">
+    <section class="section soft" id="contact" style="padding: 70px 0 80px; background: #f8fafc;">
       <div class="container">
-        <div class="partnership-form-wrapper">
-          <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-paper-plane"></i> ENQUIRE NOW</span>
-            <h2>Partnership Enquiry</h2>
-            <p class="section-desc">
-              Please fill out the form below to explore partnership possibilities with VetNova. Our leadership team will
-              review your inquiry and connect with you shortly.
-            </p>
-          </div>
+        <div id="persona-inquiry-section-widget">
+          <div class="persona-inquiry-box">
+            <!-- Section Header -->
+            <div class="persona-section-head">
+              <span class="persona-eyebrow">
+                <i class="fa-solid fa-compass"></i> PERSONA-SPECIFIC ADMISSIONS &amp; PARTNERSHIPS
+              </span>
+              <h2 class="persona-main-title">Find the Right Path with VetNova</h2>
+              <p class="persona-main-sub">
+                Tell us about yourself and what you hope to achieve. We'll help you explore relevant veterinary training
+                opportunities or partnership options.
+              </p>
 
-          <div class="partnership-card-box">
-
-            <!-- Error Banner -->
-            <div id="partnership-error-banner" class="alert alert-danger"
-              style="display: none; margin-bottom: 24px; padding: 14px 18px; border-radius: 12px; background: #FEF2F2; border: 1px solid #FCA5A5; color: #991B1B; font-size: 0.95rem; align-items: center; gap: 10px;">
-              <i class="fa-solid fa-circle-exclamation" style="font-size: 1.2rem; flex-shrink: 0;"></i>
-              <span id="partnership-error-text">Unable to submit enquiry. Please check your connection and try
-                again.</span>
             </div>
 
-            <!-- Form -->
-            <form id="partnership-enquiry-form" class="partnership-form-grid">
+            <!-- Four Audience Cards / Tab Selector -->
+            <div class="persona-cards-grid" role="tablist" aria-label="Select your audience profile">
 
-              <!-- Name -->
-              <div class="form-group form-col-half">
-                <label for="partnership-name">
-                  Full Name <span class="req-star">*</span>
-                </label>
-                <input type="text" id="partnership-name" name="name" required placeholder="Dr. / Mr. / Ms. Full Name"
-                  class="form-input" />
-              </div>
+              <button type="button" role="tab" id="tab-student" aria-controls="form-panel-student" aria-selected="false"
+                class="persona-card-btn" data-persona="student">
+                <div class="persona-card-header">
+                  <span class="persona-card-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+                  <span class="persona-card-badge">Early Career &amp; Interns</span>
+                </div>
+                <h3 class="persona-card-title">Students &amp; Fresh Grads</h3>
+                <p class="persona-card-desc">For veterinary students, interns and fresh graduates preparing for
+                  confident clinical practice.</p>
+                <div class="persona-card-action">
+                  <span>Select Pathway</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </div>
+              </button>
 
-              <!-- Organization / Institution -->
-              <div class="form-group form-col-half">
-                <label for="partnership-organization">
-                  Organization / Institution <span class="req-star">*</span>
-                </label>
-                <input type="text" id="partnership-organization" name="organization" required
-                  placeholder="Hospital / University / Company Name" class="form-input" />
-              </div>
+              <button type="button" role="tab" id="tab-practitioner" aria-controls="form-panel-practitioner"
+                aria-selected="false" class="persona-card-btn" data-persona="practitioner">
+                <div class="persona-card-header">
+                  <span class="persona-card-icon"><i class="fa-solid fa-user-doctor"></i></span>
+                  <span class="persona-card-badge">Clinicians &amp; Surgeons</span>
+                </div>
+                <h3 class="persona-card-title">Practising Doctors</h3>
+                <p class="persona-card-desc">For veterinary practitioners seeking hands-on surgical training, advanced
+                  medicine, and clinical growth.</p>
+                <div class="persona-card-action">
+                  <span>Select Pathway</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </div>
+              </button>
 
-              <!-- Email -->
-              <div class="form-group form-col-half">
-                <label for="partnership-email">
-                  Email Address <span class="req-star">*</span>
-                </label>
-                <input type="email" id="partnership-email" name="email" required
-                  placeholder="official.email@organization.com" class="form-input" />
-              </div>
+              <button type="button" role="tab" id="tab-nurse" aria-controls="form-panel-nurse" aria-selected="true"
+                class="persona-card-btn active" data-persona="nurse">
+                <div class="persona-card-header">
+                  <span class="persona-card-icon"><i class="fa-solid fa-user-nurse"></i></span>
+                  <span class="persona-card-badge">Animal Care &amp; Paravet</span>
+                </div>
+                <h3 class="persona-card-title">Veterinary Nurses</h3>
+                <p class="persona-card-desc">For aspiring veterinary nurses, animal-care professionals and clinical
+                  support staff.</p>
+                <div class="persona-card-action">
+                  <span>Select Pathway</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </div>
+              </button>
 
-              <!-- Phone Number -->
-              <div class="form-group form-col-half">
-                <label for="partnership-phone">
-                  Phone Number <span class="req-star">*</span>
-                </label>
-                <div class="phone-input-wrap">
-                  <select name="countryCode" id="partnership-country-code" class="form-select country-code-select">
-                    <option value="+91" selected>🇮🇳 +91</option>
-                    <option value="+1">🇺🇸 +1</option>
-                    <option value="+44">🇬🇧 +44</option>
-                    <option value="+61">🇦🇺 +61</option>
-                    <option value="+971">🇦🇪 +971</option>
-                    <option value="+966">🇸🇦 +966</option>
-                    <option value="+65">🇸🇬 +65</option>
-                    <option value="+977">🇳🇵 +977</option>
-                    <option value="+880">🇧🇩 +880</option>
-                    <option value="+94">🇱🇰 +94</option>
-                  </select>
-                  <input type="tel" id="partnership-phone" name="phone" required placeholder="Enter contact number"
-                    class="form-input" />
+              <button type="button" role="tab" id="tab-partner" aria-controls="form-panel-partner" aria-selected="false"
+                class="persona-card-btn " data-persona="partner">
+                <div class="persona-card-header">
+                  <span class="persona-card-icon"><i class="fa-solid fa-handshake"></i></span>
+                  <span class="persona-card-badge">Industry &amp; Institutional</span>
+                </div>
+                <h3 class="persona-card-title">Sponsors &amp; Partners</h3>
+                <p class="persona-card-desc">For pharmaceutical, diagnostics, nutrition, equipment and industry partners
+                  seeking collaboration.</p>
+                <div class="persona-card-action">
+                  <span>Select Pathway</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </div>
+              </button>
+
+            </div>
+
+            <!-- Active Persona Form Container -->
+            <div class="persona-form-wrapper" id="persona-form-container">
+              <div class="persona-form-card" id="form-panel-nurse" role="tabpanel" aria-labelledby="tab-nurse">
+                <!-- Form Header -->
+                <div class="persona-form-header">
+                  <div class="persona-header-meta">
+                    <span class="persona-badge-pill"><i class="fa-solid fa-user-nurse"></i> Animal Care &amp;
+                      Paravet</span>
+                    <h3 class="persona-form-title">Build Skills That Make a Difference</h3>
+                    <p class="persona-form-subtitle">For aspiring veterinary nurses, animal-care professionals and
+                      current veterinary support staff.</p>
+                  </div>
+                </div>
+
+                <!-- Global Alert Banner for Form Errors -->
+                <div class="persona-error-banner" id="form-error-banner" style="display: none;">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  <span id="form-error-text">Please review the fields below and correct errors.</span>
+                </div>
+
+                <!-- Form Element -->
+                <form id="persona-inquiry-form" class="persona-form" novalidate="" data-persona="nurse">
+
+
+                  <div class="form-row-2">
+                    <!-- Full Name -->
+                    <div class="form-field-group">
+                      <label for="nurse-name">Full Name <span class="req">*</span></label>
+                      <input type="text" id="nurse-name" name="name" required="" placeholder="Full Name"
+                        class="persona-input">
+                      <span class="field-error-msg" id="err-nurse-name"></span>
+                    </div>
+
+                    <!-- Your Background -->
+                    <div class="form-field-group">
+                      <label for="nurse-bg">Your Background <span class="req">*</span></label>
+                      <select id="nurse-bg" name="background" required="" class="persona-select">
+                        <option value="" disabled="" selected="">Select your background</option>
+                        <option value="Student">Student</option>
+                        <option value="Fresher">Fresher</option>
+                        <option value="Veterinary nurse/assistant">Veterinary nurse/assistant</option>
+                        <option value="Animal-care professional">Animal-care professional</option>
+                        <option value="Other">Other</option>
+                      </select>
+                      <span class="field-error-msg" id="err-nurse-bg"></span>
+                    </div>
+                  </div>
+
+                  <div class="form-row-2">
+                    <!-- What Are You Looking For? -->
+                    <div class="form-field-group">
+                      <label for="nurse-looking">What Are You Looking For? <span class="req">*</span></label>
+                      <select id="nurse-looking" name="lookingFor" required="" class="persona-select">
+                        <option value="" disabled="" selected="">Select goal</option>
+                        <option value="Certificate course">Certificate course</option>
+                        <option value="Career entry">Career entry</option>
+                        <option value="Skill enhancement">Skill enhancement</option>
+                        <option value="More information">More information</option>
+                      </select>
+                      <span class="field-error-msg" id="err-nurse-looking"></span>
+                    </div>
+
+                    <!-- Which Skills Interest You Most? -->
+                    <div class="form-field-group">
+                      <label for="nurse-skills">Which Skills Interest You Most? <span class="req">*</span></label>
+                      <select id="nurse-skills" name="skillsInterest" required="" class="persona-select">
+                        <option value="" disabled="" selected="">Select skill interest</option>
+                        <option value="Patient handling">Patient handling</option>
+                        <option value="Nursing care">Nursing care</option>
+                        <option value="Assisting in surgery">Assisting in surgery</option>
+                        <option value="Emergency care">Emergency care</option>
+                        <option value="Diagnostics">Diagnostics</option>
+                        <option value="All-round training">All-round training</option>
+                      </select>
+                      <span class="field-error-msg" id="err-nurse-skills"></span>
+                    </div>
+                  </div>
+
+                  <div class="form-row-2">
+                    <!-- Preferred Learning Mode -->
+                    <div class="form-field-group">
+                      <label for="nurse-mode">Preferred Learning Mode <span class="req">*</span></label>
+                      <select id="nurse-mode" name="preferredLearningMode" required="" class="persona-select">
+                        <option value="" disabled="" selected="">Select learning mode</option>
+                        <option value="Offline hands-on">Offline hands-on</option>
+                        <option value="Online">Online</option>
+                        <option value="Blended">Blended</option>
+                      </select>
+                      <span class="field-error-msg" id="err-nurse-mode"></span>
+                    </div>
+
+                    <!-- Mobile Number / WhatsApp -->
+                    <div class="form-field-group">
+                      <label for="nurse-phone">Mobile Number / WhatsApp <span class="req">*</span></label>
+                      <div class="phone-input-group">
+                        <span class="country-badge">🇮🇳 +91</span>
+                        <input type="tel" id="nurse-phone" name="phone" required="" placeholder="10-digit mobile number"
+                          class="persona-input phone-input">
+                      </div>
+                      <span class="field-error-msg" id="err-nurse-phone"></span>
+                    </div>
+                  </div>
+
+                  <div class="form-field-group">
+                    <label for="nurse-email">Email Address <span class="opt">(Optional)</span></label>
+                    <input type="email" id="nurse-email" name="email" placeholder="name@domain.com"
+                      class="persona-input">
+                    <span class="field-error-msg" id="err-nurse-email"></span>
+                  </div>
+
+
+                  <!-- Privacy Notice -->
+                  <div class="persona-privacy-notice">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>
+                      Your information is securely handled and will only be used by VetNova Academy coordinators to
+                      respond to your inquiry. We never share your contact details.
+                    </span>
+                  </div>
+
+                  <!-- Submit Button Group -->
+                  <div class="form-submit-wrap">
+                    <button type="submit" id="persona-submit-btn" class="persona-submit-button">
+                      <span class="btn-text">Explore Learning Opportunities</span>
+                      <span class="btn-spinner" style="display:none;"><i class="fa-solid fa-circle-notch fa-spin"></i>
+                        Submitting...</span>
+                      <i class="fa-solid fa-arrow-right btn-arrow"></i>
+                    </button>
+                  </div>
+                </form>
+
+                <!-- Personalized Success State (Initially Hidden) -->
+                <div class="persona-success-card" id="persona-success-state" style="display: none;">
+                  <div class="success-icon-wrap">
+                    <i class="fa-solid fa-check"></i>
+                  </div>
+                  <h3 class="success-heading">Thank You for Exploring Your Journey with VetNova!</h3>
+                  <p class="success-body">Every skilled veterinary nurse makes a difference in an animal's life. We're
+                    excited to help you explore practical skills that turn your passion for animal care into meaningful
+                    capability.<br><br>Your journey towards better animal care starts here. We'll be in touch soon!</p>
+
+                  <div class="success-meta-box">
+                    <div class="meta-item">
+                      <span class="meta-label">Reference ID</span>
+                      <span class="meta-val" id="success-lead-id">—</span>
+                    </div>
+                    <div class="meta-item">
+                      <span class="meta-label">Selected Pathway</span>
+                      <span class="meta-val">Veterinary Nurses &amp; Aspirants</span>
+                    </div>
+                  </div>
+
+                  <div class="success-actions">
+                    <button type="button" class="btn btn-outline" id="btn-reset-inquiry">
+                      <i class="fa-solid fa-rotate-left"></i> Submit Another Inquiry
+                    </button>
+                    <a href="https://wa.me/919272561089?text=Hello%20VetNova%20Academy%2C%20I%20would%20like%20to%20know%20more%20about%20your%20veterinary%20training%20programs."
+                      target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp-inline">
+                      <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                  </div>
                 </div>
               </div>
-
-              <!-- Organization Type -->
-              <div class="form-group form-col-half">
-                <label for="partnership-org-type">
-                  Organization Type <span class="req-star">*</span>
-                </label>
-                <select id="partnership-org-type" name="organizationType" required class="form-select">
-                  <option value="" disabled selected>Select Organization Type</option>
-                  <option value="Veterinary Clinic/Hospital">Veterinary Clinic / Hospital</option>
-                  <option value="Academic Institution">Academic Institution / University</option>
-                  <option value="Medical Equipment Manufacturer">Medical Equipment Manufacturer</option>
-                  <option value="Pharmaceutical Company">Pharmaceutical Company</option>
-                  <option value="NGO">Animal Welfare NGO / Shelter</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              <!-- Partnership Interest -->
-              <div class="form-group form-col-half">
-                <label for="partnership-interest">
-                  Partnership Interest <span class="req-star">*</span>
-                </label>
-                <select id="partnership-interest" name="partnershipInterest" required class="form-select">
-                  <option value="" disabled selected>Select Partnership Interest</option>
-                  <option value="Institutional Partnership">Institutional Partnership</option>
-                  <option value="Corporate Sponsorship">Corporate Sponsorship</option>
-                  <option value="Academic Collaboration">Academic Collaboration</option>
-                  <option value="Clinical / Training Collaboration">Clinical / Training Collaboration</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              <!-- Message -->
-              <div class="form-group form-col-full">
-                <label for="partnership-message">
-                  Message / Collaboration Details <span class="req-star">*</span>
-                </label>
-                <textarea id="partnership-message" name="message" rows="4" required
-                  placeholder="Tell us about your organization and how you would like to partner with VetNova..."
-                  class="form-textarea"></textarea>
-              </div>
-
-              <!-- Submit Button -->
-              <div class="form-group form-col-full form-submit-group">
-                <button type="submit" id="partnership-submit-btn" class="btn-partnership-submit">
-                  <span>Submit Partnership Enquiry</span>
-                  <i class="fa-solid fa-arrow-right"></i>
-                </button>
-              </div>
-
-            </form>
-
-            <!-- Success State (hidden initially) -->
-            <div id="partnership-success-state" style="display: none; text-align: center; padding: 36px 20px;">
-              <div class="success-icon-wrap"
-                style="width: 64px; height: 64px; background: rgba(18, 199, 193, 0.12); color: var(--teal); border-radius: 50%; display: grid; place-items: center; font-size: 28px; margin: 0 auto 20px;">
-                <i class="fa-solid fa-circle-check"></i>
-              </div>
-              <h3 style="font-size: 1.5rem; color: var(--navy-2); margin-bottom: 8px;">Partnership Enquiry Submitted!
-              </h3>
-              <p style="color: var(--muted); font-size: 1rem; max-width: 520px; margin: 0 auto 24px; line-height: 1.6;">
-                Thank you for your interest in partnering with VetNova. Our leadership team has received your enquiry
-                and will be in touch with your organization shortly.
-              </p>
-              <button type="button" id="partnership-reset-btn" class="btn btn-outline">
-                <i class="fa-solid fa-rotate-left"></i> Submit Another Enquiry
-              </button>
             </div>
 
+            <!-- Optional WhatsApp Contact Box -->
+            <div class="persona-whatsapp-banner">
+              <div class="whatsapp-banner-content">
+                <div class="whatsapp-banner-icon">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </div>
+                <div>
+                  <h4>Prefer to chat directly?</h4>
+                  <p>Connect with the VetNova Academy admissions desk on WhatsApp at <strong>+91 9272561089</strong> for
+                    immediate guidance.</p>
+                </div>
+              </div>
+              <a href="https://wa.me/919272561089?text=Hello%20VetNova%20Academy%2C%20I%20would%20like%20to%20know%20more%20about%20your%20veterinary%20training%20programs."
+                target="_blank" rel="noopener noreferrer" class="whatsapp-chat-btn">
+                <i class="fa-brands fa-whatsapp"></i> Open WhatsApp Chat
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </section>
+
+
   </main>
 
   <!-- Global Footer Placeholder -->
