@@ -201,7 +201,7 @@
           : "You can book a 1-on-1 session with our academic team to discuss program selection, batch availability, and career pathways.",
         ctas: [
           ctaCounselling,
-          { label: isHi ? 'अभी आवेदन करें' : 'Apply Now', action: 'link', link: 'contact.html' }
+          { label: isHi ? 'अभी आवेदन करें' : 'Book free Counselling ', action: 'link', link: 'contact.html' }
         ]
       };
     }

@@ -539,7 +539,7 @@ const concernData = {
       'Soft tissue surgeries (spay/neuter, cystotomy)',
       'Assistance during complex orthopedic operations'
     ],
-    ctaText: 'Apply Now',
+    ctaText: 'Book free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_surgery_result.webp'
   },
@@ -552,7 +552,7 @@ const concernData = {
       'Ultrasound patient positioning & probe handling',
       'Systematic approach to diagnosing pathology'
     ],
-    ctaText: 'Apply Now',
+    ctaText: 'Book free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_radiology_result.webp'
   },
@@ -565,7 +565,7 @@ const concernData = {
       'Common diagnostics checklist (blood tests, smears)',
       'Effective pet parent communication & counseling'
     ],
-    ctaText: 'Apply Now',
+    ctaText: 'Book free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_foundation_result.webp'
   },
@@ -578,7 +578,7 @@ const concernData = {
       'Wound cleaning, bandages & bleeding control',
       'Heat stroke, poisoning & animal bite protocol'
     ],
-    ctaText: 'Apply Now',
+    ctaText: 'Book free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_petcare_result.webp'
   },
@@ -591,7 +591,7 @@ const concernData = {
       'Surgical prep support & sanitization rules',
       'Basic medication routes and front desk tasks'
     ],
-    ctaText: 'Apply Now',
+    ctaText: 'Book free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_nurse_result.webp'
   }
@@ -1641,7 +1641,7 @@ function initEnquiryModal() {
     }
     if (els.errorBanner) els.errorBanner.style.display = 'none';
     if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
-      try { lastFocusedElement.focus(); } catch (e) {}
+      try { lastFocusedElement.focus(); } catch (e) { }
     }
   }
 
@@ -1745,7 +1745,7 @@ function initEnquiryModal() {
   }
 
   // Expose globally so external components or chatbots can open it
-  window.openCounsellingModal = function(options = {}) {
+  window.openCounsellingModal = function (options = {}) {
     openModal(null, options);
   };
 
