@@ -1721,7 +1721,7 @@ p {
 
 .top-info-right {
   position: relative;
-  right: -27px;
+  /* right: -27px; */
 }
 
 .selector-head {
