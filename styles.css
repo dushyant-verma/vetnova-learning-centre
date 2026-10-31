@@ -12215,6 +12215,7 @@ section#faculty-experts,
   font-size: 0.82rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  display: none;
 }
 
 .ps-hero-title {
@@ -22483,6 +22484,11 @@ body {
   padding: 6px 14px;
   border-radius: 9999px;
   margin-bottom: 12px;
+}
+
+.contact-consult,
+.admincontact {
+  display: none !important;
 }
 
 .persona-program-banner {

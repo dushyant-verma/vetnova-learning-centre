@@ -35,7 +35,7 @@
             <span>Contact &amp; Admissions</span>
           </nav>
           <h1>Get in Touch</h1>
-          <p>Enquire about a course or talk to our academic advisors about the right programme for
+          <p>Enquire about a course, request a brochure, or talk to our academic advisors about the right programme for
             you.</p>
         </div>
 
@@ -57,8 +57,9 @@
               <div class="contact-card-icon"><i class="fa-solid fa-phone-volume"></i></div>
               <h3>Call Us</h3>
               <p style="color: var(--muted); font-size: 13px; margin-bottom: 12px;">Mon – Sat: 9:00 AM – 6:00 PM</p>
-              <strong style="display: block; color: var(--navy-2); font-size: 16px; margin-bottom: 18px;" data-vetnova-phone>+91 92725 61089</strong>
-              <a class="btn btn-outline btn-sm" href="tel:+919272561089" data-vetnova-phone>Call Admissions Now <i
+              <strong style="display: block; color: var(--navy-2); font-size: 16px; margin-bottom: 18px;">+91 92725
+                61089</strong>
+              <a class="btn btn-outline btn-sm" href="tel:+919272561089">Call Admissions Now <i
                   class="fa-solid fa-phone"></i></a>
             </div>
 
@@ -67,8 +68,8 @@
               <h3>Email Us</h3>
               <p style="color: var(--muted); font-size: 13px; margin-bottom: 12px;">Direct academic inbox</p>
               <strong
-                style="display: block; color: var(--navy-2); font-size: 16px; margin-bottom: 18px;">hello@vetnova.in</strong>
-              <a class="btn btn-outline btn-sm" href="mailto:hello@vetnova.in">Send Email <i
+                style="display: block; color: var(--navy-2); font-size: 16px; margin-bottom: 18px;">contact@vetnovainstitute.com</strong>
+              <a class="btn btn-outline btn-sm" href="mailto:contact@vetnovainstitute.com">Send Email <i
                   class="fa-solid fa-envelope"></i></a>
             </div>
 
@@ -76,7 +77,7 @@
               <div class="contact-card-icon"><i class="fa-solid fa-location-dot"></i></div>
               <h3>Visit Campus</h3>
               <p style="color: var(--muted); font-size: 13px; margin-bottom: 12px;">Wagholi, Pune, MH 412207</p>
-              <strong style="display: block; color: var(--navy-2); font-size: 14px; margin-bottom: 18px;">Gawadewadi
+              <strong style="display: block; color: var(--navy-2); font-size: 14px; margin-bottom: 18px;">Pune
                 Campus</strong>
               <a class="btn btn-outline btn-sm"
                 href="https://maps.google.com/?q=Gawadewadi+Wagholi+Pune+Maharashtra+412207" target="_blank"
@@ -86,22 +87,241 @@
             <div class="contact-card-item">
               <div class="contact-card-icon"><i class="fa-brands fa-whatsapp"></i></div>
               <h3>WhatsApp Support</h3>
-              <p style="color: var(--muted); font-size: 13px; margin-bottom: 12px;">Instant Counsellor Chat</p>
-              <strong style="display: block; color: var(--navy-2); font-size: 16px; margin-bottom: 18px;">+91 92725 61089</strong>
+              <p style="color: var(--muted); font-size: 13px; margin-bottom: 12px;">Instant Chat</p>
+              <strong style="display: block; color: var(--navy-2); font-size: 16px; margin-bottom: 18px;">+91 92725
+                61089</strong>
               <a class="btn btn-primary btn-sm" href="https://wa.me/919272561089" target="_blank"
-                rel="noopener noreferrer" data-vetnova-whatsapp>Chat on WhatsApp <i class="fa-brands fa-whatsapp"></i></a>
+                rel="noopener noreferrer">Chat on WhatsApp <i class="fa-brands fa-whatsapp"></i></a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- SECTION 3: Full-Width Persona-Aware Admissions Form Section -->
-      <section class="section soft" id="contact-form">
-        <div id="contact-form-section"></div>
-        <div id="enquiry"></div>
+      <!-- SECTION 3: Dynamic Persona-Aware Admissions Form Section -->
+      <section class="section soft" id="contact-form-section">
         <div class="container">
-          <!-- Persona-Specific Inquiry Widget (Full Width Centered) -->
-          <div id="persona-inquiry-widget"></div>
+          <div class="two-column-layout" style="align-items: start;">
+            <div class="two-column-media" style="position: sticky; top: 100px;">
+              <img src="assets/images/contact/contact-counselling.webp"
+                alt="Admissions counsellor guiding prospective veterinary doctor" loading="lazy" decoding="async" />
+
+              <div
+                style="margin-top: 24px; background-color: var(--white); padding: 24px; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; box-shadow: var(--soft-shadow);">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                  <div
+                    style="width: 40px; height: 40px; border-radius: 10px; background-color: var(--mint); color: var(--teal); display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </div>
+                  <div>
+                    <h4 style="font-size: 15px; color: var(--navy-2); margin: 0; font-weight: 700;">Course Catalogue
+                      &amp; Prospectus</h4>
+                    <span style="font-size: 12px; color: var(--muted);">Complete curriculum &amp; batch schedules</span>
+                  </div>
+                </div>
+                <p style="font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 16px;">
+                  Download our official prospectus detailing wet lab hours, faculty credentials, and fee structures.
+                </p>
+                <a class="btn btn-outline btn-block" href="assets/docs/vetnova-course-brochure.pdf" download
+                  id="brochure-download-btn"
+                  onclick="if (!this.getAttribute('href').endsWith('.pdf')) { alert('Thank you for requesting the prospectus! Our team will send the complete PDF brochure to your email shortly.'); return false; }">
+                  Download Prospectus <i class="fa-solid fa-download"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="two-column-copy"
+              style="background-color: var(--white); padding: 36px; border-radius: var(--radius-xl); border: 1px solid #e2e8f0; box-shadow: var(--soft-shadow);">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <span class="eyebrow" style="margin: 0;"><i class="fa-solid fa-calendar-check"></i> ADMISSIONS
+                  CONSULTATION</span>
+                <span
+                  style="font-size: 12px; font-weight: 700; color: var(--teal-dark); background-color: var(--mint); padding: 4px 10px; border-radius: 12px;">⚡
+                  Response &lt; 2 Hours</span>
+              </div>
+              <h2 style="font-size: 26px; color: var(--navy-2); margin-bottom: 8px;">Book Free Counselling Session</h2>
+              <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">Select your profile below so we can
+                tailor course guidance to your exact learning background.</p>
+
+              <!-- Consultation Form -->
+              <form class="contact-form" id="enquiry-form" style="display: block;">
+                <!-- Step 1: Persona Selection Pills -->
+                <div class="persona-selector-wrap" style="margin-bottom: 20px;">
+                  <span class="persona-selector-label"
+                    style="font-size: 13px; font-weight: 700; color: var(--navy-2); margin-bottom: 8px; display: block;">I
+                    am a... *</span>
+                  <div class="persona-pills" role="radiogroup" aria-label="Select profile">
+                    <button type="button" class="persona-pill active" data-persona="practicing_vet"
+                      aria-pressed="true"><i class="fa-solid fa-user-doctor"></i> Practicing Vet</button>
+                    <button type="button" class="persona-pill" data-persona="fresh_grad" aria-pressed="false"><i
+                        class="fa-solid fa-graduation-cap"></i> Fresh Grad / Intern</button>
+                    <button type="button" class="persona-pill" data-persona="vet_nurse" aria-pressed="false"><i
+                        class="fa-solid fa-user-nurse"></i> Vet Nurse / Paravet</button>
+                    <button type="button" class="persona-pill" data-persona="corporate" aria-pressed="false"><i
+                        class="fa-solid fa-building-user"></i> Sponsor / Clinic Chain</button>
+                    <button type="button" class="persona-pill" data-persona="academic" aria-pressed="false"><i
+                        class="fa-solid fa-school"></i> Academic / Institution</button>
+                    <button type="button" class="persona-pill" data-persona="pet_parent" aria-pressed="false"><i
+                        class="fa-solid fa-paw"></i> Pet Parent</button>
+                    <button type="button" class="persona-pill" data-persona="other" aria-pressed="false"><i
+                        class="fa-solid fa-circle-info"></i> Other</button>
+                  </div>
+                </div>
+
+                <!-- Hidden Profile Selector (synced with pills) -->
+                <select id="form-role" name="profile" style="display: none;">
+                  <option value="practicing_vet" selected>Practicing Veterinarian</option>
+                  <option value="fresh_grad">Fresh Graduate / Intern</option>
+                  <option value="vet_nurse">Vet Nurse / Paravet</option>
+                  <option value="corporate">Sponsor / Organization</option>
+                  <option value="academic">Academic / Institution</option>
+                  <option value="pet_parent">Pet Parent / Caregiver</option>
+                  <option value="other">Other</option>
+                </select>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+                  <div class="form-group">
+                    <label for="form-name"
+                      style="font-size: 13px; font-weight: 700; color: var(--navy-2); margin-bottom: 6px; display: block;">Full
+                      Name *</label>
+                    <input type="text" id="form-name" required placeholder="Dr. / Mr. / Ms. Name"
+                      style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 14px;">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="form-email"
+                      style="font-size: 13px; font-weight: 700; color: var(--navy-2); margin-bottom: 6px; display: block;">Email
+                      Address *</label>
+                    <input type="email" id="form-email" required placeholder="Enter your email address"
+                      style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 14px;">
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+                  <div class="form-group">
+                    <label for="form-phone"
+                      style="font-size: 13px; font-weight: 700; color: var(--navy-2); margin-bottom: 6px; display: block;">Phone
+                      Number *</label>
+                    <div class="phone-input-wrap">
+                      <select class="country-code" name="country_code">
+                        <option value="+91" selected>🇮🇳 +91</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+61">🇦🇺 +61</option>
+                        <option value="+971">🇦🇪 +971</option>
+                      </select>
+                      <input type="tel" id="form-phone" required placeholder="10-digit mobile number"
+                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 14px;">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="form-period"
+                      style="font-size: 13px; font-weight: 700; color: var(--navy-2); margin-bottom: 6px; display: block;">Preferred
+                      Training Period *</label>
+                    <select id="form-period" required
+                      style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 13px;">
+                      <option value="" disabled selected>Select Preferred Timeline</option>
+                      <option value="Next 1 month">Next 1 month</option>
+                      <option value="1–3 months">1–3 months</option>
+                      <option value="Just exploring">Just exploring</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Dynamic Field Block 1: Doctor / Graduate -->
+                <div class="dynamic-field-doctor"
+                  style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+                  <div class="form-group">
+                    <label for="form-program"
+                      style="font-size: 13px; font-weight: 700; color: var(--navy-2); margin-bottom: 6px; display: block;">Course
+                      Interested In *</label>
+                    <select id="form-program"
+                      style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 13px;">
+                      <option value="skill-up" selected>Veterinary Skill-Up Program (Flagship)</option>
+                      <option value="surgery">Soft Tissue Surgery Track</option>
+                      <option value="radiology">Radiology &amp; Ultrasound Masterclass</option>
+                      <option value="emergency">Pet Emergency Care &amp; ICU Track</option>
+                      <option value="nurse">Vet Nurse &amp; Assistant Programme</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="form-experience"
+                      style="font-size: 13px; font-weight: 700; color: var(--navy-2); margin-bottom: 6px; display: block;">Clinical
+                      Experience</label>
+                    <select id="form-experience"
+                      style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 13px;">
+                      <option value="Final-Year Intern">Final-Year Intern / Student</option>
+                      <option value="1–3 Years">1–3 Years Practice</option>
+                      <option value="3–5 Years">3–5 Years Practice</option>
+                      <option value="5+ Years">5+ Years Practice / Clinic Owner</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Dynamic Field Block 2: Corporate / Institutional -->
+                <div class="dynamic-field-corporate" style="display: none; margin-bottom: 16px;">
+                  <div class="form-group" style="margin-bottom: 12px;">
+                    <label for="form-org"
+                      style="font-size: 13px; font-weight: 700; color: var(--navy-2); margin-bottom: 6px; display: block;">Organization
+                      / Hospital Name</label>
+                    <input type="text" id="form-org" placeholder="e.g. City Pet Hospital / Medical Corp"
+                      style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 14px;">
+                  </div>
+                  <div
+                    style="background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 8px; font-size: 13px; color: #166534; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                    <span><i class="fa-solid fa-handshake text-teal"></i> Looking for institutional partnerships,
+                      clinical sponsorships, or equipment demos?</span>
+                    <a href="partnerships.html"
+                      style="font-weight: 700; color: var(--teal-dark); text-decoration: underline; white-space: nowrap;">Partnership
+                      Portal →</a>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                  <label for="form-message"
+                    style="font-size: 13px; font-weight: 700; color: var(--navy-2); margin-bottom: 6px; display: block;">Specific
+                    Questions / Learning Goals</label>
+                  <textarea id="form-message" rows="3"
+                    placeholder="Tell us about your clinical goals, batch queries, or accommodation requirements..."
+                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 14px;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                  <button type="submit" class="btn btn-primary" style="flex-grow: 1;">Book Free Counselling Session <i
+                      class="fa-solid fa-calendar-check"></i></button>
+                </div>
+
+                <!-- Inline Form Error Banner -->
+                <div id="form-error-message"
+                  style="display: none; background-color: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-top: 16px; align-items: center; gap: 10px;">
+                  <i class="fa-solid fa-circle-exclamation" style="font-size: 18px; color: #ef4444; shrink: 0;"></i>
+                  <span id="form-error-text">Unable to submit your enquiry right now. Please check your connection and
+                    try again, or contact us directly.</span>
+                </div>
+              </form>
+
+              <!-- Warmer Thank-You Success State -->
+              <div id="form-success-message"
+                style="display: none; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px;">
+                <i class="fa-solid fa-circle-check"
+                  style="font-size: 52px; color: var(--teal); margin-bottom: 20px;"></i>
+                <h3 style="font-size: 26px; color: var(--navy-2); margin-bottom: 12px; font-weight: 700;">Thank you for
+                  reaching out to VetNova</h3>
+                <p
+                  style="color: var(--navy-2); font-size: 15px; line-height: 1.6; margin-bottom: 16px; max-width: 500px;">
+                  We've received your enquiry and our team will review your requirements. We'll get in touch with you
+                  shortly to help you find the right learning or training option.
+                </p>
+                <p
+                  style="color: var(--muted); font-size: 13px; line-height: 1.5; margin-bottom: 24px; max-width: 480px; background-color: #f8fafc; padding: 12px 18px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                  <i class="fa-solid fa-headset text-teal"></i> If your enquiry is time-sensitive, you can also contact
+                  us directly using the phone (+91 92725 61089) or WhatsApp options above.
+                </p>
+                <button class="btn btn-primary" id="form-reset-btn">Submit Another Enquiry</button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -130,7 +350,7 @@
       </section>
 
 
-      <section class="inner-hero" id="contact-hero">
+      <section class="inner-hero contact-consult" id="contact-hero">
         <div class="container">
 
 
@@ -143,17 +363,17 @@
                 or practical lab equipment, our academic admissions team is here to assist you every step of the way.
               </p>
               <div class="hero-ctas">
-                <a class="btn btn-primary" href="#contact-form">Enquire Now <i
-                    class="fa-solid fa-arrow-right"></i></a>
+                <a class="btn btn-primary" href="#contact-form-section"> Download Brochure <i
+                    class="fa-solid fa-calendar-check"></i></a>
                 <a class="btn btn-outline" href="partnerships.html">Explore Partnership Opportunities <i
                     class="fa-solid fa-arrow-right"></i></a>
               </div>
             </div>
 
             <div class="inner-hero-image" style="position: relative;">
-              <img src="assets/images/vetnova-building-exterior.webp"
-                alt="VetNova Training Institute Wagholi Pune Campus Building" loading="lazy"
-                decoding="async" style="width: 100%; height: 100%; object-fit: cover;" />
+              <img src="assets/images/contact/contact-hero.webp"
+                alt="VetNova admissions counsellor consulting with prospective trainees" loading="lazy"
+                decoding="async" />
 
               <div
                 style="position: absolute; bottom: 20px; left: 20px; background-color: var(--white); padding: 12px 18px; border-radius: var(--radius-md); box-shadow: var(--soft-shadow); display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; color: var(--navy-2);">
@@ -169,7 +389,7 @@
         </div>
       </section>
       <!-- SECTION 6: Campus Information & Location -->
-      <section class="section" id="campus-info">
+      <!-- <section class="section" id="campus-info">
         <div class="container">
           <div class="section-head center">
             <span class="eyebrow"><i class="fa-solid fa-building-columns"></i> OUR CAMPUS LOCATION</span>
@@ -177,26 +397,8 @@
             <p>Located in the educational hub of Wagholi, Pune with modern surgical wet labs and simulation bays.</p>
           </div>
 
-          <!-- Campus Building Exterior Showcase -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 36px;">
-            <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--soft-shadow); position: relative; height: 260px; border: 1px solid #e2e8f0;">
-              <img src="assets/images/vetnova-building-exterior.webp" alt="VetNova Training Institute Wagholi Pune Campus Building Exterior"
-                loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;" />
-              <div style="position: absolute; bottom: 12px; left: 14px; background: rgba(11,34,64,0.85); color: #fff; padding: 6px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; backdrop-filter: blur(4px);">
-                <i class="fa-solid fa-sun" style="color: #f59e0b; margin-right: 6px;"></i> Campus Exterior — Wagholi, Pune
-              </div>
-            </div>
-            <div style="border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--soft-shadow); position: relative; height: 260px; border: 1px solid #e2e8f0;">
-              <img src="assets/images/vetnova-building-golden-hour.webp" alt="VetNova Practical Facility Golden Hour Architecture"
-                loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;" />
-              <div style="position: absolute; bottom: 12px; left: 14px; background: rgba(11,34,64,0.85); color: #fff; padding: 6px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; backdrop-filter: blur(4px);">
-                <i class="fa-solid fa-city" style="color: #38bdf8; margin-right: 6px;"></i> Practical Facility Architecture
-              </div>
-            </div>
-          </div>
-
           <div class="two-column-layout">
-            <!-- Google Maps Embed -->
+
             <div
               style="border-radius: var(--radius-xl); overflow: hidden; height: 420px; box-shadow: var(--soft-shadow); border: 1px solid #e2e8f0;">
               <iframe
@@ -238,7 +440,7 @@
               </div>
 
               <div style="margin-top: 24px; display: flex; gap: 14px; flex-wrap: wrap;">
-                <a class="btn btn-primary" href="#contact-form">Schedule a Campus Visit <i
+                <a class="btn btn-primary" href="#contact-form-section">Schedule a Campus Visit <i
                     class="fa-solid fa-arrow-right"></i></a>
                 <a class="btn btn-outline" href="https://maps.google.com/?q=Gawadewadi+Wagholi+Pune+Maharashtra+412207"
                   target="_blank" rel="noopener noreferrer">Get Directions <i class="fa-solid fa-location-dot"></i></a>
@@ -246,7 +448,189 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
+
+
+
+      <!-- SECTION 8: Meet Our Admissions Team -->
+      <!-- <section class="section" id="admissions-team admincontact">
+        <div class="container">
+          <div class="section-head center">
+            <span class="eyebrow"><i class="fa-solid fa-users"></i> ACADEMIC COUNSELLORS</span>
+            <h2>Meet Our Admissions Team</h2>
+            <p>Our dedicated counsellors are ready to answer your queries and guide your enrollment.</p>
+          </div>
+
+          <div class="faculty-grid">
+            <div class="advisor-card">
+              <div class="advisor-photo">
+                <img src="assets/images/contact/contact-team-01.webp" alt="Neha Deshmukh" loading="lazy"
+                  decoding="async" />
+              </div>
+              <div class="advisor-body">
+                <h3 style="font-size: 18px; color: var(--navy-2); margin-bottom: 4px;">Neha Deshmukh</h3>
+                <span
+                  style="font-size: 13px; font-weight: 700; color: var(--teal); display: block; margin-bottom: 8px;">Head
+                  of Admissions</span>
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">8+ Years in Veterinary Academic
+                  Counselling. Specializes in doctor career roadmaps.</p>
+                <a class="btn btn-outline btn-sm btn-block" href="mailto:admissions@vetnova.in"><i
+                    class="fa-solid fa-envelope"></i> Contact Neha</a>
+              </div>
+            </div>
+
+            <div class="advisor-card">
+              <div class="advisor-photo">
+                <img src="assets/images/contact/contact-team-02.webp" alt="Rohan Patil" loading="lazy"
+                  decoding="async" />
+              </div>
+              <div class="advisor-body">
+                <h3 style="font-size: 18px; color: var(--navy-2); margin-bottom: 4px;">Rohan Patil</h3>
+                <span
+                  style="font-size: 13px; font-weight: 700; color: var(--teal); display: block; margin-bottom: 8px;">Senior
+                  Academic Counsellor</span>
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">5+ Years guiding BVSc interns and
+                  fresh graduates through clinical skill tracks.</p>
+                <a class="btn btn-outline btn-sm btn-block" href="mailto:admissions@vetnova.in"><i
+                    class="fa-solid fa-envelope"></i> Contact Rohan</a>
+              </div>
+            </div>
+
+            <div class="advisor-card">
+              <div class="advisor-photo">
+                <img src="assets/images/contact/contact-team-03.webp" alt="Dr. Sneha Joshi" loading="lazy"
+                  decoding="async" />
+              </div>
+              <div class="advisor-body">
+                <h3 style="font-size: 18px; color: var(--navy-2); margin-bottom: 4px;">Dr. Sneha Joshi</h3>
+                <span
+                  style="font-size: 13px; font-weight: 700; color: var(--teal); display: block; margin-bottom: 8px;">Clinical
+                  Career Advisor</span>
+                <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">MVSc Graduate assisting doctors
+                  with surgical &amp; radiology module selection.</p>
+                <a class="btn btn-outline btn-sm btn-block" href="mailto:admissions@vetnova.in"><i
+                    class="fa-solid fa-envelope"></i> Contact Dr. Sneha</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- SECTION 9: Frequently Asked Questions (Expanded) -->
+      <!-- <section class="section soft" id="contact-faq">
+        <div class="container">
+          <div class="section-head center">
+            <span class="eyebrow"><i class="fa-solid fa-circle-question"></i> ADMISSIONS FAQS</span>
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know about enrollment, fees, prerequisites, outstation stay, and campus visits.
+            </p>
+          </div>
+
+          <div class="faq-accordion" style="max-width: 840px; margin: 36px auto 0;">
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>What are the admission prerequisites for doctor programs?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Doctor programs require a recognized BVSc &amp; AH degree or active final-year internship status. Vet
+                  Nurse tracks are open to clinic assistants and paravet staff.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Can I take part if I am not from Pune?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Yes! Trainees attend from across India. We connect outstation doctors with verified PG and hotel
+                  partners located within 10 minutes of our Wagholi, Pune campus for comfortable accommodation during
+                  training.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>How does it work for long-term courses?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Our flagship Veterinary Skill-Up program runs over 4 intensive weeks (or modular tracks), blending
+                  80%+ tactile surgical wet lab hours, digital imaging, and emergency case management under specialist
+                  guidance.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Can I get help choosing the right program?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Absolutely! Our academic counsellors provide free 1-on-1 consultations to evaluate your clinical
+                  background, surgical goals, and timeline to recommend the exact matching track.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>Can I join a weekend batch?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Yes, we offer select weekend practical masterclasses and flexible scheduling options for practicing
+                  veterinarians who cannot attend weekday sessions.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>What if I don't see my preferred course or batch date?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>You can submit an enquiry selecting "Just exploring" or register your interest on our <a
+                    href="programs.html#notify-me" style="color: var(--teal); font-weight: 700;">Programs Page</a> to
+                  get notified as soon as new clinical batch dates are announced.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question">
+                <span>How can institutions or organizations collaborate with VetNova?</span>
+                <i class="fa-solid fa-chevron-down faq-icon"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Corporate sponsors, hospital chains, and academic institutions can visit our dedicated <a
+                    href="partnerships.html" style="color: var(--teal); font-weight: 700;">Partnerships Portal</a> or
+                  contact our institutional desk to explore custom training modules.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> -->
+
+
+
+      <!-- SECTION 11: Final CTA Banner -->
+      <!-- <section class="section dark-cta-section" id="contact-cta-final">
+        <div class="container">
+          <div class="dark-cta-card">
+            <div class="dark-cta-content">
+              <h2>Ready to Begin Your Veterinary Career?</h2>
+              <p>Connect with our admissions team today to book your 1-on-1 counselling session and reserve your seat in
+                upcoming practical batches.</p>
+              <div class="dark-cta-buttons">
+                <a class="btn btn-primary" href="#contact-form-section">Book Free Counselling Session <i
+                    class="fa-solid fa-calendar-check"></i></a>
+                <a class="btn btn-white-outline" href="partnerships.html"><i class="fa-solid fa-handshake"></i> Partner
+                  With VetNova</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> -->
 
     </main>
 
@@ -255,12 +639,9 @@
 
   </div> <!-- Close .page -->
 
-
-
   <!-- Interactive JavaScript -->
   <script src="components.js"></script>
   <script src="assets/js/api.js"></script>
-  <script src="assets/js/persona-inquiry.js"></script>
   <script src="assets/js/translator.js"></script>
   <script src="script.js"></script>
 </body>
