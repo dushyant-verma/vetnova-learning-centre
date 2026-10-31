@@ -175,7 +175,7 @@ window.VETNOVA_CONTACT = window.VETNOVA_CONTACT || {
   phoneTel: 'tel:+919272561089',
   whatsappIntl: '919272561089',
   whatsappUrl: 'https://wa.me/919272561089',
-  email: 'hello@vetnova.in',
+  email: 'contact@vetnovainstitute.com',
   admissionsEmail: 'admissions@vetnova.in'
 };
 

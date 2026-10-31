@@ -17,11 +17,11 @@ window.VETNOVA_CONTACT = window.VETNOVA_CONTACT || {
   phoneTel: 'tel:+919272561089',
   whatsappIntl: '919272561089',
   whatsappUrl: 'https://wa.me/919272561089',
-  email: 'hello@vetnova.in',
+  email: 'contact@vetnovainstitute.com',
   admissionsEmail: 'admissions@vetnova.in'
 };
 
-(function() {
+(function () {
   function syncContactElements(contact) {
     if (!contact) return;
     const phone = contact.phoneDisplay || contact.contactPhone || '+91 92725 61089';
@@ -58,11 +58,11 @@ window.VETNOVA_CONTACT = window.VETNOVA_CONTACT || {
   }
 
   function fetchLiveContactSettings() {
-    const apiBase = (typeof getApiBaseUrl === 'function') 
-      ? getApiBaseUrl() 
+    const apiBase = (typeof getApiBaseUrl === 'function')
+      ? getApiBaseUrl()
       : ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-          ? 'http://localhost:5001/api'
-          : 'https://vetnova-api-utnd.onrender.com/api');
+        ? 'http://localhost:5001/api'
+        : 'https://vetnova-api-utnd.onrender.com/api');
 
     fetch(`${apiBase}/settings/public`)
       .then(res => res.ok ? res.json() : null)

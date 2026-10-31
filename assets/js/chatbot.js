@@ -37,7 +37,7 @@
       hours: 'Mon - Sat: 9:00 AM - 6:00 PM',
       phone: '+91 92725 61089',
       whatsapp: '919272561089',
-      email: 'hello@vetnova.in'
+      email: 'contact@vetnovainstitute.com'
     }
   };
 
@@ -71,7 +71,7 @@
 
     // 1. Fresh Graduate / Intern Eligibility & Guidance
     if (query.includes('fresh') || query.includes('intern') || query.includes('student') || query.includes('junior') || query.includes('new grad') ||
-        query.includes('स्नातक') || query.includes('इंटर्न') || query.includes('छात्र') || query.includes('नया')) {
+      query.includes('स्नातक') || query.includes('इंटर्न') || query.includes('छात्र') || query.includes('नया')) {
       return {
         reply: isHi
           ? "आपके बैकग्राउंड के अनुसार, हम हमारे प्रमुख **पशु चिकित्सा स्किल-अप कार्यक्रम** (4 सप्ताह) की अनुशंसा करते हैं। यह विशेष रूप से नए स्नातकों और इंटर्न के लिए कॉलेज के सिद्धांत को वास्तविक क्लिनिकल अभ्यास से जोड़ने हेतु तैयार किया गया है।\n\nक्या आप कार्यक्रम विवरण देखना चाहेंगे या शैक्षणिक काउंसलर से बात करना चाहेंगे?"
@@ -85,7 +85,7 @@
 
     // 2. Practicing Veterinarian Guidance
     if (query.includes('practicing') || query.includes('experienced') || query.includes('doctor') || query.includes('vet doctor') || query.includes('clinic owner') ||
-        query.includes('अभ्यास') || query.includes('डॉक्टर') || query.includes('अनुभवी') || query.includes('क्लिनिक')) {
+      query.includes('अभ्यास') || query.includes('डॉक्टर') || query.includes('अनुभवी') || query.includes('क्लिनिक')) {
       return {
         reply: isHi
           ? "अभ्यास करने वाले पशु चिकित्सकों के लिए, वेटनोवा 1-सप्ताह और 3-दिन के विशेष क्लिनिकल मॉड्यूल प्रदान करता है:\n\n• **सॉफ्ट टिश्यू सर्जरी ट्रैक** (1 सप्ताह)\n• **रेडियोलॉजी एवं अल्ट्रासाउंड मास्टरक्लास** (1 सप्ताह)\n• **आपातकालीन एवं गहन चिकित्सा** (3 दिन)\n\nआप किस क्लिनिकल क्षेत्र में महारत हासिल करना चाहते हैं?"
@@ -100,7 +100,7 @@
 
     // 3. Vet Nurse / Paravet Query
     if (query.includes('nurse') || query.includes('paravet') || query.includes('assistant') || query.includes('staff') ||
-        query.includes('नर्स') || query.includes('पैरा-वेट') || query.includes('सहायक')) {
+      query.includes('नर्स') || query.includes('पैरा-वेट') || query.includes('सहायक')) {
       return {
         reply: isHi
           ? "वेटनोवा क्लिनिकल सहायकों और पैरा-वेट स्टाफ के लिए एक समर्पित **वेट नर्स एवं तकनीशियन व्यावहारिक कार्यक्रम** (2 सप्ताह) प्रदान करता है, जिसमें स्टेराइल तैयारी, आईवी एक्सेस, रोगी निगरानी और देखभाल सिखाई जाती है।"
@@ -114,7 +114,7 @@
 
     // 4. Programs Overview / What courses available
     if (query.includes('program') || query.includes('course') || query.includes('offer') || query.includes('catalog') || query.includes('list') ||
-        query.includes('कार्यक्रम') || query.includes('पाठ्यक्रम') || query.includes('कोर्स') || query.includes('लिस्ट') || query.includes('सूची')) {
+      query.includes('कार्यक्रम') || query.includes('पाठ्यक्रम') || query.includes('कोर्स') || query.includes('लिस्ट') || query.includes('सूची')) {
       return {
         reply: isHi
           ? "वेटनोवा पुणे में 5 विशेष व्यावहारिक क्लिनिकल प्रशिक्षण ट्रैक प्रदान करता है:\n\n1. **पशु चिकित्सा स्किल-अप कार्यक्रम** (4 सप्ताह)\n2. **सॉफ्ट टिश्यू सर्जरी ट्रैक** (1 सप्ताह)\n3. **रेडियोलॉजी एवं अल्ट्रासाउंड मास्टरक्लास** (1 सप्ताह)\n4. **आपातकालीन एवं गहन चिकित्सा** (3 दिन)\n5. **वेट नर्स एवं सहायक कार्यक्रम** (2 सप्ताह)\n\nसभी पाठ्यक्रमों में हमारे वाघोली परिसर में 80%+ व्यावहारिक लैब अभ्यास शामिल है।"
@@ -125,7 +125,7 @@
 
     // 5. Batches & Schedule
     if (query.includes('batch') || query.includes('date') || query.includes('schedule') || query.includes('upcoming') || query.includes('start') || query.includes('when') ||
-        query.includes('बैच') || query.includes('तारीख') || query.includes('शेड्यूल') || query.includes('कब') || query.includes('आगामी')) {
+      query.includes('बैच') || query.includes('तारीख') || query.includes('शेड्यूल') || query.includes('कब') || query.includes('आगामी')) {
       return {
         reply: isHi
           ? "वेटनोवा हमारे वाघोली, पुणे परिसर में सीमित सीटों (1-ऑन-1 मेंटर मार्गदर्शन हेतु प्रति बैच 8-10 प्रशिक्षु) के साथ नियमित मासिक व्यावहारिक बैच आयोजित करता है।\n\nअपनी सीट आरक्षित करने या आगामी बैच तिथियों के लिए आप सीधे हमारे काउंसलर से संपर्क कर सकते हैं।"
@@ -139,7 +139,7 @@
 
     // 6. Fees / Pricing
     if (query.includes('fee') || query.includes('cost') || query.includes('price') || query.includes('tuition') || query.includes('charge') ||
-        query.includes('शुल्क') || query.includes('फीस') || query.includes('खर्च') || query.includes('कीमत')) {
+      query.includes('शुल्क') || query.includes('फीस') || query.includes('खर्च') || query.includes('कीमत')) {
       return {
         reply: isHi
           ? "वेटनोवा कार्यक्रम शुल्क चयनित ट्रैक और अवधि पर निर्भर करता है (3-दिवसीय गहन कार्यशाला से लेकर 4-सप्ताह के पूर्ण क्लिनिकल मॉड्यूल तक)। शुल्क में लैब उपकरण, सर्जिकल सामग्री, पीपीई और पाठ्यक्रम प्रमाणन शामिल हैं।\n\nविस्तृत शुल्क संरचना के लिए कृपया हमारी काउंसलिंग टीम से संपर्क करें।"
@@ -150,7 +150,7 @@
 
     // 7. Faculty / Instructors
     if (query.includes('faculty') || query.includes('teacher') || query.includes('trainer') || query.includes('instructor') || query.includes('mentor') ||
-        query.includes('संकाय') || query.includes('शिक्षक') || query.includes('मेंटर') || query.includes('डॉक्टर')) {
+      query.includes('संकाय') || query.includes('शिक्षक') || query.includes('मेंटर') || query.includes('डॉक्टर')) {
       let facultyText = isHi
         ? "वेटनोवा मॉड्यूल का नेतृत्व वरिष्ठ एमवीएससी पशु चिकित्सा विशेषज्ञों, अनुभवी सॉफ्ट टिश्यू सर्जनों और डायग्नोस्टिक इमेजिंग लीडर्स द्वारा किया जाता है।"
         : "VetNova modules are led by senior MVSc veterinary specialists, experienced soft tissue surgeons, and diagnostic imaging leaders with extensive clinical expertise.";
@@ -179,7 +179,7 @@
 
     // 8. Location / Campus / Address
     if (query.includes('location') || query.includes('address') || query.includes('pune') || query.includes('where') || query.includes('reach') || query.includes('campus') || query.includes('direction') ||
-        query.includes('स्थान') || query.includes('पता') || query.includes('पुणे') || query.includes('कहाँ') || query.includes('कैंपस')) {
+      query.includes('स्थान') || query.includes('पता') || query.includes('पुणे') || query.includes('कहाँ') || query.includes('कैंपस')) {
       return {
         reply: isHi
           ? "वेटनोवा ट्रेनिंग इंस्टीट्यूट यहाँ स्थित है:\n\n📍 **गावडेवाड़ी, वाघोली, पुणे, महाराष्ट्र 412207**\n🕒 खुला: सोम-शनि: सुबह 9:00 – शाम 6:00\n📞 संपर्क: +91 92725 61089\n💬 व्हाट्सएप: +91 92725 61089\n\nहमारे 3,000 वर्ग फुट के व्यावहारिक परिसर में स्टेराइल सर्जिकल सुइट और डायग्नोस्टिक इमेजिंग सुविधाएं हैं।"
@@ -194,7 +194,7 @@
 
     // 9. Book Counselling / Help / Apply
     if (query.includes('counsel') || query.includes('apply') || query.includes('admit') || query.includes('enroll') || query.includes('book') ||
-        query.includes('परामर्श') || query.includes('आवेदन') || query.includes('दाखिला') || query.includes('प्रवेश')) {
+      query.includes('परामर्श') || query.includes('आवेदन') || query.includes('दाखिला') || query.includes('प्रवेश')) {
       return {
         reply: isHi
           ? "आप कार्यक्रम चयन, बैच उपलब्धता और करियर मार्गदर्शन के लिए हमारी शैक्षणिक टीम के साथ 1-ऑन-1 निःशुल्क सत्र बुक कर सकते हैं।"
@@ -208,7 +208,7 @@
 
     // 10. Partnerships / Collaborations
     if (query.includes('partner') || query.includes('collaborat') || query.includes('clinic partner') || query.includes('sponso') || query.includes('hospital') ||
-        query.includes('साझेदारी') || query.includes('पार्टनर') || query.includes('सहयोग') || query.includes('अस्पताल')) {
+      query.includes('साझेदारी') || query.includes('पार्टनर') || query.includes('सहयोग') || query.includes('अस्पताल')) {
       return {
         reply: isHi
           ? "वेटनोवा पशु चिकित्सालयों, अस्पताल नेटवर्कों और शैक्षणिक संस्थानों के साथ स्टाफ प्रशिक्षण, कौशल उन्नयन और क्लिनिकल साझेदारी के लिए सहयोग करता है।"
@@ -219,7 +219,7 @@
 
     // 11. Eligibility General
     if (query.includes('who can') || query.includes('eligibl') || query.includes('qualification') || query.includes('requirement') ||
-        query.includes('कौन') || query.includes('पात्रता') || query.includes('योग्यता')) {
+      query.includes('कौन') || query.includes('पात्रता') || query.includes('योग्यता')) {
       return {
         reply: isHi
           ? "पात्र आवेदकों में शामिल हैं:\n• बीवीएससी एवं एएच स्नातक, इंटर्न और अभ्यास करने वाले पशु चिकित्सक\n• विदेशी पशु चिकित्सा स्नातक\n• वेट नर्स, सहायक और पैरा-वेट स्टाफ (नर्स कार्यक्रम हेतु)"
@@ -230,11 +230,11 @@
 
     // 12. Direct Contact / Phone / WhatsApp
     if (query.includes('whatsapp') || query.includes('phone') || query.includes('call') || query.includes('mobile') || query.includes('contact number') || query.includes('helpline') ||
-        query.includes('व्हाट्सएप') || query.includes('फोन') || query.includes('कॉल') || query.includes('नंबर') || query.includes('संपर्क')) {
+      query.includes('व्हाट्सएप') || query.includes('फोन') || query.includes('कॉल') || query.includes('नंबर') || query.includes('संपर्क')) {
       return {
         reply: isHi
-          ? "वेटनोवा अकादमी का आधिकारिक संपर्क विवरण:\n\n📞 मोबाइल / फोन: **+91 92725 61089** (9272561089)\n💬 व्हाट्सएप: **+91 92725 61089**\n✉️ ईमेल: hello@vetnova.in\n🕒 समय: सोम – शनि: सुबह 9:00 से शाम 6:00 तक\n\nआप सीधे कॉल कर सकते हैं या व्हाट्सएप पर संदेश भेज सकते हैं।"
-          : "VetNova Academy Official Contact Details:\n\n📞 Phone: **+91 92725 61089** (Local: 9272561089)\n💬 WhatsApp: **+91 92725 61089**\n✉️ Email: hello@vetnova.in\n🕒 Office Hours: Mon – Sat: 9:00 AM – 6:00 PM\n\nYou can call our admissions desk or chat directly with a counsellor on WhatsApp.",
+          ? "वेटनोवा अकादमी का आधिकारिक संपर्क विवरण:\n\n📞 मोबाइल / फोन: **+91 92725 61089** (9272561089)\n💬 व्हाट्सएप: **+91 92725 61089**\n✉️ ईमेल: contact@vetnovainstitute.com\n🕒 समय: सोम – शनि: सुबह 9:00 से शाम 6:00 तक\n\nआप सीधे कॉल कर सकते हैं या व्हाट्सएप पर संदेश भेज सकते हैं।"
+          : "VetNova Academy Official Contact Details:\n\n📞 Phone: **+91 92725 61089** (Local: 9272561089)\n💬 WhatsApp: **+91 92725 61089**\n✉️ Email: contact@vetnovainstitute.com\n🕒 Office Hours: Mon – Sat: 9:00 AM – 6:00 PM\n\nYou can call our admissions desk or chat directly with a counsellor on WhatsApp.",
         ctas: [
           { label: isHi ? 'व्हाट्सएप चैट शुरू करें' : 'Chat on WhatsApp', action: 'external', link: 'https://wa.me/919272561089' },
           { label: isHi ? 'कॉल करें' : 'Call Admissions', action: 'external', link: 'tel:+919272561089' },
