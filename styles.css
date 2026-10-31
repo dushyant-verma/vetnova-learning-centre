@@ -7708,6 +7708,11 @@ section#related-posts {
   .floating-apply-now {
     display: none !important;
   }
+
+  a.btn.btn-primary.btn-block.btn-apply-now {
+    margin-bottom: 10px;
+    padding: 15px;
+  }
 }
 
 /* Mobile Stick bar */
