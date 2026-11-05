@@ -135,12 +135,12 @@ function renderArticleContent(blog) {
       this.onerror = null;
       this.src = 'assets/images/blog/blog-author-amit.webp';
     };
-    authorAvatar.alt = blog.author || 'Author';
+    authorAvatar.alt = 'VetNova Advisory Team';
   }
 
   const authorName = document.getElementById('article-author-name');
   if (authorName) {
-    authorName.textContent = blog.author || 'Dr. VetNova Specialist';
+    authorName.textContent = 'VetNova Advisory Team';
   }
 
   const articleDateRead = document.getElementById('article-date-read');
@@ -387,10 +387,10 @@ async function loadRelatedArticles(currentBlog) {
         <h3><a href="blog-single.html?slug=${encodeURIComponent(b.slug || b._id)}">${escapeHtml(b.title)}</a></h3>
         <p>${escapeHtml(b.excerpt || '')}</p>
         <div class="post-author" style="margin-top: auto;">
-          <img src="${escapeHtml(b.authorImage || 'assets/images/blog/blog-author-amit.webp')}" alt="${escapeHtml(b.author)}" loading="lazy" decoding="async" />
+          <img src="${escapeHtml(b.authorImage || 'assets/images/blog/blog-author-amit.webp')}" alt="VetNova Advisory Team" loading="lazy" decoding="async" />
           <div class="post-author-info">
-            <strong>${escapeHtml(b.author)}</strong>
-            <small>${escapeHtml(b.authorRole || 'Specialist')}</small>
+            <strong>VetNova Advisory Team</strong>
+            <small>${escapeHtml(b.authorRole || 'Faculty Advisory Board')}</small>
           </div>
         </div>
       </div>

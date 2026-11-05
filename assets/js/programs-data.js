@@ -12,7 +12,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "General Medicine",
     "slug": "general-medicine",
     "category": "Internal Medicine",
-    "duration": "4 Weeks / Modular",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Systematic clinical diagnostic and therapeutic protocols for small animal internal medicine practice, from physical examination through complex multisystem disease management.",
     "image": "assets/images/programs/program-skill-up.webp",
     "status": "Published",
@@ -62,7 +63,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Soft Tissue Surgery",
     "slug": "soft-tissue-surgery",
     "category": "Surgery",
-    "duration": "1 to 4 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Comprehensive practical surgical training from surgical asepsis and basic wound closure to life-saving abdominal, reconstructive, and emergency thoracic procedures.",
     "image": "assets/images/programs/program-surgery.webp",
     "status": "Published",
@@ -112,7 +114,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Orthopaedics",
     "slug": "orthopaedics",
     "category": "Surgery",
-    "duration": "2 to 4 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Hands-on orthopaedic surgery curriculum covering fracture mechanics, splinting, internal/external fixation, joint stabilization, and corrective osteotomies.",
     "image": "assets/images/programs/program-orthopaedics.webp",
     "status": "Published",
@@ -162,7 +165,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Veterinary Dermatology",
     "slug": "veterinary-dermatology",
     "category": "Dermatology",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Clinical approach to skin, ear, and allergic conditions in companion animals, with focus on in-house diagnostics, cytology, and evidence-based allergy therapies.",
     "image": "assets/images/facility-main.webp",
     "status": "Published",
@@ -212,7 +216,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Infectious Diseases",
     "slug": "infectious-diseases",
     "category": "Internal Medicine",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Clinical management of canine, feline, and zoonotic infectious diseases, outbreak containment, vector-borne diagnostics, and biosecurity protocols.",
     "image": "assets/images/programs/program-infectious-diseases.webp",
     "status": "Published",
@@ -262,7 +267,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Emergency and Critical Care",
     "slug": "emergency-and-critical-care",
     "category": "Emergency & Critical Care",
-    "duration": "2 to 4 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Intensive training in triage algorithms, shock resuscitation, trauma stabilization, ventilator management, and high-stakes emergency clinical decision-making.",
     "image": "assets/images/programs/program-emergency.webp",
     "status": "Published",
@@ -312,7 +318,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Anaesthesia and Pain Management",
     "slug": "anaesthesia-and-pain-management",
     "category": "Anaesthesia",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Safe peri-operative anaesthetic protocols, ASA grading, airway management, multimodal analgesia, regional nerve blocks, and critical crisis mitigation.",
     "image": "assets/images/facility-radiology.webp",
     "status": "Published",
@@ -362,7 +369,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Veterinary Cardiology",
     "slug": "veterinary-cardiology",
     "category": "Internal Medicine",
-    "duration": "2 to 3 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Clinical cardiology focusing on cardiac auscultation, ECG rhythm analysis, echocardiographic measurements, heart failure therapeutics, and interventional procedures.",
     "image": "assets/images/program-skill-up.webp",
     "status": "Published",
@@ -412,7 +420,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Veterinary Neurology",
     "slug": "veterinary-neurology",
     "category": "Neurology",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Systematic neuro-localization, seizure management algorithms, spinal trauma first aid, neuro-imaging interpretation, and neuro-surgical foundations.",
     "image": "assets/vet_facility_main_training.webp",
     "status": "Published",
@@ -462,7 +471,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Veterinary Ophthalmology",
     "slug": "veterinary-ophthalmology",
     "category": "Ophthalmology",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Essential and advanced diagnostic workups for ophthalmic conditions, corneal micro-surgery, glaucoma tonometry, and ocular emergency management.",
     "image": "assets/vet_selector_surgery_card.webp",
     "status": "Published",
@@ -512,7 +522,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Veterinary Dentistry",
     "slug": "veterinary-dentistry",
     "category": "Dentistry & Oral Surgery",
-    "duration": "1 to 2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Periodontal therapy, dental radiography, closed and surgical extractions, and management of common oral pathologies in dogs and cats.",
     "image": "assets/images/programs/program-dentistry.webp",
     "status": "Published",
@@ -562,7 +573,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Feline Medicine",
     "slug": "feline-medicine",
     "category": "Internal Medicine",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Cat-friendly handling, management of feline chronic kidney disease, retroviral infections, lower urinary tract disease, and diabetes mellitus.",
     "image": "assets/images/programs/program-feline-medicine.webp",
     "status": "Published",
@@ -612,7 +624,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Exotic Pet Medicine",
     "slug": "exotic-pet-medicine",
     "category": "Exotics & Avian",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Husbandry, clinical handling, anaesthesia, and therapeutic management of avian, reptile, and small mammal companion patients.",
     "image": "assets/images/facility-lecture.webp",
     "status": "Published",
@@ -662,7 +675,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Diagnostic Imaging",
     "slug": "diagnostic-imaging",
     "category": "Diagnostics & Imaging",
-    "duration": "2 to 3 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Digital radiography positioning and interpretation, abdominal ultrasound scanning protocols, echocardiography basics, and introductory CT/MRI concepts.",
     "image": "assets/images/programs/program-radiology.webp",
     "status": "Published",
@@ -712,7 +726,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Clinical Pathology",
     "slug": "clinical-pathology",
     "category": "Pathology & Diagnostics",
-    "duration": "1 to 2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "In-house blood smear evaluation, cytology of masses and fluid aspirates, urinalysis, and biochemical profile interpretation for daily clinical practice.",
     "image": "assets/vet_facility_diagnostics_room.webp",
     "status": "Published",
@@ -762,7 +777,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Clinical Microbiology",
     "slug": "clinical-microbiology",
     "category": "Pathology & Diagnostics",
-    "duration": "1 to 2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Sample collection, in-clinic stain techniques, bacterial culture and antimicrobial susceptibility testing, and fungal identification.",
     "image": "assets/images/facility-main.webp",
     "status": "Published",
@@ -812,7 +828,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Nephrology and Urology",
     "slug": "nephrology-and-urology",
     "category": "Internal Medicine",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Acute kidney injury, chronic kidney disease staging (IRIS), urolithiasis, urinary tract infections, and urethral obstruction intervention.",
     "image": "assets/images/programs/program-nephrology.webp",
     "status": "Published",
@@ -862,7 +879,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Gastroenterology",
     "slug": "gastroenterology",
     "category": "Internal Medicine",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Diagnostic approach to chronic vomiting, diarrhoea, protein-losing enteropathy, pancreatitis, inflammatory bowel disease, and GI endoscopy basics.",
     "image": "assets/images/program-skill-up.webp",
     "status": "Published",
@@ -912,7 +930,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Oncology",
     "slug": "oncology",
     "category": "Oncology",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Clinical tumor staging, safe chemotherapy administration protocols, oncologic surgical margins, and palliative patient care.",
     "image": "assets/vet_facility_main_training.webp",
     "status": "Published",
@@ -962,7 +981,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Endocrinology",
     "slug": "endocrinology",
     "category": "Internal Medicine",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Diabetes mellitus regulation, hyper/hypoadrenocorticism testing protocols, feline hyperthyroidism, and canine hypothyroidism management.",
     "image": "assets/images/programs/program-endocrinology.webp",
     "status": "Published",
@@ -1012,7 +1032,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Reproduction and Obstetrics",
     "slug": "reproduction-and-obstetrics",
     "category": "Reproduction",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Breeding management, artificial insemination, pregnancy ultrasonography, dystocia intervention, and elective/emergency caesarean sections.",
     "image": "assets/images/programs/program-surgery.webp",
     "status": "Published",
@@ -1062,7 +1083,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Veterinary Nutrition",
     "slug": "veterinary-nutrition",
     "category": "Nutrition & Wellness",
-    "duration": "1 to 2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Nutritional assessment, therapeutic dietary formulation for renal, hepatic, and metabolic diseases, and feeding tube placement.",
     "image": "assets/images/facility-main.webp",
     "status": "Published",
@@ -1112,7 +1134,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Preventive Medicine and Vaccinology",
     "slug": "preventive-medicine-and-vaccinology",
     "category": "Preventive Medicine",
-    "duration": "1 Week",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Core and non-core vaccination protocols (WSAVA guidelines), parasite prevention regimens, geriatric screening, and puppy/kitten wellness programs.",
     "image": "assets/images/programs/program-preventive-medicine.webp",
     "status": "Published",
@@ -1162,7 +1185,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Behavioural Medicine",
     "slug": "behavioural-medicine",
     "category": "Behavioural Science",
-    "duration": "1 to 2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Canine and feline fear-free handling, separation anxiety, aggression assessment, noise phobias, and psychopharmacology in practice.",
     "image": "assets/vet_selector_foundation_card.webp",
     "status": "Published",
@@ -1212,7 +1236,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Geriatric Medicine",
     "slug": "geriatric-medicine",
     "category": "Internal Medicine",
-    "duration": "1 to 2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Comprehensive care for aging pets: chronic osteoarthritis, cognitive dysfunction syndrome, multi-morbidities, and hospice care planning.",
     "image": "assets/images/programs/program-geriatric-medicine.webp",
     "status": "Published",
@@ -1262,7 +1287,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Laboratory Diagnostics",
     "slug": "laboratory-diagnostics",
     "category": "Diagnostics & Imaging",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Operating and troubleshooting clinical lab analyzers, point-of-care testing kits, quality control, and laboratory workflow optimization.",
     "image": "assets/vet_facility_diagnostics_room.webp",
     "status": "Published",
@@ -1312,7 +1338,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Veterinary Physiotherapy and Rehabilitation",
     "slug": "veterinary-physiotherapy-and-rehabilitation",
     "category": "Rehabilitation",
-    "duration": "2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Post-surgical orthopedic rehabilitation, neurological recovery protocols, therapeutic exercises, laser therapy, and passive range of motion.",
     "image": "assets/vet_selector_nurse_card.webp",
     "status": "Published",
@@ -1362,7 +1389,8 @@ window.VETNOVA_28_PROGRAMS = [
     "title": "Veterinary Ethics and Practice Management",
     "slug": "veterinary-ethics-and-practice-management",
     "category": "Practice Management",
-    "duration": "1 to 2 Weeks",
+    "duration": "3 Days",
+    "availability": "24 Hours",
     "description": "Clinical communication, client consent, medical negligence avoidance, ethical euthanasia decision-making, and veterinary practice business fundamentals.",
     "image": "assets/images/facility-lecture.webp",
     "status": "Published",
@@ -1512,22 +1540,49 @@ window.renderThreeStageSyllabusHTML = renderThreeStageSyllabusHTML;
 async function syncProgramsWithApi() {
   if (typeof getPrograms === "function") {
     try {
-      const livePrograms = await getPrograms();
+      const livePrograms = await getPrograms({ status: "Published" });
       if (Array.isArray(livePrograms) && livePrograms.length > 0) {
-        livePrograms.forEach(liveP => {
-          const match = window.VETNOVA_28_PROGRAMS.find(p => p.slug === liveP.slug || p.order === liveP.order);
-          if (match) {
-            match._id = liveP._id;
-            match.title = liveP.title || match.title;
-            match.description = liveP.description || match.description;
-            match.category = liveP.category || match.category;
-            match.status = liveP.status || match.status;
-            match.syllabusStatus = liveP.syllabusStatus || match.syllabusStatus;
-            if (liveP.syllabus && (liveP.syllabus.foundation?.length || liveP.syllabus.intermediate?.length || liveP.syllabus.advanced?.length)) {
-              match.syllabus = liveP.syllabus;
+        window.VETNOVA_LIVE_PROGRAMS = livePrograms;
+
+        // Sync or append into window.VETNOVA_28_PROGRAMS
+        if (Array.isArray(window.VETNOVA_28_PROGRAMS)) {
+          livePrograms.forEach(liveP => {
+            const match = window.VETNOVA_28_PROGRAMS.find(p => p.slug === liveP.slug || p.order === liveP.order);
+            if (match) {
+              match._id = liveP._id;
+              match.title = liveP.title || match.title;
+              match.description = liveP.description || match.description;
+              match.category = liveP.category || match.category;
+              match.duration = liveP.duration || match.duration || "3 Days";
+              match.availability = liveP.availability || match.availability || "24 Hours";
+              match.image = liveP.image || match.image;
+              match.status = liveP.status || match.status;
+              match.syllabusStatus = liveP.syllabusStatus || match.syllabusStatus;
+              if (liveP.syllabus && (liveP.syllabus.foundation?.length || liveP.syllabus.intermediate?.length || liveP.syllabus.advanced?.length)) {
+                match.syllabus = liveP.syllabus;
+              }
+            } else {
+              // Newly added program in CMS
+              window.VETNOVA_28_PROGRAMS.push({
+                _id: liveP._id,
+                order: liveP.order || window.VETNOVA_28_PROGRAMS.length + 1,
+                title: liveP.title,
+                slug: liveP.slug,
+                category: liveP.category || "Clinical Training",
+                duration: liveP.duration || "3 Days",
+                availability: liveP.availability || "24 Hours",
+                description: liveP.description || "",
+                image: liveP.image || "assets/images/programs/program-skill-up.webp",
+                status: liveP.status || "Published",
+                syllabusStatus: liveP.syllabusStatus || "Pending",
+                syllabus: liveP.syllabus || { foundation: [], intermediate: [], advanced: [] },
+                learningOutcomes: liveP.learningOutcomes || []
+              });
             }
-          }
-        });
+          });
+        }
+
+        window.dispatchEvent(new CustomEvent("vetnova:programs-synced", { detail: livePrograms }));
       }
     } catch (e) {
       console.warn("Could not sync with live programs API, using verified local dataset.", e);

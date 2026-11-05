@@ -31,6 +31,18 @@ async function fetchFromApi(endpoint, queryParams = {}) {
 
     return await response.json();
   } catch (error) {
+    // If local dev server is offline, fallback seamlessly to production Render API
+    if (API_BASE_URL.includes('localhost') || API_BASE_URL.includes('127.0.0.1')) {
+      try {
+        const fallbackUrl = `https://vetnova-api-utnd.onrender.com/api${endpoint}${queryString}`;
+        const fbResponse = await fetch(fallbackUrl);
+        if (fbResponse && fbResponse.ok) {
+          return await fbResponse.json();
+        }
+      } catch (fbErr) {
+        // Both local and fallback failed
+      }
+    }
     console.error(`API request failed [${endpoint}]`);
     return null;
   }
@@ -78,6 +90,47 @@ async function getFacultyMember(idOrSlug) {
  */
 async function getAdvisoryBoard() {
   const data = await fetchFromApi('/advisory-board', { status: 'Published', public: 'true' });
+  return Array.isArray(data) ? data : [];
+}
+
+/**
+ * Fetch all published programs with optional filtering
+ * @param {Object} options - Query filters (category, search, status, syllabusStatus)
+ * @returns {Promise<Array>} List of published programs
+ */
+async function getPrograms(options = {}) {
+  const query = {};
+  if (options.status) query.status = options.status;
+  if (options.category && options.category !== 'all') query.category = options.category;
+  if (options.search) query.search = options.search;
+  if (options.all) query.all = options.all;
+
+  const data = await fetchFromApi('/programs', query);
+  return Array.isArray(data) ? data : [];
+}
+
+/**
+ * Fetch a single program by ID or slug
+ * @param {string} idOrSlug - Program ObjectId or slug
+ * @returns {Promise<Object|null>} Program details or null
+ */
+async function getProgram(idOrSlug) {
+  if (!idOrSlug) return null;
+  return await fetchFromApi(`/programs/${encodeURIComponent(idOrSlug)}`);
+}
+
+/**
+ * Fetch all training batches with optional filtering
+ * @param {Object} options - Query filters (status, program, faculty)
+ * @returns {Promise<Array>} List of training batches
+ */
+async function getBatches(options = {}) {
+  const query = {};
+  if (options.status) query.status = options.status;
+  if (options.program) query.program = options.program;
+  if (options.faculty) query.faculty = options.faculty;
+
+  const data = await fetchFromApi('/batches', query);
   return Array.isArray(data) ? data : [];
 }
 

@@ -70,6 +70,41 @@ async function initProgramSinglePage() {
     heroEyebrow.innerHTML = `<i class="fa-solid fa-award"></i> ${cleanCategory.toUpperCase()}`;
   }
 
+  // Update Duration & Availability in summary bar & batch cards
+  const summaryDuration = document.querySelectorAll(".program-summary-bar .summary-item, .batch-info-item");
+  summaryDuration.forEach(item => {
+    const small = item.querySelector("small");
+    const strong = item.querySelector("strong");
+    if (small && strong && small.textContent.trim().toLowerCase() === "duration") {
+      strong.textContent = program.duration || "3 Days";
+    }
+    if (small && strong && small.textContent.trim().toLowerCase() === "availability") {
+      strong.textContent = program.availability || "24 Hours";
+    }
+  });
+
+  const summaryBar = document.querySelector(".program-summary-bar");
+  if (summaryBar && !summaryBar.querySelector(".summary-item-availability")) {
+    const availItem = document.createElement("div");
+    availItem.className = "summary-item summary-item-availability";
+    availItem.innerHTML = `
+      <i class="fa-solid fa-calendar-check text-teal"></i>
+      <div class="summary-info">
+        <small>Availability</small>
+        <strong>${program.availability || "24 Hours"}</strong>
+      </div>
+    `;
+    const locItem = Array.from(summaryBar.querySelectorAll(".summary-item")).find(it => {
+      const s = it.querySelector("small");
+      return s && s.textContent.trim().toLowerCase() === "location";
+    });
+    if (locItem) {
+      summaryBar.insertBefore(availItem, locItem);
+    } else {
+      summaryBar.appendChild(availItem);
+    }
+  }
+
   // Update Syllabus Container
   if (syllabusContainer && typeof window.renderThreeStageSyllabusHTML === "function") {
     syllabusContainer.innerHTML = window.renderThreeStageSyllabusHTML(program);

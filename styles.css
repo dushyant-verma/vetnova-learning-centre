@@ -454,11 +454,28 @@ p {
   transform: translateY(-1px);
 }
 
-/* Language Switcher Styles (Temporarily hidden UI) */
+/* Language Switcher Styles (Exclusively displayed on Vet Nurse Programme page) */
 .lang-switcher,
 .nav-lang-switcher,
 .drawer-lang-switcher {
   display: none !important;
+}
+
+body.page-vet-nurse .top-info-right .lang-switcher {
+  display: inline-flex !important;
+  align-items: center;
+}
+
+body.page-vet-nurse .drawer-lang-switcher {
+  display: inline-flex !important;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  body.page-vet-nurse .nav-lang-switcher {
+    display: inline-flex !important;
+    align-items: center;
+  }
 }
 
 .lang-btn {
@@ -978,12 +995,64 @@ p {
   margin-top: auto;
 }
 
-/* Fallback Grade Mega Grid */
+/* Grade Mega Grid & Columns (Historical 20 Oct 2026 design) */
 .grade-mega-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 14px;
   margin-bottom: 16px;
+}
+
+.grade-col {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 10px;
+  transition: all 0.25s ease;
+}
+
+.grade-col:hover {
+  background: #ffffff;
+  border-color: var(--teal);
+  box-shadow: 0 8px 24px rgba(18, 199, 193, 0.12);
+  transform: translateY(-2px);
+}
+
+.grade-col-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.grade-col-head.grade-1 {
+  border-color: #3b82f6;
+}
+
+.grade-col-head.grade-2 {
+  border-color: #10b981;
+}
+
+.grade-col-head.grade-3 {
+  border-color: #f59e0b;
+}
+
+.grade-col-head.grade-4 {
+  border-color: #8b5cf6;
+}
+
+.grade-col-head.grade-5 {
+  border-color: #ec4899;
+}
+
+.grade-col-num {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
 }
 
 .grade-col-head strong {
@@ -10231,6 +10300,13 @@ section#faq .container {
   margin-bottom: 20px;
   font-size: 13px;
   color: var(--navy-2);
+}
+
+@media (max-width: 480px) {
+  .program-card-meta {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
 }
 
 .meta-item {
@@ -23845,4 +23921,15 @@ body {
     font-size: 14.5px;
     min-height: 46px;
   }
+}
+
+
+.btn-counselling-pill {
+  background-color: #15aaa5;
+  color: white;
+  border-color: #15aaa5;
+}
+
+.btn-counselling-pill i {
+  color: white;
 }

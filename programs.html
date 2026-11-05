@@ -19,6 +19,308 @@
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="styles.css" />
 
+  <style>
+    /* Scoped program-listing layout */
+    #all-programs .program-listing-layout {
+      display: grid;
+      grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+      align-items: start;
+      gap: clamp(24px, 3vw, 40px);
+    }
+
+    #all-programs .program-filter-sidebar {
+      position: sticky;
+      top: 105px;
+      padding: 24px;
+      border: 1px solid rgba(22, 67, 58, .14);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 8px 28px rgba(18, 47, 41, .06);
+    }
+
+    #all-programs .program-filter-heading,
+    #all-programs .program-results-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    #all-programs .program-filter-heading {
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eef2f0;
+    }
+
+    #all-programs .program-filter-heading h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--navy, #0f2d4a);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #all-programs .program-clear-filters {
+      border: 0;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #f0f7f4;
+      color: var(--primary, #176b56);
+      font: inherit;
+      font-size: .84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    #all-programs .program-clear-filters:hover {
+      background: #e2f0ea;
+    }
+
+    #all-programs .program-filter-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: .86rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--navy, #0f2d4a);
+    }
+
+    #all-programs .program-search-box {
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #eef2f0;
+    }
+
+    #all-programs .program-search-wrap {
+      position: relative;
+    }
+
+    #all-programs .program-search-wrap > i {
+      position: absolute;
+      top: 50%;
+      left: 13px;
+      transform: translateY(-50%);
+      color: #77817e;
+      pointer-events: none;
+    }
+
+    #all-programs #program-search-input {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px 10px 38px;
+      border: 1px solid #dce4e1;
+      border-radius: 9px;
+      background: #fff;
+      color: #202a27;
+      font: inherit;
+      font-size: .92rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #all-programs #program-search-input:focus {
+      border-color: var(--primary, #176b56);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(23, 107, 86, 0.15);
+    }
+
+    #all-programs .program-filter-group {
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #eef2f0;
+    }
+
+    #all-programs .program-filter-group:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    #all-programs .program-filter-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: .86rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--navy, #0f2d4a);
+    }
+
+    #all-programs .program-filter-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    #all-programs .program-filter-options-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    #all-programs .program-filter-options-list::-webkit-scrollbar-thumb {
+      background: #d0ded8;
+      border-radius: 4px;
+    }
+
+    #all-programs .program-filter-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: #384541;
+      font-size: .9rem;
+      line-height: 1.35;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s;
+    }
+
+    #all-programs .program-filter-option:hover {
+      color: var(--primary, #176b56);
+    }
+
+    #all-programs .program-filter-option input[type="radio"] {
+      flex: 0 0 auto;
+      width: 16px;
+      height: 16px;
+      margin: 2px 0 0;
+      accent-color: var(--primary, #176b56);
+      cursor: pointer;
+    }
+
+    #all-programs .program-results {
+      min-width: 0;
+    }
+
+    #all-programs .program-results-toolbar {
+      margin: 0 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eef2f0;
+    }
+
+    #all-programs #program-results-count {
+      margin: 0;
+      color: #65716d;
+      font-size: .92rem;
+    }
+
+    #all-programs .program-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    #all-programs .program-empty-state {
+      padding: 48px 24px;
+      border: 1px dashed #ccd8d3;
+      border-radius: 16px;
+      background: #fafdfc;
+      text-align: center;
+    }
+
+    #all-programs .program-empty-state .empty-filter-icon {
+      font-size: 2.4rem;
+      color: var(--primary, #176b56);
+      margin-bottom: 16px;
+    }
+
+    #all-programs .program-empty-state h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--navy, #0f2d4a);
+      margin: 0 0 10px;
+    }
+
+    #all-programs .program-empty-state p {
+      font-size: .95rem;
+      color: #64748b;
+      margin: 0 0 22px;
+      max-width: 480px;
+      margin-inline: auto;
+    }
+
+    #all-programs .empty-filter-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    #all-programs .program-filter-toggle {
+      display: none;
+    }
+
+    @media (min-width: 1440px) {
+      #all-programs .program-cards-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 1100px) {
+      #all-programs .program-listing-layout {
+        grid-template-columns: 240px minmax(0, 1fr);
+        gap: 20px;
+      }
+      #all-programs .program-filter-sidebar {
+        padding: 18px;
+      }
+      #all-programs .program-cards-grid {
+        gap: 18px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      #all-programs .program-filter-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        width: 100%;
+        margin: 0 0 20px;
+        padding: 12px 18px;
+        border: 1px solid #dce4e1;
+        border-radius: 10px;
+        background: #fff;
+        color: var(--navy, #0f2d4a);
+        font: inherit;
+        font-weight: 600;
+        font-size: .95rem;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,.04);
+      }
+
+      #all-programs .program-listing-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      #all-programs .program-filter-sidebar {
+        display: none;
+        position: static;
+        margin-bottom: 24px;
+      }
+
+      #all-programs .program-filter-sidebar.is-open {
+        display: block;
+      }
+    }
+
+    @media (max-width: 600px) {
+      #all-programs .program-cards-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      #all-programs .program-filter-sidebar {
+        padding: 16px;
+      }
+    }
+  </style>
+
 </head>
 
 <body>
@@ -44,238 +346,118 @@
         </div>
       </div>
 
-      <!-- SECTION 2: Explore Programs by Learning Level -->
-      <section class="section soft" id="choose-learning-level" style="padding: 50px 0;">
+      <!-- SECTION 2: Structured Program Catalogue & Sidebar Filter Layout -->
+      <section class="section" id="all-programs" style="padding-top: 40px; padding-bottom: 70px;">
         <div class="container">
-          <div class="section-head center">
-            <span class="eyebrow"><i class="fa-solid fa-graduation-cap"></i> LEARNING PROGRESSION SYSTEM</span>
-            <h2>Explore Programs by Learning Level</h2>
-            <p>VetNova structures clinical training into three distinct progression stages across all 28 program areas.
-              Select a level to view corresponding clinical syllabus modules.</p>
-          </div>
-
-          <div class="level-cards-grid">
-            <!-- Foundation Card -->
-            <div class="level-card" data-level="foundation">
-              <div class="level-card-top">
-                <span class="level-badge level-badge-foundation"><i class="fa-solid fa-seedling"></i> FOUNDATION</span>
-                <div class="level-card-icon level-badge-foundation"><i class="fa-solid fa-stethoscope"></i></div>
-              </div>
-              <h3>Build Your Clinical Foundations</h3>
-              <p class="level-card-desc">Develop essential veterinary knowledge, clinical examination skills, diagnostic
-                fundamentals, and safe practical techniques.</p>
-
-              <div class="level-card-topics-preview">
-                <div class="level-preview-head"><i class="fa-solid fa-list-check"></i> Foundation Focus Areas</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Systematic Clinical History &amp;
-                  Exam</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Vital Signs, Hydration &amp; Pain
-                  Scoring</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Fluid Therapy &amp; First-Line
-                  Workup</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Surgical Asepsis &amp; Wound
-                  Closure</div>
-              </div>
-
-              <div class="level-card-footer">
-                <span class="level-card-link">Filter Foundation Programs <i
-                    class="fa-solid fa-chevron-right"></i></span>
-              </div>
-            </div>
-
-            <!-- Intermediate Card -->
-            <div class="level-card" data-level="intermediate">
-              <div class="level-card-top">
-                <span class="level-badge level-badge-intermediate"><i class="fa-solid fa-chart-line"></i>
-                  INTERMEDIATE</span>
-                <div class="level-card-icon level-badge-intermediate"><i class="fa-solid fa-user-doctor"></i></div>
-              </div>
-              <h3>Strengthen Your Clinical Skills</h3>
-              <p class="level-card-desc">Build confidence in clinical decision-making, diagnostics, case management, and
-                commonly performed procedures.</p>
-
-              <div class="level-card-topics-preview">
-                <div class="level-preview-head"><i class="fa-solid fa-list-check"></i> Intermediate Focus Areas</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Problem-Oriented Medical Records
-                </div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Electrolyte &amp; Acid-Base
-                  Disorders</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Emergency Abdominal &amp; Soft
-                  Tissue Surgery</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Orthopaedic Pinning, Plating
-                  &amp; Slings</div>
-              </div>
-
-              <div class="level-card-footer">
-                <span class="level-card-link">Filter Intermediate Programs <i
-                    class="fa-solid fa-chevron-right"></i></span>
-              </div>
-            </div>
-
-            <!-- Advanced Card -->
-            <div class="level-card" data-level="advanced">
-              <div class="level-card-top">
-                <span class="level-badge level-badge-advanced"><i class="fa-solid fa-award"></i> ADVANCED</span>
-                <div class="level-card-icon level-badge-advanced"><i class="fa-solid fa-brain"></i></div>
-              </div>
-              <h3>Advance Your Veterinary Expertise</h3>
-              <p class="level-card-desc">Explore complex cases, advanced procedures, specialist techniques, and
-                evidence-based clinical practice.</p>
-
-              <div class="level-card-topics-preview">
-                <div class="level-preview-head"><i class="fa-solid fa-list-check"></i> Advanced Focus Areas</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Complex Multisystem Case
-                  Management</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Advanced Thoracic &amp;
-                  Hepatobiliary Surgery</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Total Arthroplasty, TPLO &amp;
-                  Osteotomies</div>
-                <div class="level-topic-item"><i class="fa-solid fa-circle-check"></i> Antimicrobial Stewardship &amp;
-                  Clinical Audit</div>
-              </div>
-
-              <div class="level-card-footer">
-                <span class="level-card-link">Filter Advanced Programs <i class="fa-solid fa-chevron-right"></i></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Learning Level Filter Pills Container -->
-          <div class="level-filter-pills-wrap" id="level-filter-pills-wrap">
-            <div class="selector-head">
-              <span class="selected-grade-label" id="selected-level-title">Active Filter: <strong>All
-                  Programs</strong></span>
-              <span class="selector-hint">Click a level pill below to filter syllabus content:</span>
-            </div>
-            <div class="level-filter-pills-bar">
-              <button class="level-pill active" data-level="all"><i class="fa-solid fa-border-all"></i> All Programs
-                (28)</button>
-              <button class="level-pill level-pill-foundation" data-level="foundation"><i
-                  class="fa-solid fa-seedling"></i> Foundation Level</button>
-              <button class="level-pill level-pill-intermediate" data-level="intermediate"><i
-                  class="fa-solid fa-chart-line"></i> Intermediate Level</button>
-              <button class="level-pill level-pill-advanced" data-level="advanced"><i class="fa-solid fa-award"></i>
-                Advanced Level</button>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- SECTION 3: Search & Discovery Filter Controls -->
-      <section class="section" id="program-filters" style="padding: 40px 0 20px 0;">
-        <div class="container">
-
-          <!-- Persona Adaptive Messaging Banner -->
-          <div id="persona-discovery-banner" class="persona-discovery-banner" style="display: none;">
-            <div class="persona-banner-content">
-              <span class="persona-banner-badge" id="persona-badge-text">Learning Pathway</span>
-              <h3 id="persona-title-text">All Programs</h3>
-              <p id="persona-message-text">Exploring practical veterinary programs across all learning levels.</p>
-            </div>
-            <button id="persona-banner-reset" class="persona-banner-close" aria-label="Reset selection">&times; Clear
-              Selection</button>
-          </div>
-
-          <div class="program-filter-bar">
-            <!-- Search Input -->
-            <div class="filter-search-wrap">
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" id="program-search-input"
-                placeholder="Search programs by keyword (e.g. Surgery, Dermatology, Cardiology, Emergency, Imaging)..." />
-            </div>
-
-            <!-- Primary Dropdown Filters -->
-            <div class="filter-selects-wrap-primary">
-              <div class="filter-select-group">
-                <label for="filter-level" class="filter-label"><i class="fa-solid fa-layer-group"></i> Learning
-                  Level</label>
-                <select id="filter-level" class="filter-dropdown">
-                  <option value="all">All Programs (All 3 Levels)</option>
-                  <option value="foundation">Foundation Level</option>
-                  <option value="intermediate">Intermediate Level</option>
-                  <option value="advanced">Advanced Level</option>
-                </select>
-              </div>
-
-              <div class="filter-select-group">
-                <label for="filter-track" class="filter-label"><i class="fa-solid fa-book-open"></i> Clinical Discipline
-                  / Track</label>
-                <select id="filter-track" class="filter-dropdown">
-                  <option value="all">All Disciplines (28 Areas)</option>
-                  <option value="surgery">Surgery &amp; Orthopaedics</option>
-                  <option value="medicine">Internal &amp; Specialized Medicine</option>
-                  <option value="diagnostics">Diagnostics &amp; Imaging</option>
-                  <option value="emergency">Emergency &amp; Critical Care</option>
-                </select>
-              </div>
-
-              <div class="filter-select-group">
-                <label for="filter-mode" class="filter-label"><i class="fa-solid fa-laptop-house"></i> Course Delivery
-                  Mode</label>
-                <select id="filter-mode" class="filter-dropdown">
-                  <option value="all">All Modes</option>
-                  <option value="offline">100% Offline Campus</option>
-                  <option value="workshop">Weekend Workshop</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 4: Structured Program Catalogue Grid -->
-      <section class="section" id="all-programs" style="padding-top: 20px; padding-bottom: 60px;">
-        <div class="container">
-          <div class="section-head center" style="margin-bottom: 30px;">
+          <div class="section-head center" style="margin-bottom: 32px;">
             <span class="eyebrow"><i class="fa-solid fa-cubes"></i> ACCREDITED CURRICULUM DIRECTORY</span>
             <h2>Programs &amp; Learning Tracks</h2>
-            <p>Browse all 28 accredited veterinary programs in their official curriculum sequence.</p>
+            <p>Browse accredited veterinary clinical training programs and workshops managed directly via the VetNova CMS.</p>
           </div>
 
-          <!-- Dynamic Live Program Count Header -->
-          <div class="program-count-bar" id="program-count-bar">
-            <span class="program-count-badge" id="program-count-text">
-              <i class="fa-solid fa-layer-group text-teal"></i> <span id="count-number">0</span> Programs Found
-            </span>
-          </div>
+          <!-- Mobile Filter Toggle Button -->
+          <button class="program-filter-toggle" id="program-filter-toggle" type="button" aria-expanded="false" aria-controls="program-filter-sidebar">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Filter Programs</span>
+          </button>
 
-          <!-- Empty Filter State Container with Show Interest & Notify Me -->
-          <div id="no-programs-match" class="empty-filter-state" style="display: none;">
-            <div class="empty-filter-content">
-              <i class="fa-solid fa-graduation-cap empty-filter-icon"></i>
-              <h3>No programs match your selected criteria.</h3>
-              <p>Don't see the course, grade, or upcoming batch you're looking for? Let us know what you need and we'll
-                notify you as soon as new intake options open.</p>
+          <div class="program-listing-layout">
+            <!-- Left Sidebar Filters -->
+            <aside class="program-filter-sidebar" id="program-filter-sidebar" aria-label="Program filters">
+              <div class="program-filter-heading">
+                <h3><i class="fa-solid fa-filter text-teal"></i> Filters</h3>
+                <button type="button" class="program-clear-filters" id="program-clear-filters" title="Reset all filters">Clear all</button>
+              </div>
 
-              <div class="empty-filter-actions">
-                <button class="btn btn-primary btn-sm btn-show-interest" data-source="Program Interest">
-                  <i class="fa-solid fa-paper-plane"></i> Show Interest
+              <!-- Search Filter -->
+              <div class="program-search-box">
+                <label for="program-search-input" class="program-filter-label">Search Programs</label>
+                <div class="program-search-wrap">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" id="program-search-input" placeholder="Search by title, topic..." autocomplete="off" />
+                </div>
+              </div>
+
+              <!-- Program Categories Filter -->
+              <div class="program-filter-group">
+                <span class="program-filter-title"><i class="fa-solid fa-layer-group text-teal"></i> Categories</span>
+                <div class="program-filter-options-list" id="category-filter-options">
+                  <label class="program-filter-option">
+                    <input type="radio" name="program-category" value="all" checked />
+                    <span>All Categories</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Program Duration Filter -->
+              <div class="program-filter-group">
+                <span class="program-filter-title"><i class="fa-solid fa-clock text-teal"></i> Duration</span>
+                <div class="program-filter-options-list" id="duration-filter-options">
+                  <label class="program-filter-option">
+                    <input type="radio" name="program-duration" value="all" checked />
+                    <span>All Durations</span>
+                  </label>
+                  <label class="program-filter-option">
+                    <input type="radio" name="program-duration" value="3-days" />
+                    <span>3 Days</span>
+                  </label>
+                  <label class="program-filter-option">
+                    <input type="radio" name="program-duration" value="1-week" />
+                    <span>1 Week</span>
+                  </label>
+                  <label class="program-filter-option">
+                    <input type="radio" name="program-duration" value="2-weeks" />
+                    <span>2 Weeks</span>
+                  </label>
+                  <label class="program-filter-option">
+                    <input type="radio" name="program-duration" value="4-weeks" />
+                    <span>4+ Weeks</span>
+                  </label>
+                </div>
+              </div>
+            </aside>
+
+            <!-- Right Side Programs Results -->
+            <div class="program-results" id="program-results">
+              <div class="program-results-toolbar">
+                <p id="program-results-count">
+                  <i class="fa-solid fa-layer-group text-teal"></i> Showing <strong id="count-number">0</strong> programs
+                </p>
+              </div>
+
+              <!-- Empty Filter State Container -->
+              <div id="no-programs-match" class="program-empty-state" style="display: none;">
+                <i class="fa-solid fa-graduation-cap empty-filter-icon"></i>
+                <h3>No programs match your selected criteria.</h3>
+                <p>Try adjusting your keywords, selecting a different category, or clearing all filters.</p>
+                <div class="empty-filter-actions">
+                  <button id="btn-clear-filters" class="btn btn-outline btn-sm">
+                    <i class="fa-solid fa-rotate-left"></i> Reset Filters
+                  </button>
+                  <a href="contact.html#contact-form" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-envelope"></i> Enquire for Custom Intake
+                  </a>
+                </div>
+              </div>
+
+              <!-- Dynamic Program Cards Container -->
+              <div id="programs-dynamic-grid" class="program-cards-grid"></div>
+
+              <!-- Load More Programs Action Container -->
+              <div id="load-more-container" class="load-more-container" style="display: none; margin-top: 36px; text-align: center;">
+                <button id="btn-load-more-programs" class="btn btn-outline btn-load-more" type="button"
+                  aria-label="Load more veterinary programs">
+                  <span>Load More Programs</span>
+                  <i class="fa-solid fa-chevron-down"></i>
                 </button>
-                <button class="btn btn-outline btn-sm btn-notify-me" data-source="Program Notify Me">
-                  <i class="fa-solid fa-bell"></i> Notify Me
-                </button>
-                <button id="btn-clear-filters" class="btn btn-ghost btn-sm">
-                  <i class="fa-solid fa-rotate-left"></i> Clear Filters
-                </button>
+                <p id="programs-showing-count" class="programs-showing-count" aria-live="polite" style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">
+                  Showing <span id="showing-count-current">6</span> of <span id="showing-count-total">28</span> programs
+                </p>
               </div>
             </div>
           </div>
-
-          <!-- Dynamic Program Cards Container -->
-          <div id="programs-dynamic-grid" class="feature-grid-3"></div>
-
-          <!-- Load More Programs Action Container -->
-          <div id="load-more-container" class="load-more-container" style="display: none;">
-            <button id="btn-load-more-programs" class="btn btn-outline btn-load-more" type="button"
-              aria-label="Load more veterinary programs">
-              <span>Load More Programs</span>
-              <i class="fa-solid fa-chevron-down"></i>
-            </button>
-            <p id="programs-showing-count" class="programs-showing-count" aria-live="polite">
-              Showing <span id="showing-count-current">6</span> of <span id="showing-count-total">28</span> programs
-            </p>
-          </div>
+        </div>
+      </section>
 
         </div>
       </section>
@@ -302,6 +484,10 @@
                 <h3 class="program-card-title"><a href="soft-tissue-surgery.html">Soft Tissue Surgery Track</a></h3>
                 <p class="program-card-desc">Intensive surgical workshop covering sterile setup, tissue handling, and
                   suture patterns.</p>
+                <div class="program-card-meta">
+                  <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> 3 Days</div>
+                  <div class="meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> <strong>Availability:</strong> 24 Hours</div>
+                </div>
                 <div class="program-card-footer">
                   <div class="program-card-price">₹18,500 <small>+ GST</small></div>
                   <a class="btn btn-outline btn-sm" href="soft-tissue-surgery.html">View Program <i
@@ -322,6 +508,10 @@
                 <h3 class="program-card-title"><a href="radiology-ultrasound.html">Radiology &amp; Ultrasound
                     Masterclass</a></h3>
                 <p class="program-card-desc">Radiograph reading &amp; hands-on abdominal ultrasound FAST scanning.</p>
+                <div class="program-card-meta">
+                  <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> 3 Days</div>
+                  <div class="meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> <strong>Availability:</strong> 24 Hours</div>
+                </div>
                 <div class="program-card-footer">
                   <div class="program-card-price">₹16,000 <small>+ GST</small></div>
                   <a class="btn btn-outline btn-sm" href="radiology-ultrasound.html">View Program <i
@@ -343,6 +533,10 @@
                 </h3>
                 <p class="program-card-desc">Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and
                   triage.</p>
+                <div class="program-card-meta">
+                  <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> 3 Days</div>
+                  <div class="meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> <strong>Availability:</strong> 24 Hours</div>
+                </div>
                 <div class="program-card-footer">
                   <div class="program-card-price">₹12,500 <small>+ GST</small></div>
                   <a class="btn btn-outline btn-sm" href="emergency-medicine.html">View Program <i
@@ -385,113 +579,19 @@
             <div class="batch-tab-panel active" id="panel-upcoming-batches" role="tabpanel"
               aria-labelledby="tab-upcoming-batches">
               <div
-                style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #e2e8f0; overflow: hidden; box-shadow: var(--soft-shadow);">
-                <div style="overflow-x: auto;">
-                  <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 15px;">
-                    <thead>
-                      <tr style="background-color: var(--navy-2); color: var(--white);">
-                        <th style="padding: 16px 20px;">Program Track</th>
-                        <th style="padding: 16px 20px;">Start Date</th>
-                        <th style="padding: 16px 20px;">Duration</th>
-                        <th style="padding: 16px 20px;">Seat Status</th>
-                        <th style="padding: 16px 20px;">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr style="border-bottom: 1px solid #f1f5f9;">
-                        <td style="padding: 18px 20px;"><strong>Veterinary Skill-Up Program</strong></td>
-                        <td style="padding: 18px 20px; color: var(--navy-2);">August 15, 2026</td>
-                        <td style="padding: 18px 20px;">4 Weeks</td>
-                        <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 4 Seats
-                            Remaining</span></td>
-                        <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
-                            href="contact.html?program=veterinary-skill-up#contact-form">Book free Counselling </a></td>
-                      </tr>
-                      <tr style="border-bottom: 1px solid #f1f5f9; background-color: #fafcfd;">
-                        <td style="padding: 18px 20px;"><strong>Soft Tissue Surgery Track</strong></td>
-                        <td style="padding: 18px 20px; color: var(--navy-2);">September 1, 2026</td>
-                        <td style="padding: 18px 20px;">1 Week</td>
-                        <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢
-                            Admissions
-                            Open</span></td>
-                        <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
-                            href="contact.html?program=soft-tissue-surgery#contact-form">Book free Counselling </a></td>
-                      </tr>
-                      <tr style="border-bottom: 1px solid #f1f5f9;">
-                        <td style="padding: 18px 20px;"><strong>Radiology &amp; Ultrasound Masterclass</strong></td>
-                        <td style="padding: 18px 20px; color: var(--navy-2);">September 12, 2026</td>
-                        <td style="padding: 18px 20px;">1 Week</td>
-                        <td style="padding: 18px 20px;"><span style="color: var(--teal); font-weight: 700;">🟢
-                            Admissions
-                            Open</span></td>
-                        <td style="padding: 18px 20px;"><a class="btn btn-outline btn-sm btn-apply-now"
-                            href="contact.html?program=radiology-ultrasound#contact-form">Book free Counselling </a>
-                        </td>
-                      </tr>
-                      <tr style="background-color: #fafcfd;">
-                        <td style="padding: 18px 20px;"><strong>Pet Emergency &amp; Critical Care</strong></td>
-                        <td style="padding: 18px 20px; color: var(--navy-2);">September 25, 2026</td>
-                        <td style="padding: 18px 20px;">3 Days</td>
-                        <td style="padding: 18px 20px;"><span style="color: #e11d48; font-weight: 700;">🔥 3 Seats
-                            Remaining</span></td>
-                        <td style="padding: 18px 20px;"><a class="btn btn-primary btn-sm btn-apply-now"
-                            href="contact.html?program=emergency-medicine#contact-form">Book free Counselling </a></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <!-- Upcoming Batch Schedule Fallback Banner -->
-              <div class="upcoming-batch-fallback" id="upcoming-batch-fallback">
-                <div class="batch-fallback-content">
-                  <div class="batch-fallback-icon"><i class="fa-solid fa-calendar-plus"></i></div>
-                  <div class="batch-fallback-text">
-                    <h3>Can't find a suitable upcoming batch?</h3>
-                    <p>Don't see your preferred dates or schedule? Let us know when you'd like to join and we'll notify
-                      you as soon as new intake dates open.</p>
-                  </div>
-                </div>
-                <div class="batch-fallback-actions">
-                  <button class="btn btn-primary btn-sm btn-show-interest" data-source="Program Interest"
-                    data-context="Upcoming Batch Schedule">
-                    <i class="fa-solid fa-paper-plane"></i> Show Interest
-                  </button>
-                  <button class="btn btn-outline btn-sm btn-notify-me" data-source="Program Notify Me"
-                    data-context="Upcoming Batch Schedule">
-                    <i class="fa-solid fa-bell"></i> Notify Me
-                  </button>
-                </div>
+                style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #e2e8f0; padding: 48px 24px; text-align: center; box-shadow: var(--soft-shadow);">
+                <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--teal, #12c7c1); margin-bottom: 12px;"></i>
+                <p style="font-size: 15px; color: #64748b; margin: 0; font-weight: 500;">Loading training batch schedules...</p>
               </div>
             </div>
 
             <!-- TAB 2: Ongoing Batches -->
             <div class="batch-tab-panel" id="panel-ongoing-batches" role="tabpanel"
               aria-labelledby="tab-ongoing-batches" style="display: none;">
-              <div class="ongoing-batch-tab-wrap" style="padding-top: 10px;">
-                <div class="section-head center" style="margin-bottom: 24px;">
-                  <span class="ongoing-status-badge"><i class="fa-solid fa-circle"></i> ACTIVE SESSIONS</span>
-                  <h3 style="margin-top: 12px; font-size: 1.6rem; color: var(--navy-2);">Ongoing Batches</h3>
-                  <p style="margin: 0 auto; max-width: 600px;">Currently running practical clinical workshops at our
-                    Pune learning facility.</p>
-                </div>
-
-                <div class="ongoing-empty-card">
-                  <i class="fa-solid fa-clock-rotate-left"
-                    style="font-size: 36px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
-                  <h4 style="font-size: 1.15rem; color: #334155; margin-bottom: 6px; font-weight: 600;">July &amp;
-                    August
-                    Batches Currently In Session</h4>
-                  <p
-                    style="font-size: 0.95rem; color: #64748b; margin: 0 0 20px 0; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">
-                    Active clinical cohorts are undergoing supervised surgical and diagnostic training on campus.
-                    Explore
-                    upcoming batches to reserve your seat in the next scheduled intake.</p>
-                  <button type="button" class="btn btn-outline btn-sm btn-switch-upcoming"
-                    data-switch-tab="panel-upcoming-batches">
-                    View Upcoming Batches <i class="fa-solid fa-arrow-left" style="margin-left: 6px;"></i>
-                  </button>
-                </div>
+              <div
+                style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #e2e8f0; padding: 48px 24px; text-align: center; box-shadow: var(--soft-shadow);">
+                <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--teal, #12c7c1); margin-bottom: 12px;"></i>
+                <p style="font-size: 15px; color: #64748b; margin: 0; font-weight: 500;">Loading ongoing batches...</p>
               </div>
             </div>
           </div>
@@ -768,6 +868,7 @@
   <script src="components.js"></script>
   <script src="assets/js/programs-data.js"></script>
   <script src="assets/js/api.js"></script>
+  <script src="assets/js/batches.js"></script>
   <script src="assets/js/translator.js"></script>
   <script src="script.js"></script>
 </body>

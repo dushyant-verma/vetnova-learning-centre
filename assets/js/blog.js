@@ -12,18 +12,26 @@ document.addEventListener('DOMContentLoaded', () => {
 let allBlogs = [];
 let activeCategory = 'all';
 
+const CATEGORY_SLUG_MAP = {
+  'GENERAL': 'general',
+  'VET NURSES': 'nurse',
+  'VET NURSE': 'nurse',
+  'ANIMAL WELFARE': 'welfare',
+  'PET CARE & WELLNESS': 'pet-care',
+  'PET CARE': 'pet-care',
+  'CLINICAL SKILLS': 'clinical-skills',
+  'EMERGENCY CARE': 'emergency',
+  'EMERGENCY MEDICINE': 'emergency',
+  'RADIOLOGY & IMAGING': 'radiology',
+  'RADIOLOGY': 'radiology',
+  'SURGERY': 'surgery',
+  'SOFT TISSUE SURGERY': 'surgery',
+  'CAREER ADVICE': 'career'
+};
+
 async function initBlogPage() {
   const featuredContainer = document.getElementById('featured-post-container');
   const gridContainer = document.getElementById('latest-articles-grid');
-
-  if (gridContainer) {
-    gridContainer.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--muted);">
-        <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: var(--teal); margin-bottom: 12px;"></i>
-        <p>Loading knowledge hub articles...</p>
-      </div>
-    `;
-  }
 
   // Load categories and blogs in parallel
   const [categoriesList, blogsData] = await Promise.all([
@@ -31,31 +39,30 @@ async function initBlogPage() {
     getBlogs({ status: 'Published' })
   ]);
 
-  allBlogs = blogsData || [];
-
-  // Render dynamic Category Pills
-  renderCategoryPills(categoriesList, gridContainer);
-
-  if (!allBlogs || allBlogs.length === 0) {
-    if (gridContainer) {
-      gridContainer.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--muted);">
-          <i class="fa-solid fa-newspaper fa-2x" style="margin-bottom: 12px;"></i>
-          <p>No articles currently available. Check back soon!</p>
-        </div>
-      `;
-    }
-    return;
+  if (Array.isArray(categoriesList)) {
+    categoriesList.forEach(cat => {
+      if (cat && cat.name && cat.slug) {
+        CATEGORY_SLUG_MAP[cat.name.trim().toUpperCase()] = cat.slug.trim().toLowerCase();
+      }
+    });
   }
 
-  // Identify Featured Blog (either marked isFeatured or the first article)
-  const featuredBlog = allBlogs.find(b => b.isFeatured) || allBlogs[0];
+  allBlogs = blogsData || [];
 
-  // Render Featured Blog
-  renderFeaturedBlog(featuredBlog, featuredContainer);
+  // Only replace grid content if API returned valid articles
+  if (allBlogs && allBlogs.length > 0) {
+    // Render dynamic Category Pills if the container exists
+    renderCategoryPills(categoriesList, gridContainer);
 
-  // Render Grid Articles
-  renderBlogGrid(allBlogs, gridContainer);
+    // Identify Featured Blog (either marked isFeatured or the first article)
+    const featuredBlog = allBlogs.find(b => b.isFeatured) || allBlogs[0];
+
+    // Render Featured Blog
+    renderFeaturedBlog(featuredBlog, featuredContainer);
+
+    // Render Grid Articles
+    renderBlogGrid(allBlogs, gridContainer);
+  }
 }
 
 function renderCategoryPills(categoriesList, gridContainer) {
@@ -111,10 +118,10 @@ function renderFeaturedBlog(blog, container) {
         <div class="post-author">
           <img src="${escapeHtml(blog.authorImage || 'assets/images/blog/blog-author-amit.webp')}"
             onerror="this.onerror=null; this.src='assets/images/blog/blog-author-amit.webp';"
-            alt="${escapeHtml(blog.author)}" loading="lazy" decoding="async" />
+            alt="VetNova Advisory Team" loading="lazy" decoding="async" />
           <div class="post-author-info">
-            <strong>${escapeHtml(blog.author)}</strong>
-            <small>${escapeHtml(blog.authorRole || 'Faculty Specialist')}</small>
+            <strong>VetNova Advisory Team</strong>
+            <small>${escapeHtml(blog.authorRole || 'Faculty Advisory Board')}</small>
           </div>
           <a class="btn btn-primary btn-sm" style="margin-left: auto;" href="blog-single.html?slug=${encodeURIComponent(blog.slug || blog._id)}">
             Read Article <i class="fa-solid fa-arrow-right"></i>
@@ -150,8 +157,23 @@ function renderBlogGrid(blogs, container) {
       : [blog.category || 'CLINICAL GUIDE'];
     const authorImg = blog.authorImage || 'assets/images/blog/blog-author-amit.webp';
 
+    // Collect all matching tokens (official slugs + slugified names)
+    const categoryTokens = new Set();
+    catList.forEach(c => {
+      const upper = (c || '').trim().toUpperCase();
+      if (CATEGORY_SLUG_MAP[upper]) {
+        categoryTokens.add(CATEGORY_SLUG_MAP[upper]);
+      }
+      const slugified = slugify(c);
+      if (slugified) {
+        categoryTokens.add(slugified);
+      }
+    });
+
+    const dataCategoryAttr = Array.from(categoryTokens).join(' ') || 'general';
+
     return `
-      <div class="blog-card" data-category="${escapeHtml(catList.map(c => slugify(c)).join(' '))}">
+      <div class="blog-card" data-category="${escapeHtml(dataCategoryAttr)}">
         <div class="blog-card-media">
           <img src="${escapeHtml(blog.image || 'assets/images/hero-veterinary-training.webp')}"
             onerror="this.onerror=null; this.src='assets/images/hero-veterinary-training.webp';"
@@ -167,10 +189,10 @@ function renderBlogGrid(blogs, container) {
           <div class="post-author" style="margin-top: auto;">
             <img src="${escapeHtml(authorImg)}"
               onerror="this.onerror=null; this.src='assets/images/blog/blog-author-amit.webp';"
-              alt="${escapeHtml(blog.author)}" loading="lazy" decoding="async" />
+              alt="VetNova Advisory Team" loading="lazy" decoding="async" />
             <div class="post-author-info">
-              <strong>${escapeHtml(blog.author)}</strong>
-              <small>${escapeHtml(blog.authorRole || 'Specialist')}</small>
+              <strong>VetNova Advisory Team</strong>
+              <small>${escapeHtml(blog.authorRole || 'Faculty Advisory Board')}</small>
             </div>
           </div>
         </div>
@@ -188,6 +210,9 @@ function matchBlogCategories(blog, targetCategory) {
     : [blog.category || 'general'];
 
   return categoriesToTest.some(cat => {
+    const upper = (cat || '').trim().toUpperCase();
+    const mapped = CATEGORY_SLUG_MAP[upper];
+    if (mapped && (mapped === target || mapped.includes(target) || target.includes(mapped))) return true;
     const c = slugify(cat);
     return c.includes(target) || target.includes(c);
   });
@@ -195,7 +220,11 @@ function matchBlogCategories(blog, targetCategory) {
 
 function slugify(text) {
   if (!text) return '';
-  return text.toString().toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '');
+  return text.toString().toLowerCase().trim()
+    .replace(/&+/g, 'and')
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/-+/g, '-');
 }
 
 function formatDate(dateStr) {

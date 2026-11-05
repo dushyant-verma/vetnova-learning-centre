@@ -1179,9 +1179,9 @@ function initProgramDiscovery() {
           </div>
           <div class="discovery-card-body">
             <div class="discovery-card-meta">
-              <span><i class="fa-solid fa-signal"></i> ${p.level || 'All Levels'}</span>
+              <span><i class="fa-solid fa-clock text-teal"></i> 3 Days</span>
+              <span><i class="fa-solid fa-calendar-check text-teal"></i> 24 Hours</span>
               <span><i class="fa-solid fa-book-open"></i> ${p.category || 'Clinical Track'}</span>
-              <span><i class="fa-solid fa-hospital"></i> Offline Vet Lab</span>
             </div>
             <h4 class="discovery-card-title">${p.title}</h4>
             <p class="discovery-card-desc">${p.description}</p>
@@ -1190,7 +1190,7 @@ function initProgramDiscovery() {
               <a href="${p.url}" class="btn btn-primary btn-sm">
                 Explore Program <i class="fa-solid fa-arrow-right"></i>
               </a>
-              <a href="contact.html?program=${encodeURIComponent(programSlug)}#contact-form" class="btn btn-outline btn-sm">
+              <a href="${p.url}" class="btn btn-outline btn-sm">
                 Enquire Now
               </a>
             </div>
@@ -2520,14 +2520,64 @@ window.VETNOVA_PROGRAMS_DATA = [
 ];
 
 /* Realtime Learning Level & Track Program Filter Controller */
-function initProgramFilters() {
+const KNOWN_STATIC_PROGRAMS = new Set([
+  'anaesthesia-and-pain-management',
+  'behavioural-medicine',
+  'clinical-microbiology',
+  'clinical-pathology',
+  'diagnostic-imaging',
+  'emergency-and-critical-care',
+  'emergency-medicine',
+  'endocrinology',
+  'exotic-pet-medicine',
+  'feline-medicine',
+  'gastroenterology',
+  'general-medicine',
+  'geriatric-medicine',
+  'infectious-diseases',
+  'laboratory-diagnostics',
+  'nephrology-and-urology',
+  'oncology',
+  'orthopaedics',
+  'preventive-medicine-and-vaccinology',
+  'radiology-ultrasound',
+  'reproduction-and-obstetrics',
+  'soft-tissue-surgery',
+  'veterinary-cardiology',
+  'veterinary-dentistry',
+  'veterinary-dermatology',
+  'veterinary-ethics-and-practice-management',
+  'veterinary-neurology',
+  'veterinary-nutrition',
+  'veterinary-ophthalmology',
+  'veterinary-physiotherapy-and-rehabilitation',
+  'veterinary-skill-up'
+]);
+
+function resolveProgramUrl(p) {
+  if (!p) return 'programs.html';
+  const slug = (p.slug || '').toLowerCase().trim();
+  if (slug && KNOWN_STATIC_PROGRAMS.has(slug)) {
+    return `${slug}.html`;
+  }
+  if (slug) {
+    return `programs-single.html?slug=${encodeURIComponent(slug)}`;
+  }
+  return 'programs.html';
+}
+
+async function initProgramFilters() {
+  const dynamicContainer = document.getElementById('programs-dynamic-grid');
   const searchInput = document.getElementById('program-search-input');
   const levelSelect = document.getElementById('filter-level') || document.getElementById('filter-grade');
   const trackSelect = document.getElementById('filter-track') || document.getElementById('filter-topic');
   const modeSelect = document.getElementById('filter-mode');
-  const dynamicContainer = document.getElementById('programs-dynamic-grid');
   const noResultsState = document.getElementById('no-programs-match');
   const clearFiltersBtn = document.getElementById('btn-clear-filters');
+  const sidebarClearBtn = document.getElementById('program-clear-filters');
+  const filterToggleBtn = document.getElementById('program-filter-toggle');
+  const filterSidebar = document.getElementById('program-filter-sidebar');
+  const categoryContainer = document.getElementById('category-filter-options');
   const levelCards = document.querySelectorAll('.level-card[data-level], .grade-card[data-level]');
   const levelPills = document.querySelectorAll('.level-pill[data-level]');
   const selectedLevelTitle = document.getElementById('selected-level-title') || document.getElementById('selected-grade-title');
@@ -2539,12 +2589,17 @@ function initProgramFilters() {
   const showingCurrentEl = document.getElementById('showing-count-current');
   const showingTotalEl = document.getElementById('showing-count-total');
 
+  if (!dynamicContainer && !levelSelect && !trackSelect) return;
+
   // Pagination Configuration: Initial 6 programs visible
   const PROGRAMS_PAGE_SIZE = 6;
   let visibleLimit = PROGRAMS_PAGE_SIZE;
   let currentFilteredPrograms = [];
 
-  if (!dynamicContainer && !levelSelect && !trackSelect) return;
+  // Master program dataset from CMS with local fallback
+  let programsData = (window.VETNOVA_LIVE_PROGRAMS && window.VETNOVA_LIVE_PROGRAMS.length > 0)
+    ? window.VETNOVA_LIVE_PROGRAMS
+    : (window.VETNOVA_28_PROGRAMS || window.VETNOVA_PROGRAMS_DATA || []);
 
   const levelNameMap = {
     'all': 'All Programs',
@@ -2553,27 +2608,51 @@ function initProgramFilters() {
     'advanced': 'Advanced Level'
   };
 
-  const trackNameMap = {
-    'all': 'All Disciplines',
-    'surgery': 'Surgery & Orthopaedics',
-    'medicine': 'Internal & Specialized Medicine',
-    'diagnostics': 'Diagnostics & Imaging',
-    'emergency': 'Emergency & Critical Care',
-    'fresh-graduates': 'Fresh Graduates & Interns',
-    'practicing-vets': 'Practicing Veterinarians',
-    'vet-nurse': 'Vet Nurse & Paravet Staff'
-  };
+  // Populate dynamic category radio options from programs dataset
+  function populateCategoryOptions(list) {
+    if (!categoryContainer) return;
+    const distinctCats = [...new Set(list.map(p => (p.category || '').trim()).filter(Boolean))].sort();
+    const currentChecked = document.querySelector('input[name="program-category"]:checked')?.value || 'all';
 
-  function updateUrlParam(level) {
+    let html = `
+      <label class="program-filter-option">
+        <input type="radio" name="program-category" value="all" ${currentChecked === 'all' ? 'checked' : ''} />
+        <span>All Categories</span>
+      </label>
+    `;
+
+    distinctCats.forEach(cat => {
+      const isChecked = currentChecked.toLowerCase() === cat.toLowerCase();
+      html += `
+        <label class="program-filter-option">
+          <input type="radio" name="program-category" value="${cat}" ${isChecked ? 'checked' : ''} />
+          <span>${cat}</span>
+        </label>
+      `;
+    });
+
+    categoryContainer.innerHTML = html;
+
+    // Rebind change listeners
+    categoryContainer.querySelectorAll('input[name="program-category"]').forEach(radio => {
+      radio.addEventListener('change', () => filterPrograms(true));
+    });
+  }
+
+  function updateUrlParam(level, category) {
     try {
       const url = new URL(window.location);
       if (level && level !== 'all') {
         url.searchParams.set('level', level);
-        url.searchParams.delete('grade');
       } else {
         url.searchParams.delete('level');
-        url.searchParams.delete('grade');
       }
+      if (category && category !== 'all') {
+        url.searchParams.set('category', category);
+      } else {
+        url.searchParams.delete('category');
+      }
+      url.searchParams.delete('grade');
       window.history.replaceState({}, '', url);
     } catch (e) {
       // Fallback
@@ -2585,15 +2664,29 @@ function initProgramFilters() {
       visibleLimit = PROGRAMS_PAGE_SIZE;
     }
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    let rawLevel = levelSelect ? levelSelect.value.toLowerCase().trim() : 'all';
-    // Fallback if legacy grade was passed
+
+    // Category filter: from radio options or legacy dropdown
+    const catRadio = document.querySelector('input[name="program-category"]:checked');
+    const selectedCategory = catRadio ? catRadio.value : (trackSelect ? trackSelect.value : 'all');
+
+    // Duration filter: from radio options
+    const durRadio = document.querySelector('input[name="program-duration"]:checked');
+    const selectedDuration = durRadio ? durRadio.value : 'all';
+
+    // Learning level filter: from radio options, dropdown, or pills
+    const levelRadio = document.querySelector('input[name="program-level"]:checked');
+    let rawLevel = levelRadio ? levelRadio.value : (levelSelect ? levelSelect.value : 'all');
+    rawLevel = (rawLevel || 'all').toLowerCase().trim();
     if (rawLevel === 'grade-1') rawLevel = 'foundation';
     else if (rawLevel === 'grade-2' || rawLevel === 'grade-3') rawLevel = 'intermediate';
     else if (rawLevel === 'grade-4' || rawLevel === 'grade-5') rawLevel = 'advanced';
-
     const levelFilter = ['foundation', 'intermediate', 'advanced'].includes(rawLevel) ? rawLevel : 'all';
-    const trackFilter = trackSelect ? trackSelect.value : 'all';
-    const modeFilter = modeSelect ? modeSelect.value : 'all';
+
+    // Sync Level Radio if different
+    if (levelRadio && levelRadio.value !== levelFilter) {
+      const targetRadio = document.querySelector(`input[name="program-level"][value="${levelFilter}"]`);
+      if (targetRadio) targetRadio.checked = true;
+    }
 
     // Sync Level Card UI state
     levelCards.forEach(lCard => {
@@ -2615,7 +2708,7 @@ function initProgramFilters() {
       }
     });
 
-    // Sync Level Select UI state
+    // Sync Level Select UI state (if present)
     if (levelSelect && levelSelect.value !== levelFilter) {
       levelSelect.value = levelFilter;
     }
@@ -2623,129 +2716,84 @@ function initProgramFilters() {
     // Update Level Selector title text
     if (selectedLevelTitle) {
       const lLabel = levelNameMap[levelFilter] || 'All Programs';
-      const tLabel = trackNameMap[trackFilter] || 'All Disciplines';
-      selectedLevelTitle.innerHTML = `Active Filter: <strong>${lLabel}</strong> ${trackFilter !== 'all' ? '&bull; ' + tLabel : ''}`;
+      const cLabel = selectedCategory !== 'all' ? ` • ${selectedCategory}` : '';
+      selectedLevelTitle.innerHTML = `Active Filter: <strong>${lLabel}</strong>${cLabel}`;
     }
 
-    // Update Persona Adaptive Messaging Banner
-    if (personaBanner) {
-      const badgeText = document.getElementById('persona-badge-text');
-      const titleText = document.getElementById('persona-title-text');
-      const messageText = document.getElementById('persona-message-text');
-
-      if (levelFilter !== 'all' || trackFilter !== 'all' || modeFilter !== 'all' || query !== '') {
-        personaBanner.style.display = 'flex';
-        const lName = levelNameMap[levelFilter] || '';
-        const tName = trackNameMap[trackFilter] || '';
-        if (badgeText) badgeText.textContent = 'Curriculum Level Pathway';
-        if (titleText) {
-          if (levelFilter !== 'all' && trackFilter !== 'all') {
-            titleText.textContent = `${lName} • ${tName}`;
-          } else if (levelFilter !== 'all') {
-            titleText.textContent = `${lName} Selected`;
-          } else if (trackFilter !== 'all') {
-            titleText.textContent = `${tName} Selected`;
-          } else {
-            titleText.textContent = `Search: "${query}"`;
-          }
-        }
-        if (messageText) {
-          if (levelFilter === 'foundation') {
-            messageText.textContent = 'Showing essential clinical examinations, diagnostic fundamentals, and core practical techniques across all programs.';
-          } else if (levelFilter === 'intermediate') {
-            messageText.textContent = 'Showing clinical decision-making, case management, routine surgery, and intermediate diagnostic interpretation.';
-          } else if (levelFilter === 'advanced') {
-            messageText.textContent = 'Showing complex multisystem case management, specialist procedures, advanced surgical interventions, and clinical audits.';
-          } else {
-            messageText.textContent = 'Exploring all 28 accredited veterinary clinical programs and workshops.';
-          }
-        }
-      } else {
-        personaBanner.style.display = 'none';
-      }
-    }
-
-    // Source dataset: all 28 programs
-    const sourceList = (window.VETNOVA_28_PROGRAMS && window.VETNOVA_28_PROGRAMS.length >= 28)
-      ? window.VETNOVA_28_PROGRAMS
-      : (window.VETNOVA_PROGRAMS_DATA || []);
-
-    const matched = sourceList.filter(p => {
+    // Filter matched programs from CMS master dataset
+    const matched = programsData.filter(p => {
       // 1. Text Search matching
-      const matchesQuery = query === "" ||
+      const matchesQuery = query === '' ||
         (p.title && p.title.toLowerCase().includes(query)) ||
         (p.description && p.description.toLowerCase().includes(query)) ||
         (p.category && p.category.toLowerCase().includes(query)) ||
-        (p.slug && p.slug.toLowerCase().includes(query));
+        (p.slug && p.slug.toLowerCase().includes(query)) ||
+        (Array.isArray(p.learningOutcomes) && p.learningOutcomes.some(o => o.toLowerCase().includes(query)));
 
-      // 2. Discipline / Category / Track Filter
-      let matchesTrack = true;
-      if (trackFilter !== "all") {
-        const cat = (p.category || "").toLowerCase();
-        const trk = (p.track || "").toLowerCase();
-        if (trackFilter === "surgery") {
-          matchesTrack = cat.includes("surgery") || trk.includes("surgery") || cat.includes("orthopaedic");
-        } else if (trackFilter === "medicine" || trackFilter === "internal-medicine") {
-          matchesTrack = cat.includes("medicine") || cat.includes("dermatology") || cat.includes("cardiology") || cat.includes("neurology") || cat.includes("oncology") || cat.includes("endocrinology") || cat.includes("nephrology") || cat.includes("gastroenterology");
-        } else if (trackFilter === "diagnostics" || trackFilter === "diagnostic-specialization") {
-          matchesTrack = cat.includes("diagnostic") || cat.includes("imaging") || cat.includes("pathology") || cat.includes("microbiology") || cat.includes("laboratory");
-        } else if (trackFilter === "emergency" || trackFilter === "emergency-care") {
-          matchesTrack = cat.includes("emergency") || cat.includes("critical") || cat.includes("anaesthesia");
-        } else {
-          matchesTrack = cat.includes(trackFilter.toLowerCase()) || trk.includes(trackFilter.toLowerCase());
+      // 2. Category matching
+      let matchesCategory = true;
+      if (selectedCategory && selectedCategory !== 'all') {
+        const cat = (p.category || '').toLowerCase().trim();
+        const sel = selectedCategory.toLowerCase().trim();
+        matchesCategory = cat === sel || cat.includes(sel) || sel.includes(cat);
+      }
+
+      // 3. Duration matching
+      let matchesDuration = true;
+      if (selectedDuration && selectedDuration !== 'all') {
+        const dur = (p.duration || '3 Days').toLowerCase().trim();
+        if (selectedDuration === '3-days') {
+          matchesDuration = dur.includes('3') || dur.includes('day');
+        } else if (selectedDuration === '1-week') {
+          matchesDuration = dur.includes('1 week') || dur.includes('7 day') || dur === '1 week';
+        } else if (selectedDuration === '2-weeks') {
+          matchesDuration = dur.includes('2') || dur.includes('3 week');
+        } else if (selectedDuration === '4-weeks') {
+          matchesDuration = dur.includes('4') || dur.includes('month') || dur.includes('week');
         }
       }
 
-      // 3. Delivery Mode Filter
-      let matchesMode = true;
-      if (modeFilter !== "all") {
-        if (p.deliveryMode) {
-          matchesMode = p.deliveryMode === modeFilter;
-        }
-      }
-
-      return matchesQuery && matchesTrack && matchesMode;
+      return matchesQuery && matchesCategory && matchesDuration;
     });
 
-    // Store current filtered list for Load More pagination
     currentFilteredPrograms = matched;
 
-    // Dynamic Program Count Update - Always reflects TOTAL matching programs
+    // Update program counter
     if (countNumberEl) {
       countNumberEl.textContent = matched.length;
     }
 
-    // Render cards with incremental Load More pagination (max 6 initially)
+    // Render cards
     if (noResultsState && dynamicContainer) {
       if (matched.length === 0) {
-        noResultsState.style.display = "block";
-        dynamicContainer.style.display = "none";
-        dynamicContainer.innerHTML = "";
-        if (loadMoreContainer) {
-          loadMoreContainer.style.display = "none";
-        }
+        noResultsState.style.display = 'block';
+        dynamicContainer.style.display = 'none';
+        dynamicContainer.innerHTML = '';
+        if (loadMoreContainer) loadMoreContainer.style.display = 'none';
       } else {
-        noResultsState.style.display = "none";
-        dynamicContainer.style.display = "grid";
+        noResultsState.style.display = 'none';
+        dynamicContainer.style.display = 'grid';
 
-        // Slice to display up to visibleLimit programs (first 6 initially)
         const visiblePrograms = matched.slice(0, visibleLimit);
 
         dynamicContainer.innerHTML = visiblePrograms.map((p, idx) => {
           const orderNum = p.order || (idx + 1);
-          const hasSyllabus = p.syllabusStatus === "Available";
-          const programTitle = (p.title || "").replace(/^#?\d+[\.\s\-#]+\s*/, "");
-          const categoryBadge = (p.category || "Clinical Track").replace(/^#?\d+[\s\-\•\.\:]+\s*/, "");
+          const hasSyllabus = p.syllabusStatus === 'Available';
+          const programTitle = (p.title || '').replace(/^#?\d+[\.\s\-#]+\s*/, '');
+          const categoryBadge = (p.category || 'Clinical Track').replace(/^#?\d+[\s\-\•\.\:]+\s*/, '');
+          const pImg = p.image || 'assets/images/programs/program-skill-up.webp';
+          const progUrl = resolveProgramUrl(p);
 
-          const pImg = p.image || "assets/images/programs/program-skill-up.webp";
-          const progUrl = p.slug ? `${p.slug}.html` : (p.url || `programs-single.html?slug=${p.slug}`);
+          // Duration & Availability from CMS with consistent standards
+          const durationVal = p.duration || '3 Days';
+          const availabilityVal = p.availability || '24 Hours';
 
-          // Determine Level Specific URL, Action Text & Content
+          // Level stage content
           let viewSyllabusUrl = progUrl;
-          let viewSyllabusText = "Syllabus";
-          let stageContentHTML = "";
-          let topBadgeHTML = "";
-          let levelBadgesHTML = "";
+          let viewSyllabusText = 'Syllabus';
+          let stageContentHTML = '';
+          let topBadgeHTML = '';
+          let levelBadgesHTML = '';
 
           const syllabusFoundation = (p.syllabus && p.syllabus.foundation) || [];
           const syllabusIntermediate = (p.syllabus && p.syllabus.intermediate) || [];
@@ -2753,9 +2801,7 @@ function initProgramFilters() {
 
           if (levelFilter === 'foundation') {
             viewSyllabusUrl = `${progUrl}?level=foundation#curriculum`;
-            viewSyllabusText = "Syllabus";
             topBadgeHTML = `<span class="badge-grade-pill badge-pill-foundation"><i class="fa-solid fa-seedling"></i> Foundation Stage</span>`;
-
             levelBadgesHTML = `
               <div class="card-level-badges">
                 <span class="level-badge badge-foundation active"><i class="fa-solid fa-check"></i> Foundation Active</span>
@@ -2763,17 +2809,16 @@ function initProgramFilters() {
                 <span class="level-badge badge-advanced muted">Advanced</span>
               </div>
             `;
-
             if (syllabusFoundation.length > 0) {
-              const previewTopics = syllabusFoundation.slice(0, 3);
-              const remainingCount = syllabusFoundation.length - previewTopics.length;
+              const preview = syllabusFoundation.slice(0, 3);
+              const remaining = syllabusFoundation.length - preview.length;
               stageContentHTML = `
                 <div class="card-stage-content-box stage-box-foundation">
                   <div class="stage-content-head"><i class="fa-solid fa-stethoscope"></i> <strong>Foundation Modules:</strong></div>
                   <ul class="stage-topics-list">
-                    ${previewTopics.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
+                    ${preview.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
                   </ul>
-                  ${remainingCount > 0 ? `<span class="stage-more-topics">+${remainingCount} more foundation clinical topics in syllabus</span>` : ''}
+                  ${remaining > 0 ? `<span class="stage-more-topics">+${remaining} more foundation clinical topics in syllabus</span>` : ''}
                 </div>
               `;
             } else {
@@ -2786,9 +2831,7 @@ function initProgramFilters() {
             }
           } else if (levelFilter === 'intermediate') {
             viewSyllabusUrl = `${progUrl}?level=intermediate#curriculum`;
-            viewSyllabusText = "Syllabus";
             topBadgeHTML = `<span class="badge-grade-pill badge-pill-intermediate"><i class="fa-solid fa-chart-line"></i> Intermediate Stage</span>`;
-
             levelBadgesHTML = `
               <div class="card-level-badges">
                 <span class="level-badge badge-foundation muted">Foundation</span>
@@ -2796,17 +2839,16 @@ function initProgramFilters() {
                 <span class="level-badge badge-advanced muted">Advanced</span>
               </div>
             `;
-
             if (syllabusIntermediate.length > 0) {
-              const previewTopics = syllabusIntermediate.slice(0, 3);
-              const remainingCount = syllabusIntermediate.length - previewTopics.length;
+              const preview = syllabusIntermediate.slice(0, 3);
+              const remaining = syllabusIntermediate.length - preview.length;
               stageContentHTML = `
                 <div class="card-stage-content-box stage-box-intermediate">
                   <div class="stage-content-head"><i class="fa-solid fa-user-doctor"></i> <strong>Intermediate Modules:</strong></div>
                   <ul class="stage-topics-list">
-                    ${previewTopics.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
+                    ${preview.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
                   </ul>
-                  ${remainingCount > 0 ? `<span class="stage-more-topics">+${remainingCount} more intermediate clinical topics in syllabus</span>` : ''}
+                  ${remaining > 0 ? `<span class="stage-more-topics">+${remaining} more intermediate clinical topics in syllabus</span>` : ''}
                 </div>
               `;
             } else {
@@ -2819,9 +2861,7 @@ function initProgramFilters() {
             }
           } else if (levelFilter === 'advanced') {
             viewSyllabusUrl = `${progUrl}?level=advanced#curriculum`;
-            viewSyllabusText = "Syllabus";
             topBadgeHTML = `<span class="badge-grade-pill badge-pill-advanced"><i class="fa-solid fa-award"></i> Advanced Stage</span>`;
-
             levelBadgesHTML = `
               <div class="card-level-badges">
                 <span class="level-badge badge-foundation muted">Foundation</span>
@@ -2829,17 +2869,16 @@ function initProgramFilters() {
                 <span class="level-badge badge-advanced active"><i class="fa-solid fa-check"></i> Advanced Active</span>
               </div>
             `;
-
             if (syllabusAdvanced.length > 0) {
-              const previewTopics = syllabusAdvanced.slice(0, 3);
-              const remainingCount = syllabusAdvanced.length - previewTopics.length;
+              const preview = syllabusAdvanced.slice(0, 3);
+              const remaining = syllabusAdvanced.length - preview.length;
               stageContentHTML = `
                 <div class="card-stage-content-box stage-box-advanced">
                   <div class="stage-content-head"><i class="fa-solid fa-brain"></i> <strong>Advanced Modules:</strong></div>
                   <ul class="stage-topics-list">
-                    ${previewTopics.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
+                    ${preview.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
                   </ul>
-                  ${remainingCount > 0 ? `<span class="stage-more-topics">+${remainingCount} more advanced specialist topics in syllabus</span>` : ''}
+                  ${remaining > 0 ? `<span class="stage-more-topics">+${remaining} more advanced specialist topics in syllabus</span>` : ''}
                 </div>
               `;
             } else {
@@ -2851,9 +2890,8 @@ function initProgramFilters() {
               `;
             }
           } else {
-            // 'all' Levels
+            // All levels
             viewSyllabusUrl = progUrl;
-            viewSyllabusText = "Syllabus";
             topBadgeHTML = hasSyllabus
               ? `<span class="badge-grade-pill" style="background:#1e7e44;color:#fff;"><i class="fa-solid fa-circle-check"></i> Three-Stage Syllabus</span>`
               : `<span class="badge-grade-pill" style="background:#b87314;color:#fff;"><i class="fa-solid fa-clock"></i> Syllabus in Review</span>`;
@@ -2867,12 +2905,8 @@ function initProgramFilters() {
             `;
           }
 
-          const enquireContext = levelFilter !== 'all'
-            ? `${programTitle} (${levelNameMap[levelFilter]})`
-            : programTitle;
-
           return `
-            <div class="program-card" data-order="${orderNum}" data-slug="${p.slug || ""}" data-category="${p.category || ""}">
+            <div class="program-card" data-order="${orderNum}" data-slug="${p.slug || ''}" data-category="${p.category || ''}">
               <div class="program-card-media" style="position: relative;">
                 <div class="card-grade-badge-wrap" style="position: absolute; top: 12px; left: 12px; z-index: 2;">
                   <span class="badge-grade-pill" style="background: rgba(15, 45, 74, 0.9); color: #fff;">${categoryBadge}</span>
@@ -2885,11 +2919,11 @@ function initProgramFilters() {
               <div class="program-card-body">
                 ${levelBadgesHTML}
                 <h3 class="program-card-title"><a href="${viewSyllabusUrl}">${programTitle}</a></h3>
-                <p class="program-card-desc">${p.description || ""}</p>
+                <p class="program-card-desc">${p.description || ''}</p>
                 ${stageContentHTML}
-                <div class="program-card-meta" style="margin-top: 12px; font-size: 0.84rem; color: #475569; display: flex; flex-wrap: wrap; gap: 12px;">
-                  <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> ${p.duration || "2 to 4 Weeks"}</div>
-                  <div class="meta-item"><i class="fa-solid fa-hospital text-teal"></i> Offline Vet Lab</div>
+                <div class="program-card-meta">
+                  <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> ${durationVal}</div>
+                  <div class="meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> <strong>Availability:</strong> ${availabilityVal}</div>
                 </div>
                 <div class="program-card-footer">
                   <div class="program-card-price-row">
@@ -2899,42 +2933,55 @@ function initProgramFilters() {
                   </div>
                   <div class="program-card-actions">
                     <a class="btn btn-outline btn-sm" href="${viewSyllabusUrl}">${viewSyllabusText} <i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="contact.html?program=${encodeURIComponent(p.slug || p.id || programTitle)}#contact-form" class="btn btn-primary btn-sm">Enquire Now</a>
+                    <a href="${progUrl}" class="btn btn-primary btn-sm btn-enquire-card">Enquire Now</a>
                   </div>
                 </div>
               </div>
             </div>
           `;
-        }).join("");
+        }).join('');
 
-        // Manage Load More button visibility and showing status
         if (loadMoreContainer) {
           if (visibleLimit < matched.length) {
-            loadMoreContainer.style.display = "flex";
+            loadMoreContainer.style.display = 'block';
             if (showingCurrentEl) showingCurrentEl.textContent = visiblePrograms.length;
             if (showingTotalEl) showingTotalEl.textContent = matched.length;
           } else {
-            loadMoreContainer.style.display = "none";
+            loadMoreContainer.style.display = 'none';
           }
         }
       }
     }
 
-    updateRelatedPrograms(trackFilter);
+    if (typeof updateRelatedPrograms === 'function') {
+      updateRelatedPrograms(selectedCategory);
+    }
   }
 
   function resetAllFilters() {
     if (searchInput) searchInput.value = '';
+
+    const allCatRadio = document.querySelector('input[name="program-category"][value="all"]');
+    if (allCatRadio) allCatRadio.checked = true;
+
+    const allDurRadio = document.querySelector('input[name="program-duration"][value="all"]');
+    if (allDurRadio) allDurRadio.checked = true;
+
+    const allLvlRadio = document.querySelector('input[name="program-level"][value="all"]');
+    if (allLvlRadio) allLvlRadio.checked = true;
+
     if (levelSelect) levelSelect.value = 'all';
     if (trackSelect) trackSelect.value = 'all';
     if (modeSelect) modeSelect.value = 'all';
     if (personaBanner) personaBanner.style.display = 'none';
+
     levelCards.forEach(c => c.classList.remove('active'));
     levelPills.forEach(p => {
       if (p.dataset.level === 'all') p.classList.add('active');
       else p.classList.remove('active');
     });
-    updateUrlParam('all');
+
+    updateUrlParam('all', 'all');
     filterPrograms(true);
   }
 
@@ -2944,9 +2991,8 @@ function initProgramFilters() {
       if (visibleLimit < currentFilteredPrograms.length) {
         const prevCount = visibleLimit;
         visibleLimit += PROGRAMS_PAGE_SIZE;
-        filterPrograms(false); // keep previously displayed cards, reveal next chunk
+        filterPrograms(false);
 
-        // Keyboard accessibility: gently move focus to first newly revealed card without layout jump
         const allCards = dynamicContainer.querySelectorAll('.program-card');
         if (allCards && allCards[prevCount]) {
           const firstNewLink = allCards[prevCount].querySelector('.program-card-title a') || allCards[prevCount];
@@ -2959,8 +3005,36 @@ function initProgramFilters() {
     });
   }
 
-  // Bind Event Listeners (all reset pagination to initial 6)
+  // Mobile sidebar filter toggle handler
+  if (filterToggleBtn && filterSidebar) {
+    filterToggleBtn.addEventListener('click', () => {
+      const isOpen = filterSidebar.classList.toggle('is-open');
+      filterToggleBtn.setAttribute('aria-expanded', String(isOpen));
+      filterToggleBtn.innerHTML = isOpen
+        ? '<i class="fa-solid fa-xmark"></i> <span>Close Filters</span>'
+        : '<i class="fa-solid fa-sliders"></i> <span>Filter Programs</span>';
+    });
+  }
+
+  // Bind Event Listeners
   if (searchInput) searchInput.addEventListener('input', () => filterPrograms(true));
+  if (sidebarClearBtn) sidebarClearBtn.addEventListener('click', resetAllFilters);
+  if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', resetAllFilters);
+  if (personaCloseBtn) personaCloseBtn.addEventListener('click', resetAllFilters);
+
+  // Duration radio buttons
+  document.querySelectorAll('input[name="program-duration"]').forEach(radio => {
+    radio.addEventListener('change', () => filterPrograms(true));
+  });
+
+  // Level radio buttons
+  document.querySelectorAll('input[name="program-level"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      updateUrlParam(e.target.value);
+      filterPrograms(true);
+    });
+  });
+
   if (levelSelect) {
     levelSelect.addEventListener('change', () => {
       updateUrlParam(levelSelect.value);
@@ -2969,8 +3043,6 @@ function initProgramFilters() {
   }
   if (trackSelect) trackSelect.addEventListener('change', () => filterPrograms(true));
   if (modeSelect) modeSelect.addEventListener('change', () => filterPrograms(true));
-  if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', resetAllFilters);
-  if (personaCloseBtn) personaCloseBtn.addEventListener('click', resetAllFilters);
 
   // Level Card Click Handlers
   levelCards.forEach(lCard => {
@@ -2981,14 +3053,19 @@ function initProgramFilters() {
       else if (selectedL === 'grade-2') targetLevel = 'intermediate';
       else if (selectedL === 'grade-3' || selectedL === 'grade-4' || selectedL === 'grade-5') targetLevel = 'advanced';
 
+      const targetRadio = document.querySelector(`input[name="program-level"][value="${targetLevel}"]`);
+      if (targetRadio) {
+        targetRadio.checked = true;
+      }
       if (levelSelect) {
-        if (levelSelect.value === targetLevel) {
-          levelSelect.value = 'all';
-        } else {
-          levelSelect.value = targetLevel;
-        }
-        updateUrlParam(levelSelect.value);
-        filterPrograms();
+        levelSelect.value = targetLevel;
+      }
+      updateUrlParam(targetLevel);
+      filterPrograms(true);
+
+      const catalogSec = document.getElementById('all-programs');
+      if (catalogSec) {
+        catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   });
@@ -2997,47 +3074,104 @@ function initProgramFilters() {
   levelPills.forEach(lPill => {
     lPill.addEventListener('click', () => {
       const selectedL = lPill.dataset.level;
+      const targetRadio = document.querySelector(`input[name="program-level"][value="${selectedL}"]`);
+      if (targetRadio) {
+        targetRadio.checked = true;
+      }
       if (levelSelect) {
         levelSelect.value = selectedL;
-        updateUrlParam(selectedL);
-        filterPrograms();
       }
+      updateUrlParam(selectedL);
+      filterPrograms(true);
     });
   });
+
+  // Initial population of categories and initial rendering
+  populateCategoryOptions(programsData);
 
   // URL Parameter auto-selection
   const urlParams = new URLSearchParams(window.location.search);
   let paramTriggered = false;
-  if (urlParams.has('level') && levelSelect) {
-    const lvl = urlParams.get('level').toLowerCase().trim();
-    if (['foundation', 'intermediate', 'advanced', 'all'].includes(lvl)) {
-      levelSelect.value = lvl;
-      paramTriggered = true;
+
+  // Level or Grade parameter
+  let targetLvl = null;
+  if (urlParams.has('level')) {
+    targetLvl = urlParams.get('level').toLowerCase().trim();
+  } else if (urlParams.has('grade')) {
+    const grd = urlParams.get('grade').toLowerCase().trim();
+    if (grd.includes('1')) targetLvl = 'foundation';
+    else if (grd.includes('2') || grd.includes('3')) targetLvl = 'intermediate';
+    else if (grd.includes('4') || grd.includes('5')) targetLvl = 'advanced';
+  }
+  if (targetLvl && ['foundation', 'intermediate', 'advanced', 'all'].includes(targetLvl)) {
+    const radio = document.querySelector(`input[name="program-level"][value="${targetLvl}"]`);
+    if (radio) radio.checked = true;
+    if (levelSelect) levelSelect.value = targetLvl;
+    paramTriggered = true;
+  }
+
+  // Category or Track parameter
+  let targetCat = null;
+  if (urlParams.has('category')) {
+    targetCat = urlParams.get('category').toLowerCase().trim();
+  } else if (urlParams.has('track')) {
+    const trk = urlParams.get('track').toLowerCase().trim();
+    const trackToCatMap = {
+      'vet-nurse': 'veterinary nursing',
+      'emergency-care': 'emergency & critical care',
+      'diagnostic-specialization': 'diagnostics & imaging',
+      'surgery': 'surgery'
+    };
+    if (trackToCatMap[trk]) {
+      targetCat = trackToCatMap[trk];
     }
-  } else if (urlParams.has('grade') && levelSelect) {
-    const grd = urlParams.get('grade').toLowerCase();
-    if (grd.includes('1') || grd.includes('basic')) levelSelect.value = 'foundation';
-    else if (grd.includes('2') || grd.includes('intermediate')) levelSelect.value = 'intermediate';
-    else if (grd.includes('3') || grd.includes('4') || grd.includes('5') || grd.includes('advanced')) levelSelect.value = 'advanced';
-    paramTriggered = true;
+  }
+  if (targetCat) {
+    const allRadios = document.querySelectorAll('input[name="program-category"]');
+    for (const radio of allRadios) {
+      if (radio.value.toLowerCase() === targetCat) {
+        radio.checked = true;
+        paramTriggered = true;
+        break;
+      }
+    }
   }
 
-  if (urlParams.has('track') && trackSelect) {
-    trackSelect.value = urlParams.get('track');
-    paramTriggered = true;
-  }
-
-  // Initial Execution
-  filterPrograms();
+  // First render
+  filterPrograms(true);
 
   if (paramTriggered) {
-    const filterSec = document.getElementById('choose-learning-level') || document.getElementById('choose-learning-grade') || document.getElementById('all-programs');
+    const filterSec = document.getElementById('all-programs');
     if (filterSec) {
       setTimeout(() => {
         filterSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 300);
     }
   }
+
+  // Fetch live programs from MERN CMS API asynchronously
+  if (typeof getPrograms === 'function') {
+    try {
+      const live = await getPrograms({ status: 'Published' });
+      if (Array.isArray(live) && live.length > 0) {
+        programsData = live;
+        window.VETNOVA_LIVE_PROGRAMS = live;
+        populateCategoryOptions(programsData);
+        filterPrograms(false);
+      }
+    } catch (e) {
+      console.warn('Live programs sync fallback to local store:', e);
+    }
+  }
+
+  // Also listen for vetnova:programs-synced event
+  window.addEventListener('vetnova:programs-synced', (e) => {
+    if (Array.isArray(e.detail) && e.detail.length > 0) {
+      programsData = e.detail;
+      populateCategoryOptions(programsData);
+      filterPrograms(false);
+    }
+  });
 }
 
 /* Single Program Page Learning Level Context Representation */
@@ -3081,49 +3215,49 @@ function updateRelatedPrograms(activeTrack) {
 
   const allRelatedCards = [
     {
-      track: 'practicing-vets',
-      badge: 'PRACTICING VETS TRACK',
+      track: 'surgery',
+      badge: 'SURGERY TRACK',
       title: 'Soft Tissue Surgery Track',
       desc: 'Intensive surgical workshop covering sterile setup, tissue handling, and suture patterns.',
       price: '₹18,500',
-      href: 'soft-tissue-surgery.html?grade=grade-2',
+      href: 'soft-tissue-surgery.html',
       img: 'assets/images/programs/program-surgery.webp'
     },
     {
-      track: 'diagnostic-specialization',
-      badge: 'DIAGNOSTIC SPECIALIZATION',
+      track: 'radiology',
+      badge: 'DIAGNOSTICS TRACK',
       title: 'Radiology & Ultrasound Masterclass',
       desc: 'Radiograph reading & hands-on abdominal ultrasound FAST scanning.',
       price: '₹16,000',
-      href: 'radiology-ultrasound.html?grade=grade-2',
+      href: 'radiology-ultrasound.html',
       img: 'assets/images/programs/program-radiology.webp'
     },
     {
-      track: 'emergency-care',
-      badge: 'EMERGENCY & CRITICAL CARE',
+      track: 'emergency',
+      badge: 'EMERGENCY TRACK',
       title: 'Pet Emergency & Critical Care',
       desc: 'Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and triage.',
       price: '₹12,500',
-      href: 'emergency-medicine.html?grade=grade-3',
+      href: 'emergency-medicine.html',
       img: 'assets/images/programs/program-emergency.webp'
     },
     {
-      track: 'fresh-graduates',
-      badge: 'FRESH GRADUATES TRACK',
-      title: 'Veterinary Skill-Up Program',
-      desc: 'Comprehensive 4-week clinical mastery covering surgery, X-ray, ultrasound, and ICU.',
-      price: '₹38,000',
-      href: 'veterinary-skill-up.html?grade=grade-1',
+      track: 'medicine',
+      badge: 'INTERNAL MEDICINE',
+      title: 'General Medicine & Diagnostics',
+      desc: 'Systematic clinical diagnostic and therapeutic protocols for small animal internal medicine practice.',
+      price: '₹15,000',
+      href: 'general-medicine.html',
       img: 'assets/images/programs/program-skill-up.webp'
     },
     {
-      track: 'vet-nurse',
-      badge: 'VET NURSE TRACK',
-      title: 'Vet Nurse Foundation Certificate',
-      desc: 'Foundational practical training for clinic assistants and paravet staff.',
-      price: '₹9,500',
-      href: 'vet-nurse-programme.html?grade=grade-1',
-      img: 'assets/images/programs/program-nurse.webp'
+      track: 'orthopaedics',
+      badge: 'ORTHOPAEDIC SURGERY',
+      title: 'Small Animal Orthopaedics',
+      desc: 'Hands-on bone plating, fracture stabilization, pinning, and post-op radiograph evaluation.',
+      price: '₹19,500',
+      href: 'orthopaedics.html',
+      img: 'assets/images/programs/program-orthopaedics.webp'
     }
   ];
 
@@ -3132,12 +3266,16 @@ function updateRelatedPrograms(activeTrack) {
   relatedGrid.innerHTML = itemsToDisplay.map(item => `
     <div class="program-card related-card" data-track="${item.track}" onclick="window.location.href='${item.href}';">
       <div class="program-card-media">
-        <span class="program-card-badge ${item.track === 'emergency-care' ? 'emergency' : ''}">${item.badge}</span>
+        <span class="program-card-badge ${item.track === 'emergency' ? 'emergency' : ''}">${item.badge}</span>
         <img src="${item.img}" alt="${item.title}" loading="lazy" decoding="async" />
       </div>
       <div class="program-card-body">
         <h3 class="program-card-title"><a href="${item.href}">${item.title}</a></h3>
         <p class="program-card-desc">${item.desc}</p>
+        <div class="program-card-meta">
+          <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> 3 Days</div>
+          <div class="meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> <strong>Availability:</strong> 24 Hours</div>
+        </div>
         <div class="program-card-footer">
           <div class="program-card-price">${item.price} <small>+ GST</small></div>
           <a class="btn btn-outline btn-sm" href="${item.href}">View Program <i class="fa-solid fa-arrow-right"></i></a>
@@ -3184,7 +3322,7 @@ function initFaqSearch() {
 }
 
 /* ==========================================================================
-   Popular Courses Category Filter Controller (100% Isolated)
+   Popular Courses Category Filter Controller (100% Isolated & CMS Synced)
    ========================================================================== */
 function initPopularCoursesFilter() {
   const pills = document.querySelectorAll('.popular-course-filter-pill');
@@ -3225,6 +3363,81 @@ function initPopularCoursesFilter() {
     });
   }
 
+  // Live CMS Synchronization for Popular Courses cards
+  function syncCardsWithLivePrograms(programs) {
+    if (!Array.isArray(programs) || programs.length === 0) return;
+
+    cards.forEach(card => {
+      const link = card.querySelector('.popular-course-card-actions a')?.getAttribute('href') || '';
+      const slug = link.replace(/\.html.*$/, '').replace(/^.*\//, '');
+      const liveP = programs.find(p => p.slug === slug);
+      if (liveP) {
+        const titleEl = card.querySelector('.popular-course-card-title');
+        if (titleEl && liveP.title) titleEl.textContent = liveP.title;
+        const descEl = card.querySelector('.popular-course-card-desc');
+        if (descEl && (liveP.shortDescription || liveP.description)) {
+          descEl.textContent = liveP.shortDescription || liveP.description;
+        }
+        const imgEl = card.querySelector('.popular-course-image');
+        if (imgEl && liveP.image) imgEl.src = liveP.image;
+        if (liveP.duration) {
+          const durEl = card.querySelector('.popular-course-meta-bar .popular-course-meta-item:first-child');
+          if (durEl) durEl.innerHTML = `<i class="fa-regular fa-clock"></i> ${liveP.duration}`;
+        }
+        if (liveP.availability) {
+          const availEl = card.querySelector('.popular-course-meta-bar .popular-course-meta-item:nth-child(2)');
+          if (availEl) availEl.innerHTML = `<i class="fa-solid fa-calendar-check text-teal"></i> ${liveP.availability}`;
+        }
+      }
+    });
+
+    // Dynamically append newly added published programs from CMS if not in HTML
+    programs.forEach(liveP => {
+      if (!liveP.slug || liveP.status === 'Draft') return;
+      const existing = grid.querySelector(`[href*="${liveP.slug}"]`);
+      if (!existing && liveP.status === 'Published') {
+        const newCard = document.createElement('div');
+        newCard.className = 'popular-course-card dynamic-cms-card';
+        newCard.setAttribute('data-category', (liveP.category || 'medicine').toLowerCase());
+        newCard.style.display = 'none';
+        newCard.style.opacity = '0';
+        
+        const progUrl = liveP.slug.endsWith('.html') ? liveP.slug : `${liveP.slug}.html`;
+        const highlightsHtml = (liveP.learningOutcomes && liveP.learningOutcomes.length > 0)
+          ? liveP.learningOutcomes.slice(0, 2).map(h => `<li class="popular-course-highlight-item"><i class="fa-solid fa-check"></i> ${h}</li>`).join('')
+          : `<li class="popular-course-highlight-item"><i class="fa-solid fa-check"></i> Supervised clinical execution</li><li class="popular-course-highlight-item"><i class="fa-solid fa-check"></i> Verified competency certificate</li>`;
+
+        newCard.innerHTML = `
+          <div class="popular-course-image-frame">
+            <img src="${liveP.image || 'assets/images/programs/program-skill-up.webp'}" alt="${liveP.title}" class="popular-course-image" loading="lazy" decoding="async" />
+            <span class="popular-course-badge">${(liveP.category || 'Clinical').split(' ')[0]}</span>
+          </div>
+          <div class="popular-course-body">
+            <div class="popular-course-meta-bar">
+              <span class="popular-course-meta-item"><i class="fa-regular fa-clock"></i> ${liveP.duration || '3 Days'}</span>
+              <span class="popular-course-meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> ${liveP.availability || '24 Hours'}</span>
+              <span class="popular-course-level-tag">Accredited</span>
+            </div>
+            <h3 class="popular-course-card-title">${liveP.title}</h3>
+            <p class="popular-course-card-desc">${liveP.shortDescription || liveP.description || ''}</p>
+            <ul class="popular-course-highlights">
+              ${highlightsHtml}
+            </ul>
+            <div class="popular-course-card-actions">
+              <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm" href="${progUrl}">Enquire</a>
+              <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm" href="${progUrl}">View Program</a>
+            </div>
+          </div>
+        `;
+        grid.appendChild(newCard);
+      }
+    });
+
+    cards = grid.querySelectorAll('.popular-course-card');
+    const curPill = document.querySelector('.popular-course-filter-pill.active');
+    filterCards(curPill ? (curPill.dataset.filter || 'all') : 'all');
+  }
+
   // Enforce initial 4-card display limit on page load
   const activePill = document.querySelector('.popular-course-filter-pill.active');
   const initialFilter = activePill ? (activePill.dataset.filter || 'all') : 'all';
@@ -3238,6 +3451,14 @@ function initPopularCoursesFilter() {
       const filter = pill.dataset.filter || 'all';
       filterCards(filter);
     });
+  });
+
+  // Check if live programs are already loaded or listen for sync event
+  if (window.VETNOVA_LIVE_PROGRAMS) {
+    syncCardsWithLivePrograms(window.VETNOVA_LIVE_PROGRAMS);
+  }
+  window.addEventListener('vetnova:programs-synced', (e) => {
+    syncCardsWithLivePrograms(e.detail);
   });
 }
 
