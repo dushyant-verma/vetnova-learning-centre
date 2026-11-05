@@ -114,9 +114,11 @@ async function initProgramSinglePage() {
   }
 
   // Update inquiry CTAs to include clean program context
-  const applyBtns = document.querySelectorAll(".btn-apply-now, .btn-show-interest, .btn-counselling-modal");
+  const applyBtns = document.querySelectorAll(".btn-apply-now, .btn-show-interest, .btn-counselling-modal, .btn-book-counselling");
   applyBtns.forEach(btn => {
     btn.setAttribute("data-context", cleanTitle);
+    btn.setAttribute("data-program", cleanTitle);
+    btn.setAttribute("data-action", "book-counselling");
     if (btn.tagName.toLowerCase() === "a" && btn.getAttribute("href")?.includes("contact.html")) {
       btn.setAttribute("href", `contact.html?program=${encodeURIComponent(program.slug)}#contact-form`);
     }

@@ -9105,7 +9105,8 @@ section#related-posts {
   padding: 20px;
 }
 
-.modal-overlay.open {
+.modal-overlay.open,
+.modal-overlay.active {
   opacity: 1;
   pointer-events: auto;
 }
@@ -9125,7 +9126,8 @@ section#related-posts {
   padding: 36px 32px;
 }
 
-.modal-overlay.open .modal-box {
+.modal-overlay.open .modal-box,
+.modal-overlay.active .modal-box {
   transform: scale(1) translateY(0);
 }
 

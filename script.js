@@ -1630,10 +1630,92 @@ function initEnquiryModal() {
     };
   }
 
+  const SPECIAL_PROGRAM_TITLES = {
+    'veterinary-skill-up': 'Veterinary Skill-Up Program',
+    'skill-up': 'Veterinary Skill-Up Program',
+    'soft-tissue-surgery': 'Soft Tissue Surgery',
+    'radiology-ultrasound': 'Radiology & Ultrasound',
+    'emergency-medicine': 'Emergency Medicine',
+    'emergency-and-critical-care': 'Emergency and Critical Care',
+    'vet-nurse-programme': 'Vet Nurse Programme',
+    'vet-nurse': 'Vet Nurse Programme'
+  };
+
+  function resolveProgramTitleFromSlug(slug) {
+    if (!slug) return '';
+    const s = slug.toLowerCase().trim().replace(/\.html$/, '');
+    if (SPECIAL_PROGRAM_TITLES[s]) return SPECIAL_PROGRAM_TITLES[s];
+
+    if (Array.isArray(window.VETNOVA_LIVE_PROGRAMS)) {
+      const match = window.VETNOVA_LIVE_PROGRAMS.find(p => (p.slug || '').toLowerCase() === s);
+      if (match && match.title) return match.title;
+    }
+
+    if (Array.isArray(window.VETNOVA_28_PROGRAMS)) {
+      const match = window.VETNOVA_28_PROGRAMS.find(p => (p.slug || '').toLowerCase() === s);
+      if (match && match.title) return match.title;
+    }
+
+    return s.replace(/[-_]+/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  }
+
+  function isSingleProgramPage() {
+    const pathname = window.location.pathname || '';
+    const filename = pathname.split('/').pop().toLowerCase().replace('.html', '').trim();
+    if (filename === 'programs-single') return true;
+    if (typeof KNOWN_STATIC_PROGRAMS !== 'undefined' && KNOWN_STATIC_PROGRAMS.has(filename)) return true;
+    if (document.querySelector('.ps-hero, .program-hero, #upcoming-batches-program, #curriculum, .curriculum-section, .ps-hero-actions')) return true;
+    return false;
+  }
+
+  function detectProgramName(triggerEl) {
+    // 1. From trigger button data attributes
+    if (triggerEl) {
+      if (triggerEl.dataset.program && triggerEl.dataset.program.trim()) {
+        return triggerEl.dataset.program.trim();
+      }
+      if (triggerEl.dataset.context && triggerEl.dataset.context.trim()) {
+        return triggerEl.dataset.context.trim();
+      }
+      const href = triggerEl.getAttribute('href') || '';
+      if (href.includes('program=')) {
+        try {
+          const u = new URL(href, window.location.origin);
+          const p = u.searchParams.get('program');
+          if (p) return resolveProgramTitleFromSlug(p);
+        } catch (e) {}
+      }
+    }
+
+    // 2. From URL query params (e.g. programs-single.html?slug=...)
+    const urlParams = new URLSearchParams(window.location.search);
+    const slugParam = urlParams.get('slug') || urlParams.get('program');
+    if (slugParam) {
+      return resolveProgramTitleFromSlug(slugParam);
+    }
+
+    // 3. From page filename
+    const filename = (window.location.pathname || '').split('/').pop().toLowerCase().replace('.html', '').trim();
+    if (filename && !['index', 'programs', 'contact', 'about', 'blog', 'faq', 'faculty', 'facility-tour'].includes(filename)) {
+      return resolveProgramTitleFromSlug(filename);
+    }
+
+    // 4. From H1 on the page
+    const h1 = document.querySelector('.ps-hero-content h1, .program-hero h1, h1');
+    if (h1) {
+      const text = h1.textContent.trim().replace(/^#?\d+[\.\s\-#]+\s*/, '');
+      if (text && !text.toLowerCase().includes('practical veterinary programs') && !text.toLowerCase().includes('welcome')) {
+        return text;
+      }
+    }
+
+    return '';
+  }
+
   function closeModal() {
     const els = getModalElements();
     if (!els || !els.modal) return;
-    els.modal.classList.remove('open');
+    els.modal.classList.remove('open', 'active');
     document.body.style.overflow = '';
     if (els.form) {
       delete els.form.dataset.source;
@@ -1645,10 +1727,26 @@ function initEnquiryModal() {
     }
   }
 
-  function openModal(e, options = {}) {
+  async function openModal(e, options = {}) {
     if (e && e.preventDefault) e.preventDefault();
 
-    const els = getModalElements();
+    let els = getModalElements();
+    if (!els || !els.modal) {
+      // If modal not yet injected into #global-footer, fetch it immediately
+      const footer = document.getElementById('global-footer');
+      if (footer && (!footer.children || footer.children.length === 0)) {
+        try {
+          const res = await fetch('components/footer.html');
+          if (res.ok) {
+            footer.innerHTML = await res.text();
+            els = getModalElements();
+          }
+        } catch (err) {
+          console.warn('[EnquiryModal] Error loading footer modal:', err);
+        }
+      }
+    }
+
     if (!els || !els.modal) {
       console.warn('[EnquiryModal] Modal element not found in DOM');
       return;
@@ -1672,12 +1770,17 @@ function initEnquiryModal() {
     // Clear input error highlights
     els.modal.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 
+    // Detect target program
+    const targetProgram = options.program || detectProgramName(options.triggerEl || (e ? e.currentTarget || e.target : null));
+
     // Configure Header Texts
     if (els.modalTitle) {
       els.modalTitle.textContent = options.title || 'Book a Counselling Session';
     }
     if (els.modalDesc) {
-      els.modalDesc.textContent = options.subtitle || 'Speak with our team to find the right veterinary learning programme for your goals.';
+      els.modalDesc.textContent = options.subtitle || (targetProgram
+        ? `Speak with our admissions mentors regarding the ${targetProgram} program.`
+        : 'Speak with our team to find the right veterinary learning programme for your goals.');
     }
 
     // Configure Submit Button Text
@@ -1693,49 +1796,57 @@ function initEnquiryModal() {
     }
 
     // Preselect Program if specified or detected
-    if (els.programSelect) {
-      let targetProgram = options.program || '';
-      if (!targetProgram) {
-        // Auto-detect from page URL/slug if on an individual program page
-        const path = window.location.pathname.split('/').pop().replace('.html', '');
-        if (window.VETNOVA_28_PROGRAMS && Array.isArray(window.VETNOVA_28_PROGRAMS)) {
-          const match = window.VETNOVA_28_PROGRAMS.find(p => p.slug === path);
-          if (match) targetProgram = match.title;
-        }
-        if (!targetProgram) {
-          const h1 = document.querySelector('h1');
-          if (h1) {
-            const h1Text = h1.textContent.trim().toLowerCase();
-            for (let i = 0; i < els.programSelect.options.length; i++) {
-              const optVal = els.programSelect.options[i].value.toLowerCase();
-              if (optVal && h1Text.includes(optVal)) {
-                targetProgram = els.programSelect.options[i].value;
-                break;
-              }
-            }
-          }
+    if (els.programSelect && targetProgram) {
+      const lowerTarget = targetProgram.toLowerCase().trim();
+      let matchedIndex = -1;
+
+      for (let i = 0; i < els.programSelect.options.length; i++) {
+        const opt = els.programSelect.options[i];
+        const val = (opt.value || '').toLowerCase().trim();
+        const txt = (opt.text || '').toLowerCase().trim();
+        if (val === lowerTarget || txt === lowerTarget || txt.replace(/^\d+[\.\s\-#]+\s*/, '') === lowerTarget) {
+          matchedIndex = i;
+          break;
         }
       }
 
-      if (targetProgram) {
-        const lowerTarget = targetProgram.toLowerCase();
+      if (matchedIndex === -1) {
         for (let i = 0; i < els.programSelect.options.length; i++) {
           const opt = els.programSelect.options[i];
-          if (opt.value && (opt.value.toLowerCase() === lowerTarget || opt.text.toLowerCase().includes(lowerTarget))) {
-            els.programSelect.selectedIndex = i;
+          const val = (opt.value || '').toLowerCase().trim();
+          const txt = (opt.text || '').toLowerCase().trim();
+          if (val && (lowerTarget.includes(val) || val.includes(lowerTarget))) {
+            matchedIndex = i;
             break;
           }
         }
       }
+
+      if (matchedIndex !== -1) {
+        els.programSelect.selectedIndex = matchedIndex;
+      } else {
+        const newOpt = document.createElement('option');
+        newOpt.value = targetProgram;
+        newOpt.textContent = targetProgram;
+        newOpt.selected = true;
+        els.programSelect.appendChild(newOpt);
+        els.programSelect.value = targetProgram;
+      }
+
+      if (els.form) {
+        els.form.dataset.targetProgram = targetProgram;
+      }
     }
 
-    // Prefill Message
+    // Prefill Message or Placeholder
     if (options.message && els.messageInput) {
       els.messageInput.value = options.message;
+    } else if (els.messageInput && targetProgram && !els.messageInput.value) {
+      els.messageInput.placeholder = `Tell us about your learning goals or questions for ${targetProgram}...`;
     }
 
     // Open Modal & Lock Body Scroll
-    els.modal.classList.add('open');
+    els.modal.classList.add('open', 'active');
     document.body.style.overflow = 'hidden';
 
     // Set initial focus to Name field
@@ -1753,7 +1864,7 @@ function initEnquiryModal() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       const els = getModalElements();
-      if (els && els.modal && els.modal.classList.contains('open')) {
+      if (els && els.modal && (els.modal.classList.contains('open') || els.modal.classList.contains('active'))) {
         closeModal();
       }
     }
@@ -1775,31 +1886,54 @@ function initEnquiryModal() {
       return;
     }
 
-    // 3. Book Counselling triggers
-    const triggerBtn = e.target.closest(
-      '.btn-counselling-pill, #header-counselling-btn, .header-counselling-btn, .btn-counselling-modal, .btn-book-counselling, [data-action="book-counselling"]'
-    ) || (e.target.closest('a, button') && (e.target.closest('a, button').textContent || '').trim().toLowerCase().includes('book counselling') ? e.target.closest('a, button') : null);
+    // 3. Book Counselling triggers across all single program pages & site
+    const candidateBtn = e.target.closest('a, button, [role="button"]');
+    let triggerBtn = null;
+
+    if (candidateBtn) {
+      const href = (candidateBtn.getAttribute('href') || '').trim();
+      const text = (candidateBtn.textContent || '').trim().toLowerCase().replace(/\s+/g, ' ');
+
+      // Exclude telephone, email, WhatsApp, or pure social links
+      const isExternalOrDirect = href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('https://wa.me') || href.startsWith('whatsapp:');
+
+      if (!isExternalOrDirect) {
+        // Explicit classes / attributes
+        const hasExplicitClass = candidateBtn.matches(
+          '.btn-counselling-pill, #header-counselling-btn, .header-counselling-btn, .btn-counselling-modal, .btn-book-counselling, [data-action="book-counselling"], .btn-show-counselling'
+        );
+
+        // Counselling text anywhere in button (catches "Book free Counselling", "Book Free Counselling", "Book Counselling", etc.)
+        const hasCounsellingText = text.includes('counselling') || text.includes('counseling');
+
+        // On single program pages: catch .btn-apply-now or links to contact.html?program=
+        const onProgPage = isSingleProgramPage();
+        const hasProgramCtaClass = candidateBtn.classList.contains('btn-apply-now');
+        const hasProgramContactLink = href.includes('contact.html') && (href.includes('program=') || onProgPage);
+
+        if (hasExplicitClass || hasCounsellingText || (onProgPage && (hasProgramCtaClass || hasProgramContactLink))) {
+          // If on contact.html itself and clicking an in-page anchor (#contact-form, #enquiry), allow natural in-page scrolling unless in header
+          const isContactPage = window.location.pathname.endsWith('contact.html');
+          const isNavOrSticky = candidateBtn.closest('#global-header, .topbar, .drawer-menu, .mobile-stick');
+          if (!(isContactPage && (href === '#contact-form' || href === '#enquiry') && !isNavOrSticky)) {
+            triggerBtn = candidateBtn;
+          }
+        }
+      }
+    }
 
     if (triggerBtn) {
-      const href = triggerBtn.getAttribute('href') || '';
-      // Don't intercept telephone dialing links
-      if (href.startsWith('tel:')) return;
-
-      // Check if on contact.html and clicking internal section anchor
-      const isContactPage = window.location.pathname.endsWith('contact.html');
-      const isNavOrSticky = triggerBtn.closest('#global-header, .topbar, .drawer-menu, .mobile-stick');
-      if (isContactPage && (href === '#contact-form' || href === '#enquiry') && !isNavOrSticky) {
-        return; // Allow smooth in-page jump
-      }
-
       e.preventDefault();
       e.stopPropagation();
 
+      const progName = detectProgramName(triggerBtn);
       openModal(e, {
         title: 'Book a Counselling Session',
-        subtitle: 'Speak with our team to find the right veterinary learning programme for your goals.',
-        source: triggerBtn.dataset.source || 'Book Counselling Button',
-        program: triggerBtn.dataset.program || '',
+        subtitle: progName
+          ? `Speak with our admissions mentors regarding the ${progName} program.`
+          : 'Speak with our team to find the right veterinary learning programme for your goals.',
+        source: triggerBtn.dataset.source || (progName ? `Program Page - ${progName}` : 'Book Free Counselling Button'),
+        program: progName,
         triggerEl: triggerBtn
       });
       return;
@@ -2603,7 +2737,8 @@ async function initProgramFilters() {
 
   const levelNameMap = {
     'all': 'All Programs',
-    'foundation': 'Foundation Level',
+    'beginner': 'Beginner Level',
+    'foundation': 'Beginner Level',
     'intermediate': 'Intermediate Level',
     'advanced': 'Advanced Level'
   };
@@ -2669,18 +2804,14 @@ async function initProgramFilters() {
     const catRadio = document.querySelector('input[name="program-category"]:checked');
     const selectedCategory = catRadio ? catRadio.value : (trackSelect ? trackSelect.value : 'all');
 
-    // Duration filter: from radio options
-    const durRadio = document.querySelector('input[name="program-duration"]:checked');
-    const selectedDuration = durRadio ? durRadio.value : 'all';
-
     // Learning level filter: from radio options, dropdown, or pills
     const levelRadio = document.querySelector('input[name="program-level"]:checked');
     let rawLevel = levelRadio ? levelRadio.value : (levelSelect ? levelSelect.value : 'all');
     rawLevel = (rawLevel || 'all').toLowerCase().trim();
-    if (rawLevel === 'grade-1') rawLevel = 'foundation';
+    if (rawLevel === 'foundation' || rawLevel === 'grade-1') rawLevel = 'beginner';
     else if (rawLevel === 'grade-2' || rawLevel === 'grade-3') rawLevel = 'intermediate';
     else if (rawLevel === 'grade-4' || rawLevel === 'grade-5') rawLevel = 'advanced';
-    const levelFilter = ['foundation', 'intermediate', 'advanced'].includes(rawLevel) ? rawLevel : 'all';
+    const levelFilter = ['beginner', 'intermediate', 'advanced'].includes(rawLevel) ? rawLevel : 'all';
 
     // Sync Level Radio if different
     if (levelRadio && levelRadio.value !== levelFilter) {
@@ -2738,22 +2869,20 @@ async function initProgramFilters() {
         matchesCategory = cat === sel || cat.includes(sel) || sel.includes(cat);
       }
 
-      // 3. Duration matching
-      let matchesDuration = true;
-      if (selectedDuration && selectedDuration !== 'all') {
-        const dur = (p.duration || '3 Days').toLowerCase().trim();
-        if (selectedDuration === '3-days') {
-          matchesDuration = dur.includes('3') || dur.includes('day');
-        } else if (selectedDuration === '1-week') {
-          matchesDuration = dur.includes('1 week') || dur.includes('7 day') || dur === '1 week';
-        } else if (selectedDuration === '2-weeks') {
-          matchesDuration = dur.includes('2') || dur.includes('3 week');
-        } else if (selectedDuration === '4-weeks') {
-          matchesDuration = dur.includes('4') || dur.includes('month') || dur.includes('week');
+      // 3. Learning Level matching (Dynamic from CMS master dataset)
+      let matchesLevel = true;
+      if (levelFilter && levelFilter !== 'all') {
+        const progLevel = (p.learningLevel || p.level || '').toLowerCase().trim();
+        if (levelFilter === 'beginner') {
+          matchesLevel = progLevel === 'beginner' || progLevel === 'foundation' || progLevel.includes('beginner');
+        } else if (levelFilter === 'intermediate') {
+          matchesLevel = progLevel === 'intermediate' || progLevel.includes('intermediate');
+        } else if (levelFilter === 'advanced') {
+          matchesLevel = progLevel === 'advanced' || progLevel.includes('advanced');
         }
       }
 
-      return matchesQuery && matchesCategory && matchesDuration;
+      return matchesQuery && matchesCategory && matchesLevel;
     });
 
     currentFilteredPrograms = matched;
@@ -2788,119 +2917,57 @@ async function initProgramFilters() {
           const durationVal = p.duration || '3 Days';
           const availabilityVal = p.availability || '24 Hours';
 
-          // Level stage content
+          // Program link, syllabus URL & Level badges
           let viewSyllabusUrl = progUrl;
           let viewSyllabusText = 'Syllabus';
-          let stageContentHTML = '';
           let topBadgeHTML = '';
           let levelBadgesHTML = '';
 
-          const syllabusFoundation = (p.syllabus && p.syllabus.foundation) || [];
-          const syllabusIntermediate = (p.syllabus && p.syllabus.intermediate) || [];
-          const syllabusAdvanced = (p.syllabus && p.syllabus.advanced) || [];
+          const pLevel = (p.learningLevel || p.level || 'Beginner').trim();
+          const pLevelLower = pLevel.toLowerCase();
 
-          if (levelFilter === 'foundation') {
+          if (levelFilter === 'beginner' || levelFilter === 'foundation') {
             viewSyllabusUrl = `${progUrl}?level=foundation#curriculum`;
-            topBadgeHTML = `<span class="badge-grade-pill badge-pill-foundation"><i class="fa-solid fa-seedling"></i> Foundation Stage</span>`;
+            topBadgeHTML = `<span class="badge-grade-pill badge-pill-foundation"><i class="fa-solid fa-seedling"></i> Beginner</span>`;
             levelBadgesHTML = `
               <div class="card-level-badges">
-                <span class="level-badge badge-foundation active"><i class="fa-solid fa-check"></i> Foundation Active</span>
+                <span class="level-badge badge-foundation active"><i class="fa-solid fa-check"></i> Beginner Active</span>
                 <span class="level-badge badge-intermediate muted">Intermediate</span>
                 <span class="level-badge badge-advanced muted">Advanced</span>
               </div>
             `;
-            if (syllabusFoundation.length > 0) {
-              const preview = syllabusFoundation.slice(0, 3);
-              const remaining = syllabusFoundation.length - preview.length;
-              stageContentHTML = `
-                <div class="card-stage-content-box stage-box-foundation">
-                  <div class="stage-content-head"><i class="fa-solid fa-stethoscope"></i> <strong>Foundation Modules:</strong></div>
-                  <ul class="stage-topics-list">
-                    ${preview.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
-                  </ul>
-                  ${remaining > 0 ? `<span class="stage-more-topics">+${remaining} more foundation clinical topics in syllabus</span>` : ''}
-                </div>
-              `;
-            } else {
-              stageContentHTML = `
-                <div class="card-stage-content-box stage-box-foundation">
-                  <div class="stage-content-head"><i class="fa-solid fa-stethoscope"></i> <strong>Foundation Training Stage:</strong></div>
-                  <p class="stage-content-desc">Essential clinical examination, basic diagnostics, safety protocols, and primary procedural techniques for ${programTitle}.</p>
-                </div>
-              `;
-            }
           } else if (levelFilter === 'intermediate') {
             viewSyllabusUrl = `${progUrl}?level=intermediate#curriculum`;
-            topBadgeHTML = `<span class="badge-grade-pill badge-pill-intermediate"><i class="fa-solid fa-chart-line"></i> Intermediate Stage</span>`;
+            topBadgeHTML = `<span class="badge-grade-pill badge-pill-intermediate"><i class="fa-solid fa-chart-line"></i> Intermediate</span>`;
             levelBadgesHTML = `
               <div class="card-level-badges">
-                <span class="level-badge badge-foundation muted">Foundation</span>
+                <span class="level-badge badge-foundation muted">Beginner</span>
                 <span class="level-badge badge-intermediate active"><i class="fa-solid fa-check"></i> Intermediate Active</span>
                 <span class="level-badge badge-advanced muted">Advanced</span>
               </div>
             `;
-            if (syllabusIntermediate.length > 0) {
-              const preview = syllabusIntermediate.slice(0, 3);
-              const remaining = syllabusIntermediate.length - preview.length;
-              stageContentHTML = `
-                <div class="card-stage-content-box stage-box-intermediate">
-                  <div class="stage-content-head"><i class="fa-solid fa-user-doctor"></i> <strong>Intermediate Modules:</strong></div>
-                  <ul class="stage-topics-list">
-                    ${preview.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
-                  </ul>
-                  ${remaining > 0 ? `<span class="stage-more-topics">+${remaining} more intermediate clinical topics in syllabus</span>` : ''}
-                </div>
-              `;
-            } else {
-              stageContentHTML = `
-                <div class="card-stage-content-box stage-box-intermediate">
-                  <div class="stage-content-head"><i class="fa-solid fa-user-doctor"></i> <strong>Intermediate Training Stage:</strong></div>
-                  <p class="stage-content-desc">Clinical decision-making, case management, routine surgery, and intermediate diagnostic interpretation for ${programTitle}.</p>
-                </div>
-              `;
-            }
           } else if (levelFilter === 'advanced') {
             viewSyllabusUrl = `${progUrl}?level=advanced#curriculum`;
-            topBadgeHTML = `<span class="badge-grade-pill badge-pill-advanced"><i class="fa-solid fa-award"></i> Advanced Stage</span>`;
+            topBadgeHTML = `<span class="badge-grade-pill badge-pill-advanced"><i class="fa-solid fa-award"></i> Advanced</span>`;
             levelBadgesHTML = `
               <div class="card-level-badges">
-                <span class="level-badge badge-foundation muted">Foundation</span>
+                <span class="level-badge badge-foundation muted">Beginner</span>
                 <span class="level-badge badge-intermediate muted">Intermediate</span>
                 <span class="level-badge badge-advanced active"><i class="fa-solid fa-check"></i> Advanced Active</span>
               </div>
             `;
-            if (syllabusAdvanced.length > 0) {
-              const preview = syllabusAdvanced.slice(0, 3);
-              const remaining = syllabusAdvanced.length - preview.length;
-              stageContentHTML = `
-                <div class="card-stage-content-box stage-box-advanced">
-                  <div class="stage-content-head"><i class="fa-solid fa-brain"></i> <strong>Advanced Modules:</strong></div>
-                  <ul class="stage-topics-list">
-                    ${preview.map(t => `<li><i class="fa-solid fa-angle-right"></i> <span>${t}</span></li>`).join('')}
-                  </ul>
-                  ${remaining > 0 ? `<span class="stage-more-topics">+${remaining} more advanced specialist topics in syllabus</span>` : ''}
-                </div>
-              `;
-            } else {
-              stageContentHTML = `
-                <div class="card-stage-content-box stage-box-advanced">
-                  <div class="stage-content-head"><i class="fa-solid fa-brain"></i> <strong>Advanced Training Stage:</strong></div>
-                  <p class="stage-content-desc">Specialist clinical interventions, complex multisystem cases, advanced surgical complications, and evidence-based practice for ${programTitle}.</p>
-                </div>
-              `;
-            }
           } else {
-            // All levels
+            // All levels: highlight this program's specific CMS learning level
             viewSyllabusUrl = progUrl;
-            topBadgeHTML = hasSyllabus
-              ? `<span class="badge-grade-pill" style="background:#1e7e44;color:#fff;"><i class="fa-solid fa-circle-check"></i> Three-Stage Syllabus</span>`
-              : `<span class="badge-grade-pill" style="background:#b87314;color:#fff;"><i class="fa-solid fa-clock"></i> Syllabus in Review</span>`;
+            const badgeClass = pLevelLower === 'advanced' ? 'badge-pill-advanced' : pLevelLower === 'intermediate' ? 'badge-pill-intermediate' : 'badge-pill-foundation';
+            const badgeIcon = pLevelLower === 'advanced' ? 'fa-award' : pLevelLower === 'intermediate' ? 'fa-chart-line' : 'fa-seedling';
+            topBadgeHTML = `<span class="badge-grade-pill ${badgeClass}"><i class="fa-solid ${badgeIcon}"></i> ${pLevel}</span>`;
 
             levelBadgesHTML = `
               <div class="card-level-badges">
-                <span class="level-badge badge-foundation"><i class="fa-solid fa-seedling"></i> Foundation</span>
-                <span class="level-badge badge-intermediate"><i class="fa-solid fa-chart-line"></i> Intermediate</span>
-                <span class="level-badge badge-advanced"><i class="fa-solid fa-award"></i> Advanced</span>
+                <span class="level-badge badge-foundation ${pLevelLower === 'beginner' || pLevelLower === 'foundation' ? 'active' : 'muted'}"><i class="fa-solid fa-seedling"></i> Beginner</span>
+                <span class="level-badge badge-intermediate ${pLevelLower === 'intermediate' ? 'active' : 'muted'}"><i class="fa-solid fa-chart-line"></i> Intermediate</span>
+                <span class="level-badge badge-advanced ${pLevelLower === 'advanced' ? 'active' : 'muted'}"><i class="fa-solid fa-award"></i> Advanced</span>
               </div>
             `;
           }
@@ -2920,7 +2987,6 @@ async function initProgramFilters() {
                 ${levelBadgesHTML}
                 <h3 class="program-card-title"><a href="${viewSyllabusUrl}">${programTitle}</a></h3>
                 <p class="program-card-desc">${p.description || ''}</p>
-                ${stageContentHTML}
                 <div class="program-card-meta">
                   <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> ${durationVal}</div>
                   <div class="meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> <strong>Availability:</strong> ${availabilityVal}</div>
@@ -2963,9 +3029,6 @@ async function initProgramFilters() {
 
     const allCatRadio = document.querySelector('input[name="program-category"][value="all"]');
     if (allCatRadio) allCatRadio.checked = true;
-
-    const allDurRadio = document.querySelector('input[name="program-duration"][value="all"]');
-    if (allDurRadio) allDurRadio.checked = true;
 
     const allLvlRadio = document.querySelector('input[name="program-level"][value="all"]');
     if (allLvlRadio) allLvlRadio.checked = true;
@@ -3021,11 +3084,6 @@ async function initProgramFilters() {
   if (sidebarClearBtn) sidebarClearBtn.addEventListener('click', resetAllFilters);
   if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', resetAllFilters);
   if (personaCloseBtn) personaCloseBtn.addEventListener('click', resetAllFilters);
-
-  // Duration radio buttons
-  document.querySelectorAll('input[name="program-duration"]').forEach(radio => {
-    radio.addEventListener('change', () => filterPrograms(true));
-  });
 
   // Level radio buttons
   document.querySelectorAll('input[name="program-level"]').forEach(radio => {

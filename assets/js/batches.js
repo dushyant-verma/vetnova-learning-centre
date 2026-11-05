@@ -189,7 +189,7 @@ function renderUpcomingBatches(batches, container) {
           </span>
         </td>
         <td style="padding: 16px 20px; white-space: nowrap;">
-          <a class="btn btn-primary btn-sm btn-apply-now" href="${enquiryLink}">
+          <a class="btn btn-primary btn-sm btn-apply-now btn-book-counselling" data-program="${program}" data-action="book-counselling" href="${enquiryLink}">
             Book free Counselling
           </a>
         </td>
