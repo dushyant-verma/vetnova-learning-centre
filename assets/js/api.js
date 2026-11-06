@@ -131,6 +131,7 @@ async function getBatches(options = {}) {
   if (options.faculty) query.faculty = options.faculty;
 
   const data = await fetchFromApi('/batches', query);
+  if (data === null) return null;
   return Array.isArray(data) ? data : [];
 }
 

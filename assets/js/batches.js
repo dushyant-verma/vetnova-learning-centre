@@ -25,28 +25,38 @@ async function initBatches() {
   if (upcomingPanel) upcomingPanel.innerHTML = loadingHtml;
   if (ongoingPanel) ongoingPanel.innerHTML = loadingHtml;
 
-  let batches = [];
+  let batches = null;
+  let isApiError = false;
+
   try {
     if (typeof getBatches === 'function') {
       batches = await getBatches();
     } else if (typeof fetchFromApi === 'function') {
-      batches = await fetchFromApi('/batches') || [];
+      batches = await fetchFromApi('/batches');
     }
   } catch (err) {
     console.error('Failed to fetch batches from API:', err);
-    batches = [];
+    batches = null;
   }
 
-  // Filter batches into Upcoming and Ongoing
+  // Check if API failed
+  if (batches === null) {
+    isApiError = true;
+    if (upcomingPanel) renderBatchErrorState(upcomingPanel, initBatches);
+    if (ongoingPanel) renderBatchErrorState(ongoingPanel, initBatches);
+    return;
+  }
+
+  // Filter batches into Upcoming and Ongoing based on dates and status
   const upcomingBatches = [];
   const ongoingBatches = [];
 
   if (Array.isArray(batches)) {
     batches.forEach(batch => {
-      const status = (batch.status || 'Upcoming').toLowerCase();
-      if (status === 'upcoming') {
+      const classification = classifyBatch(batch);
+      if (classification === 'upcoming') {
         upcomingBatches.push(batch);
-      } else if (status === 'ongoing') {
+      } else if (classification === 'ongoing') {
         ongoingBatches.push(batch);
       }
     });
@@ -82,6 +92,88 @@ async function initBatches() {
     if (typeof window.setVetNovaLanguage === 'function') {
       window.setVetNovaLanguage('hi');
     }
+  }
+}
+
+/**
+ * Classify a batch based on start/end dates and status
+ * @param {Object} batch
+ * @returns {'upcoming' | 'ongoing' | 'completed'}
+ */
+function classifyBatch(batch) {
+  const rawStatus = (batch.status || '').trim().toLowerCase();
+
+  // If explicitly completed or archived
+  if (rawStatus === 'completed' || rawStatus === 'archived' || rawStatus === 'cancelled') {
+    return 'completed';
+  }
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+  let start = null;
+  let end = null;
+
+  if (batch.startDate) {
+    const s = new Date(batch.startDate);
+    if (!isNaN(s.getTime())) {
+      start = new Date(s.getFullYear(), s.getMonth(), s.getDate()).getTime();
+    }
+  }
+
+  if (batch.endDate) {
+    const e = new Date(batch.endDate);
+    if (!isNaN(e.getTime())) {
+      end = new Date(e.getFullYear(), e.getMonth(), e.getDate(), 23, 59, 59, 999).getTime();
+    }
+  }
+
+  // 1. If start date is in the future (after today)
+  if (start && start > today) {
+    return 'upcoming';
+  }
+
+  // 2. If start date has arrived (<= today)
+  if (start && start <= today) {
+    if (end && end >= today) {
+      return 'ongoing';
+    }
+    if (!end) {
+      return rawStatus === 'ongoing' ? 'ongoing' : 'upcoming';
+    }
+    if (end < today) {
+      return 'completed';
+    }
+  }
+
+  // 3. Fallback to explicit status field
+  if (rawStatus === 'ongoing') return 'ongoing';
+  return 'upcoming';
+}
+
+/**
+ * Render API error state with retry button
+ */
+function renderBatchErrorState(container, retryFn) {
+  container.innerHTML = `
+    <div style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #fee2e2; padding: 48px 24px; text-align: center; box-shadow: var(--soft-shadow);">
+      <i class="fa-solid fa-triangle-exclamation" style="font-size: 38px; color: #ef4444; margin-bottom: 14px; display: inline-block;"></i>
+      <h3 style="margin: 0 0 8px; color: var(--navy-2, #14194b); font-size: 19px; font-weight: 700;">Unable to Load Batch Schedules</h3>
+      <p style="color: #64748b; margin: 0 0 20px; font-size: 14.5px; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+        We could not connect to the scheduling service. Please check your connection or retry.
+      </p>
+      <button type="button" class="btn btn-outline btn-sm btn-retry-batches">
+        <i class="fa-solid fa-rotate-right" style="margin-right: 6px;"></i> Retry Schedules
+      </button>
+    </div>
+  `;
+
+  const retryBtn = container.querySelector('.btn-retry-batches');
+  if (retryBtn && typeof retryFn === 'function') {
+    retryBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      retryFn();
+    });
   }
 }
 
@@ -190,7 +282,7 @@ function renderUpcomingBatches(batches, container) {
         </td>
         <td style="padding: 16px 20px; white-space: nowrap;">
           <a class="btn btn-primary btn-sm btn-apply-now btn-book-counselling" data-program="${program}" data-action="book-counselling" href="${enquiryLink}">
-            Book free Counselling
+            Book Free Counselling
           </a>
         </td>
       </tr>

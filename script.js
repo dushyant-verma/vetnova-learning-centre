@@ -548,7 +548,7 @@ const concernData = {
       'Soft tissue surgeries (spay/neuter, cystotomy)',
       'Assistance during complex orthopedic operations'
     ],
-    ctaText: 'Book free Counselling ',
+    ctaText: 'Book Free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_surgery_result.webp'
   },
@@ -561,7 +561,7 @@ const concernData = {
       'Ultrasound patient positioning & probe handling',
       'Systematic approach to diagnosing pathology'
     ],
-    ctaText: 'Book free Counselling ',
+    ctaText: 'Book Free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_radiology_result.webp'
   },
@@ -574,7 +574,7 @@ const concernData = {
       'Common diagnostics checklist (blood tests, smears)',
       'Effective pet parent communication & counseling'
     ],
-    ctaText: 'Book free Counselling ',
+    ctaText: 'Book Free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_foundation_result.webp'
   },
@@ -587,7 +587,7 @@ const concernData = {
       'Wound cleaning, bandages & bleeding control',
       'Heat stroke, poisoning & animal bite protocol'
     ],
-    ctaText: 'Book free Counselling ',
+    ctaText: 'Book Free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_petcare_result.webp'
   },
@@ -600,7 +600,7 @@ const concernData = {
       'Surgical prep support & sanitization rules',
       'Basic medication routes and front desk tasks'
     ],
-    ctaText: 'Book free Counselling ',
+    ctaText: 'Book Free Counselling ',
     ctaLink: 'contact.html#contact-form',
     image: 'assets/vet_selector_nurse_result.webp'
   }
@@ -1706,7 +1706,7 @@ function initEnquiryModal() {
           const u = new URL(href, window.location.origin);
           const p = u.searchParams.get('program');
           if (p) return resolveProgramTitleFromSlug(p);
-        } catch (e) {}
+        } catch (e) { }
       }
       if (href && href.endsWith('.html') && !['index.html', 'programs.html', 'contact.html', 'about.html', 'blog.html', 'faq.html', 'facility-tour.html'].includes(href)) {
         return resolveProgramTitleFromSlug(href);
@@ -1932,7 +1932,7 @@ function initEnquiryModal() {
           '.btn-counselling-pill, #header-counselling-btn, .header-counselling-btn, .btn-counselling-modal, .btn-book-counselling, [data-action="book-counselling"], .btn-show-counselling, .btn-enquire-card'
         );
 
-        // Counselling text anywhere in button (catches "Book free Counselling", "Book Free Counselling", "Book Counselling", etc.)
+        // Counselling text anywhere in button (catches "Book Free Counselling", "Book Free Counselling", "Book Counselling", etc.)
         const hasCounsellingText = text.includes('counselling') || text.includes('counseling');
 
         // On single program pages: catch .btn-apply-now or links to contact.html?program=
@@ -3493,7 +3493,7 @@ function initPopularCoursesFilter() {
         newCard.setAttribute('data-category', (liveP.category || 'medicine').toLowerCase());
         newCard.style.display = 'none';
         newCard.style.opacity = '0';
-        
+
         const progUrl = liveP.slug.endsWith('.html') ? liveP.slug : `${liveP.slug}.html`;
         const highlightsHtml = (liveP.learningOutcomes && liveP.learningOutcomes.length > 0)
           ? liveP.learningOutcomes.slice(0, 2).map(h => `<li class="popular-course-highlight-item"><i class="fa-solid fa-check"></i> ${h}</li>`).join('')

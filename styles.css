@@ -24059,7 +24059,7 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
   display: none;
 }
 
-.btn-apply-now {
+.footer-cta-card .btn-apply-now {
   min-height: 58px !important;
   font-size: 16px;
 }
