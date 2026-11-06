@@ -292,7 +292,7 @@ async function initV4DynamicBlog() {
       blogs = await getBlogs();
     }
 
-    if (blogs && blogs.length >= 4) {
+    if (blogs && blogs.length >= 1) {
       const featured = blogs[0];
       const stacked = blogs.slice(1, 4);
 
@@ -307,7 +307,7 @@ async function initV4DynamicBlog() {
             alt="${escapeHtml(featured.title)}" loading="lazy" />
         </div>
         <div class="hp4-blog-feat-body">
-          <span class="hp4-blog-category">${escapeHtml((featured.category || 'SURGICAL GUIDE').toUpperCase())} • ${featDate}</span>
+          <span class="hp4-blog-category">${escapeHtml((featured.category || 'CLINICAL SKILLS').toUpperCase())} • ${featDate}</span>
           <h3 style="font-family: var(--hp4-font-display); font-size: 1.4rem; font-weight: 800; color: var(--hp4-navy-main); margin: 0 0 12px 0;">
             <a href="blog-single.html?slug=${featSlug}" style="color: inherit; text-decoration: none;">${escapeHtml(featured.title)}</a>
           </h3>
@@ -318,28 +318,33 @@ async function initV4DynamicBlog() {
         </div>
       `;
 
-      // Render Stacked (Right)
-      stackedContainer.innerHTML = stacked.map(blog => {
-        const slug = encodeURIComponent(blog.slug || blog._id);
-        return `
-          <div class="hp4-blog-small-card">
-            <div class="hp4-blog-sm-media">
-              <img class="hp4-blog-sm-img" src="${escapeHtml(blog.image || 'assets/images/hero-veterinary-training.webp')}"
-                onerror="this.onerror=null; this.src='assets/images/hero-veterinary-training.webp';"
-                alt="${escapeHtml(blog.title)}" loading="lazy" />
+      // Render Stacked (Right) if any
+      if (stacked.length > 0) {
+        stackedContainer.style.display = '';
+        stackedContainer.innerHTML = stacked.map(blog => {
+          const slug = encodeURIComponent(blog.slug || blog._id);
+          return `
+            <div class="hp4-blog-small-card">
+              <div class="hp4-blog-sm-media">
+                <img class="hp4-blog-sm-img" src="${escapeHtml(blog.image || 'assets/images/hero-veterinary-training.webp')}"
+                  onerror="this.onerror=null; this.src='assets/images/hero-veterinary-training.webp';"
+                  alt="${escapeHtml(blog.title)}" loading="lazy" />
+              </div>
+              <div>
+                <span class="hp4-blog-category" style="font-size: 0.72rem;">${escapeHtml((blog.category || 'CLINICAL GUIDE').toUpperCase())}</span>
+                <h4 style="font-family: var(--hp4-font-display); font-size: 1.05rem; font-weight: 800; color: var(--hp4-navy-main); margin: 4px 0 6px 0;">
+                  <a href="blog-single.html?slug=${slug}" style="color: inherit; text-decoration: none;">${escapeHtml(blog.title)}</a>
+                </h4>
+                <a href="blog-single.html?slug=${slug}" class="hp4-blog-link" style="font-size: 0.82rem;">
+                  Read Article <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
             </div>
-            <div>
-              <span class="hp4-blog-category" style="font-size: 0.72rem;">${escapeHtml((blog.category || 'CLINICAL GUIDE').toUpperCase())}</span>
-              <h4 style="font-family: var(--hp4-font-display); font-size: 1.05rem; font-weight: 800; color: var(--hp4-navy-main); margin: 4px 0 6px 0;">
-                <a href="blog-single.html?slug=${slug}" style="color: inherit; text-decoration: none;">${escapeHtml(blog.title)}</a>
-              </h4>
-              <a href="blog-single.html?slug=${slug}" class="hp4-blog-link" style="font-size: 0.82rem;">
-                Read Article <i class="fa-solid fa-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+      } else {
+        stackedContainer.style.display = 'none';
+      }
 
     } else {
       renderV4FallbackBlog(featContainer, stackedContainer);
@@ -355,66 +360,22 @@ function renderV4FallbackBlog(featContainer, stackedContainer) {
 
   featContainer.innerHTML = `
     <div class="hp4-blog-feat-media">
-      <img class="hp4-blog-feat-img" src="assets/images/hero-veterinary-training.webp" alt="Surgical Guide" loading="lazy" />
+      <img class="hp4-blog-feat-img" src="assets/images/hero-veterinary-training.webp" alt="From Veterinary Graduate to Confident Clinician" loading="lazy" />
     </div>
     <div class="hp4-blog-feat-body">
-      <span class="hp4-blog-category">SURGICAL MASTERY • AUG 2026</span>
+      <span class="hp4-blog-category">CLINICAL SKILLS • AUG 2026</span>
       <h3 style="font-family: var(--hp4-font-display); font-size: 1.4rem; font-weight: 800; color: var(--hp4-navy-main); margin: 0 0 12px 0;">
-        <a href="blog.html" style="color: inherit; text-decoration: none;">A Step-by-Step Approach to Small Animal Abdominal Exploratory Surgery</a>
+        <a href="blog-single.html?slug=veterinary-graduate-to-confident-clinician" style="color: inherit; text-decoration: none;">From Veterinary Graduate to Confident Clinician: Essential Practical Skills Every New Veterinarian Needs</a>
       </h3>
-      <p style="font-size: 0.95rem; color: var(--hp4-slate-600); margin: 0 0 20px 0; line-height: 1.6;">Comprehensive surgical guide covering sterile field preparation, tissue handling, and organ systematic evaluation protocols.</p>
-      <a href="blog.html" class="hp4-blog-link" style="margin-top: auto;">
+      <p style="font-size: 0.95rem; color: var(--hp4-slate-600); margin: 0 0 20px 0; line-height: 1.6;">Explore the practical clinical, communication and decision-making skills new veterinarians need to move from academic learning to confident, responsible practice in India.</p>
+      <a href="blog-single.html?slug=veterinary-graduate-to-confident-clinician" class="hp4-blog-link" style="margin-top: auto;">
         Read Full Article <i class="fa-solid fa-arrow-right"></i>
       </a>
     </div>
   `;
 
-  stackedContainer.innerHTML = `
-    <div class="hp4-blog-small-card">
-      <div class="hp4-blog-sm-media">
-        <img class="hp4-blog-sm-img" src="assets/vet_facility_diagnostics_room.webp" alt="Diagnostic Imaging" loading="lazy" />
-      </div>
-      <div>
-        <span class="hp4-blog-category" style="font-size: 0.72rem;">DIAGNOSTIC IMAGING</span>
-        <h4 style="font-family: var(--hp4-font-display); font-size: 1.05rem; font-weight: 800; color: var(--hp4-navy-main); margin: 4px 0 6px 0;">
-          <a href="blog.html" style="color: inherit; text-decoration: none;">Abdominal Ultrasound FAST Scanning Protocols</a>
-        </h4>
-        <a href="blog.html" class="hp4-blog-link" style="font-size: 0.82rem;">
-          Read Article <i class="fa-solid fa-arrow-right"></i>
-        </a>
-      </div>
-    </div>
-
-    <div class="hp4-blog-small-card">
-      <div class="hp4-blog-sm-media">
-        <img class="hp4-blog-sm-img" src="assets/images/program-clinic-ready.webp" alt="Emergency Resuscitation" loading="lazy" />
-      </div>
-      <div>
-        <span class="hp4-blog-category" style="font-size: 0.72rem;">EMERGENCY CARE</span>
-        <h4 style="font-family: var(--hp4-font-display); font-size: 1.05rem; font-weight: 800; color: var(--hp4-navy-main); margin: 4px 0 6px 0;">
-          <a href="blog.html" style="color: inherit; text-decoration: none;">Critical Fluid Resuscitation for Hemorrhagic Shock</a>
-        </h4>
-        <a href="blog.html" class="hp4-blog-link" style="font-size: 0.82rem;">
-          Read Article <i class="fa-solid fa-arrow-right"></i>
-        </a>
-      </div>
-    </div>
-
-    <div class="hp4-blog-small-card">
-      <div class="hp4-blog-sm-media">
-        <img class="hp4-blog-sm-img" src="assets/images/program-surgery.webp" alt="Suture Patterns" loading="lazy" />
-      </div>
-      <div>
-        <span class="hp4-blog-category" style="font-size: 0.72rem;">SURGICAL SKILLS</span>
-        <h4 style="font-family: var(--hp4-font-display); font-size: 1.05rem; font-weight: 800; color: var(--hp4-navy-main); margin: 4px 0 6px 0;">
-          <a href="blog.html" style="color: inherit; text-decoration: none;">Choosing the Right Suture Pattern for Tissue Closure</a>
-        </h4>
-        <a href="blog.html" class="hp4-blog-link" style="font-size: 0.82rem;">
-          Read Article <i class="fa-solid fa-arrow-right"></i>
-        </a>
-      </div>
-    </div>
-  `;
+  stackedContainer.style.display = 'none';
+  stackedContainer.innerHTML = '';
 }
 
 function escapeHtml(str) {

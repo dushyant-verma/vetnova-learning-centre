@@ -181,7 +181,7 @@ function renderBlogGrid(blogs, container) {
         <div class="blog-card-body">
           <div class="post-meta flex flex-wrap gap-1 items-center">
             ${catList.map(c => `<span class="post-category-badge">${escapeHtml(c.toUpperCase())}</span>`).join('')}
-            <span>${escapeHtml(blog.readTime || '5 Min Read')}</span>
+            <span>${escapeHtml(blog.readTime || '8 Min Read')}</span>
           </div>
           <h3><a href="blog-single.html?slug=${slugOrId}">${escapeHtml(blog.title)}</a></h3>
           <p>${escapeHtml(blog.excerpt || '')}</p>

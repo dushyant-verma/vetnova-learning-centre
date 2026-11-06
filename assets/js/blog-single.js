@@ -49,7 +49,7 @@ async function initBlogSinglePage() {
 
   // Fallback to default featured slug if none supplied in query
   if (!slug) {
-    slug = 'step-by-step-soft-tissue-surgical-preparation-protocols';
+    slug = 'veterinary-graduate-to-confident-clinician';
   }
 
   const blog = await getBlog(slug);
@@ -372,7 +372,14 @@ async function loadRelatedArticles(currentBlog) {
     .filter(b => b._id !== currentBlog._id && b.slug !== currentBlog.slug)
     .slice(0, 3);
 
-  if (related.length === 0) return;
+  const relatedSection = relatedContainer.closest('.section') || document.getElementById('related-posts');
+
+  if (related.length === 0) {
+    if (relatedSection) relatedSection.style.display = 'none';
+    return;
+  }
+
+  if (relatedSection) relatedSection.style.display = '';
 
   relatedContainer.innerHTML = related.map(b => `
     <div class="blog-card" data-category="${escapeHtml(b.category || '')}">
