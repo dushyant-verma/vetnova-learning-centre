@@ -74,129 +74,99 @@
       </div>
 
       <!-- Programs Mega Menu -->
-      <div class="nav-item has-dropdown">
+      <div class="nav-item has-dropdown mega-nav-item">
         <a class="nav-link dropdown-toggle" data-nav="programs" href="programs.html" aria-haspopup="true"
-          aria-expanded="false">
+          aria-expanded="false" id="programs-mega-toggle">
           Programs <i class="fa-solid fa-chevron-down caret"></i>
         </a>
-        <div class="dropdown-menu mega-dropdown grade-mega-dropdown">
+        <div class="dropdown-menu mega-dropdown programs-mega-dropdown" role="menu" aria-labelledby="programs-mega-toggle">
           <div class="dropdown-arrow"></div>
+
+          <!-- Mega Header Intro Bar -->
           <div class="mega-header-bar">
-            <span class="mega-header-tag"><i class="fa-solid fa-graduation-cap"></i> LEARNING PROGRESSION SYSTEM</span>
-            <h3
-              style="margin: 4px 0 2px 0; font-size: 1.15rem; color: var(--navy-1); font-family: var(--font-heading);">
-              Explore Programs by Learning Grade</h3>
-            <p style="margin: 0; font-size: 0.85rem; color: #64748b;">Structured school/grade-style progression from
-              Grade 1 to Grade 5 across 5 specialized learning tracks.</p>
+            <div class="mega-header-text">
+              <span class="mega-header-tag"><i class="fa-solid fa-graduation-cap"></i> PRACTICAL CLINICAL TRACKS</span>
+              <h3 class="mega-menu-heading">Explore Programs by Audience &amp; Experience</h3>
+              <p class="mega-menu-subtitle">Structured hands-on clinical modules tailored for veterinary students, clinicians, specialists, and animal care professionals.</p>
+            </div>
+            <a href="programs.html" class="mega-header-all-link">View All 28 Programs <i class="fa-solid fa-arrow-right"></i></a>
           </div>
-          <div class="grade-mega-grid">
 
-            <!-- Grade 1 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-1">
-                <span class="grade-col-num">GRADE 1</span>
-                <strong>Basic</strong>
-              </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-1&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i>
-                    Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-1&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-                    Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-1&track=diagnostic-specialization"><i
-                      class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-1&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i>
-                    Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-1&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet
-                    Nurse &amp; Paravet Staff</a></li>
-              </ul>
-            </div>
+          <!-- 4 Visual Cards in 4-Column Grid -->
+          <div class="programs-mega-grid">
 
-            <!-- Grade 2 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-2">
-                <span class="grade-col-num">GRADE 2</span>
-                <strong>Intermediate</strong>
+            <!-- Card 1: Fresh Vets & Interns -->
+            <a href="programs.html?level=Foundation%20Level" class="programs-mega-card card-fresh-vets" data-level="foundation" role="menuitem">
+              <div class="mega-card-img-wrap">
+                <img src="assets/images/learning-paths/featured-skillup.webp" alt="Fresh Vets &amp; Interns practicing clinical skills" class="mega-card-img" loading="lazy" />
+                <span class="mega-card-badge badge-fresh-vets">BYSC Students &amp; Interns</span>
               </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-2&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i>
-                    Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-2&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-                    Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-2&track=diagnostic-specialization"><i
-                      class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-2&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i>
-                    Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-2&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet
-                    Nurse &amp; Paravet Staff</a></li>
-              </ul>
-            </div>
+              <div class="mega-card-content">
+                <h4 class="mega-card-title">Fresh Vets &amp; Interns</h4>
+                <p class="mega-card-desc">Build core clinical confidence and tactile dexterity. Bridge academic theory with real hands-on surgical practice and internship readiness.</p>
+                <span class="mega-card-cta cta-fresh-vets">
+                  <span>Explore Skill-Up Track</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </span>
+              </div>
+            </a>
 
-            <!-- Grade 3 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-3">
-                <span class="grade-col-num">GRADE 3</span>
-                <strong>Competitive</strong>
+            <!-- Card 2: Practising Veterinarians -->
+            <a href="programs.html?level=Intermediate%20Level" class="programs-mega-card card-practising-vets" data-level="intermediate" role="menuitem">
+              <div class="mega-card-img-wrap">
+                <img src="assets/images/learning-paths/soft-tissue-surgery.webp" alt="Practising Veterinarians in surgical suite" class="mega-card-img" loading="lazy" />
+                <span class="mega-card-badge badge-practising-vets">Clinicians &amp; Practitioners</span>
               </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-3&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i>
-                    Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-3&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-                    Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-3&track=diagnostic-specialization"><i
-                      class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-3&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i>
-                    Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-3&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet
-                    Nurse &amp; Paravet Staff</a></li>
-              </ul>
-            </div>
+              <div class="mega-card-content">
+                <h4 class="mega-card-title">Practising Veterinarians</h4>
+                <p class="mega-card-desc">Refine everyday clinical decision-making. Upgrade soft tissue surgical dexterity, digital X-ray interpretation, and emergency triage.</p>
+                <span class="mega-card-cta cta-practising-vets">
+                  <span>Explore Surgical Track</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </span>
+              </div>
+            </a>
 
-            <!-- Grade 4 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-4">
-                <span class="grade-col-num">GRADE 4</span>
-                <strong>Advanced</strong>
+            <!-- Card 3: Specialists & Experienced Vets -->
+            <a href="programs.html?level=Intermediate%20Level" class="programs-mega-card card-specialists" data-level="intermediate" role="menuitem">
+              <div class="mega-card-img-wrap">
+                <img src="assets/images/learning-paths/radiology-ultrasound.webp" alt="Specialists performing advanced diagnostics" class="mega-card-img" loading="lazy" />
+                <span class="mega-card-badge badge-specialists">Specialists &amp; Experienced</span>
               </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-4&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i>
-                    Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-4&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-                    Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-4&track=diagnostic-specialization"><i
-                      class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-4&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i>
-                    Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-4&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet
-                    Nurse &amp; Paravet Staff</a></li>
-              </ul>
-            </div>
+              <div class="mega-card-content">
+                <h4 class="mega-card-title">Specialists &amp; Experienced Vets</h4>
+                <p class="mega-card-desc">Master complex abdominal organ procedures and advanced diagnostics. Explore specialist clinical training and advanced practical learning.</p>
+                <span class="mega-card-cta cta-specialists">
+                  <span>Explore Advanced Masterclasses</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </span>
+              </div>
+            </a>
 
-            <!-- Grade 5 Column -->
-            <div class="grade-col">
-              <div class="grade-col-head grade-5">
-                <span class="grade-col-num">GRADE 5</span>
-                <strong>Pro</strong>
+            <!-- Card 4: Pet Owners & Rescuers -->
+            <a href="programs.html?level=Advanced%20Level" class="programs-mega-card card-pet-owners" data-level="advanced" role="menuitem">
+              <div class="mega-card-img-wrap">
+                <img src="assets/images/learning-paths/pet-first-aid.webp" alt="Pet Owners &amp; Rescuers practical animal first aid" class="mega-card-img" loading="lazy" />
+                <span class="mega-card-badge badge-pet-owners">Pet Owners &amp; Volunteers</span>
               </div>
-              <ul class="grade-track-list">
-                <li><a href="programs.html?grade=grade-5&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i>
-                    Fresh Graduates &amp; Interns</a></li>
-                <li><a href="programs.html?grade=grade-5&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-                    Practicing Veterinarians</a></li>
-                <li><a href="programs.html?grade=grade-5&track=diagnostic-specialization"><i
-                      class="fa-solid fa-x-ray"></i> Diagnostic Specialization</a></li>
-                <li><a href="programs.html?grade=grade-5&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i>
-                    Emergency &amp; Critical Care</a></li>
-                <li><a href="programs.html?grade=grade-5&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet
-                    Nurse &amp; Paravet Staff</a></li>
-              </ul>
-            </div>
+              <div class="mega-card-content">
+                <h4 class="mega-card-title">Pet Owners &amp; Rescuers</h4>
+                <p class="mega-card-desc">Be your pet's first line of protection. Learn practical workshops on emergency first aid, choking response, pet CPR, and gentle animal handling.</p>
+                <span class="mega-card-cta cta-pet-owners">
+                  <span>Explore Pet First Aid Workshop</span>
+                  <i class="fa-solid fa-arrow-right"></i>
+                </span>
+              </div>
+            </a>
 
           </div>
+
+          <!-- Mega Footer Strip -->
           <div class="mega-footer-banner">
-            <span>Looking for complete program details &amp; batch schedules?</span>
-            <a href="programs.html" class="link-arrow">View Programs Catalogue <i
-                class="fa-solid fa-arrow-right"></i></a>
+            <span class="mega-footer-text"><i class="fa-solid fa-circle-info text-teal"></i> All 28 programs include offline lab practice, mentored clinical rounds &amp; recognized certification.</span>
+            <a href="programs.html#syllabus" class="link-arrow">Browse Course Curriculum <i class="fa-solid fa-arrow-right"></i></a>
           </div>
+
         </div>
       </div>
 
@@ -288,114 +258,72 @@
     <div class="drawer-accordion">
       <button type="button" class="drawer-accordion-btn" id="drawer-programs-btn" aria-expanded="false"
         aria-controls="drawer-programs-panel">
-        <span><i class="fa-solid fa-layer-group"></i> Clinical Programs by Grade</span>
+        <span><i class="fa-solid fa-graduation-cap"></i> Programs by Audience</span>
         <i class="fa-solid fa-chevron-down accordion-caret"></i>
       </button>
-      <div class="drawer-accordion-content" id="drawer-programs-panel" role="region"
+      <div class="drawer-accordion-content drawer-programs-accordion" id="drawer-programs-panel" role="region"
         aria-labelledby="drawer-programs-btn">
-        <!-- Grade 1 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-1-btn" aria-expanded="false"
-            aria-controls="drawer-grade-1-panel">
-            <span><strong class="grade-pill grade-pill-1">Grade 1</strong> Basic</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-1-panel" role="region" aria-labelledby="drawer-grade-1-btn">
-            <a href="programs.html?grade=grade-1&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh
-              Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-1&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-              Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-1&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i>
-              Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-1&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency
-              &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-1&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp;
-              Paravet Staff</a>
-          </div>
+        <div class="drawer-programs-list">
+
+          <!-- Card 1: Fresh Vets & Interns -->
+          <a href="programs.html?level=Foundation%20Level" class="drawer-program-card card-fresh-vets" data-level="foundation">
+            <div class="drawer-program-thumb">
+              <img src="assets/images/learning-paths/featured-skillup.webp" alt="Fresh Vets &amp; Interns" loading="lazy" />
+            </div>
+            <div class="drawer-program-info">
+              <span class="drawer-program-badge badge-fresh-vets">BYSC Students &amp; Interns</span>
+              <strong class="drawer-program-title">Fresh Vets &amp; Interns</strong>
+              <p class="drawer-program-desc">Build core clinical confidence and tactile dexterity with real surgical practice.</p>
+              <span class="drawer-program-cta cta-fresh-vets">Explore Skill-Up Track <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+
+          <!-- Card 2: Practising Veterinarians -->
+          <a href="programs.html?level=Intermediate%20Level" class="drawer-program-card card-practising-vets" data-level="intermediate">
+            <div class="drawer-program-thumb">
+              <img src="assets/images/learning-paths/soft-tissue-surgery.webp" alt="Practising Veterinarians" loading="lazy" />
+            </div>
+            <div class="drawer-program-info">
+              <span class="drawer-program-badge badge-practising-vets">Clinicians &amp; Practitioners</span>
+              <strong class="drawer-program-title">Practising Veterinarians</strong>
+              <p class="drawer-program-desc">Upgrade soft tissue surgical dexterity, digital X-ray interpretation &amp; emergency triage.</p>
+              <span class="drawer-program-cta cta-practising-vets">Explore Surgical Track <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+
+          <!-- Card 3: Specialists & Experienced Vets -->
+          <a href="programs.html?level=Intermediate%20Level" class="drawer-program-card card-specialists" data-level="intermediate">
+            <div class="drawer-program-thumb">
+              <img src="assets/images/learning-paths/radiology-ultrasound.webp" alt="Specialists &amp; Experienced Vets" loading="lazy" />
+            </div>
+            <div class="drawer-program-info">
+              <span class="drawer-program-badge badge-specialists">Specialists &amp; Experienced</span>
+              <strong class="drawer-program-title">Specialists &amp; Experienced Vets</strong>
+              <p class="drawer-program-desc">Master complex organ procedures, advanced diagnostics &amp; clinical training.</p>
+              <span class="drawer-program-cta cta-specialists">Explore Advanced Masterclasses <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+
+          <!-- Card 4: Pet Owners & Rescuers -->
+          <a href="programs.html?level=Advanced%20Level" class="drawer-program-card card-pet-owners" data-level="advanced">
+            <div class="drawer-program-thumb">
+              <img src="assets/images/learning-paths/pet-first-aid.webp" alt="Pet Owners &amp; Rescuers" loading="lazy" />
+            </div>
+            <div class="drawer-program-info">
+              <span class="drawer-program-badge badge-pet-owners">Pet Owners &amp; Volunteers</span>
+              <strong class="drawer-program-title">Pet Owners &amp; Rescuers</strong>
+              <p class="drawer-program-desc">Learn emergency first aid, choking response, pet CPR &amp; gentle animal handling.</p>
+              <span class="drawer-program-cta cta-pet-owners">Explore Pet First Aid Workshop <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+
         </div>
 
-        <!-- Grade 2 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-2-btn" aria-expanded="false"
-            aria-controls="drawer-grade-2-panel">
-            <span><strong class="grade-pill grade-pill-2">Grade 2</strong> Intermediate</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-2-panel" role="region" aria-labelledby="drawer-grade-2-btn">
-            <a href="programs.html?grade=grade-2&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh
-              Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-2&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-              Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-2&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i>
-              Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-2&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency
-              &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-2&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp;
-              Paravet Staff</a>
-          </div>
-        </div>
-
-        <!-- Grade 3 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-3-btn" aria-expanded="false"
-            aria-controls="drawer-grade-3-panel">
-            <span><strong class="grade-pill grade-pill-3">Grade 3</strong> Competitive</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-3-panel" role="region" aria-labelledby="drawer-grade-3-btn">
-            <a href="programs.html?grade=grade-3&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh
-              Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-3&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-              Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-3&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i>
-              Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-3&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency
-              &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-3&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp;
-              Paravet Staff</a>
-          </div>
-        </div>
-
-        <!-- Grade 4 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-4-btn" aria-expanded="false"
-            aria-controls="drawer-grade-4-panel">
-            <span><strong class="grade-pill grade-pill-4">Grade 4</strong> Advanced</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-4-panel" role="region" aria-labelledby="drawer-grade-4-btn">
-            <a href="programs.html?grade=grade-4&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh
-              Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-4&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-              Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-4&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i>
-              Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-4&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency
-              &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-4&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp;
-              Paravet Staff</a>
-          </div>
-        </div>
-
-        <!-- Grade 5 -->
-        <div class="drawer-sub-accordion">
-          <button type="button" class="drawer-sub-accordion-btn" id="drawer-grade-5-btn" aria-expanded="false"
-            aria-controls="drawer-grade-5-panel">
-            <span><strong class="grade-pill grade-pill-5">Grade 5</strong> Pro</span>
-            <i class="fa-solid fa-chevron-down accordion-caret"></i>
-          </button>
-          <div class="drawer-sub-content" id="drawer-grade-5-panel" role="region" aria-labelledby="drawer-grade-5-btn">
-            <a href="programs.html?grade=grade-5&track=fresh-graduates"><i class="fa-solid fa-stethoscope"></i> Fresh
-              Graduates &amp; Interns</a>
-            <a href="programs.html?grade=grade-5&track=practicing-vets"><i class="fa-solid fa-user-doctor"></i>
-              Practicing Veterinarians</a>
-            <a href="programs.html?grade=grade-5&track=diagnostic-specialization"><i class="fa-solid fa-x-ray"></i>
-              Diagnostic Specialization</a>
-            <a href="programs.html?grade=grade-5&track=emergency-care"><i class="fa-solid fa-heart-pulse"></i> Emergency
-              &amp; Critical Care</a>
-            <a href="programs.html?grade=grade-5&track=vet-nurse"><i class="fa-solid fa-user-nurse"></i> Vet Nurse &amp;
-              Paravet Staff</a>
-          </div>
+        <div class="drawer-programs-footer">
+          <a href="programs.html" class="drawer-view-all-btn">
+            <span>View All 28 Programs Catalog</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
         </div>
       </div>
     </div>

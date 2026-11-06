@@ -75,6 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.addEventListener('vetnova:componentLoaded', (e) => {
+    if (e.detail && e.detail.containerId === 'global-header') {
+      if (typeof initDesktopDropdowns === 'function') {
+        initDesktopDropdowns();
+      }
+    }
     if (e.detail && e.detail.containerId === 'global-footer') {
       if (typeof initFooterDynamicPrograms === 'function') {
         initFooterDynamicPrograms();
@@ -2769,8 +2774,8 @@ async function initProgramFilters() {
 
   const levelNameMap = {
     'all': 'All Programs',
-    'beginner': 'Beginner Level',
-    'foundation': 'Beginner Level',
+    'beginner': 'Foundation Level',
+    'foundation': 'Foundation Level',
     'intermediate': 'Intermediate Level',
     'advanced': 'Advanced Level'
   };
@@ -2810,7 +2815,16 @@ async function initProgramFilters() {
     try {
       const url = new URL(window.location);
       if (level && level !== 'all') {
-        url.searchParams.set('level', level);
+        const lvlLower = level.toLowerCase().trim();
+        let displayLvl = level;
+        if (lvlLower === 'foundation' || lvlLower === 'beginner' || lvlLower.includes('found')) {
+          displayLvl = 'Foundation Level';
+        } else if (lvlLower === 'intermediate' || lvlLower.includes('inter')) {
+          displayLvl = 'Intermediate Level';
+        } else if (lvlLower === 'advanced' || lvlLower.includes('adv')) {
+          displayLvl = 'Advanced Level';
+        }
+        url.searchParams.set('level', displayLvl);
       } else {
         url.searchParams.delete('level');
       }
@@ -2840,14 +2854,15 @@ async function initProgramFilters() {
     const levelRadio = document.querySelector('input[name="program-level"]:checked');
     let rawLevel = levelRadio ? levelRadio.value : (levelSelect ? levelSelect.value : 'all');
     rawLevel = (rawLevel || 'all').toLowerCase().trim();
-    if (rawLevel === 'foundation' || rawLevel === 'grade-1') rawLevel = 'beginner';
-    else if (rawLevel === 'grade-2' || rawLevel === 'grade-3') rawLevel = 'intermediate';
-    else if (rawLevel === 'grade-4' || rawLevel === 'grade-5') rawLevel = 'advanced';
-    const levelFilter = ['beginner', 'intermediate', 'advanced'].includes(rawLevel) ? rawLevel : 'all';
+    if (rawLevel === 'foundation' || rawLevel === 'beginner' || rawLevel.includes('foundation') || rawLevel === 'grade-1') rawLevel = 'foundation';
+    else if (rawLevel === 'intermediate' || rawLevel.includes('intermediate') || rawLevel === 'grade-2' || rawLevel === 'grade-3') rawLevel = 'intermediate';
+    else if (rawLevel === 'advanced' || rawLevel.includes('advanced') || rawLevel === 'grade-4' || rawLevel === 'grade-5') rawLevel = 'advanced';
+    const levelFilter = ['foundation', 'beginner', 'intermediate', 'advanced'].includes(rawLevel) ? rawLevel : 'all';
 
     // Sync Level Radio if different
     if (levelRadio && levelRadio.value !== levelFilter) {
-      const targetRadio = document.querySelector(`input[name="program-level"][value="${levelFilter}"]`);
+      const targetRadio = document.querySelector(`input[name="program-level"][value="${levelFilter}"]`) ||
+        (levelFilter === 'foundation' ? document.querySelector('input[name="program-level"][value="beginner"]') : null);
       if (targetRadio) targetRadio.checked = true;
     }
 
@@ -2905,8 +2920,8 @@ async function initProgramFilters() {
       let matchesLevel = true;
       if (levelFilter && levelFilter !== 'all') {
         const progLevel = (p.learningLevel || p.level || '').toLowerCase().trim();
-        if (levelFilter === 'beginner') {
-          matchesLevel = progLevel === 'beginner' || progLevel === 'foundation' || progLevel.includes('beginner');
+        if (levelFilter === 'foundation' || levelFilter === 'beginner') {
+          matchesLevel = progLevel === 'beginner' || progLevel === 'foundation' || progLevel.includes('beginner') || progLevel.includes('foundation');
         } else if (levelFilter === 'intermediate') {
           matchesLevel = progLevel === 'intermediate' || progLevel.includes('intermediate');
         } else if (levelFilter === 'advanced') {
@@ -3188,19 +3203,77 @@ async function initProgramFilters() {
   // Level or Grade parameter
   let targetLvl = null;
   if (urlParams.has('level')) {
-    targetLvl = urlParams.get('level').toLowerCase().trim();
+    const rawParam = decodeURIComponent(urlParams.get('level')).toLowerCase().trim();
+    if (rawParam.includes('found') || rawParam.includes('begin') || rawParam.includes('fresh') || rawParam.includes('skill-up') || rawParam.includes('student')) {
+      targetLvl = 'foundation';
+    } else if (rawParam.includes('inter') || rawParam.includes('surg') || rawParam.includes('practis') || rawParam.includes('practic') || rawParam.includes('special')) {
+      targetLvl = 'intermediate';
+    } else if (rawParam.includes('adv') || rawParam.includes('pet') || rawParam.includes('first-aid') || rawParam.includes('rescue')) {
+      targetLvl = 'advanced';
+    } else if (rawParam === 'all') {
+      targetLvl = 'all';
+    } else {
+      targetLvl = rawParam;
+    }
   } else if (urlParams.has('grade')) {
     const grd = urlParams.get('grade').toLowerCase().trim();
     if (grd.includes('1')) targetLvl = 'foundation';
     else if (grd.includes('2') || grd.includes('3')) targetLvl = 'intermediate';
     else if (grd.includes('4') || grd.includes('5')) targetLvl = 'advanced';
   }
-  if (targetLvl && ['foundation', 'intermediate', 'advanced', 'all'].includes(targetLvl)) {
-    const radio = document.querySelector(`input[name="program-level"][value="${targetLvl}"]`);
-    if (radio) radio.checked = true;
+
+  if (targetLvl && ['foundation', 'beginner', 'intermediate', 'advanced', 'all'].includes(targetLvl)) {
+    const radio = document.querySelector(`input[name="program-level"][value="${targetLvl}"]`) ||
+      (targetLvl === 'foundation' ? document.querySelector('input[name="program-level"][value="beginner"]') : null) ||
+      (targetLvl === 'beginner' ? document.querySelector('input[name="program-level"][value="foundation"]') : null);
+    if (radio) {
+      radio.checked = true;
+      paramTriggered = true;
+    }
     if (levelSelect) levelSelect.value = targetLvl;
-    paramTriggered = true;
   }
+
+  // In-page mega menu card filtering when on programs.html
+  document.querySelectorAll('.programs-mega-card, .drawer-program-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      const currentPath = window.location.pathname.split('/').pop().toLowerCase();
+      if (currentPath === 'programs.html' || currentPath === 'programs' || currentPath === '') {
+        const targetLevel = card.getAttribute('data-level');
+        if (targetLevel) {
+          e.preventDefault();
+          const targetRadio = document.querySelector(`input[name="program-level"][value="${targetLevel}"]`) ||
+            (targetLevel === 'foundation' ? document.querySelector('input[name="program-level"][value="beginner"]') : null);
+          if (targetRadio) {
+            targetRadio.checked = true;
+          }
+          if (levelSelect) {
+            levelSelect.value = targetLevel;
+          }
+          updateUrlParam(targetLevel);
+          filterPrograms(true);
+
+          // Close mega menu dropdown
+          const parentItem = card.closest('.has-dropdown');
+          if (parentItem) {
+            parentItem.classList.remove('is-open');
+            const toggle = parentItem.querySelector('.dropdown-toggle');
+            if (toggle) toggle.setAttribute('aria-expanded', 'false');
+          }
+          // Close mobile drawer if open
+          const mobileDrawer = document.getElementById('mobile-drawer');
+          const drawerOverlay = document.getElementById('drawer-overlay');
+          if (mobileDrawer) mobileDrawer.classList.remove('open');
+          if (drawerOverlay) drawerOverlay.classList.remove('open');
+          document.body.style.overflow = '';
+
+          const catalogSec = document.getElementById('all-programs');
+          if (catalogSec) {
+            catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      }
+    });
+  });
 
   // Category or Track parameter
   let targetCat = null;
@@ -4534,6 +4607,9 @@ function initDesktopDropdowns() {
   const CLOSE_DELAY = 200; // 200ms close delay (approx 150ms-300ms)
 
   dropdownContainers.forEach(container => {
+    if (container.dataset.dropdownBound === 'true') return;
+    container.dataset.dropdownBound = 'true';
+
     let closeTimer = null;
     const toggleLink = container.querySelector('.dropdown-toggle');
     const menuPanel = container.querySelector('.dropdown-menu');
@@ -4561,17 +4637,37 @@ function initDesktopDropdowns() {
       }
     }
 
+    function closeDropdownNow() {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+      container.classList.remove('is-open');
+      if (toggleLink) {
+        toggleLink.setAttribute('aria-expanded', 'false');
+      }
+    }
+
     function scheduleCloseDropdown() {
       if (closeTimer) {
         clearTimeout(closeTimer);
       }
       closeTimer = setTimeout(() => {
-        container.classList.remove('is-open');
-        if (toggleLink) {
-          toggleLink.setAttribute('aria-expanded', 'false');
-        }
-        closeTimer = null;
+        closeDropdownNow();
       }, CLOSE_DELAY);
+    }
+
+    // Toggle on click for desktop & touch devices
+    if (toggleLink) {
+      toggleLink.addEventListener('click', (e) => {
+        if (window.innerWidth >= 992) {
+          const isOpen = container.classList.contains('is-open');
+          if (!isOpen) {
+            e.preventDefault();
+            openDropdown();
+          }
+        }
+      });
     }
 
     // Pointer enters the combined hover region (trigger or dropdown panel)
@@ -4611,15 +4707,35 @@ function initDesktopDropdowns() {
       const menuLinks = menuPanel.querySelectorAll('a');
       menuLinks.forEach(link => {
         link.addEventListener('click', () => {
-          if (closeTimer) {
-            clearTimeout(closeTimer);
-            closeTimer = null;
-          }
+          closeDropdownNow();
+        });
+      });
+    }
+  });
+
+  // Global click outside to close dropdowns
+  document.addEventListener('click', (e) => {
+    dropdownContainers.forEach(container => {
+      if (!container.contains(e.target) && container.classList.contains('is-open')) {
+        container.classList.remove('is-open');
+        const toggleLink = container.querySelector('.dropdown-toggle');
+        if (toggleLink) toggleLink.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  // Escape key closes open dropdowns
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      dropdownContainers.forEach(container => {
+        if (container.classList.contains('is-open')) {
           container.classList.remove('is-open');
+          const toggleLink = container.querySelector('.dropdown-toggle');
           if (toggleLink) {
             toggleLink.setAttribute('aria-expanded', 'false');
+            toggleLink.focus();
           }
-        });
+        }
       });
     }
   });
