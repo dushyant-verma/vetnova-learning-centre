@@ -20,7 +20,7 @@ window.loadedAdvisorMap = window.loadedAdvisorMap || {
     organization: 'Broadlands Animal Hospital & PVS',
     qualification: 'BVSc & AH, MVSc, PhD, NIH Postdoc',
     image: 'assets/images/about/about-advisor-01.webp',
-    linkedin: 'https://www.linkedin.com/in/purushottam-narute-dvm-phd-46387019/',
+    linkedin: '',
     displayOrder: 1,
     previewBio: 'Dr. Purushottam Narute is a veterinarian, biomedical researcher, and veterinary healthcare leader with a multidisciplinary background in veterinary medicine, animal biotechnology, infectious diseases, and microbiology.',
     fullBio: [
@@ -57,7 +57,7 @@ window.loadedAdvisorMap = window.loadedAdvisorMap || {
     organization: 'Madras Veterinary College, TANUVAS',
     qualification: 'B.V.Sc., M.V.Sc., Ph.D., PGDVSR',
     image: 'assets/images/about/about-advisor-02.webp',
-    linkedin: 'https://www.linkedin.com/search/results/all/?keywords=Dr%20M%20Chandrasekar%20TANUVAS',
+    linkedin: '',
     displayOrder: 2,
     previewBio: 'Accomplished veterinary academic, clinician, researcher and educator with more than 24 years of service at TANUVAS, specializing in clinical medicine, therapeutics, surgery, emergency & critical care, and veterinary ethics.',
     fullBio: [
@@ -243,7 +243,7 @@ window.loadedAdvisorMap = window.loadedAdvisorMap || {
     organization: 'Oregon State University & AO VET',
     qualification: 'BVSc & AH (Hons), MS, DACVS (Small Animal)',
     image: 'assets/images/about/about-advisor-03.webp',
-    linkedin: 'https://www.linkedin.com/search/results/all/?keywords=Shantibhushan%20Jha%20Oregon',
+    linkedin: '',
     displayOrder: 3,
     previewBio: 'Associate Professor of Small Animal Orthopedic Surgery at Oregon State University’s Carlson College of Veterinary Medicine, board-certified surgeon (DACVS), and AO VET International CDC Chair-Elect specializing in minimally invasive surgery, joint health, and pedagogical AI.',
     fullBio: [
@@ -281,7 +281,7 @@ window.loadedAdvisorMap = window.loadedAdvisorMap || {
     organization: 'Dr. Chariars Pets Speciality Clinic & V-TEAMS',
     qualification: 'Veterinary Surgeon (Surgery, Radiology & Anaesthesia)',
     image: 'assets/images/about/about-advisor-04.webp',
-    linkedin: 'https://www.linkedin.com/search/results/all/?keywords=Dr%20V%20M%20Chariar',
+    linkedin: '',
     displayOrder: 4,
     previewBio: 'Dr. V. M. Chariar is a veterinary surgeon specialising in small-animal surgery, radiology and anaesthesia. Together with Dr. J. V. Chariar, he co-founded Dr. Chariars Pets Speciality Clinic in Thane and has helped develop it into a centre for advanced surgical, reconstructive, diagnostic and veterinary care.',
     fullBio: [
@@ -321,7 +321,7 @@ window.loadedAdvisorMap = window.loadedAdvisorMap || {
     organization: 'Maharashtra Animal & Fishery Sciences University (MAFSU)',
     qualification: 'Director of Research, DBT CREST Fellow',
     image: 'assets/images/about/about-advisor-05.webp',
-    linkedin: 'https://www.linkedin.com/search/results/all/?keywords=Dr%20Nitin%20Kurkure',
+    linkedin: '',
     displayOrder: 5,
     previewBio: 'Director of Research at Maharashtra Animal & Fishery Sciences University, Nagpur, leading advanced veterinary research in host-pathogen interactions and antimicrobial resistance (AMR), with 204 scientific publications and prestigious national honours.',
     fullBio: [
@@ -357,7 +357,7 @@ window.loadedAdvisorMap = window.loadedAdvisorMap || {
     organization: 'NVF Foundation & Mars Petcare',
     qualification: 'MVSc, MSc (England)',
     image: 'assets/images/about/about-advisor-06.webp',
-    linkedin: 'https://www.linkedin.com/search/results/all/?keywords=Kallahalli%20Umesh',
+    linkedin: '',
     displayOrder: 6,
     previewBio: 'Kallahalli Umesh is an internationally respected small animal clinician, educator, and scientific communicator with over three decades of experience in small animal medicine, recognized for evidence-based practice and continuing clinical education across Asia.',
     fullBio: [
@@ -491,11 +491,9 @@ function renderAdvisorCard(member, isHidden = false) {
   const previewBio = escapeHtml(member.previewBio || member.bio || '');
   const photo = escapeHtml(member.image || 'assets/images/about/about-advisor-01.webp');
 
-  let linkedinUrl = member.linkedin;
-  if (!linkedinUrl || linkedinUrl === '#' || linkedinUrl === 'https://linkedin.com' || linkedinUrl === 'https://www.linkedin.com') {
-    const encodedName = encodeURIComponent(member.name ? member.name.replace(/^(Dr\.|Dr|Prof\.|Prof)\s+/i, '').trim() : '');
-    linkedinUrl = encodedName ? `https://www.linkedin.com/search/results/all/?keywords=${encodedName}` : 'https://www.linkedin.com';
-  }
+  const hasLinkedinUrl = Boolean(member.linkedin && member.linkedin.trim() && member.linkedin !== '#' && member.linkedin !== 'javascript:void(0)');
+  const linkedinUrl = hasLinkedinUrl ? member.linkedin : 'javascript:void(0)';
+  const linkedinTarget = hasLinkedinUrl ? ' target="_blank" rel="noopener noreferrer"' : '';
 
   return `
     <div class="advisor-card${isHidden ? ' advisor-card-hidden' : ''}" id="advisor-${idKey}">
@@ -511,7 +509,7 @@ function renderAdvisorCard(member, isHidden = false) {
             <span>View Profile</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
-          <a href="${escapeHtml(linkedinUrl)}" target="_blank" rel="noopener noreferrer" class="advisor-card-linkedin-btn" title="LinkedIn Profile" aria-label="LinkedIn Profile">
+          <a href="${escapeHtml(linkedinUrl)}"${linkedinTarget} class="advisor-card-linkedin-btn" title="LinkedIn Profile" aria-label="LinkedIn Profile">
             <i class="fa-brands fa-linkedin"></i>
           </a>
         </div>
@@ -543,18 +541,30 @@ function openAdvisorProfileModal(advisorId) {
   if (nameEl) nameEl.textContent = member.name || '';
   if (designationEl) designationEl.textContent = member.designation || '';
 
-  // Determine LinkedIn URL: prefer specific profile, or search query by name, or fallback to linkedin.com
-  let linkedinUrl = member.linkedin;
-  if (!linkedinUrl || linkedinUrl === '#' || linkedinUrl === 'https://linkedin.com' || linkedinUrl === 'https://www.linkedin.com') {
-    const encodedName = encodeURIComponent(member.name ? member.name.replace(/^(Dr\.|Dr|Prof\.|Prof)\s+/i, '').trim() : '');
-    linkedinUrl = encodedName ? `https://www.linkedin.com/search/results/all/?keywords=${encodedName}` : 'https://www.linkedin.com';
-  }
+  // Show LinkedIn icon/button without external URL if none provided
+  const hasModalLinkedinUrl = Boolean(member.linkedin && member.linkedin.trim() && member.linkedin !== '#' && member.linkedin !== 'javascript:void(0)');
+  const modalLinkedinUrl = hasModalLinkedinUrl ? member.linkedin : 'javascript:void(0)';
 
   if (linkedinBtn) {
-    linkedinBtn.href = linkedinUrl;
+    linkedinBtn.href = modalLinkedinUrl;
+    if (hasModalLinkedinUrl) {
+      linkedinBtn.setAttribute('target', '_blank');
+      linkedinBtn.setAttribute('rel', 'noopener noreferrer');
+    } else {
+      linkedinBtn.removeAttribute('target');
+      linkedinBtn.removeAttribute('rel');
+    }
   }
   if (linkedinTopBtn) {
-    linkedinTopBtn.href = linkedinUrl;
+    linkedinTopBtn.href = modalLinkedinUrl;
+    if (hasModalLinkedinUrl) {
+      linkedinTopBtn.setAttribute('target', '_blank');
+      linkedinTopBtn.setAttribute('rel', 'noopener noreferrer');
+    } else {
+      linkedinTopBtn.removeAttribute('target');
+      linkedinTopBtn.removeAttribute('rel');
+    }
+    linkedinTopBtn.style.display = 'inline-flex';
   }
   if (linkedinWrap) {
     linkedinWrap.style.display = 'flex';
