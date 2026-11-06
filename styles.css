@@ -24046,7 +24046,14 @@ body {
     grid-template-columns: 1fr;
     gap: 20px;
   }
+
   .sitemap-card {
     padding: 24px 20px;
   }
+}
+
+.btn-counselling-pill i,
+a.btn.btn-outline.btn-sm.footer-quick-btn,
+.maps-btn {
+  display: none;
 }
