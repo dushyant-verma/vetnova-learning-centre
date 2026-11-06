@@ -116,6 +116,7 @@
     "Contact": "संपर्क",
     "Contact Us": "संपर्क करें",
     "Book Counselling": "परामर्श बुक करें",
+    "Call Now": "अभी कॉल करें",
     "Book Free Counselling ": "निःशुल्क परामर्श बुक करें",
     "Book Free Counselling": "निःशुल्क परामर्श बुक करें",
     "Partner With Us": "हमारे साथ साझेदारी करें",

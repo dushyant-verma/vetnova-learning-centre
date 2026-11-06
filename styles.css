@@ -3339,6 +3339,45 @@ body.page-vet-nurse .drawer-lang-switcher {
   border-top: 1px solid #f1f5f9;
 }
 
+.btn-call-now {
+  background: var(--grad-primary, linear-gradient(135deg, #0ba39f 0%, #15aaa5 100%));
+  color: #ffffff !important;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  min-height: 48px;
+  box-shadow: 0 4px 14px rgba(18, 199, 193, 0.3);
+  transition: all 0.25s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: var(--btn-radius-primary, 12px);
+  width: 100%;
+}
+
+.btn-call-now:hover {
+  background: linear-gradient(135deg, #098e8a 0%, #0ea8a3 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(18, 199, 193, 0.4);
+  color: #ffffff !important;
+}
+
+.btn-call-now:active {
+  transform: translateY(0);
+}
+
+.btn-call-now i {
+  font-size: 15px;
+  color: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.btn-call-now:hover i {
+  transform: rotate(15deg) scale(1.1);
+}
+
 .drawer-footer {
   margin-top: auto;
   border-top: 1px solid #edf2f7;
