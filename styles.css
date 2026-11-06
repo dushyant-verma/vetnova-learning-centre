@@ -23935,3 +23935,118 @@ body {
 .btn-counselling-pill i {
   color: white;
 }
+
+/* ==========================================================================
+   Sitemap Page Styles
+   ========================================================================== */
+.sitemap-section {
+  padding: 60px 0 90px;
+  background-color: var(--soft-bg, #f8fafd);
+}
+
+.sitemap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+  align-items: start;
+}
+
+.sitemap-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-xl, 16px);
+  padding: 30px 28px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.sitemap-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  border-color: var(--teal, #12c7c1);
+}
+
+.sitemap-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.sitemap-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(18, 199, 193, 0.12);
+  color: var(--teal, #12c7c1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.sitemap-card-title {
+  margin: 0;
+  font-size: 1.28rem;
+  font-weight: 800;
+  color: var(--navy-2, #0f172a);
+}
+
+.sitemap-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sitemap-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.45;
+}
+
+.sitemap-list li i {
+  color: var(--teal, #12c7c1);
+  font-size: 0.82rem;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.sitemap-list a {
+  color: #334155;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.sitemap-list a:hover {
+  color: var(--teal, #12c7c1);
+  padding-left: 3px;
+}
+
+.sitemap-subhead {
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  margin: 18px 0 8px 0;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .sitemap-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .sitemap-card {
+    padding: 24px 20px;
+  }
+}

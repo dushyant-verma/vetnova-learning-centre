@@ -331,6 +331,10 @@
                 <p class="advisor-spec">Small Animal Soft Tissue &amp; Orthopedic Surgery Specialist.</p>
                 <div class="advisor-footer">
                   <span class="advisor-exp">Senior Advisor</span>
+                  <div class="advisor-actions" style="display: flex; align-items: center; gap: 8px;">
+                    <a class="social-link" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile of Dr. Ramesh Deshmukh"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <button type="button" class="btn btn-outline btn-sm advisor-profile-btn" data-advisor-id="dr-ramesh-deshmukh">View Profile</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -346,6 +350,10 @@
                 <p class="advisor-spec">Veterinary Diagnostic Imaging &amp; Ultrasonography Consultant.</p>
                 <div class="advisor-footer">
                   <span class="advisor-exp">Senior Advisor</span>
+                  <div class="advisor-actions" style="display: flex; align-items: center; gap: 8px;">
+                    <a class="social-link" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile of Dr. Sunita Rao"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <button type="button" class="btn btn-outline btn-sm advisor-profile-btn" data-advisor-id="dr-sunita-rao">View Profile</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -361,6 +369,10 @@
                 <p class="advisor-spec">Clinical Operations Strategist &amp; Curriculum Mentor.</p>
                 <div class="advisor-footer">
                   <span class="advisor-exp">Senior Advisor</span>
+                  <div class="advisor-actions" style="display: flex; align-items: center; gap: 8px;">
+                    <a class="social-link" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile of Dr. Vikram Patil"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <button type="button" class="btn btn-outline btn-sm advisor-profile-btn" data-advisor-id="dr-vikram-patil">View Profile</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -376,12 +388,42 @@
                 <p class="advisor-spec">Compassionate Care Standards &amp; Ethical Clinical Practice.</p>
                 <div class="advisor-footer">
                   <span class="advisor-exp">Senior Advisor</span>
+                  <div class="advisor-actions" style="display: flex; align-items: center; gap: 8px;">
+                    <a class="social-link" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile of Dr. Ananya Joshi"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <button type="button" class="btn btn-outline btn-sm advisor-profile-btn" data-advisor-id="dr-ananya-joshi">View Profile</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      <!-- Advisory Board Profile Modal -->
+      <div class="faculty-modal-overlay" id="advisor-modal" aria-hidden="true" role="dialog" aria-labelledby="advisor-modal-name">
+        <div class="faculty-modal-content">
+          <button class="faculty-modal-close" id="advisor-modal-close" aria-label="Close modal">&times;</button>
+          <div class="faculty-modal-layout">
+            <div class="faculty-modal-left">
+              <img id="advisor-modal-image" src="" alt="Advisory Board Member" class="faculty-modal-image" />
+            </div>
+            <div class="faculty-modal-right">
+              <h2 id="advisor-modal-name" class="faculty-modal-name"></h2>
+              <p id="advisor-modal-role" class="faculty-modal-role"></p>
+              <div class="faculty-modal-meta">
+                <span id="advisor-modal-qual" class="faculty-modal-qual"></span>
+                <span id="advisor-modal-exp" class="faculty-modal-exp"></span>
+              </div>
+              <p id="advisor-modal-intro" class="faculty-modal-intro" style="margin-bottom: 24px;"></p>
+              <div id="advisor-modal-linkedin-wrap">
+                <a id="advisor-modal-linkedin" class="btn btn-outline btn-sm" href="#" target="_blank" rel="noopener noreferrer">
+                  <i class="fa-brands fa-linkedin-in" style="color: #0077b5;"></i> View LinkedIn Profile
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
 

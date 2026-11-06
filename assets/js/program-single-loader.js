@@ -70,6 +70,27 @@ async function initProgramSinglePage() {
     heroEyebrow.innerHTML = `<i class="fa-solid fa-award"></i> ${cleanCategory.toUpperCase()}`;
   }
 
+  // Clean up Program Summary Bar: remove Level and deduplicate Availability
+  const summaryBar = document.querySelector(".program-summary-bar");
+  if (summaryBar) {
+    // 1. Completely remove Level item if present
+    summaryBar.querySelectorAll(".summary-item").forEach(item => {
+      const s = item.querySelector("small");
+      if (s && s.textContent.trim().toLowerCase() === "level") {
+        item.remove();
+      }
+    });
+
+    // 2. Ensure only a single Availability item exists
+    const availItems = Array.from(summaryBar.querySelectorAll(".summary-item")).filter(item => {
+      const s = item.querySelector("small");
+      return s && s.textContent.trim().toLowerCase() === "availability";
+    });
+    if (availItems.length > 1) {
+      availItems.slice(1).forEach(item => item.remove());
+    }
+  }
+
   // Update Duration & Availability in summary bar & batch cards
   const summaryDuration = document.querySelectorAll(".program-summary-bar .summary-item, .batch-info-item");
   summaryDuration.forEach(item => {
@@ -82,28 +103,6 @@ async function initProgramSinglePage() {
       strong.textContent = program.availability || "24 Hours";
     }
   });
-
-  const summaryBar = document.querySelector(".program-summary-bar");
-  if (summaryBar && !summaryBar.querySelector(".summary-item-availability")) {
-    const availItem = document.createElement("div");
-    availItem.className = "summary-item summary-item-availability";
-    availItem.innerHTML = `
-      <i class="fa-solid fa-calendar-check text-teal"></i>
-      <div class="summary-info">
-        <small>Availability</small>
-        <strong>${program.availability || "24 Hours"}</strong>
-      </div>
-    `;
-    const locItem = Array.from(summaryBar.querySelectorAll(".summary-item")).find(it => {
-      const s = it.querySelector("small");
-      return s && s.textContent.trim().toLowerCase() === "location";
-    });
-    if (locItem) {
-      summaryBar.insertBefore(availItem, locItem);
-    } else {
-      summaryBar.appendChild(availItem);
-    }
-  }
 
   // Update Syllabus Container
   if (syllabusContainer && typeof window.renderThreeStageSyllabusHTML === "function") {

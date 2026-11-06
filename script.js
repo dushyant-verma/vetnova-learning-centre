@@ -21,6 +21,7 @@ function runAllInitializers() {
   initSingleProgramGradeRepresentation();
   initFaqSearch();
   initPopularCoursesFilter();
+  initFooterDynamicPrograms();
   initBatchTabs();
   initSingleFocusJourney();
   initFacultyModal();
@@ -72,6 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
       runAllInitializers();
     });
   }
+
+  document.addEventListener('vetnova:componentLoaded', (e) => {
+    if (e.detail && e.detail.containerId === 'global-footer') {
+      if (typeof initFooterDynamicPrograms === 'function') {
+        initFooterDynamicPrograms();
+      }
+    }
+  });
 });
 
 function loadComponent(id, url) {
@@ -1677,6 +1686,20 @@ function initEnquiryModal() {
       if (triggerEl.dataset.context && triggerEl.dataset.context.trim()) {
         return triggerEl.dataset.context.trim();
       }
+      // Check parent card container (e.g. Popular Courses or Program Cards)
+      const parentCard = triggerEl.closest('.popular-course-card, .program-card, .course-card');
+      if (parentCard) {
+        if (parentCard.dataset.program && parentCard.dataset.program.trim()) {
+          return parentCard.dataset.program.trim();
+        }
+        const cardTitle = parentCard.querySelector('.popular-course-card-title, .program-card-title, h3');
+        if (cardTitle && cardTitle.textContent.trim()) {
+          return cardTitle.textContent.trim().replace(/^#?\d+[\.\s\-#]+\s*/, '');
+        }
+        if (parentCard.dataset.slug) {
+          return resolveProgramTitleFromSlug(parentCard.dataset.slug);
+        }
+      }
       const href = triggerEl.getAttribute('href') || '';
       if (href.includes('program=')) {
         try {
@@ -1684,6 +1707,9 @@ function initEnquiryModal() {
           const p = u.searchParams.get('program');
           if (p) return resolveProgramTitleFromSlug(p);
         } catch (e) {}
+      }
+      if (href && href.endsWith('.html') && !['index.html', 'programs.html', 'contact.html', 'about.html', 'blog.html', 'faq.html', 'facility-tour.html'].includes(href)) {
+        return resolveProgramTitleFromSlug(href);
       }
     }
 
@@ -1898,9 +1924,12 @@ function initEnquiryModal() {
       const isExternalOrDirect = href.startsWith('tel:') || href.startsWith('mailto:') || href.startsWith('https://wa.me') || href.startsWith('whatsapp:');
 
       if (!isExternalOrDirect) {
+        // Popular Courses Card "Enquire" buttons on Homepage
+        const isPopularCourseEnquire = (candidateBtn.closest('.popular-course-card') || candidateBtn.matches('.popular-course-btn')) && text.includes('enquire');
+
         // Explicit classes / attributes
         const hasExplicitClass = candidateBtn.matches(
-          '.btn-counselling-pill, #header-counselling-btn, .header-counselling-btn, .btn-counselling-modal, .btn-book-counselling, [data-action="book-counselling"], .btn-show-counselling'
+          '.btn-counselling-pill, #header-counselling-btn, .header-counselling-btn, .btn-counselling-modal, .btn-book-counselling, [data-action="book-counselling"], .btn-show-counselling, .btn-enquire-card'
         );
 
         // Counselling text anywhere in button (catches "Book free Counselling", "Book Free Counselling", "Book Counselling", etc.)
@@ -1911,7 +1940,7 @@ function initEnquiryModal() {
         const hasProgramCtaClass = candidateBtn.classList.contains('btn-apply-now');
         const hasProgramContactLink = href.includes('contact.html') && (href.includes('program=') || onProgPage);
 
-        if (hasExplicitClass || hasCounsellingText || (onProgPage && (hasProgramCtaClass || hasProgramContactLink))) {
+        if (isPopularCourseEnquire || hasExplicitClass || hasCounsellingText || (onProgPage && (hasProgramCtaClass || hasProgramContactLink))) {
           // If on contact.html itself and clicking an in-page anchor (#contact-form, #enquiry), allow natural in-page scrolling unless in header
           const isContactPage = window.location.pathname.endsWith('contact.html');
           const isNavOrSticky = candidateBtn.closest('#global-header, .topbar, .drawer-menu, .mobile-stick');
@@ -1927,13 +1956,16 @@ function initEnquiryModal() {
       e.stopPropagation();
 
       const progName = detectProgramName(triggerBtn);
+      const isEnquire = triggerBtn.textContent.toLowerCase().includes('enquire') || triggerBtn.dataset.action === 'enquire';
       openModal(e, {
-        title: 'Book a Counselling Session',
+        title: isEnquire ? 'Enquire About Program' : 'Book a Counselling Session',
         subtitle: progName
           ? `Speak with our admissions mentors regarding the ${progName} program.`
           : 'Speak with our team to find the right veterinary learning programme for your goals.',
-        source: triggerBtn.dataset.source || (progName ? `Program Page - ${progName}` : 'Book Free Counselling Button'),
+        source: triggerBtn.dataset.source || (progName ? (isEnquire ? `Popular Courses - ${progName}` : `Program Page - ${progName}`) : (isEnquire ? 'Enquire Button' : 'Book Free Counselling Button')),
         program: progName,
+        isEnquiry: isEnquire,
+        submitText: isEnquire ? 'Submit Enquiry' : 'Request Counselling',
         triggerEl: triggerBtn
       });
       return;
@@ -2927,7 +2959,7 @@ async function initProgramFilters() {
           const pLevelLower = pLevel.toLowerCase();
 
           if (levelFilter === 'beginner' || levelFilter === 'foundation') {
-            viewSyllabusUrl = `${progUrl}?level=foundation#curriculum`;
+            viewSyllabusUrl = `${progUrl}?level=foundation#syllabus`;
             topBadgeHTML = `<span class="badge-grade-pill badge-pill-foundation"><i class="fa-solid fa-seedling"></i> Beginner</span>`;
             levelBadgesHTML = `
               <div class="card-level-badges">
@@ -2937,7 +2969,7 @@ async function initProgramFilters() {
               </div>
             `;
           } else if (levelFilter === 'intermediate') {
-            viewSyllabusUrl = `${progUrl}?level=intermediate#curriculum`;
+            viewSyllabusUrl = `${progUrl}?level=intermediate#syllabus`;
             topBadgeHTML = `<span class="badge-grade-pill badge-pill-intermediate"><i class="fa-solid fa-chart-line"></i> Intermediate</span>`;
             levelBadgesHTML = `
               <div class="card-level-badges">
@@ -2947,7 +2979,7 @@ async function initProgramFilters() {
               </div>
             `;
           } else if (levelFilter === 'advanced') {
-            viewSyllabusUrl = `${progUrl}?level=advanced#curriculum`;
+            viewSyllabusUrl = `${progUrl}?level=advanced#syllabus`;
             topBadgeHTML = `<span class="badge-grade-pill badge-pill-advanced"><i class="fa-solid fa-award"></i> Advanced</span>`;
             levelBadgesHTML = `
               <div class="card-level-badges">
@@ -2958,7 +2990,7 @@ async function initProgramFilters() {
             `;
           } else {
             // All levels: highlight this program's specific CMS learning level
-            viewSyllabusUrl = progUrl;
+            viewSyllabusUrl = `${progUrl}#syllabus`;
             const badgeClass = pLevelLower === 'advanced' ? 'badge-pill-advanced' : pLevelLower === 'intermediate' ? 'badge-pill-intermediate' : 'badge-pill-foundation';
             const badgeIcon = pLevelLower === 'advanced' ? 'fa-award' : pLevelLower === 'intermediate' ? 'fa-chart-line' : 'fa-seedling';
             topBadgeHTML = `<span class="badge-grade-pill ${badgeClass}"><i class="fa-solid ${badgeIcon}"></i> ${pLevel}</span>`;
@@ -2971,6 +3003,8 @@ async function initProgramFilters() {
               </div>
             `;
           }
+
+          const exploreUrl = `${progUrl}#hero`;
 
           return `
             <div class="program-card" data-order="${orderNum}" data-slug="${p.slug || ''}" data-category="${p.category || ''}">
@@ -2985,7 +3019,7 @@ async function initProgramFilters() {
               </div>
               <div class="program-card-body">
                 ${levelBadgesHTML}
-                <h3 class="program-card-title"><a href="${viewSyllabusUrl}">${programTitle}</a></h3>
+                <h3 class="program-card-title"><a href="${exploreUrl}">${programTitle}</a></h3>
                 <p class="program-card-desc">${p.description || ''}</p>
                 <div class="program-card-meta">
                   <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> ${durationVal}</div>
@@ -2999,7 +3033,7 @@ async function initProgramFilters() {
                   </div>
                   <div class="program-card-actions">
                     <a class="btn btn-outline btn-sm" href="${viewSyllabusUrl}">${viewSyllabusText} <i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="${progUrl}" class="btn btn-primary btn-sm btn-enquire-card">Enquire Now</a>
+                    <a href="${exploreUrl}" class="btn btn-primary btn-sm">Explore</a>
                   </div>
                 </div>
               </div>
@@ -3482,8 +3516,8 @@ function initPopularCoursesFilter() {
               ${highlightsHtml}
             </ul>
             <div class="popular-course-card-actions">
-              <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm" href="${progUrl}">Enquire</a>
-              <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm" href="${progUrl}">View Program</a>
+              <a class="popular-course-btn popular-course-btn-outline popular-course-btn-sm" href="${progUrl}" data-action="enquire" data-program="${liveP.title}">Enquire</a>
+              <a class="popular-course-btn popular-course-btn-primary popular-course-btn-sm" href="${progUrl}">Explore</a>
             </div>
           </div>
         `;
@@ -3517,7 +3551,46 @@ function initPopularCoursesFilter() {
   }
   window.addEventListener('vetnova:programs-synced', (e) => {
     syncCardsWithLivePrograms(e.detail);
+    if (typeof initFooterDynamicPrograms === 'function') {
+      initFooterDynamicPrograms();
+    }
   });
+}
+
+/* ==========================================================================
+   Footer Dynamic Programs Synchronizer (Pulls from CMS / API)
+   ========================================================================== */
+async function initFooterDynamicPrograms() {
+  const listEl = document.getElementById('footer-programs-list');
+  if (!listEl) return;
+
+  try {
+    let progs = window.VETNOVA_LIVE_PROGRAMS;
+    if (!Array.isArray(progs) || progs.length === 0) {
+      if (typeof getPrograms === 'function') {
+        progs = await getPrograms({ status: 'Published' });
+      } else {
+        const res = await fetch('http://localhost:5001/api/programs?status=Published').catch(() => null);
+        if (res && res.ok) {
+          progs = await res.json();
+        }
+      }
+    }
+
+    if (Array.isArray(progs) && progs.length > 0) {
+      const published = progs.filter(p => p.status !== 'Draft');
+      if (published.length > 0) {
+        const top5 = published.slice(0, 5);
+        listEl.innerHTML = top5.map(p => {
+          const title = (p.title || '').replace(/^#?\d+[\.\s\-#]+\s*/, '');
+          const progUrl = (typeof resolveProgramUrl === 'function') ? resolveProgramUrl(p) : `${p.slug || ''}.html`;
+          return `<li><a href="${progUrl}"><i class="fa-solid fa-chevron-right"></i> ${title}</a></li>`;
+        }).join('');
+      }
+    }
+  } catch (err) {
+    console.info('[Footer] Retaining fallback program links:', err);
+  }
 }
 
 /* ==========================================================================

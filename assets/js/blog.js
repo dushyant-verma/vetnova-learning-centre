@@ -121,7 +121,6 @@ function renderFeaturedBlog(blog, container) {
             alt="VetNova Advisory Team" loading="lazy" decoding="async" />
           <div class="post-author-info">
             <strong>VetNova Advisory Team</strong>
-            <small>${escapeHtml(blog.authorRole || 'Faculty Advisory Board')}</small>
           </div>
           <a class="btn btn-primary btn-sm" style="margin-left: auto;" href="blog-single.html?slug=${encodeURIComponent(blog.slug || blog._id)}">
             Read Article <i class="fa-solid fa-arrow-right"></i>
@@ -192,7 +191,6 @@ function renderBlogGrid(blogs, container) {
               alt="VetNova Advisory Team" loading="lazy" decoding="async" />
             <div class="post-author-info">
               <strong>VetNova Advisory Team</strong>
-              <small>${escapeHtml(blog.authorRole || 'Faculty Advisory Board')}</small>
             </div>
           </div>
         </div>

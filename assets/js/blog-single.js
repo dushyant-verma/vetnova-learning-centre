@@ -390,7 +390,6 @@ async function loadRelatedArticles(currentBlog) {
           <img src="${escapeHtml(b.authorImage || 'assets/images/blog/blog-author-amit.webp')}" alt="VetNova Advisory Team" loading="lazy" decoding="async" />
           <div class="post-author-info">
             <strong>VetNova Advisory Team</strong>
-            <small>${escapeHtml(b.authorRole || 'Faculty Advisory Board')}</small>
           </div>
         </div>
       </div>

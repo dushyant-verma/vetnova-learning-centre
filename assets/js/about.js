@@ -11,7 +11,50 @@ document.addEventListener('DOMContentLoaded', () => {
 // Cache map of loaded faculty objects indexed by ID or slug
 window.loadedFacultyMap = window.loadedFacultyMap || {};
 
+// Cache map of loaded advisory board objects indexed by ID or slug
+window.loadedAdvisorMap = window.loadedAdvisorMap || {
+  'dr-ramesh-deshmukh': {
+    name: 'Dr. Ramesh Deshmukh',
+    designation: 'Senior Surgical Advisor',
+    organization: 'VetNova Advisory Council',
+    qualification: '25+ Yrs Experience',
+    bio: 'Small Animal Soft Tissue & Orthopedic Surgery Specialist guiding surgical curriculum standards, sterile wet labs, and clinical procedural mentorship.',
+    image: 'assets/images/about/about-advisor-01.webp',
+    linkedin: 'https://www.linkedin.com'
+  },
+  'dr-sunita-rao': {
+    name: 'Dr. Sunita Rao',
+    designation: 'Radiology & Imaging Director',
+    organization: 'VetNova Advisory Council',
+    qualification: '20+ Yrs Experience',
+    bio: 'Veterinary Diagnostic Imaging & Ultrasonography Consultant overseeing diagnostic training labs, FAST protocol training, and systematic radiograph reading.',
+    image: 'assets/images/about/about-advisor-02.webp',
+    linkedin: 'https://www.linkedin.com'
+  },
+  'dr-vikram-patil': {
+    name: 'Dr. Vikram Patil',
+    designation: 'Academic Curriculum Lead',
+    organization: 'VetNova Advisory Council',
+    qualification: '22+ Yrs Experience',
+    bio: 'Former University Professor & Clinical Operations Strategist driving practical education excellence, case-based learning protocols, and institutional accreditations.',
+    image: 'assets/images/about/about-advisor-03.webp',
+    linkedin: 'https://www.linkedin.com'
+  },
+  'dr-ananya-joshi': {
+    name: 'Dr. Ananya Joshi',
+    designation: 'Animal Welfare & Ethics Officer',
+    organization: 'VetNova Advisory Council',
+    qualification: '18+ Yrs Experience',
+    bio: 'Compassionate Care Standards & Shelter Medicine Expert advocating animal welfare in clinical training, fear-free handling, and compassionate veterinary practice.',
+    image: 'assets/images/about/about-advisor-04.webp',
+    linkedin: 'https://www.linkedin.com'
+  }
+};
+
 async function initAboutPageData() {
+  bindAdvisorProfileButtons();
+  initAdvisorModalEvents();
+
   await Promise.all([
     loadFacultySection(),
     loadAdvisoryBoardSection()
@@ -75,15 +118,24 @@ async function loadAdvisoryBoardSection() {
   if (!advisorGrid) return;
 
   const boardList = await getAdvisoryBoard();
-  if (!boardList || boardList.length === 0) return; // Keep fallback HTML if empty
+  if (!boardList || boardList.length === 0) {
+    bindAdvisorProfileButtons();
+    return;
+  }
 
   advisorGrid.innerHTML = boardList.map(member => {
+    const idKey = member._id || slugify(member.name);
+    window.loadedAdvisorMap[idKey] = member;
+    if (member.name) {
+      window.loadedAdvisorMap[slugify(member.name)] = member;
+    }
+
     const name = escapeHtml(member.name || 'Board Member');
     const designation = escapeHtml(member.designation || 'Senior Advisory Member');
     const org = escapeHtml(member.organization || 'VetNova Advisory Council');
     const bio = escapeHtml(member.bio || member.qualification || 'Guiding clinical curriculum and strategic vision.');
     const photo = member.image || 'assets/images/about/about-advisor-01.webp';
-    const linkedin = member.linkedin || '#';
+    const linkedin = member.linkedin || '';
 
     return `
       <div class="advisor-card">
@@ -96,12 +148,104 @@ async function loadAdvisoryBoardSection() {
           <p class="advisor-spec">${bio}</p>
           <div class="advisor-footer">
             <span class="advisor-exp">${escapeHtml(member.qualification || 'Senior Advisor')}</span>
-            ${member.linkedin ? `<a class="social-link" href="${escapeHtml(linkedin)}" target="_blank" aria-label="LinkedIn profile of ${name}"><i class="fa-brands fa-linkedin-in"></i></a>` : ''}
+            <div class="advisor-actions" style="display: flex; align-items: center; gap: 8px;">
+              ${linkedin ? `<a class="social-link" href="${escapeHtml(linkedin)}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile of ${name}"><i class="fa-brands fa-linkedin-in"></i></a>` : ''}
+              <button type="button" class="btn btn-outline btn-sm advisor-profile-btn" data-advisor-id="${idKey}">View Profile</button>
+            </div>
           </div>
         </div>
       </div>
     `;
   }).join('');
+
+  bindAdvisorProfileButtons();
+}
+
+function bindAdvisorProfileButtons() {
+  const btns = document.querySelectorAll('.advisor-profile-btn');
+  btns.forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const advisorId = btn.getAttribute('data-advisor-id');
+      openAdvisorProfileModal(advisorId);
+    };
+  });
+}
+
+function openAdvisorProfileModal(advisorId) {
+  const member = window.loadedAdvisorMap[advisorId] || (typeof advisorProfiles !== 'undefined' ? advisorProfiles[advisorId] : null);
+  if (!member) return;
+
+  const modal = document.getElementById('advisor-modal');
+  if (!modal) return;
+
+  const imgEl = document.getElementById('advisor-modal-image');
+  const nameEl = document.getElementById('advisor-modal-name');
+  const roleEl = document.getElementById('advisor-modal-role');
+  const qualEl = document.getElementById('advisor-modal-qual');
+  const expEl = document.getElementById('advisor-modal-exp');
+  const introEl = document.getElementById('advisor-modal-intro');
+  const linkedinWrap = document.getElementById('advisor-modal-linkedin-wrap');
+  const linkedinEl = document.getElementById('advisor-modal-linkedin');
+
+  if (imgEl) {
+    imgEl.src = member.image || 'assets/images/about/about-advisor-01.webp';
+    imgEl.alt = member.name || 'Advisory Board Member';
+  }
+  if (nameEl) nameEl.textContent = member.name || '';
+  if (roleEl) {
+    const org = member.organization ? ` • ${member.organization}` : '';
+    roleEl.textContent = `${member.designation || 'Advisory Board Member'}${org}`;
+  }
+  if (qualEl) {
+    qualEl.textContent = member.qualification || 'Senior Clinical Advisor';
+    qualEl.style.display = qualEl.textContent ? 'inline-block' : 'none';
+  }
+  if (expEl) {
+    expEl.textContent = member.experience || member.organization || 'VetNova Advisory Council';
+    expEl.style.display = expEl.textContent ? 'inline-block' : 'none';
+  }
+  if (introEl) {
+    introEl.textContent = member.bio || 'Advising on veterinary clinical curriculum, quality assurance, and surgical training standards.';
+  }
+  if (linkedinEl && linkedinWrap) {
+    if (member.linkedin && member.linkedin !== '#' && member.linkedin.trim() !== '') {
+      linkedinEl.href = member.linkedin;
+      linkedinWrap.style.display = 'block';
+    } else {
+      linkedinWrap.style.display = 'none';
+    }
+  }
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function initAdvisorModalEvents() {
+  const modal = document.getElementById('advisor-modal');
+  if (!modal) return;
+
+  const closeBtn = document.getElementById('advisor-modal-close');
+  const closeModal = () => {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  if (closeBtn) {
+    closeBtn.onclick = closeModal;
+  }
+
+  modal.onclick = (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) {
+      closeModal();
+    }
+  });
 }
 
 function bindFacultyProfileButtons() {
