@@ -7228,6 +7228,12 @@ section#contact-hero .inner-hero-image img {
   color: #475569;
   margin-bottom: 20px;
   line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .advisor-footer {
@@ -7632,6 +7638,7 @@ section#contact-hero .inner-hero-image img {
   height: 100%;
   object-fit: cover;
   display: block;
+  object-position: top;
 }
 
 .advisor-modal-linkedin-wrap {
@@ -25371,6 +25378,7 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

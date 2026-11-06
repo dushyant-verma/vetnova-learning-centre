@@ -81,17 +81,18 @@ async function initProgramSinglePage() {
       }
     });
 
-    // 2. Ensure only a single Availability item exists
+    // 2. Ensure only a single Course Length item exists
     const availItems = Array.from(summaryBar.querySelectorAll(".summary-item")).filter(item => {
       const s = item.querySelector("small");
-      return s && s.textContent.trim().toLowerCase() === "availability";
+      const text = s ? s.textContent.trim().toLowerCase() : "";
+      return text === "availability" || text === "course length";
     });
     if (availItems.length > 1) {
       availItems.slice(1).forEach(item => item.remove());
     }
   }
 
-  // Update Duration & Availability in summary bar & batch cards
+  // Update Duration & Course Length in summary bar & batch cards
   const summaryDuration = document.querySelectorAll(".program-summary-bar .summary-item, .batch-info-item");
   summaryDuration.forEach(item => {
     const small = item.querySelector("small");
@@ -99,8 +100,9 @@ async function initProgramSinglePage() {
     if (small && strong && small.textContent.trim().toLowerCase() === "duration") {
       strong.textContent = program.duration || "3 Days";
     }
-    if (small && strong && small.textContent.trim().toLowerCase() === "availability") {
-      strong.textContent = program.availability || "24 Hours";
+    if (small && strong && (small.textContent.trim().toLowerCase() === "availability" || small.textContent.trim().toLowerCase() === "course length")) {
+      small.textContent = "Course Length";
+      strong.textContent = program.courseLength || program.availability || "8 hours/ day";
     }
   });
 

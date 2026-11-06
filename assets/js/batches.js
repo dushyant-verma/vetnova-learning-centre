@@ -17,7 +17,7 @@ const DEMO_UPCOMING_BATCHES = [
     facultyName: 'Dr. Purushottam Narute & Specialist Faculty',
     startDate: new Date(Date.now() + 14 * 86400000).toISOString(),
     endDate: new Date(Date.now() + 19 * 86400000).toISOString(),
-    duration: '5 Days Hands-On',
+    duration: '3 Days Hands-On',
     seatStatus: '🟢 4 Seats Available',
     status: 'Upcoming',
     isDemo: true

@@ -1040,7 +1040,7 @@ function initProgramFinder() {
           title: 'Soft tissue surgery',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Sept 25, 2026',
           url: 'soft-tissue-surgery.html'
         },
@@ -1048,15 +1048,15 @@ function initProgramFinder() {
           title: 'Orthopaedics',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'October 2026',
           url: 'orthopaedics.html'
         },
         {
           title: 'Skill-up program',
           level: 'Flagship, 4 weeks',
-          duration: '4 Weeks',
-          courseLength: '120 Hours Tactile Lab',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Enrolling Now',
           url: 'veterinary-skill-up.html'
         }
@@ -1066,15 +1066,15 @@ function initProgramFinder() {
           title: 'Small animal orthopaedics',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'October 2026',
           url: 'orthopaedics.html'
         },
         {
           title: 'Veterinary skill-up program',
           level: 'Flagship, 4 weeks',
-          duration: '4 Weeks',
-          courseLength: '120 Hours',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Enrolling Now',
           url: 'veterinary-skill-up.html'
         },
@@ -1082,7 +1082,7 @@ function initProgramFinder() {
           title: 'Physiotherapy & rehabilitation',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'veterinary-physiotherapy-and-rehabilitation.html'
         }
@@ -1092,7 +1092,7 @@ function initProgramFinder() {
           title: 'Diagnostic imaging',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Nov 12, 2026',
           url: 'diagnostic-imaging.html'
         },
@@ -1100,7 +1100,7 @@ function initProgramFinder() {
           title: 'Radiology & ultrasound',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'radiology-ultrasound.html'
         },
@@ -1108,7 +1108,7 @@ function initProgramFinder() {
           title: 'General medicine & diagnostics',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'general-medicine.html'
         }
@@ -1118,7 +1118,7 @@ function initProgramFinder() {
           title: 'Emergency and critical care',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Oct 15, 2026',
           url: 'emergency-and-critical-care.html'
         },
@@ -1126,7 +1126,7 @@ function initProgramFinder() {
           title: 'Anaesthesia & pain management',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'anaesthesia-and-pain-management.html'
         },
@@ -1134,7 +1134,7 @@ function initProgramFinder() {
           title: 'Pet emergency & ICU triage',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'emergency-medicine.html'
         }
@@ -1144,7 +1144,7 @@ function initProgramFinder() {
           title: 'General medicine',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Sept 2026',
           url: 'general-medicine.html'
         },
@@ -1152,7 +1152,7 @@ function initProgramFinder() {
           title: 'Veterinary dermatology',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'veterinary-dermatology.html'
         },
@@ -1160,7 +1160,7 @@ function initProgramFinder() {
           title: 'Infectious diseases',
           level: 'Foundation',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'infectious-diseases.html'
         }
@@ -1173,7 +1173,7 @@ function initProgramFinder() {
           title: 'Soft tissue surgery track',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Oct 28, 2026',
           url: 'soft-tissue-surgery.html'
         },
@@ -1181,7 +1181,7 @@ function initProgramFinder() {
           title: 'Veterinary dentistry & extractions',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'veterinary-dentistry.html'
         },
@@ -1189,7 +1189,7 @@ function initProgramFinder() {
           title: 'Anaesthesia & pain management',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'anaesthesia-and-pain-management.html'
         }
@@ -1199,7 +1199,7 @@ function initProgramFinder() {
           title: 'Small animal orthopaedics',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Nov 2026',
           url: 'orthopaedics.html'
         },
@@ -1207,7 +1207,7 @@ function initProgramFinder() {
           title: 'Physiotherapy & rehabilitation',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'veterinary-physiotherapy-and-rehabilitation.html'
         }
@@ -1217,7 +1217,7 @@ function initProgramFinder() {
           title: 'Radiology & ultrasound masterclass',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Oct 14, 2026',
           url: 'radiology-ultrasound.html'
         },
@@ -1225,7 +1225,7 @@ function initProgramFinder() {
           title: 'Diagnostic imaging',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'diagnostic-imaging.html'
         },
@@ -1233,7 +1233,7 @@ function initProgramFinder() {
           title: 'Clinical pathology',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'clinical-pathology.html'
         }
@@ -1243,7 +1243,7 @@ function initProgramFinder() {
           title: 'Emergency and critical care',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Oct 15, 2026',
           url: 'emergency-and-critical-care.html'
         },
@@ -1251,7 +1251,7 @@ function initProgramFinder() {
           title: 'Anaesthesia and pain management',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'anaesthesia-and-pain-management.html'
         }
@@ -1261,7 +1261,7 @@ function initProgramFinder() {
           title: 'Veterinary dermatology',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'veterinary-dermatology.html'
         },
@@ -1269,7 +1269,7 @@ function initProgramFinder() {
           title: 'Feline medicine',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'feline-medicine.html'
         },
@@ -1277,7 +1277,7 @@ function initProgramFinder() {
           title: 'Infectious diseases',
           level: 'Intermediate',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'infectious-diseases.html'
         }
@@ -1290,7 +1290,7 @@ function initProgramFinder() {
           title: 'Advanced soft tissue organ surgery',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Nov 2026',
           url: 'soft-tissue-surgery.html'
         },
@@ -1298,7 +1298,7 @@ function initProgramFinder() {
           title: 'Small animal orthopaedics masterclass',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Dec 2026',
           url: 'orthopaedics.html'
         }
@@ -1308,7 +1308,7 @@ function initProgramFinder() {
           title: 'Small animal orthopaedics (bone plating)',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Nov 2026',
           url: 'orthopaedics.html'
         },
@@ -1316,7 +1316,7 @@ function initProgramFinder() {
           title: 'Veterinary physiotherapy & rehab',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'veterinary-physiotherapy-and-rehabilitation.html'
         }
@@ -1326,7 +1326,7 @@ function initProgramFinder() {
           title: 'Diagnostic imaging & Doppler ultrasound',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Nov 2026',
           url: 'diagnostic-imaging.html'
         },
@@ -1334,7 +1334,7 @@ function initProgramFinder() {
           title: 'Radiology & ultrasound masterclass',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'radiology-ultrasound.html'
         }
@@ -1344,7 +1344,7 @@ function initProgramFinder() {
           title: 'Emergency and critical care (ICU & ventilator)',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Oct 2026',
           url: 'emergency-and-critical-care.html'
         }
@@ -1354,7 +1354,7 @@ function initProgramFinder() {
           title: 'Veterinary cardiology',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Nov 2026',
           url: 'veterinary-cardiology.html'
         },
@@ -1362,7 +1362,7 @@ function initProgramFinder() {
           title: 'Veterinary neurology',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Dec 2026',
           url: 'veterinary-neurology.html'
         },
@@ -1370,7 +1370,7 @@ function initProgramFinder() {
           title: 'Veterinary ophthalmology',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'veterinary-ophthalmology.html'
         },
@@ -1378,7 +1378,7 @@ function initProgramFinder() {
           title: 'Veterinary oncology',
           level: 'Advanced',
           duration: '3 Days',
-          courseLength: '24 Hours',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'oncology.html'
         }
@@ -1390,8 +1390,8 @@ function initProgramFinder() {
         {
           title: 'Pet First Aid & Wound Management Workshop',
           level: 'First Aid Workshop',
-          duration: '1–2 Days',
-          courseLength: '16 Hours Hands-On',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Enrolling Now',
           url: 'emergency-medicine.html'
         }
@@ -1400,8 +1400,8 @@ function initProgramFinder() {
         {
           title: 'Pet Trauma, Bandaging & Safe Handling',
           level: 'First Aid Workshop',
-          duration: '1–2 Days',
-          courseLength: '16 Hours Hands-On',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'emergency-medicine.html'
         }
@@ -1410,8 +1410,8 @@ function initProgramFinder() {
         {
           title: 'Pet Emergency Triage & First Aid',
           level: 'First Aid Workshop',
-          duration: '1–2 Days',
-          courseLength: '16 Hours Hands-On',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Enrolling Now',
           url: 'emergency-medicine.html'
         }
@@ -1420,16 +1420,16 @@ function initProgramFinder() {
         {
           title: 'Pet CPR, Choking & Emergency Life Support',
           level: 'First Aid Workshop',
-          duration: '1–2 Days',
-          courseLength: '16 Hours Hands-On',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Enrolling Now',
           url: 'emergency-medicine.html'
         },
         {
           title: 'Pet Emergency & Critical Care Workshop',
           level: 'First Aid Workshop',
-          duration: '2 Days',
-          courseLength: '16 Hours Hands-On',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'emergency-medicine.html'
         }
@@ -1438,8 +1438,8 @@ function initProgramFinder() {
         {
           title: 'Pet Poisoning, Toxin & Home Emergency Care',
           level: 'First Aid Workshop',
-          duration: '1–2 Days',
-          courseLength: '16 Hours Hands-On',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Enrolling Now',
           url: 'emergency-medicine.html'
         }
@@ -1448,16 +1448,16 @@ function initProgramFinder() {
         {
           title: 'Pet CPR, Choking & Emergency Life Support',
           level: 'First Aid Workshop',
-          duration: '1–2 Days',
-          courseLength: '16 Hours Hands-On',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Enrolling Now',
           url: 'emergency-medicine.html'
         },
         {
           title: 'Pet Emergency & Critical Care Workshop',
           level: 'First Aid Workshop',
-          duration: '2 Days',
-          courseLength: '16 Hours Hands-On',
+          duration: '3 Days',
+          courseLength: '8 hours/ day',
           nextBatch: 'Available',
           url: 'emergency-medicine.html'
         }
@@ -1965,7 +1965,7 @@ function initContactForm() {
     }
 
     const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn ? submitBtn.innerHTML : 'Book Free Counselling Session <i class="fa-solid fa-calendar-check"></i>';
+    const originalText = submitBtn ? submitBtn.innerHTML : 'Book Free Counselling Session';
 
     if (submitBtn) {
       submitBtn.disabled = true;
@@ -3475,7 +3475,7 @@ async function initProgramFilters() {
 
           // Duration & Course Length from CMS/dataset
           const durationVal = p.duration || '3 Days';
-          const courseLengthVal = p.courseLength || p.availability || '24 Hours';
+          const courseLengthVal = p.courseLength || p.availability || '8 hours/ day';
 
           // Program link, syllabus URL & Level badge (show ONLY active level)
           let viewSyllabusUrl = `${progUrl}#syllabus`;
@@ -3913,7 +3913,7 @@ function updateRelatedPrograms(activeTrack) {
       title: 'Soft Tissue Surgery Track',
       desc: 'Intensive surgical workshop covering sterile setup, tissue handling, and suture patterns.',
       duration: '3 Days',
-      courseLength: '24 Hours',
+      courseLength: '8 hours/ day',
       href: 'soft-tissue-surgery.html',
       img: 'assets/images/programs/program-surgery.webp'
     },
@@ -3923,7 +3923,7 @@ function updateRelatedPrograms(activeTrack) {
       title: 'Radiology & Ultrasound Masterclass',
       desc: 'Radiograph reading & hands-on abdominal ultrasound FAST scanning.',
       duration: '3 Days',
-      courseLength: '24 Hours',
+      courseLength: '8 hours/ day',
       href: 'radiology-ultrasound.html',
       img: 'assets/images/programs/program-radiology.webp'
     },
@@ -3933,7 +3933,7 @@ function updateRelatedPrograms(activeTrack) {
       title: 'Pet Emergency & Critical Care',
       desc: 'Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and triage.',
       duration: '3 Days',
-      courseLength: '24 Hours',
+      courseLength: '8 hours/ day',
       href: 'emergency-medicine.html',
       img: 'assets/images/programs/program-emergency.webp'
     },
@@ -3943,7 +3943,7 @@ function updateRelatedPrograms(activeTrack) {
       title: 'General Medicine & Diagnostics',
       desc: 'Systematic clinical diagnostic and therapeutic protocols for small animal internal medicine practice.',
       duration: '3 Days',
-      courseLength: '24 Hours',
+      courseLength: '8 hours/ day',
       href: 'general-medicine.html',
       img: 'assets/images/programs/program-skill-up.webp'
     },
@@ -3953,7 +3953,7 @@ function updateRelatedPrograms(activeTrack) {
       title: 'Small Animal Orthopaedics',
       desc: 'Hands-on bone plating, fracture stabilization, pinning, and post-op radiograph evaluation.',
       duration: '3 Days',
-      courseLength: '24 Hours',
+      courseLength: '8 hours/ day',
       href: 'orthopaedics.html',
       img: 'assets/images/programs/program-orthopaedics.webp'
     }
@@ -3972,7 +3972,7 @@ function updateRelatedPrograms(activeTrack) {
         <p class="program-card-desc">${item.desc}</p>
         <div class="program-card-meta">
           <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> ${item.duration || '3 Days'}</div>
-          <div class="meta-item"><i class="fa-solid fa-graduation-cap text-teal"></i> <strong>Course Length:</strong> ${item.courseLength || '24 Hours'}</div>
+          <div class="meta-item"><i class="fa-solid fa-graduation-cap text-teal"></i> <strong>Course Length:</strong> ${item.courseLength || '8 hours/ day'}</div>
         </div>
         <div class="program-card-footer">
           <div class="program-card-actions" style="display: flex; width: 100%; justify-content: flex-end;">
@@ -4114,7 +4114,7 @@ function initPopularCoursesFilter() {
           <div class="popular-course-body">
             <div class="popular-course-meta-bar">
               <span class="popular-course-meta-item"><i class="fa-regular fa-clock"></i> ${liveP.duration || '3 Days'}</span>
-              <span class="popular-course-meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> ${liveP.availability || '24 Hours'}</span>
+              <span class="popular-course-meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> ${liveP.courseLength || liveP.availability || '8 hours/ day'}</span>
               <span class="popular-course-level-tag">Accredited</span>
             </div>
             <h3 class="popular-course-card-title">${liveP.title}</h3>

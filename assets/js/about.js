@@ -566,38 +566,9 @@ function openAdvisorProfileModal(advisorId) {
       ? member.fullBio 
       : (member.fullBio ? [member.fullBio] : [member.bio || '']);
 
-    const qualifications = Array.isArray(member.qualifications) ? member.qualifications : [];
     const achievements = Array.isArray(member.achievements) ? member.achievements : [];
     const researchInterests = Array.isArray(member.researchInterests) ? member.researchInterests : [];
     const extraSectionsHtml = member.extraSectionsHtml || '';
-
-    const qualificationsTableHtml = qualifications.length > 0 ? `
-      <div class="advisor-detail-section">
-        <h4 class="advisor-detail-heading"><i class="fa-solid fa-graduation-cap"></i> Educational Qualifications</h4>
-        <div class="advisor-table-responsive">
-          <table class="advisor-table">
-            <thead>
-              <tr>
-                <th>Qualification</th>
-                <th>Discipline / Field</th>
-                <th>Institution / University</th>
-                <th>Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${qualifications.map(q => `
-                <tr>
-                  <td><strong>${escapeHtml(q.degree || '')}</strong></td>
-                  <td>${escapeHtml(q.field || '')}</td>
-                  <td>${escapeHtml(q.institution || '')}</td>
-                  <td>${escapeHtml(q.year || '')}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    ` : '';
 
     const achievementsHtml = achievements.length > 0 ? `
       <div class="advisor-detail-section">
@@ -622,7 +593,6 @@ function openAdvisorProfileModal(advisorId) {
         <h4 class="advisor-detail-heading"><i class="fa-solid fa-user-doctor"></i> Full Biography</h4>
         ${fullBioParagraphs.map(p => `<p class="advisor-detail-bio">${escapeHtml(p)}</p>`).join('')}
       </div>
-      ${qualificationsTableHtml}
       ${achievementsHtml}
       ${researchHtml}
       ${extraSectionsHtml}

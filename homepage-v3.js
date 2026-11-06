@@ -288,7 +288,7 @@ window.VetNovaHP3 = {
         title: 'Emergency Medicine & Critical Care',
         desc: 'Rapid triage protocols, shock resuscitation, CPR chest compression algorithms, fluid therapy pumps, and ventilator monitoring.',
         duration: '3 Days',
-        hours: '24 Hours',
+        hours: '8 hours/ day',
         salary: '₹6.0 - ₹11 LPA',
         placement: '95.4%',
         skills: ['CPR Resuscitation', 'Fluid Shock Rates', 'Endotracheal Intubation', 'Oxygenation', 'Triage Assessment'],
