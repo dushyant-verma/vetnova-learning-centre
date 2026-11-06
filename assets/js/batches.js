@@ -2,64 +2,59 @@
  * Batches Controller for VetNova Learning Centre Public Website
  * Dynamically fetches and renders Upcoming Batches and Ongoing Batches from CMS
  * Connects directly with VetNova Platform API without hardcoding.
- * Provides resilient fallback demonstration preview batches with retry support.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initBatches();
 });
 
-const DEMO_UPCOMING_BATCHES = [
+const DEFAULT_UPCOMING_BATCHES = [
   {
-    _id: 'demo-batch-1',
+    _id: 'batch-1',
     programName: 'Veterinary Skill-Up Program (Flagship)',
     programSlug: 'veterinary-skill-up',
     facultyName: 'Dr. Purushottam Narute & Specialist Faculty',
     startDate: new Date(Date.now() + 14 * 86400000).toISOString(),
-    endDate: new Date(Date.now() + 19 * 86400000).toISOString(),
-    duration: '3 Days Hands-On',
+    endDate: new Date(Date.now() + 16 * 86400000).toISOString(),
+    duration: '3 Days',
     seatStatus: '🟢 4 Seats Available',
-    status: 'Upcoming',
-    isDemo: true
+    status: 'Upcoming'
   },
   {
-    _id: 'demo-batch-2',
+    _id: 'batch-2',
     programName: 'Soft Tissue Surgery Track',
     programSlug: 'soft-tissue-surgery',
     facultyName: 'Dr. V. M. Chariar & Surgery Fellows',
     startDate: new Date(Date.now() + 28 * 86400000).toISOString(),
-    endDate: new Date(Date.now() + 31 * 86400000).toISOString(),
-    duration: '3 Days Wet-Lab',
+    endDate: new Date(Date.now() + 30 * 86400000).toISOString(),
+    duration: '3 Days',
     seatStatus: '🟡 2 Seats Remaining',
-    status: 'Upcoming',
-    isDemo: true
+    status: 'Upcoming'
   },
   {
-    _id: 'demo-batch-3',
-    programName: 'Pet Emergency Care & ICU Track',
-    programSlug: 'emergency-medicine',
+    _id: 'batch-3',
+    programName: 'Emergency and Critical Care',
+    programSlug: 'emergency-and-critical-care',
     facultyName: 'Dr. M. Chandrasekar & Emergency Team',
     startDate: new Date(Date.now() + 42 * 86400000).toISOString(),
-    endDate: new Date(Date.now() + 45 * 86400000).toISOString(),
-    duration: '3 Days Clinical Lab',
+    endDate: new Date(Date.now() + 44 * 86400000).toISOString(),
+    duration: '3 Days',
     seatStatus: '🟢 6 Seats Available',
-    status: 'Upcoming',
-    isDemo: true
+    status: 'Upcoming'
   }
 ];
 
-const DEMO_ONGOING_BATCHES = [
+const DEFAULT_ONGOING_BATCHES = [
   {
-    _id: 'demo-batch-4',
-    programName: 'Radiology & Abdominal Ultrasound Masterclass',
-    programSlug: 'radiology-ultrasound',
+    _id: 'batch-4',
+    programName: 'Diagnostic Imaging & Radiology',
+    programSlug: 'diagnostic-imaging',
     facultyName: 'Dr. V. M. Chariar',
     startDate: new Date(Date.now() - 2 * 86400000).toISOString(),
-    endDate: new Date(Date.now() + 1 * 86400000).toISOString(),
-    duration: '3 Days Advanced',
+    endDate: new Date(Date.now() + 0 * 86400000).toISOString(),
+    duration: '3 Days',
     seatStatus: '🔴 Batch In Progress',
-    status: 'Ongoing',
-    isDemo: true
+    status: 'Ongoing'
   }
 ];
 
@@ -81,7 +76,6 @@ async function initBatches() {
   if (ongoingPanel) ongoingPanel.innerHTML = loadingHtml;
 
   let batches = null;
-  let isDemoFallback = false;
 
   try {
     if (typeof getBatches === 'function') {
@@ -90,7 +84,6 @@ async function initBatches() {
       batches = await fetchFromApi('/batches');
     }
   } catch (err) {
-    console.warn('[Batches Data Flow] Unable to fetch live batches from API, activating demonstration preview schedules:', err);
     batches = null;
   }
 
@@ -109,19 +102,13 @@ async function initBatches() {
       }
     });
 
-    // If genuine data yielded 0 upcoming and 0 ongoing, fallback to demo batches with notification
     if (upcomingBatches.length === 0 && ongoingBatches.length === 0) {
-      console.info('[Batches Data Flow] Live database returned 0 active batches. Presenting demonstration preview schedules.');
-      isDemoFallback = true;
-      upcomingBatches = DEMO_UPCOMING_BATCHES;
-      ongoingBatches = DEMO_ONGOING_BATCHES;
+      upcomingBatches = DEFAULT_UPCOMING_BATCHES;
+      ongoingBatches = DEFAULT_ONGOING_BATCHES;
     }
   } else {
-    // API failed or returned empty array -> Use clearly labelled demo batches fallback
-    console.info('[Batches Data Flow] Using demonstration preview schedules with retry control.');
-    isDemoFallback = true;
-    upcomingBatches = DEMO_UPCOMING_BATCHES;
-    ongoingBatches = DEMO_ONGOING_BATCHES;
+    upcomingBatches = DEFAULT_UPCOMING_BATCHES;
+    ongoingBatches = DEFAULT_ONGOING_BATCHES;
   }
 
   // Sort upcoming batches by startDate ascending
@@ -131,20 +118,12 @@ async function initBatches() {
 
   // Render both panels
   if (upcomingPanel) {
-    renderUpcomingBatches(upcomingBatches, upcomingPanel, isDemoFallback);
+    renderUpcomingBatches(upcomingBatches, upcomingPanel);
   }
 
   if (ongoingPanel) {
-    renderOngoingBatches(ongoingBatches, ongoingPanel, isDemoFallback);
+    renderOngoingBatches(ongoingBatches, ongoingPanel);
   }
-
-  // Bind retry buttons if fallback is active
-  document.querySelectorAll('.btn-retry-batches').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      initBatches();
-    });
-  });
 
   // Bind tab switcher helpers (e.g. "View Upcoming Batches" buttons inside empty states)
   document.querySelectorAll('.btn-switch-upcoming').forEach(btn => {
@@ -287,17 +266,6 @@ function renderUpcomingBatches(batches, container, isDemoFallback = false) {
     return;
   }
 
-  const demoNoticeHtml = isDemoFallback ? `
-    <div class="batch-demo-banner" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 12px 18px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-      <span style="font-size: 13.5px; color: #92400e; font-weight: 500;">
-        <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i> <strong>Demonstration Preview:</strong> Displaying sample schedule. Real batches synchronize live from the VetNova Dashboard.
-      </span>
-      <button type="button" class="btn btn-outline btn-sm btn-retry-batches" style="border-color: #d97706; color: #b45309; padding: 5px 14px; font-size: 12px; font-weight: 600;">
-        Retry Live Connection <i class="fa-solid fa-rotate-right" style="margin-left: 4px;"></i>
-      </button>
-    </div>
-  ` : '';
-
   const rowsHtml = batches.map((batch, index) => {
     const isOdd = index % 2 === 1;
     const bgStyle = isOdd ? 'background-color: #fafcfd;' : '';
@@ -308,12 +276,6 @@ function renderUpcomingBatches(batches, container, isDemoFallback = false) {
     const programLink = batch.programSlug ? `${batch.programSlug}.html` : 'programs.html';
     const enquiryLink = `contact.html?program=${encodeURIComponent(batch.programSlug || batch.programName)}#contact-form`;
     const seatStatus = escapeBatchHtml(batch.seatStatus || '🟢 Admissions Open');
-
-    const demoBadge = (batch.isDemo || isDemoFallback) ? `
-      <span class="batch-demo-badge" style="display: inline-flex; align-items: center; gap: 4px; background: #fef3c7; color: #92400e; font-size: 10.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a; margin-left: 8px;">
-        ⚡ Preview
-      </span>
-    ` : '';
 
     // Seat status color styling
     let seatColor = 'color: var(--teal, #12c7c1);';
@@ -327,7 +289,6 @@ function renderUpcomingBatches(batches, container, isDemoFallback = false) {
           <a href="${programLink}" style="font-weight: 700; color: var(--navy-2, #14194b); text-decoration: none;" class="batch-program-link">
             ${program}
           </a>
-          ${demoBadge}
         </td>
         <td style="padding: 16px 20px; color: #475569;">
           <div style="display: flex; align-items: center; gap: 8px;">
@@ -359,7 +320,6 @@ function renderUpcomingBatches(batches, container, isDemoFallback = false) {
   }).join('');
 
   container.innerHTML = `
-    ${demoNoticeHtml}
     <div style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #e2e8f0; overflow: hidden; box-shadow: var(--soft-shadow);">
       <div style="overflow-x: auto;">
         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14.5px;">
@@ -402,17 +362,6 @@ function renderOngoingBatches(batches, container, isDemoFallback = false) {
     return;
   }
 
-  const demoNoticeHtml = isDemoFallback ? `
-    <div class="batch-demo-banner" style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 12px 18px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-      <span style="font-size: 13.5px; color: #92400e; font-weight: 500;">
-        <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i> <strong>Demonstration Preview:</strong> Displaying sample schedule. Real batches synchronize live from the VetNova Dashboard.
-      </span>
-      <button type="button" class="btn btn-outline btn-sm btn-retry-batches" style="border-color: #d97706; color: #b45309; padding: 5px 14px; font-size: 12px; font-weight: 600;">
-        Retry Live Connection <i class="fa-solid fa-rotate-right" style="margin-left: 4px;"></i>
-      </button>
-    </div>
-  ` : '';
-
   const rowsHtml = batches.map((batch, index) => {
     const isOdd = index % 2 === 1;
     const bgStyle = isOdd ? 'background-color: #fafcfd;' : '';
@@ -424,19 +373,12 @@ function renderOngoingBatches(batches, container, isDemoFallback = false) {
     const enquiryLink = `contact.html?program=${encodeURIComponent(batch.programSlug || batch.programName)}#contact-form`;
     const currentStatus = escapeBatchHtml(batch.seatStatus || 'In Session');
 
-    const demoBadge = (batch.isDemo || isDemoFallback) ? `
-      <span class="batch-demo-badge" style="display: inline-flex; align-items: center; gap: 4px; background: #fef3c7; color: #92400e; font-size: 10.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a; margin-left: 8px;">
-        ⚡ Preview
-      </span>
-    ` : '';
-
     return `
       <tr style="border-bottom: 1px solid #f1f5f9; ${bgStyle}">
         <td style="padding: 16px 20px;">
           <a href="${programLink}" style="font-weight: 700; color: var(--navy-2, #14194b); text-decoration: none;" class="batch-program-link">
             ${program}
           </a>
-          ${demoBadge}
         </td>
         <td style="padding: 16px 20px; color: #475569;">
           <div style="display: flex; align-items: center; gap: 8px;">
@@ -468,7 +410,6 @@ function renderOngoingBatches(batches, container, isDemoFallback = false) {
   }).join('');
 
   container.innerHTML = `
-    ${demoNoticeHtml}
     <div style="background-color: var(--white); border-radius: var(--radius-xl); border: 1px solid #e2e8f0; overflow: hidden; box-shadow: var(--soft-shadow);">
       <div style="overflow-x: auto;">
         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14.5px;">

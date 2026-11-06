@@ -25864,3 +25864,9 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
     padding: 14px 20px;
   }
 }
+
+/* Hide demonstration preview banners and badges on live site */
+.batch-demo-banner,
+.batch-demo-badge {
+  display: none !important;
+}
