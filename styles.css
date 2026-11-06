@@ -26065,7 +26065,7 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
 
 /* Hide demonstration preview banners and badges on live site */
 .batch-demo-banner,
-.batch-demo-badge {
+.batch-demo-badge , .match-card-level{
   display: none !important;
 }
 
