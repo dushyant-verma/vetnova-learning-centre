@@ -26065,10 +26065,15 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
 
 /* Hide demonstration preview banners and badges on live site */
 .batch-demo-banner,
-.batch-demo-badge , .match-card-level{
+.batch-demo-badge,
+.match-card-level {
   display: none !important;
 }
 
 a.btn.btn-outline.btn-book-counselling span {
   color: black;
+}
+
+.persona-hero {
+  padding: 140px 0 50px !important;
 }
