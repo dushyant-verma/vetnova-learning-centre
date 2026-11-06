@@ -4078,7 +4078,21 @@ function initPopularCoursesFilter() {
           descEl.textContent = liveP.shortDescription || liveP.description;
         }
         const imgEl = card.querySelector('.popular-course-image');
-        if (imgEl && liveP.image) imgEl.src = liveP.image;
+        if (imgEl) {
+          let resolvedImg = liveP.image || '';
+          if (slug === 'orthopaedics' || (liveP.slug === 'orthopaedics')) {
+            resolvedImg = 'assets/images/programs/program-orthopaedics.webp';
+          } else if (resolvedImg.includes('facility-diagnostics-room')) {
+            resolvedImg = 'assets/vet_facility_diagnostics_room.webp';
+          }
+          if (resolvedImg) {
+            imgEl.src = resolvedImg;
+          }
+          imgEl.onerror = function() {
+            this.onerror = null;
+            this.src = 'assets/images/programs/program-surgery.webp';
+          };
+        }
         if (liveP.duration) {
           const durEl = card.querySelector('.popular-course-meta-bar .popular-course-meta-item:first-child');
           if (durEl) durEl.innerHTML = `<i class="fa-regular fa-clock"></i> ${liveP.duration}`;
