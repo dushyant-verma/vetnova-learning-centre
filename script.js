@@ -2762,13 +2762,15 @@ function initEnquiryModal() {
       }
 
       const pagePath = window.location.pathname || 'website';
-      const sourceTag = form.dataset.source || 'Book Counselling Modal';
+      const sourceTag = form.dataset.source || 'Counselling Form';
 
-      // Counselling session requests are routed as general leads with role saved in profile
+      // Counselling session requests are routed with audience, program, source and full details
       const payload = {
         name: nameVal,
         firstName: firstNameVal,
         lastName: lastNameVal,
+        audience: roleVal || 'Practising Veterinarians',
+        programName: programVal || 'General Counselling / Undecided',
         email: emailVal,
         phone: cleanPhone || phoneVal,
         countryCode: countryCode,
@@ -2781,6 +2783,8 @@ function initEnquiryModal() {
           lastName: lastNameVal,
           role: roleVal,
           whoAreYou: roleVal,
+          audience: roleVal,
+          programName: programVal || 'General Counselling / Undecided',
           interestedProgram: programVal || 'General Counselling / Undecided',
           currentStage: roleVal,
           yearsOfExperience: '1-5 years',
@@ -2788,7 +2792,7 @@ function initEnquiryModal() {
           areaToStrengthen: programVal || 'General Clinical Practice',
           preferredTrainingLevel: 'Clinical Skills'
         },
-        source: sourceTag,
+        source: 'Counselling Form',
         sourcePage: pagePath
       };
 
