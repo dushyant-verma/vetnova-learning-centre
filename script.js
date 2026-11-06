@@ -1,5 +1,21 @@
 /* VetNova Training Institute — Interactive Script */
 
+function getGlobalAssetPath(url) {
+  const cleanUrl = url.replace(/^\/+/, '');
+  if (window.location.protocol === 'file:') {
+    const script = document.querySelector('script[src*="script.js"]') || document.querySelector('script[src*="components.js"]');
+    if (script) {
+      const src = script.getAttribute('src') || '';
+      const idx = Math.max(src.indexOf('script.js'), src.indexOf('components.js'));
+      if (idx > 0) {
+        return src.substring(0, idx) + cleanUrl;
+      }
+    }
+    return cleanUrl;
+  }
+  return '/' + cleanUrl;
+}
+
 function runAllInitializers() {
   initStickyHeader();
   initMobileMenu();
@@ -29,11 +45,12 @@ function runAllInitializers() {
   initProgramsMegaMenu();
   initRolePickerModal();
   initConnectWidget();
+
   if (typeof window.initVetNovaChatbot === 'function') {
     window.initVetNovaChatbot();
   } else {
     const cbScript = document.createElement('script');
-    cbScript.src = 'assets/js/chatbot.js';
+    cbScript.src = getGlobalAssetPath('assets/js/chatbot.js');
     cbScript.onload = () => {
       if (typeof window.initVetNovaChatbot === 'function') {
         window.initVetNovaChatbot();
@@ -46,7 +63,7 @@ function runAllInitializers() {
     window.initVetNovaTranslator();
   } else {
     const trScript = document.createElement('script');
-    trScript.src = 'assets/js/translator.js';
+    trScript.src = getGlobalAssetPath('assets/js/translator.js');
     trScript.onload = () => {
       if (typeof window.initVetNovaTranslator === 'function') {
         window.initVetNovaTranslator();
@@ -94,16 +111,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function loadComponent(id, url) {
-  return fetch(url)
+  const resolvedUrl = getGlobalAssetPath(url);
+  return fetch(resolvedUrl)
     .then(response => {
       if (!response.ok) {
-        throw new Error(`Failed to load ${url}: ${response.statusText}`);
+        throw new Error(`Failed to load ${resolvedUrl}: ${response.statusText}`);
       }
       return response.text();
     })
     .then(html => {
       const container = document.getElementById(id);
-      if (container) {
+      if (container && (!container.children || container.children.length === 0)) {
         container.innerHTML = html;
       }
     });
@@ -2288,6 +2306,64 @@ function initEnquiryModal() {
     }
   }
 
+  function detectRoleName(triggerEl) {
+    if (triggerEl) {
+      if (triggerEl.dataset && triggerEl.dataset.role && triggerEl.dataset.role.trim()) {
+        return triggerEl.dataset.role.trim();
+      }
+      const parentWithRole = triggerEl.closest('[data-role]');
+      if (parentWithRole && parentWithRole.dataset && parentWithRole.dataset.role && parentWithRole.dataset.role.trim()) {
+        return parentWithRole.dataset.role.trim();
+      }
+    }
+
+    const path = (window.location.pathname || '').toLowerCase();
+    if (path.includes('practising-vets') || path.includes('practicing-vets') || path.includes('practitioner')) {
+      return 'Practising Veterinarians';
+    }
+    if (path.includes('fresh-vets') || path.includes('intern') || path.includes('student')) {
+      return 'Fresh Vets & Interns';
+    }
+    if (path.includes('specialist') || path.includes('experienced-vets') || path.includes('advanced')) {
+      return 'Specialists & Experienced Vets';
+    }
+    if (path.includes('pet-first-aid') || path.includes('pet-owners') || path.includes('rescuer')) {
+      return 'Pet Owners & Rescuers';
+    }
+
+    return '';
+  }
+
+  function setModalRole(roleSelect, roleName) {
+    if (!roleSelect || !roleName || !roleSelect.options) return;
+    const target = roleName.toLowerCase().trim();
+    for (let i = 0; i < roleSelect.options.length; i++) {
+      const opt = roleSelect.options[i];
+      const val = (opt.value || '').toLowerCase().trim();
+      const txt = (opt.text || '').toLowerCase().trim();
+      if (val === target || txt.includes(target) || target.includes(val)) {
+        roleSelect.selectedIndex = i;
+        return;
+      }
+      if ((target.includes('practis') || target.includes('practic')) && (val.includes('practis') || val.includes('practic'))) {
+        roleSelect.selectedIndex = i;
+        return;
+      }
+      if ((target.includes('fresh') || target.includes('intern')) && (val.includes('fresh') || val.includes('intern'))) {
+        roleSelect.selectedIndex = i;
+        return;
+      }
+      if (target.includes('specialist') && val.includes('specialist')) {
+        roleSelect.selectedIndex = i;
+        return;
+      }
+      if ((target.includes('pet') || target.includes('rescuer')) && (val.includes('pet') || val.includes('rescuer'))) {
+        roleSelect.selectedIndex = i;
+        return;
+      }
+    }
+  }
+
   async function openModal(e, options = {}) {
     if (e && e.preventDefault) e.preventDefault();
 
@@ -2297,7 +2373,7 @@ function initEnquiryModal() {
       const footer = document.getElementById('global-footer');
       if (footer && (!footer.children || footer.children.length === 0)) {
         try {
-          const res = await fetch('components/footer.html');
+          const res = await fetch(getGlobalAssetPath('components/footer.html'));
           if (res.ok) {
             footer.innerHTML = await res.text();
             els = getModalElements();
@@ -2400,6 +2476,16 @@ function initEnquiryModal() {
 
       if (els.form) {
         els.form.dataset.targetProgram = targetProgram;
+      }
+    }
+
+    // Preselect Role / Persona
+    const targetRole = options.role || detectRoleName(options.triggerEl || (e ? e.currentTarget || e.target : null));
+    if (els.roleSelect) {
+      if (targetRole) {
+        setModalRole(els.roleSelect, targetRole);
+      } else if (!els.roleSelect.value) {
+        els.roleSelect.selectedIndex = 0;
       }
     }
 
@@ -2621,6 +2707,14 @@ function initEnquiryModal() {
       // Validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const phoneDigits = phoneVal.replace(/\D/g, '');
+      let cleanPhone = phoneDigits;
+      if (countryCode === '+91') {
+        if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) {
+          cleanPhone = cleanPhone.substring(1);
+        } else if (cleanPhone.length === 12 && cleanPhone.startsWith('91')) {
+          cleanPhone = cleanPhone.substring(2);
+        }
+      }
 
       let errorMsg = '';
       let firstInvalid = null;
@@ -2637,8 +2731,10 @@ function initEnquiryModal() {
       } else if (!emailVal || !emailRegex.test(emailVal)) {
         errorMsg = 'Please enter a valid email address.';
         firstInvalid = els.emailInput;
-      } else if (!phoneVal || phoneDigits.length < 7 || phoneDigits.length > 15) {
-        errorMsg = 'Please enter a valid phone number (at least 7 to 10 digits).';
+      } else if (!phoneVal || (countryCode === '+91' ? (cleanPhone.length !== 10 || !['6', '7', '8', '9'].includes(cleanPhone[0])) : (phoneDigits.length < 7 || phoneDigits.length > 15))) {
+        errorMsg = countryCode === '+91'
+          ? 'Please enter a valid 10-digit Indian mobile number.'
+          : 'Please enter a valid phone number (7 to 15 digits).';
         firstInvalid = els.phoneInput;
       } else if (els.roleSelect && !roleVal) {
         errorMsg = 'Please tell us who you are (select your role).';
@@ -2674,7 +2770,7 @@ function initEnquiryModal() {
         firstName: firstNameVal,
         lastName: lastNameVal,
         email: emailVal,
-        phone: phoneVal,
+        phone: cleanPhone || phoneVal,
         countryCode: countryCode,
         course: programVal || 'General Counselling / Undecided',
         profile: roleVal || 'Counselling Lead',
@@ -2711,7 +2807,10 @@ function initEnquiryModal() {
           return resJson;
         };
 
-        await apiSubmitFn(payload);
+        const submitResult = await apiSubmitFn(payload);
+        if (submitResult && submitResult.success === false) {
+          throw new Error(submitResult.message || 'Submission was not accepted. Please try again.');
+        }
 
         // On Success
         form.style.display = 'none';

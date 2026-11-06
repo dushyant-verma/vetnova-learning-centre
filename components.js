@@ -81,15 +81,19 @@ window.VETNOVA_CONTACT = window.VETNOVA_CONTACT || {
   }
 
   function getComponentPath(componentUrl) {
-    const script = document.querySelector('script[src*="components.js"]');
-    if (script) {
-      const src = script.getAttribute('src') || '';
-      const idx = src.indexOf('components.js');
-      if (idx > 0) {
-        return src.substring(0, idx) + componentUrl;
+    const cleanUrl = componentUrl.replace(/^\/+/, '');
+    if (window.location.protocol === 'file:') {
+      const script = document.querySelector('script[src*="components.js"]');
+      if (script) {
+        const src = script.getAttribute('src') || '';
+        const idx = src.indexOf('components.js');
+        if (idx > 0) {
+          return src.substring(0, idx) + cleanUrl;
+        }
       }
+      return cleanUrl;
     }
-    return componentUrl;
+    return '/' + cleanUrl;
   }
 
   function loadSharedComponent(containerId, componentUrl) {
@@ -111,17 +115,20 @@ window.VETNOVA_CONTACT = window.VETNOVA_CONTACT || {
       })
       .then(html => {
         if (container && (!container.children || container.children.length === 0)) {
-          const script = document.querySelector('script[src*="components.js"]');
-          let prefix = '';
-          if (script) {
-            const src = script.getAttribute('src') || '';
-            const idx = src.indexOf('components.js');
-            if (idx > 0) {
-              prefix = src.substring(0, idx);
+          // If running under file:// protocol, rewrite relative assets; otherwise keep root-relative
+          if (window.location.protocol === 'file:') {
+            const script = document.querySelector('script[src*="components.js"]');
+            let prefix = '';
+            if (script) {
+              const src = script.getAttribute('src') || '';
+              const idx = src.indexOf('components.js');
+              if (idx > 0) {
+                prefix = src.substring(0, idx);
+              }
             }
-          }
-          if (prefix) {
-            html = html.replace(/(href|src)=["'](?!https?:\/\/|\/\/|#|\/|mailto:|tel:)([^"']+)["']/g, `$1="${prefix}$2"`);
+            if (prefix) {
+              html = html.replace(/(href|src)=["'](?!https?:\/\/|\/\/|#|\/|mailto:|tel:)([^"']+)["']/g, `$1="${prefix}$2"`);
+            }
           }
           container.innerHTML = html;
           syncContactElements(window.VETNOVA_CONTACT);
