@@ -7733,7 +7733,7 @@ section#related-posts {
 
 /* WhatsApp Floating Button styled via .whatsapp-float-widget on bottom-left */
 
-/* Fixed Floating Book free Counselling  CTA Side Tab */
+/* Fixed Floating Book Free Counselling  CTA Side Tab */
 .floating-apply-now {
   position: fixed;
   right: 0;
@@ -11360,7 +11360,7 @@ section#faq .container {
   margin-top: 8px;
 }
 
-/* Reusing exact Hero Book free Counselling  button component style */
+/* Reusing exact Hero Book Free Counselling  button component style */
 #concern-selector .results-cta .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -15179,7 +15179,7 @@ span.partner-cta-badge i,
   margin-top: 8px;
 }
 
-/* Reusing exact Hero Book free Counselling  button component style */
+/* Reusing exact Hero Book Free Counselling  button component style */
 #concern-selector .results-cta .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -24054,6 +24054,12 @@ body {
 
 .btn-counselling-pill i,
 a.btn.btn-outline.btn-sm.footer-quick-btn,
-.maps-btn {
+.maps-btn,
+.footer-cta-actions .btn-white-outline {
   display: none;
+}
+
+.btn-apply-now {
+  min-height: 58px !important;
+  font-size: 16px;
 }
