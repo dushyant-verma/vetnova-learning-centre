@@ -26,6 +26,7 @@ function runAllInitializers() {
   initSingleFocusJourney();
   initFacultyModal();
   initDesktopDropdowns();
+  initRolePickerModal();
   initConnectWidget();
   if (typeof window.initVetNovaChatbot === 'function') {
     window.initVetNovaChatbot();
@@ -130,17 +131,21 @@ function initActiveNavigation() {
   subLinks.forEach(link => {
     const href = link.getAttribute('href');
     if (href) {
-      const [linkPage, linkHash] = href.toLowerCase().split('#');
+      const [linkUrlWithoutHash, linkHash] = href.toLowerCase().split('#');
+      const [linkPage, linkQuery] = linkUrlWithoutHash.split('?');
       const cleanLinkPage = (linkPage || 'index.html').split('/').pop();
       const currentFile = (path === '' ? 'index.html' : path);
 
       let isActive = false;
       if (cleanLinkPage === currentFile) {
-        if (linkHash) {
+        if (linkQuery) {
+          const currentSearch = window.location.search.toLowerCase().replace(/^\?/, '');
+          isActive = currentSearch === linkQuery || (currentSearch && decodeURIComponent(currentSearch) === decodeURIComponent(linkQuery));
+        } else if (linkHash) {
           isActive = currentHash === ('#' + linkHash) ||
             ((linkHash === 'vision-mission' || linkHash === 'mission-vision') && (currentHash === '#vision-mission' || currentHash === '#mission-vision'));
         } else {
-          isActive = !currentHash;
+          isActive = !currentHash && !window.location.search;
         }
       }
 
@@ -962,351 +967,830 @@ function getDiscoveryCatalog() {
 }
 
 function initQuiz() {
-  initProgramDiscovery();
+  initProgramFinder();
 }
 
-function initProgramDiscovery() {
-  const topicButtons = document.querySelectorAll('.discovery-topic-btn');
-  const goalContainer = document.getElementById('goal-options-container');
-  const step1 = document.getElementById('step-1-content');
-  const step2 = document.getElementById('step-2-content');
-  const step3 = document.getElementById('step-3-content');
+/* ==========================================================================
+   3-Step Program Finder Controller (#quiz-section)
+   Exact match to reference UI screenshot
+   ========================================================================== */
+function initProgramFinder() {
+  const container = document.getElementById('quiz-section');
+  if (!container) return;
 
-  const progressStep1 = document.querySelector('.discovery-progress .progress-step[data-step="1"]');
-  const progressStep2 = document.querySelector('.discovery-progress .progress-step[data-step="2"]');
-  const progressStep3 = document.querySelector('.discovery-progress .progress-step[data-step="3"]');
+  const roleCards = container.querySelectorAll('.finder-role-card');
+  const interestCards = container.querySelectorAll('.finder-interest-card');
+  const matchesGrid = document.getElementById('finder-matches-grid');
+  const levelPill = document.getElementById('finder-level-pill');
+  const step3Title = document.getElementById('finder-step-3-title');
+  const changeRoleBtn = document.getElementById('finder-change-role-btn');
+  const progressSteps = container.querySelectorAll('.finder-progress-step');
 
-  const backBtn = document.getElementById('quiz-back-btn');
-  const resetBtn = document.getElementById('quiz-reset-btn');
-  const levelPills = document.querySelectorAll('.discovery-level-filter .level-pill');
-  const loadMoreBtn = document.getElementById('discovery-load-more-btn');
+  // Wizard Step Box Elements
+  const step1Box = document.getElementById('finder-step-1');
+  const step2Box = document.getElementById('finder-step-2');
+  const step3Box = document.getElementById('finder-step-3');
+  const step1Continue = document.getElementById('finder-step-1-continue');
+  const step2Back = document.getElementById('finder-step-2-back');
+  const step2Continue = document.getElementById('finder-step-2-continue');
+  const step3Back = document.getElementById('finder-step-3-back');
+  const step3ChangeRole = document.getElementById('finder-step-3-change-role');
 
-  if (!topicButtons || topicButtons.length === 0 || !step1) return;
+  if (!roleCards.length || !interestCards.length || !matchesGrid) return;
 
-  // Initialize strictly at Step 1: No cards rendered, Step 2 & 3 locked
-  resetToStep1();
+  // Selected State
+  let currentStep = 1;
+  let maxUnlockedStep = 1;
+  let currentRole = 'fresh-vet';
+  let currentInterests = new Set(['surgery']);
 
-  // Attach Load More button listener
-  if (loadMoreBtn && !loadMoreBtn.dataset.bound) {
-    loadMoreBtn.dataset.bound = 'true';
-    loadMoreBtn.addEventListener('click', () => {
-      discoveryVisibleCount += 3;
-      renderDiscoveryCards();
-    });
-  }
+  // Role metadata definitions
+  const roleMeta = {
+    'fresh-vet': {
+      name: 'fresh vet',
+      levelName: 'Foundation',
+      levelBadge: 'Foundation level',
+      defaultCategory: 'Beginner'
+    },
+    'practising-vet': {
+      name: 'practising vet',
+      levelName: 'Intermediate',
+      levelBadge: 'Intermediate level',
+      defaultCategory: 'Intermediate'
+    },
+    'specialist': {
+      name: 'specialist',
+      levelName: 'Advanced',
+      levelBadge: 'Advanced level',
+      defaultCategory: 'Advanced'
+    },
+    'pet-owner': {
+      name: 'pet owner',
+      levelName: 'First aid',
+      levelBadge: 'First aid workshop',
+      defaultCategory: 'First Aid'
+    }
+  };
 
-  function resetToStep1(shouldScroll = false) {
-    const wasStarted = discoveryState.discoveryStarted;
-    discoveryState = {
-      discoveryStarted: false,
-      selectedTopic: null,
-      selectedGoal: null,
-      selectedLevel: 'all'
-    };
-    discoveryMatchedPrograms = [];
-    discoveryVisibleCount = 3;
+  // Curated database of real verified VetNova programs matching role & topics
+  const finderDatabase = {
+    'fresh-vet': {
+      'surgery': [
+        {
+          title: 'Soft tissue surgery',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Sept 25, 2026',
+          url: 'soft-tissue-surgery.html'
+        },
+        {
+          title: 'Orthopaedics',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'October 2026',
+          url: 'orthopaedics.html'
+        },
+        {
+          title: 'Skill-up program',
+          level: 'Flagship, 4 weeks',
+          duration: '4 Weeks',
+          courseLength: '120 Hours Tactile Lab',
+          nextBatch: 'Enrolling Now',
+          url: 'veterinary-skill-up.html'
+        }
+      ],
+      'orthopaedics': [
+        {
+          title: 'Small animal orthopaedics',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'October 2026',
+          url: 'orthopaedics.html'
+        },
+        {
+          title: 'Veterinary skill-up program',
+          level: 'Flagship, 4 weeks',
+          duration: '4 Weeks',
+          courseLength: '120 Hours',
+          nextBatch: 'Enrolling Now',
+          url: 'veterinary-skill-up.html'
+        },
+        {
+          title: 'Physiotherapy & rehabilitation',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'veterinary-physiotherapy-and-rehabilitation.html'
+        }
+      ],
+      'imaging': [
+        {
+          title: 'Diagnostic imaging',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Nov 12, 2026',
+          url: 'diagnostic-imaging.html'
+        },
+        {
+          title: 'Radiology & ultrasound',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'radiology-ultrasound.html'
+        },
+        {
+          title: 'General medicine & diagnostics',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'general-medicine.html'
+        }
+      ],
+      'emergency': [
+        {
+          title: 'Emergency and critical care',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Oct 15, 2026',
+          url: 'emergency-and-critical-care.html'
+        },
+        {
+          title: 'Anaesthesia & pain management',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'anaesthesia-and-pain-management.html'
+        },
+        {
+          title: 'Pet emergency & ICU triage',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'emergency-medicine.html'
+        }
+      ],
+      'medicine': [
+        {
+          title: 'General medicine',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Sept 2026',
+          url: 'general-medicine.html'
+        },
+        {
+          title: 'Veterinary dermatology',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'veterinary-dermatology.html'
+        },
+        {
+          title: 'Infectious diseases',
+          level: 'Foundation',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'infectious-diseases.html'
+        }
+      ]
+    },
 
-    topicButtons.forEach(b => b.classList.remove('selected'));
-    if (levelPills) {
-      levelPills.forEach(p => {
-        if (p.dataset.level === 'all') p.classList.add('active');
-        else p.classList.remove('active');
+    'practising-vet': {
+      'surgery': [
+        {
+          title: 'Soft tissue surgery track',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Oct 28, 2026',
+          url: 'soft-tissue-surgery.html'
+        },
+        {
+          title: 'Veterinary dentistry & extractions',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'veterinary-dentistry.html'
+        },
+        {
+          title: 'Anaesthesia & pain management',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'anaesthesia-and-pain-management.html'
+        }
+      ],
+      'orthopaedics': [
+        {
+          title: 'Small animal orthopaedics',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Nov 2026',
+          url: 'orthopaedics.html'
+        },
+        {
+          title: 'Physiotherapy & rehabilitation',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'veterinary-physiotherapy-and-rehabilitation.html'
+        }
+      ],
+      'imaging': [
+        {
+          title: 'Radiology & ultrasound masterclass',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Oct 14, 2026',
+          url: 'radiology-ultrasound.html'
+        },
+        {
+          title: 'Diagnostic imaging',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'diagnostic-imaging.html'
+        },
+        {
+          title: 'Clinical pathology',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'clinical-pathology.html'
+        }
+      ],
+      'emergency': [
+        {
+          title: 'Emergency and critical care',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Oct 15, 2026',
+          url: 'emergency-and-critical-care.html'
+        },
+        {
+          title: 'Anaesthesia and pain management',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'anaesthesia-and-pain-management.html'
+        }
+      ],
+      'medicine': [
+        {
+          title: 'Veterinary dermatology',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'veterinary-dermatology.html'
+        },
+        {
+          title: 'Feline medicine',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'feline-medicine.html'
+        },
+        {
+          title: 'Infectious diseases',
+          level: 'Intermediate',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'infectious-diseases.html'
+        }
+      ]
+    },
+
+    'specialist': {
+      'surgery': [
+        {
+          title: 'Advanced soft tissue organ surgery',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Nov 2026',
+          url: 'soft-tissue-surgery.html'
+        },
+        {
+          title: 'Small animal orthopaedics masterclass',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Dec 2026',
+          url: 'orthopaedics.html'
+        }
+      ],
+      'orthopaedics': [
+        {
+          title: 'Small animal orthopaedics (bone plating)',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Nov 2026',
+          url: 'orthopaedics.html'
+        },
+        {
+          title: 'Veterinary physiotherapy & rehab',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'veterinary-physiotherapy-and-rehabilitation.html'
+        }
+      ],
+      'imaging': [
+        {
+          title: 'Diagnostic imaging & Doppler ultrasound',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Nov 2026',
+          url: 'diagnostic-imaging.html'
+        },
+        {
+          title: 'Radiology & ultrasound masterclass',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'radiology-ultrasound.html'
+        }
+      ],
+      'emergency': [
+        {
+          title: 'Emergency and critical care (ICU & ventilator)',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Oct 2026',
+          url: 'emergency-and-critical-care.html'
+        }
+      ],
+      'medicine': [
+        {
+          title: 'Veterinary cardiology',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Nov 2026',
+          url: 'veterinary-cardiology.html'
+        },
+        {
+          title: 'Veterinary neurology',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Dec 2026',
+          url: 'veterinary-neurology.html'
+        },
+        {
+          title: 'Veterinary ophthalmology',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'veterinary-ophthalmology.html'
+        },
+        {
+          title: 'Veterinary oncology',
+          level: 'Advanced',
+          duration: '3 Days',
+          courseLength: '24 Hours',
+          nextBatch: 'Available',
+          url: 'oncology.html'
+        }
+      ]
+    },
+
+    'pet-owner': {
+      'surgery': [
+        {
+          title: 'Pet First Aid & Wound Management Workshop',
+          level: 'First Aid Workshop',
+          duration: '1–2 Days',
+          courseLength: '16 Hours Hands-On',
+          nextBatch: 'Enrolling Now',
+          url: 'emergency-medicine.html'
+        }
+      ],
+      'orthopaedics': [
+        {
+          title: 'Pet Trauma, Bandaging & Safe Handling',
+          level: 'First Aid Workshop',
+          duration: '1–2 Days',
+          courseLength: '16 Hours Hands-On',
+          nextBatch: 'Available',
+          url: 'emergency-medicine.html'
+        }
+      ],
+      'imaging': [
+        {
+          title: 'Pet Emergency Triage & First Aid',
+          level: 'First Aid Workshop',
+          duration: '1–2 Days',
+          courseLength: '16 Hours Hands-On',
+          nextBatch: 'Enrolling Now',
+          url: 'emergency-medicine.html'
+        }
+      ],
+      'emergency': [
+        {
+          title: 'Pet CPR, Choking & Emergency Life Support',
+          level: 'First Aid Workshop',
+          duration: '1–2 Days',
+          courseLength: '16 Hours Hands-On',
+          nextBatch: 'Enrolling Now',
+          url: 'emergency-medicine.html'
+        },
+        {
+          title: 'Pet Emergency & Critical Care Workshop',
+          level: 'First Aid Workshop',
+          duration: '2 Days',
+          courseLength: '16 Hours Hands-On',
+          nextBatch: 'Available',
+          url: 'emergency-medicine.html'
+        }
+      ],
+      'medicine': [
+        {
+          title: 'Pet Poisoning, Toxin & Home Emergency Care',
+          level: 'First Aid Workshop',
+          duration: '1–2 Days',
+          courseLength: '16 Hours Hands-On',
+          nextBatch: 'Enrolling Now',
+          url: 'emergency-medicine.html'
+        }
+      ],
+      'default': [
+        {
+          title: 'Pet CPR, Choking & Emergency Life Support',
+          level: 'First Aid Workshop',
+          duration: '1–2 Days',
+          courseLength: '16 Hours Hands-On',
+          nextBatch: 'Enrolling Now',
+          url: 'emergency-medicine.html'
+        },
+        {
+          title: 'Pet Emergency & Critical Care Workshop',
+          level: 'First Aid Workshop',
+          duration: '2 Days',
+          courseLength: '16 Hours Hands-On',
+          nextBatch: 'Available',
+          url: 'emergency-medicine.html'
+        }
+      ]
+    }
+  };
+
+  function scrollToFinder() {
+    if (container) {
+      const navHeight = 85;
+      const rect = container.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || (document.documentElement ? document.documentElement.scrollTop : 0) || 0;
+      const targetY = rect.top + scrollTop - navHeight;
+      window.scrollTo({
+        top: Math.max(0, targetY),
+        behavior: 'smooth'
       });
     }
-    if (goalContainer) goalContainer.innerHTML = '';
-    const resultsContainer = document.getElementById('discovery-program-cards');
-    if (resultsContainer) resultsContainer.innerHTML = '';
-    const loadMoreWrap = document.getElementById('discovery-load-more-wrap');
-    if (loadMoreWrap) loadMoreWrap.style.display = 'none';
+  }
 
-    if (step1) step1.classList.add('active');
-    if (step2) step2.classList.remove('active');
-    if (step3) step3.classList.remove('active');
+  function goToStep(targetStep, shouldScroll = true) {
+    if (targetStep < 1 || targetStep > 3) return;
+    currentStep = targetStep;
+    maxUnlockedStep = Math.max(maxUnlockedStep, targetStep);
 
-    if (progressStep1) {
-      progressStep1.classList.add('active');
-      progressStep1.classList.remove('completed', 'locked');
-    }
-    if (progressStep2) {
-      progressStep2.classList.add('locked');
-      progressStep2.classList.remove('active', 'completed');
-    }
-    if (progressStep3) {
-      progressStep3.classList.add('locked');
-      progressStep3.classList.remove('active', 'completed');
-    }
-
-    if (shouldScroll || wasStarted) {
-      const quizSec = document.getElementById('quiz-section');
-      if (quizSec) {
-        quizSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Hide all step boxes and show target with active animation
+    [step1Box, step2Box, step3Box].forEach((box, idx) => {
+      if (!box) return;
+      const s = idx + 1;
+      if (s === targetStep) {
+        box.style.display = 'block';
+        box.classList.add('active');
+        box.setAttribute('aria-hidden', 'false');
+      } else {
+        box.style.display = 'none';
+        box.classList.remove('active');
+        box.setAttribute('aria-hidden', 'true');
       }
+    });
+
+    // Update Progress Indicator
+    progressSteps.forEach((stepEl, idx) => {
+      const s = idx + 1;
+      stepEl.classList.remove('active', 'completed', 'inactive');
+      stepEl.removeAttribute('aria-current');
+
+      if (s === targetStep) {
+        stepEl.classList.add('active');
+        stepEl.setAttribute('aria-current', 'step');
+        stepEl.setAttribute('aria-selected', 'true');
+      } else if (s < targetStep) {
+        stepEl.classList.add('completed');
+        stepEl.setAttribute('aria-selected', 'false');
+      } else {
+        stepEl.classList.add('inactive');
+        stepEl.setAttribute('aria-selected', 'false');
+      }
+    });
+
+    if (targetStep === 3) {
+      updateMatches();
+    }
+
+    if (shouldScroll) {
+      scrollToFinder();
     }
   }
 
-  // Step 1: Select Topic
-  topicButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      topicButtons.forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
+  function updateMatches() {
+    const meta = roleMeta[currentRole] || roleMeta['fresh-vet'];
 
-      const topicKey = btn.dataset.topic || 'all';
-      discoveryState.selectedTopic = topicKey;
-      discoveryState.discoveryStarted = true;
-      discoveryState.selectedGoal = null;
-      discoveryVisibleCount = 3;
+    // Update level pill
+    if (levelPill) {
+      levelPill.textContent = meta.levelBadge;
+    }
 
-      populateGoals(topicKey);
+    // Format interest names for title
+    const interestDisplayNames = {
+      'surgery': 'soft tissue surgery',
+      'orthopaedics': 'orthopaedics',
+      'imaging': 'imaging',
+      'emergency': 'emergency care',
+      'medicine': 'medicine'
+    };
 
-      step1.classList.remove('active');
-      step2.classList.add('active');
-      step3.classList.remove('active');
-
-      if (progressStep1) {
-        progressStep1.classList.add('completed');
-        progressStep1.classList.remove('active', 'locked');
+    let interestNames = [];
+    currentInterests.forEach(k => {
+      if (interestDisplayNames[k]) {
+        interestNames.push(interestDisplayNames[k]);
       }
-      if (progressStep2) {
-        progressStep2.classList.add('active');
-        progressStep2.classList.remove('locked', 'completed');
+    });
+
+    if (step3Title) {
+      if (currentRole === 'pet-owner') {
+        step3Title.textContent = 'Step 3 · Your matches (pet owner + first aid)';
+      } else if (currentInterests.has('not-sure') || interestNames.length === 0) {
+        step3Title.textContent = `Step 3 · Your matches (${meta.name} + all tracks)`;
+      } else {
+        step3Title.textContent = `Step 3 · Your matches (${meta.name} + ${interestNames.join(', ')})`;
       }
-      if (progressStep3) {
-        progressStep3.classList.add('locked');
-        progressStep3.classList.remove('active', 'completed');
+    }
+
+    // Resolve matching programs
+    let results = [];
+    if (currentRole === 'pet-owner') {
+      const petPool = finderDatabase['pet-owner'];
+      const addedTitles = new Set();
+      if (currentInterests.has('not-sure') || currentInterests.size === 0) {
+        petPool['default'].forEach(p => {
+          results.push(p);
+          addedTitles.add(p.title.toLowerCase());
+        });
+      } else {
+        currentInterests.forEach(intKey => {
+          const list = petPool[intKey] || petPool['default'] || [];
+          list.forEach(p => {
+            if (!addedTitles.has(p.title.toLowerCase())) {
+              results.push(p);
+              addedTitles.add(p.title.toLowerCase());
+            }
+          });
+        });
+      }
+      if (results.length === 0) {
+        results = petPool['default'] || [];
+      }
+    } else {
+      const rolePool = finderDatabase[currentRole] || {};
+      const addedTitles = new Set();
+
+      if (currentInterests.has('not-sure') || currentInterests.size === 0) {
+        // Collect across all topics for this role
+        Object.values(rolePool).forEach(list => {
+          list.forEach(p => {
+            if (!addedTitles.has(p.title.toLowerCase())) {
+              results.push(p);
+              addedTitles.add(p.title.toLowerCase());
+            }
+          });
+        });
+      } else {
+        currentInterests.forEach(intKey => {
+          const list = rolePool[intKey] || [];
+          list.forEach(p => {
+            if (!addedTitles.has(p.title.toLowerCase())) {
+              results.push(p);
+              addedTitles.add(p.title.toLowerCase());
+            }
+          });
+        });
+
+        // If specific pool has fewer than 2 items, complement with other programs at that level
+        if (results.length < 2) {
+          Object.values(rolePool).forEach(list => {
+            list.forEach(p => {
+              if (results.length < 3 && !addedTitles.has(p.title.toLowerCase())) {
+                results.push(p);
+                addedTitles.add(p.title.toLowerCase());
+              }
+            });
+          });
+        }
+      }
+    }
+
+    // Render cards
+    if (results.length === 0) {
+      const levelQuery = encodeURIComponent(meta.levelName);
+      matchesGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 36px 20px; background: #f8fafc; border-radius: 12px; border: 1.5px dashed #cbd5e1;">
+          <p style="font-size: 16px; font-weight: 600; color: #334155; margin-bottom: 8px;">No exact programs matched this specific combination for ${meta.name}.</p>
+          <p style="font-size: 14px; color: #64748b; margin-bottom: 18px;">Explore all ${meta.levelBadge} training programs or speak with an academic advisor.</p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="programs.html?level=${levelQuery}" class="btn btn-primary btn-sm">Explore All ${meta.levelName} Programs <i class="fa-solid fa-arrow-right"></i></a>
+            <button type="button" class="btn btn-outline btn-sm btn-book-counselling" data-action="book-counselling">Book Free Counselling</button>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    matchesGrid.innerHTML = results.map(p => `
+      <div class="finder-match-card">
+        <h3 class="match-card-title">${p.title}</h3>
+        <div class="match-card-level">${p.level}</div>
+        <div class="match-card-meta">
+          <strong>Duration:</strong> ${p.duration} · <strong>Course Length:</strong> ${p.courseLength}<br>
+          <span style="color: #0d9488; font-weight: 600;"><i class="fa-solid fa-calendar-check" style="font-size: 12px; margin-right: 4px;"></i> Next Batch: ${p.nextBatch || 'Available'}</span>
+        </div>
+        <div class="match-card-actions">
+          <button type="button" class="finder-enquire-btn btn-book-counselling" data-action="book-counselling" data-program="${p.title}">Enquire</button>
+          <span class="action-divider">·</span>
+          <a href="${p.url}" class="finder-view-link">View program</a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Bind Role Cards (Step 1 - Single Select)
+  roleCards.forEach(card => {
+    card.addEventListener('click', () => {
+      roleCards.forEach(c => {
+        c.classList.remove('active');
+        c.setAttribute('aria-checked', 'false');
+      });
+      card.classList.add('active');
+      card.setAttribute('aria-checked', 'true');
+      currentRole = card.dataset.role || 'fresh-vet';
+
+      if (step1Continue) {
+        step1Continue.disabled = false;
+        step1Continue.classList.remove('disabled');
       }
     });
   });
 
-  // Level Refinement Filter Pills (Optional fine-tune inside Step 2)
-  if (levelPills) {
-    levelPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        levelPills.forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        discoveryState.selectedLevel = pill.dataset.level || 'all';
-        discoveryVisibleCount = 3;
+  // Step 1 Continue button
+  if (step1Continue) {
+    step1Continue.addEventListener('click', () => {
+      if (!currentRole) return;
+      goToStep(2);
+    });
+  }
 
-        // If Step 3 is already active, re-calculate and re-render
-        if (step3 && step3.classList.contains('active')) {
-          renderDiscoveryResults(discoveryState.selectedGoal);
+  // Helper to validate and update Step 2 Continue button
+  function updateStep2State() {
+    if (step2Continue) {
+      if (currentInterests.size === 0) {
+        step2Continue.disabled = true;
+        step2Continue.classList.add('disabled');
+      } else {
+        step2Continue.disabled = false;
+        step2Continue.classList.remove('disabled');
+      }
+    }
+  }
+
+  // Bind Interest Cards (Step 2 - Multi Select)
+  interestCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const interestKey = card.dataset.interest;
+
+      if (interestKey === 'not-sure') {
+        // Clear all other interests
+        interestCards.forEach(c => {
+          if (c !== card) {
+            c.classList.remove('active');
+            c.setAttribute('aria-pressed', 'false');
+          }
+        });
+        card.classList.add('active');
+        card.setAttribute('aria-pressed', 'true');
+        currentInterests.clear();
+        currentInterests.add('not-sure');
+      } else {
+        // Deselect 'not-sure'
+        const notSureCard = container.querySelector('.finder-interest-card[data-interest="not-sure"]');
+        if (notSureCard) {
+          notSureCard.classList.remove('active');
+          notSureCard.setAttribute('aria-pressed', 'false');
+        }
+        currentInterests.delete('not-sure');
+
+        // Toggle clicked interest
+        if (card.classList.contains('active')) {
+          card.classList.remove('active');
+          card.setAttribute('aria-pressed', 'false');
+          currentInterests.delete(interestKey);
+        } else {
+          card.classList.add('active');
+          card.setAttribute('aria-pressed', 'true');
+          currentInterests.add(interestKey);
+        }
+      }
+
+      updateStep2State();
+    });
+  });
+
+  // Step 2 Back & Continue buttons
+  if (step2Back) {
+    step2Back.addEventListener('click', () => {
+      goToStep(1);
+    });
+  }
+
+  if (step2Continue) {
+    step2Continue.addEventListener('click', () => {
+      if (currentInterests.size === 0) {
+        alert('Please select at least one learning interest or choose "Not sure yet" to continue.');
+        return;
+      }
+      goToStep(3);
+    });
+  }
+
+  // Step 3 Back & Change Role buttons
+  if (step3Back) {
+    step3Back.addEventListener('click', () => {
+      goToStep(2);
+    });
+  }
+
+  if (step3ChangeRole) {
+    step3ChangeRole.addEventListener('click', () => {
+      goToStep(1);
+    });
+  }
+
+  if (changeRoleBtn) {
+    changeRoleBtn.addEventListener('click', () => {
+      goToStep(1);
+    });
+  }
+
+  // Progress steps navigation
+  if (progressSteps.length) {
+    progressSteps.forEach(step => {
+      step.addEventListener('click', () => {
+        const stepNum = parseInt(step.dataset.step, 10);
+        // Allow navigating to any step up to maxUnlockedStep
+        if (stepNum <= maxUnlockedStep) {
+          goToStep(stepNum);
         }
       });
     });
   }
 
-  // Back Button (Step 2 -> Step 1)
-  if (backBtn) {
-    backBtn.addEventListener('click', () => {
-      step2.classList.remove('active');
-      step1.classList.add('active');
-      step3.classList.remove('active');
-
-      if (progressStep1) {
-        progressStep1.classList.add('active');
-        progressStep1.classList.remove('completed', 'locked');
-      }
-      if (progressStep2) {
-        progressStep2.classList.add('locked');
-        progressStep2.classList.remove('active', 'completed');
-      }
-      if (progressStep3) {
-        progressStep3.classList.add('locked');
-        progressStep3.classList.remove('active', 'completed');
-      }
-
-      discoveryState.selectedGoal = null;
-    });
-  }
-
-  // Reset Button (Step 3 -> Step 1)
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => resetToStep1(true));
-  }
-
-  function populateGoals(topicKey) {
-    if (!goalContainer) return;
-    const topicData = discoveryDatabase.topics[topicKey] || discoveryDatabase.topics['all'];
-    goalContainer.innerHTML = '';
-
-    if (topicData && topicData.goals) {
-      topicData.goals.forEach(goal => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-opt-btn discovery-goal-btn';
-        btn.innerHTML = `
-          <span class="icon"><i class="fa-solid fa-bullseye"></i></span>
-          <div class="text">
-            <b>${goal.text}</b>
-            <small>Click to see matched programs for this specific outcome</small>
-          </div>
-        `;
-        btn.addEventListener('click', () => {
-          discoveryState.selectedGoal = goal;
-          discoveryVisibleCount = 3;
-          renderDiscoveryResults(goal);
-        });
-        goalContainer.appendChild(btn);
-      });
-    }
-  }
-
-  function renderDiscoveryCards() {
-    const resultsContainer = document.getElementById('discovery-program-cards');
-    const loadMoreWrap = document.getElementById('discovery-load-more-wrap');
-    const loadMoreBtn = document.getElementById('discovery-load-more-btn');
-    if (!resultsContainer) return;
-
-    if (discoveryMatchedPrograms.length === 0) {
-      resultsContainer.innerHTML = `
-        <div class="discovery-empty-state" style="text-align: center; padding: 48px 24px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 16px; grid-column: 1 / -1;">
-          <i class="fa-solid fa-compass-drafting" style="font-size: 36px; color: #94a3b8; margin-bottom: 12px; display: block;"></i>
-          <h3 style="font-size: 1.15rem; color: #334155; margin-bottom: 8px; font-weight: 600;">No programs currently match these exact selections.</h3>
-          <p style="font-size: 0.95rem; color: #64748b; margin: 0 0 20px 0;">We couldn't find a program matching your exact level refinement. Would you like to reset your selections or speak with our academic advisors?</p>
-          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn btn-outline btn-sm" id="empty-reset-btn"><i class="fa-solid fa-rotate-right"></i> Reset Selections</button>
-            <a href="contact.html#contact-form" class="btn btn-primary btn-sm"><i class="fa-solid fa-calendar-check"></i> Book Free Counselling</a>
-          </div>
-        </div>
-      `;
-      const emptyResetBtn = document.getElementById('empty-reset-btn');
-      if (emptyResetBtn) emptyResetBtn.addEventListener('click', () => resetToStep1(false));
-      if (loadMoreWrap) loadMoreWrap.style.display = 'none';
-      return;
-    }
-
-    const visibleSlice = discoveryMatchedPrograms.slice(0, discoveryVisibleCount);
-
-    resultsContainer.innerHTML = visibleSlice.map(p => {
-      const badgeText = p.badge || 'VERIFIED PROGRAM';
-      const cardImg = p.image || 'assets/images/programs/program-skill-up.webp';
-      const outcomesHtml = (p.outcomes && p.outcomes.length > 0)
-        ? `<div class="discovery-card-outcomes">
-            ${p.outcomes.slice(0, 3).map(o => `<span><i class="fa-solid fa-check"></i> ${o}</span>`).join('')}
-          </div>`
-        : '';
-
-      const programSlug = p.slug || p.id || p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      return `
-        <div class="discovery-card">
-          <div class="discovery-card-img-wrap" style="position: relative;">
-            <img src="${cardImg}" alt="${p.title}" loading="lazy" />
-            <span class="discovery-card-badge">${badgeText}</span>
-          </div>
-          <div class="discovery-card-body">
-            <div class="discovery-card-meta">
-              <span><i class="fa-solid fa-clock text-teal"></i> 3 Days</span>
-              <span><i class="fa-solid fa-calendar-check text-teal"></i> 24 Hours</span>
-              <span><i class="fa-solid fa-book-open"></i> ${p.category || 'Clinical Track'}</span>
-            </div>
-            <h4 class="discovery-card-title">${p.title}</h4>
-            <p class="discovery-card-desc">${p.description}</p>
-            ${outcomesHtml}
-            <div class="discovery-card-actions" style="margin-top: 16px; display: flex; gap: 8px;">
-              <a href="${p.url}" class="btn btn-primary btn-sm">
-                Explore Program <i class="fa-solid fa-arrow-right"></i>
-              </a>
-              <a href="${p.url}" class="btn btn-outline btn-sm">
-                Enquire Now
-              </a>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    // Re-bind modal triggers for dynamically created enquire buttons
-    if (typeof bindModalTriggers === 'function') {
-      bindModalTriggers();
-    }
-
-    // Update Load More Programs button visibility and text
-    if (loadMoreWrap && loadMoreBtn) {
-      if (discoveryMatchedPrograms.length > discoveryVisibleCount) {
-        loadMoreWrap.style.display = 'block';
-        loadMoreBtn.disabled = false;
-        loadMoreBtn.innerHTML = `<i class="fa-solid fa-plus-circle" style="margin-right: 6px;"></i> Load More Programs (${discoveryMatchedPrograms.length - discoveryVisibleCount} remaining)`;
-      } else {
-        loadMoreWrap.style.display = 'none';
-      }
-    }
-  }
-
-  function renderDiscoveryResults(goal) {
-    const resultsTitle = document.getElementById('discovery-results-title');
-    const resultsSubtitle = document.getElementById('discovery-results-subtitle');
-
-    if (resultsTitle) {
-      if (discoveryState.selectedTopic === 'all') {
-        resultsTitle.textContent = 'Relevant Programs Matching Your Interests';
-      } else {
-        const topicName = discoveryDatabase.topics[discoveryState.selectedTopic]?.name || 'Your Selected Topic';
-        resultsTitle.textContent = `Relevant Programs for ${topicName}`;
-      }
-    }
-    if (resultsSubtitle) {
-      if (goal && goal.text) {
-        resultsSubtitle.textContent = `Targeting: "${goal.text}"`;
-      } else {
-        resultsSubtitle.textContent = 'Official VetNova clinical programs aligned with your clinical learning goals.';
-      }
-    }
-
-    // 1. Retrieve all genuine published discovery programs (no demos)
-    const catalog = getDiscoveryCatalog();
-
-    // 2. Filter programs by topic
-    let filtered = catalog.filter(p => {
-      if (!p || p.isDemo) return false;
-      if (discoveryState.selectedTopic === 'all') return true;
-      return p.topics && p.topics.includes(discoveryState.selectedTopic);
-    });
-
-    // 3. Prioritize by goal if goal has specific programIds
-    if (goal && goal.programIds && goal.programIds.length > 0) {
-      filtered.sort((a, b) => {
-        const aMatch = goal.programIds.includes(a.id);
-        const bMatch = goal.programIds.includes(b.id);
-        if (aMatch && !bMatch) return -1;
-        if (!aMatch && bMatch) return 1;
-        return 0;
-      });
-    }
-
-    // 4. Apply Level Refinement (Step 2)
-    if (discoveryState.selectedLevel && discoveryState.selectedLevel !== 'all') {
-      filtered = filtered.filter(p => p.levels && p.levels.includes(discoveryState.selectedLevel));
-    }
-
-    // 5. Save matching results and reset visible count to 3
-    discoveryMatchedPrograms = filtered;
-    discoveryVisibleCount = 3;
-
-    // 6. Render the first 3 cards initially
-    renderDiscoveryCards();
-
-    // 7. Transition view to Step 3
-    if (step2 && step3) {
-      step2.classList.remove('active');
-      step3.classList.add('active');
-    }
-
-    if (progressStep1) {
-      progressStep1.classList.add('completed');
-      progressStep1.classList.remove('active', 'locked');
-    }
-    if (progressStep2) {
-      progressStep2.classList.add('completed');
-      progressStep2.classList.remove('active', 'locked');
-    }
-    if (progressStep3) {
-      progressStep3.classList.add('active');
-      progressStep3.classList.remove('locked');
-    }
-  }
+  // Initial step setup (Step 1 without scrolling)
+  updateStep2State();
+  goToStep(1, false);
 }
 
-/* ==========================================================================
-   Enquiry Lead Form Handler
-   ========================================================================== */
 function initContactForm() {
   const form = document.getElementById('enquiry-form');
   const successState = document.getElementById('form-success-message');
@@ -1322,6 +1806,7 @@ function initContactForm() {
   const dynamicDoctor = form.querySelector('.dynamic-field-doctor');
   const dynamicNurse = form.querySelector('.dynamic-field-nurse');
   const dynamicCorporate = form.querySelector('.dynamic-field-corporate');
+  const dynamicAcademic = form.querySelector('.dynamic-field-academic');
   const dynamicPet = form.querySelector('.dynamic-field-pet');
 
   let selectedPersona = 'practicing_vet';
@@ -1348,7 +1833,8 @@ function initContactForm() {
     // Toggle persona-specific form fields immediately
     if (dynamicDoctor) dynamicDoctor.style.display = (persona === 'practicing_vet' || persona === 'fresh_grad' || persona === 'doctor') ? 'grid' : 'none';
     if (dynamicNurse) dynamicNurse.style.display = (persona === 'vet_nurse' || persona === 'nurse') ? 'block' : 'none';
-    if (dynamicCorporate) dynamicCorporate.style.display = (persona === 'corporate' || persona === 'academic' || persona === 'sponsor') ? 'block' : 'none';
+    if (dynamicCorporate) dynamicCorporate.style.display = (persona === 'corporate' || persona === 'sponsor') ? 'block' : 'none';
+    if (dynamicAcademic) dynamicAcademic.style.display = (persona === 'academic') ? 'block' : 'none';
     if (dynamicPet) dynamicPet.style.display = (persona === 'pet_parent') ? 'block' : 'none';
   }
 
@@ -1400,6 +1886,9 @@ function initContactForm() {
     const messageEl = document.getElementById('form-message');
     const expEl = document.getElementById('form-experience');
     const orgEl = document.getElementById('form-org');
+    const acadInstEl = document.getElementById('form-academic-inst');
+    const acadRoleEl = document.getElementById('form-academic-role');
+    const acadInterestEl = document.getElementById('form-academic-interest');
 
     const name = nameEl ? nameEl.value.trim() : '';
     const email = emailEl ? emailEl.value.trim() : '';
@@ -1421,9 +1910,24 @@ function initContactForm() {
       return;
     }
 
+    // Academic specific validation
+    if (selectedPersona === 'academic') {
+      const instNameVal = acadInstEl ? acadInstEl.value.trim() : '';
+      const roleVal = acadRoleEl ? acadRoleEl.value.trim() : '';
+      if (!instNameVal || !roleVal) {
+        if (errorBanner && errorText) {
+          errorText.textContent = 'Please enter your Institution/University Name and Department/Role.';
+          errorBanner.style.display = 'flex';
+        }
+        return;
+      }
+    }
+
     // Course title resolution
     let courseTitle = 'General Enquiry';
-    if (programEl && programEl.options && programEl.selectedIndex >= 0) {
+    if (selectedPersona === 'academic' && acadInterestEl) {
+      courseTitle = `Academic: ${acadInterestEl.value.trim()}`;
+    } else if (programEl && programEl.options && programEl.selectedIndex >= 0) {
       courseTitle = programEl.options[programEl.selectedIndex].text.replace(/\s*\(Flagship\)\s*/i, '').trim();
     }
 
@@ -1443,8 +1947,16 @@ function initContactForm() {
     if (clinicalExp && (selectedPersona === 'practicing_vet' || selectedPersona === 'fresh_grad')) {
       metaParts.push(`Clinical Experience: ${clinicalExp}`);
     }
-    if (orgName && (selectedPersona === 'corporate' || selectedPersona === 'academic')) {
+    if (orgName && selectedPersona === 'corporate') {
       metaParts.push(`Organization: ${orgName}`);
+    }
+    if (selectedPersona === 'academic') {
+      const inst = acadInstEl ? acadInstEl.value.trim() : '';
+      const role = acadRoleEl ? acadRoleEl.value.trim() : '';
+      const interest = acadInterestEl ? acadInterestEl.value.trim() : '';
+      if (inst) metaParts.push(`Institution: ${inst}`);
+      if (role) metaParts.push(`Role/Dept: ${role}`);
+      if (interest) metaParts.push(`Program Interest: ${interest}`);
     }
 
     if (metaParts.length > 0) {
@@ -1471,6 +1983,7 @@ function initContactForm() {
       course: courseTitle,
       preferredTrainingPeriod,
       clinicalExperience: clinicalExp,
+      organization: (selectedPersona === 'academic' && acadInstEl) ? acadInstEl.value.trim() : orgName,
       message: fullMessage,
       source: 'Contact Page Counselling',
       sourcePage: pagePath
@@ -2960,64 +3473,46 @@ async function initProgramFilters() {
           const pImg = p.image || 'assets/images/programs/program-skill-up.webp';
           const progUrl = resolveProgramUrl(p);
 
-          // Duration & Availability from CMS with consistent standards
+          // Duration & Course Length from CMS/dataset
           const durationVal = p.duration || '3 Days';
-          const availabilityVal = p.availability || '24 Hours';
+          const courseLengthVal = p.courseLength || p.availability || '24 Hours';
 
-          // Program link, syllabus URL & Level badges
-          let viewSyllabusUrl = progUrl;
+          // Program link, syllabus URL & Level badge (show ONLY active level)
+          let viewSyllabusUrl = `${progUrl}#syllabus`;
           let viewSyllabusText = 'Syllabus';
-          let topBadgeHTML = '';
-          let levelBadgesHTML = '';
 
           const pLevel = (p.learningLevel || p.level || 'Beginner').trim();
           const pLevelLower = pLevel.toLowerCase();
 
-          if (levelFilter === 'beginner' || levelFilter === 'foundation') {
-            viewSyllabusUrl = `${progUrl}?level=foundation#syllabus`;
-            topBadgeHTML = `<span class="badge-grade-pill badge-pill-foundation"><i class="fa-solid fa-seedling"></i> Beginner</span>`;
-            levelBadgesHTML = `
-              <div class="card-level-badges">
-                <span class="level-badge badge-foundation active"><i class="fa-solid fa-check"></i> Beginner Active</span>
-                <span class="level-badge badge-intermediate muted">Intermediate</span>
-                <span class="level-badge badge-advanced muted">Advanced</span>
-              </div>
-            `;
-          } else if (levelFilter === 'intermediate') {
-            viewSyllabusUrl = `${progUrl}?level=intermediate#syllabus`;
-            topBadgeHTML = `<span class="badge-grade-pill badge-pill-intermediate"><i class="fa-solid fa-chart-line"></i> Intermediate</span>`;
-            levelBadgesHTML = `
-              <div class="card-level-badges">
-                <span class="level-badge badge-foundation muted">Beginner</span>
-                <span class="level-badge badge-intermediate active"><i class="fa-solid fa-check"></i> Intermediate Active</span>
-                <span class="level-badge badge-advanced muted">Advanced</span>
-              </div>
-            `;
-          } else if (levelFilter === 'advanced') {
-            viewSyllabusUrl = `${progUrl}?level=advanced#syllabus`;
-            topBadgeHTML = `<span class="badge-grade-pill badge-pill-advanced"><i class="fa-solid fa-award"></i> Advanced</span>`;
-            levelBadgesHTML = `
-              <div class="card-level-badges">
-                <span class="level-badge badge-foundation muted">Beginner</span>
-                <span class="level-badge badge-intermediate muted">Intermediate</span>
-                <span class="level-badge badge-advanced active"><i class="fa-solid fa-check"></i> Advanced Active</span>
-              </div>
-            `;
-          } else {
-            // All levels: highlight this program's specific CMS learning level
-            viewSyllabusUrl = `${progUrl}#syllabus`;
-            const badgeClass = pLevelLower === 'advanced' ? 'badge-pill-advanced' : pLevelLower === 'intermediate' ? 'badge-pill-intermediate' : 'badge-pill-foundation';
-            const badgeIcon = pLevelLower === 'advanced' ? 'fa-award' : pLevelLower === 'intermediate' ? 'fa-chart-line' : 'fa-seedling';
-            topBadgeHTML = `<span class="badge-grade-pill ${badgeClass}"><i class="fa-solid ${badgeIcon}"></i> ${pLevel}</span>`;
+          let activeLevelName = 'Beginner';
+          let activeBadgeClass = 'badge-foundation';
+          let activeIcon = 'fa-seedling';
 
-            levelBadgesHTML = `
-              <div class="card-level-badges">
-                <span class="level-badge badge-foundation ${pLevelLower === 'beginner' || pLevelLower === 'foundation' ? 'active' : 'muted'}"><i class="fa-solid fa-seedling"></i> Beginner</span>
-                <span class="level-badge badge-intermediate ${pLevelLower === 'intermediate' ? 'active' : 'muted'}"><i class="fa-solid fa-chart-line"></i> Intermediate</span>
-                <span class="level-badge badge-advanced ${pLevelLower === 'advanced' ? 'active' : 'muted'}"><i class="fa-solid fa-award"></i> Advanced</span>
-              </div>
-            `;
+          if (levelFilter === 'intermediate' || (levelFilter === 'all' && (pLevelLower === 'intermediate' || pLevelLower.includes('inter')))) {
+            activeLevelName = 'Intermediate';
+            activeBadgeClass = 'badge-intermediate';
+            activeIcon = 'fa-chart-line';
+            viewSyllabusUrl = `${progUrl}?level=intermediate#syllabus`;
+          } else if (levelFilter === 'advanced' || (levelFilter === 'all' && (pLevelLower === 'advanced' || pLevelLower.includes('adv')))) {
+            activeLevelName = 'Advanced';
+            activeBadgeClass = 'badge-advanced';
+            activeIcon = 'fa-award';
+            viewSyllabusUrl = `${progUrl}?level=advanced#syllabus`;
+          } else {
+            // Beginner / Foundation
+            activeLevelName = 'Beginner';
+            activeBadgeClass = 'badge-foundation';
+            activeIcon = 'fa-seedling';
+            if (levelFilter === 'beginner' || levelFilter === 'foundation') {
+              viewSyllabusUrl = `${progUrl}?level=foundation#syllabus`;
+            }
           }
+
+          const levelBadgesHTML = `
+            <div class="card-level-badges">
+              <span class="level-badge ${activeBadgeClass} active"><i class="fa-solid ${activeIcon}"></i> ${activeLevelName} Active</span>
+            </div>
+          `;
 
           const exploreUrl = `${progUrl}#hero`;
 
@@ -3027,9 +3522,6 @@ async function initProgramFilters() {
                 <div class="card-grade-badge-wrap" style="position: absolute; top: 12px; left: 12px; z-index: 2;">
                   <span class="badge-grade-pill" style="background: rgba(15, 45, 74, 0.9); color: #fff;">${categoryBadge}</span>
                 </div>
-                <div style="position: absolute; top: 12px; right: 12px; z-index: 2;">
-                  ${topBadgeHTML}
-                </div>
                 <img src="${pImg}" alt="${programTitle}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='assets/images/programs/program-skill-up.webp';" />
               </div>
               <div class="program-card-body">
@@ -3038,7 +3530,7 @@ async function initProgramFilters() {
                 <p class="program-card-desc">${p.description || ''}</p>
                 <div class="program-card-meta">
                   <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> ${durationVal}</div>
-                  <div class="meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> <strong>Availability:</strong> ${availabilityVal}</div>
+                  <div class="meta-item"><i class="fa-solid fa-graduation-cap text-teal"></i> <strong>Course Length:</strong> ${courseLengthVal}</div>
                 </div>
                 <div class="program-card-footer">
                   <div class="program-card-price-row">
@@ -3206,9 +3698,9 @@ async function initProgramFilters() {
     const rawParam = decodeURIComponent(urlParams.get('level')).toLowerCase().trim();
     if (rawParam.includes('found') || rawParam.includes('begin') || rawParam.includes('fresh') || rawParam.includes('skill-up') || rawParam.includes('student')) {
       targetLvl = 'foundation';
-    } else if (rawParam.includes('inter') || rawParam.includes('surg') || rawParam.includes('practis') || rawParam.includes('practic') || rawParam.includes('special')) {
+    } else if (rawParam.includes('inter') || rawParam.includes('surg') || rawParam.includes('practis') || rawParam.includes('practic')) {
       targetLvl = 'intermediate';
-    } else if (rawParam.includes('adv') || rawParam.includes('pet') || rawParam.includes('first-aid') || rawParam.includes('rescue')) {
+    } else if (rawParam.includes('adv') || rawParam.includes('special')) {
       targetLvl = 'advanced';
     } else if (rawParam === 'all') {
       targetLvl = 'all';
@@ -3233,12 +3725,14 @@ async function initProgramFilters() {
     if (levelSelect) levelSelect.value = targetLvl;
   }
 
-  // In-page mega menu card filtering when on programs.html
-  document.querySelectorAll('.programs-mega-card, .drawer-program-card').forEach(card => {
+  // In-page menu item click filtering when on programs.html
+  document.querySelectorAll('.programs-mega-card, .drawer-program-card, .iam-dropdown-menu .dropdown-item, .drawer-iam-link').forEach(card => {
     card.addEventListener('click', (e) => {
       const currentPath = window.location.pathname.split('/').pop().toLowerCase();
       if (currentPath === 'programs.html' || currentPath === 'programs' || currentPath === '') {
         const targetLevel = card.getAttribute('data-level');
+        const targetCategory = card.getAttribute('data-category');
+
         if (targetLevel) {
           e.preventDefault();
           const targetRadio = document.querySelector(`input[name="program-level"][value="${targetLevel}"]`) ||
@@ -3249,27 +3743,52 @@ async function initProgramFilters() {
           if (levelSelect) {
             levelSelect.value = targetLevel;
           }
+          const allCatRadio = document.querySelector('input[name="program-category"][value="all"]');
+          if (allCatRadio) allCatRadio.checked = true;
+
           updateUrlParam(targetLevel);
           filterPrograms(true);
+        } else if (targetCategory) {
+          e.preventDefault();
+          const allLevelRadio = document.querySelector('input[name="program-level"][value="all"]');
+          if (allLevelRadio) allLevelRadio.checked = true;
+          if (levelSelect) levelSelect.value = 'all';
 
-          // Close mega menu dropdown
-          const parentItem = card.closest('.has-dropdown');
-          if (parentItem) {
-            parentItem.classList.remove('is-open');
-            const toggle = parentItem.querySelector('.dropdown-toggle');
-            if (toggle) toggle.setAttribute('aria-expanded', 'false');
+          const allRadios = document.querySelectorAll('input[name="program-category"]');
+          for (const radio of allRadios) {
+            const rVal = radio.value.toLowerCase().trim();
+            const targetVal = targetCategory.toLowerCase().trim();
+            if (rVal === targetVal || (targetVal.includes('emergency') && rVal.includes('emergency'))) {
+              radio.checked = true;
+              break;
+            }
           }
-          // Close mobile drawer if open
-          const mobileDrawer = document.getElementById('mobile-drawer');
-          const drawerOverlay = document.getElementById('drawer-overlay');
-          if (mobileDrawer) mobileDrawer.classList.remove('open');
-          if (drawerOverlay) drawerOverlay.classList.remove('open');
-          document.body.style.overflow = '';
+          const url = new URL(window.location.href);
+          url.searchParams.delete('level');
+          url.searchParams.delete('grade');
+          url.searchParams.set('category', targetCategory);
+          window.history.replaceState({}, '', url.toString());
 
-          const catalogSec = document.getElementById('all-programs');
-          if (catalogSec) {
-            catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
+          filterPrograms(true);
+        }
+
+        // Close dropdown
+        const parentItem = card.closest('.has-dropdown');
+        if (parentItem) {
+          parentItem.classList.remove('is-open');
+          const toggle = parentItem.querySelector('.dropdown-toggle');
+          if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        }
+        // Close mobile drawer if open
+        const mobileDrawer = document.getElementById('mobile-drawer');
+        const drawerOverlay = document.getElementById('drawer-overlay');
+        if (mobileDrawer) mobileDrawer.classList.remove('open');
+        if (drawerOverlay) drawerOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+
+        const catalogSec = document.getElementById('all-programs');
+        if (catalogSec) {
+          catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
     });
@@ -3278,23 +3797,32 @@ async function initProgramFilters() {
   // Category or Track parameter
   let targetCat = null;
   if (urlParams.has('category')) {
-    targetCat = urlParams.get('category').toLowerCase().trim();
+    targetCat = decodeURIComponent(urlParams.get('category')).toLowerCase().trim();
   } else if (urlParams.has('track')) {
     const trk = urlParams.get('track').toLowerCase().trim();
     const trackToCatMap = {
       'vet-nurse': 'veterinary nursing',
       'emergency-care': 'emergency & critical care',
+      'emergency': 'emergency & critical care',
+      'first-aid': 'emergency & critical care',
       'diagnostic-specialization': 'diagnostics & imaging',
       'surgery': 'surgery'
     };
     if (trackToCatMap[trk]) {
       targetCat = trackToCatMap[trk];
     }
+  } else if (urlParams.has('role')) {
+    const r = urlParams.get('role').toLowerCase().trim();
+    if (r.includes('pet') || r.includes('first') || r.includes('rescue')) {
+      targetCat = 'emergency & critical care';
+    }
   }
+
   if (targetCat) {
     const allRadios = document.querySelectorAll('input[name="program-category"]');
     for (const radio of allRadios) {
-      if (radio.value.toLowerCase() === targetCat) {
+      const rVal = radio.value.toLowerCase().trim();
+      if (rVal === targetCat || (targetCat.includes('emergency') && rVal.includes('emergency')) || (targetCat.includes('first') && rVal.includes('emergency'))) {
         radio.checked = true;
         paramTriggered = true;
         break;
@@ -3384,7 +3912,8 @@ function updateRelatedPrograms(activeTrack) {
       badge: 'SURGERY TRACK',
       title: 'Soft Tissue Surgery Track',
       desc: 'Intensive surgical workshop covering sterile setup, tissue handling, and suture patterns.',
-      price: '₹18,500',
+      duration: '3 Days',
+      courseLength: '24 Hours',
       href: 'soft-tissue-surgery.html',
       img: 'assets/images/programs/program-surgery.webp'
     },
@@ -3393,7 +3922,8 @@ function updateRelatedPrograms(activeTrack) {
       badge: 'DIAGNOSTICS TRACK',
       title: 'Radiology & Ultrasound Masterclass',
       desc: 'Radiograph reading & hands-on abdominal ultrasound FAST scanning.',
-      price: '₹16,000',
+      duration: '3 Days',
+      courseLength: '24 Hours',
       href: 'radiology-ultrasound.html',
       img: 'assets/images/programs/program-radiology.webp'
     },
@@ -3402,7 +3932,8 @@ function updateRelatedPrograms(activeTrack) {
       badge: 'EMERGENCY TRACK',
       title: 'Pet Emergency & Critical Care',
       desc: 'Handling shock, toxic ingestion, cardiac arrest, fluid resuscitation, and triage.',
-      price: '₹12,500',
+      duration: '3 Days',
+      courseLength: '24 Hours',
       href: 'emergency-medicine.html',
       img: 'assets/images/programs/program-emergency.webp'
     },
@@ -3411,7 +3942,8 @@ function updateRelatedPrograms(activeTrack) {
       badge: 'INTERNAL MEDICINE',
       title: 'General Medicine & Diagnostics',
       desc: 'Systematic clinical diagnostic and therapeutic protocols for small animal internal medicine practice.',
-      price: '₹15,000',
+      duration: '3 Days',
+      courseLength: '24 Hours',
       href: 'general-medicine.html',
       img: 'assets/images/programs/program-skill-up.webp'
     },
@@ -3420,7 +3952,8 @@ function updateRelatedPrograms(activeTrack) {
       badge: 'ORTHOPAEDIC SURGERY',
       title: 'Small Animal Orthopaedics',
       desc: 'Hands-on bone plating, fracture stabilization, pinning, and post-op radiograph evaluation.',
-      price: '₹19,500',
+      duration: '3 Days',
+      courseLength: '24 Hours',
       href: 'orthopaedics.html',
       img: 'assets/images/programs/program-orthopaedics.webp'
     }
@@ -3438,12 +3971,13 @@ function updateRelatedPrograms(activeTrack) {
         <h3 class="program-card-title"><a href="${item.href}">${item.title}</a></h3>
         <p class="program-card-desc">${item.desc}</p>
         <div class="program-card-meta">
-          <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> 3 Days</div>
-          <div class="meta-item"><i class="fa-solid fa-calendar-check text-teal"></i> <strong>Availability:</strong> 24 Hours</div>
+          <div class="meta-item"><i class="fa-solid fa-clock text-teal"></i> <strong>Duration:</strong> ${item.duration || '3 Days'}</div>
+          <div class="meta-item"><i class="fa-solid fa-graduation-cap text-teal"></i> <strong>Course Length:</strong> ${item.courseLength || '24 Hours'}</div>
         </div>
         <div class="program-card-footer">
-          <div class="program-card-price">${item.price} <small>+ GST</small></div>
-          <a class="btn btn-outline btn-sm" href="${item.href}">View Program <i class="fa-solid fa-arrow-right"></i></a>
+          <div class="program-card-actions" style="display: flex; width: 100%; justify-content: flex-end;">
+            <a class="btn btn-outline btn-sm" href="${item.href}">Explore <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
         </div>
       </div>
     </div>
@@ -4935,3 +5469,60 @@ function initPartnershipForm() {
 }
 
 
+
+
+/* ==========================================================================
+   Role Picker Modal Controller
+   ========================================================================== */
+function initRolePickerModal() {
+  const getModal = () => document.getElementById('role-picker-modal');
+
+  function openModal() {
+    const modal = getModal();
+    if (!modal) return;
+    modal.classList.add('open', 'active');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    const modal = getModal();
+    if (!modal) return;
+    modal.classList.remove('open', 'active');
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('#btn-find-my-program, [data-action="role-picker"], .btn-find-program, .btn-role-picker');
+    if (trigger) {
+      e.preventDefault();
+      openModal();
+      return;
+    }
+
+    if (e.target.closest('#role-picker-close-btn')) {
+      e.preventDefault();
+      closeModal();
+      return;
+    }
+
+    const modal = getModal();
+    if (modal && e.target === modal) {
+      closeModal();
+      return;
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const modal = getModal();
+      if (modal && (modal.classList.contains('active') || modal.classList.contains('open') || modal.style.display === 'flex')) {
+        closeModal();
+      }
+    }
+  });
+
+  window.openRolePickerModal = openModal;
+  window.closeRolePickerModal = closeModal;
+}
