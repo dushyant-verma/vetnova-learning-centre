@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Veterinary Knowledge Hub — Clinical Guides, Surgery & Radiology | VetNova</title>
+  <title>Veterinary Knowledge Hub — Practical Clinical Guides & Continuing Education | VetNova</title>
   <meta name="description"
-    content="Explore VetNova's Veterinary Knowledge Hub: expert clinical guides, soft tissue surgery techniques, digital radiology interpretation, emergency medicine protocols, and pet care resources." />
+    content="Explore VetNova's Veterinary Knowledge Hub: expert clinical guides, practical veterinary skill development, continuing education insights, and training philosophy for veterinarians in India." />
 
   <!-- Font and Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -306,20 +306,12 @@
                 <legend>Categories</legend>
                 <label class="blog-filter-option"><input type="radio" name="blog-category" value="all" checked>
                   <span>All articles</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="surgery">
-                  <span>Surgery</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="radiology">
-                  <span>Radiology &amp; Imaging</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="emergency">
-                  <span>Emergency Care</span></label>
                 <label class="blog-filter-option"><input type="radio" name="blog-category" value="clinical-skills">
                   <span>Clinical Skills</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="pet-care"> <span>Pet
-                    Care &amp; Wellness</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="welfare"> <span>Animal
-                    Welfare</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="nurse"> <span>Vet
-                    Nurses</span></label>
+                <label class="blog-filter-option"><input type="radio" name="blog-category" value="continuing-education">
+                  <span>Continuing Education</span></label>
+                <label class="blog-filter-option"><input type="radio" name="blog-category" value="training-philosophy">
+                  <span>Training Philosophy</span></label>
                 <label class="blog-filter-option"><input type="radio" name="blog-category" value="career"> <span>Career
                     Advice</span></label>
               </fieldset>
@@ -332,7 +324,7 @@
               <div class="feature-grid-3" id="latest-articles-grid">
 
                 <!-- Article 1 -->
-                <div class="blog-card" data-category="clinical-skills career general">
+                <div class="blog-card" data-category="clinical-skills career">
                   <div class="blog-card-media">
                     <img src="assets/images/hero-veterinary-training.webp"
                       alt="Veterinary graduates participating in supervised practical clinical training in India" loading="lazy"
@@ -358,7 +350,7 @@
                 </div>
 
                 <!-- Article 2 -->
-                <div class="blog-card" data-category="clinical-skills career general">
+                <div class="blog-card" data-category="clinical-skills continuing-education career">
                   <div class="blog-card-media">
                     <img src="assets/images/facility-lecture.webp"
                       alt="Practising veterinarians taking part in continuing veterinary education and clinical skills training" loading="lazy"
@@ -384,7 +376,7 @@
                 </div>
 
                 <!-- Article 3 -->
-                <div class="blog-card" data-category="clinical-skills career general">
+                <div class="blog-card" data-category="clinical-skills training-philosophy career">
                   <div class="blog-card-media">
                     <img src="assets/images/program-skill-up.webp"
                       alt="Small-group hands-on veterinary training with guidance from an experienced veterinary professional" loading="lazy"
@@ -486,13 +478,9 @@
           const matchesCategory = selected === 'all' ||
             tokens.includes(selected) ||
             cardCat.includes(selected) ||
-            (selected === 'nurse' && (cardCat.includes('nurse') || cardText.includes('nurse'))) ||
-            (selected === 'welfare' && (cardCat.includes('welfare') || cardText.includes('welfare'))) ||
-            (selected === 'emergency' && (cardCat.includes('emergency') || cardText.includes('emergency') || cardText.includes('triage') || cardText.includes('resuscitation'))) ||
-            (selected === 'radiology' && (cardCat.includes('radiology') || cardCat.includes('imaging') || cardText.includes('x-ray') || cardText.includes('ultrasound') || cardText.includes('radiograph'))) ||
-            (selected === 'surgery' && (cardCat.includes('surgery') || cardText.includes('surgery') || cardText.includes('surgical') || cardText.includes('ligation') || cardText.includes('spay'))) ||
-            (selected === 'clinical-skills' && (cardCat.includes('clinical') || cardText.includes('clinical') || cardText.includes('skills') || cardText.includes('analgesia') || cardText.includes('protocols'))) ||
-            (selected === 'pet-care' && (cardCat.includes('pet') || cardCat.includes('care') || cardText.includes('pet care') || cardText.includes('wellness'))) ||
+            (selected === 'clinical-skills' && (cardCat.includes('clinical') || cardText.includes('clinical') || cardText.includes('skills'))) ||
+            (selected === 'continuing-education' && (cardCat.includes('continuing') || cardText.includes('continuing') || cardText.includes('education') || cardText.includes('cve'))) ||
+            (selected === 'training-philosophy' && (cardCat.includes('philosophy') || cardText.includes('philosophy') || cardText.includes('hands-on') || cardText.includes('classroom'))) ||
             (selected === 'career' && (cardCat.includes('career') || cardText.includes('career') || cardText.includes('advice')));
 
           const matchesSearch = !term || cardText.includes(term);

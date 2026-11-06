@@ -80,47 +80,54 @@
         </div>
       </div>
 
-      <!-- I am a Dropdown -->
-      <div class="nav-item has-dropdown">
+      <!-- Programs Dropdown Menu -->
+      <div class="nav-item has-dropdown programs-nav-item">
         <a class="nav-link dropdown-toggle" data-nav="programs" href="programs.html" aria-haspopup="true"
-          aria-expanded="false" id="iam-dropdown-toggle">
-          I am a <i class="fa-solid fa-chevron-down caret"></i>
+          aria-expanded="false" id="programs-dropdown-toggle">
+          Programs <i class="fa-solid fa-chevron-down caret"></i>
         </a>
-        <div class="dropdown-menu iam-dropdown-menu" role="menu" aria-labelledby="iam-dropdown-toggle">
+        <div class="dropdown-menu programs-dropdown-menu programs-persona-menu" role="menu" aria-labelledby="programs-dropdown-toggle">
           <div class="dropdown-arrow"></div>
-          <a class="dropdown-item" href="programs.html?level=Foundation%20Level" data-level="foundation" role="menuitem">
-            <div class="dropdown-icon"><i class="fa-solid fa-user-graduate"></i></div>
-            <div class="dropdown-text">
-              <strong>Fresh Vets &amp; Interns</strong>
-              <small>Build core confidence &amp; surgical skills</small>
+          
+          <div class="programs-menu-inner">
+            <div class="programs-menu-head">
+              <h3 class="programs-menu-title">Who are you?</h3>
+              <p class="programs-menu-sub">Pick one to see programs at your level</p>
             </div>
-          </a>
-          <a class="dropdown-item" href="programs.html?level=Intermediate%20Level" data-level="intermediate" role="menuitem">
-            <div class="dropdown-icon"><i class="fa-solid fa-user-doctor"></i></div>
-            <div class="dropdown-text">
-              <strong>Practising Veterinarians</strong>
-              <small>Sharpen surgery, X-ray &amp; clinical care</small>
+
+            <div class="programs-menu-cards">
+              <a href="for/fresh-vets/" class="programs-persona-card" id="nav-persona-fresh-vets">
+                <div class="persona-card-title">Fresh Vets &amp; Interns</div>
+                <div class="persona-card-sub">Build core clinical confidence</div>
+              </a>
+
+              <a href="for/practising-vets/" class="programs-persona-card" id="nav-persona-practising-vets">
+                <div class="persona-card-title">Practising Veterinarians</div>
+                <div class="persona-card-sub">Sharpen surgery, X-ray, clinical care</div>
+              </a>
+
+              <a href="for/specialists/" class="programs-persona-card" id="nav-persona-specialists">
+                <div class="persona-card-title">Specialists &amp; Experienced Vets</div>
+                <div class="persona-card-sub">Master complex surgery and diagnostics</div>
+              </a>
+
+              <a href="pet-first-aid/" class="programs-persona-card" id="nav-persona-pet-owners">
+                <div class="persona-card-title">Pet Owners &amp; Rescuers</div>
+                <div class="persona-card-sub">First aid, CPR and safe handling</div>
+              </a>
             </div>
-          </a>
-          <a class="dropdown-item" href="programs.html?level=Advanced%20Level" data-level="advanced" role="menuitem">
-            <div class="dropdown-icon"><i class="fa-solid fa-award"></i></div>
-            <div class="dropdown-text">
-              <strong>Specialists &amp; Experienced Vets</strong>
-              <small>Master complex surgery &amp; diagnostics</small>
+
+            <div class="programs-menu-bottom-box">
+              <a href="programs.html" class="programs-bottom-all-link">View all programs and levels</a>
+              <a href="contact.html#contact-form" class="programs-bottom-counselling-link btn-book-counselling" data-action="book-counselling">
+                Not sure? <strong>Book free counselling</strong>
+              </a>
             </div>
-          </a>
-          <a class="dropdown-item" href="programs.html?category=Emergency%20%26%20Critical%20Care" data-category="Emergency &amp; Critical Care" role="menuitem">
-            <div class="dropdown-icon"><i class="fa-solid fa-paw"></i></div>
-            <div class="dropdown-text">
-              <strong>Pet Owners &amp; Rescuers</strong>
-              <small>Hands-on first aid, CPR &amp; safe handling</small>
-            </div>
-          </a>
+          </div>
         </div>
       </div>
 
-      <a class="nav-link" data-nav="Partnerships" href="partnerships.html">Partner With Us</a>
-      <!-- <a class="nav-link" data-nav="welfare" href="animal-welfare.html">Animal Welfare</a> -->
+      <a class="nav-link" data-nav="partnerships" href="partnerships.html">Partner With Us</a>
       <a class="nav-link" data-nav="blog" href="blog.html">Blog</a>
       <a class="nav-link" data-nav="contact" href="contact.html">Contact</a>
     </nav>
@@ -131,8 +138,8 @@
         <span class="lang-divider">|</span>
         <button type="button" class="lang-btn" data-lang="hi" aria-pressed="false">हिन्दी</button>
       </div>
-      <a class="btn btn-counselling-pill" href="contact.html#contact-form" id="header-counselling-btn">
-        <span>Book Free Counselling</span>
+      <a class="btn btn-counselling-pill btn-book-counselling" href="contact.html#contact-form" id="header-counselling-btn" data-action="book-counselling">
+        <span>Book counselling</span>
       </a>
       <!-- <a class="btn btn-primary btn-apply-now" href="contact.html#contact-form">
         <span>Book Free Counselling </span>
@@ -207,48 +214,52 @@
       </div>
     </div>
 
-    <!-- Mobile Accordion: I am a -->
+    <!-- Mobile Accordion: Programs -->
     <div class="drawer-accordion">
       <button type="button" class="drawer-accordion-btn" id="drawer-programs-btn" aria-expanded="false"
         aria-controls="drawer-programs-panel">
-        <span><i class="fa-solid fa-graduation-cap"></i> I am a</span>
+        <span><i class="fa-solid fa-graduation-cap"></i> Programs</span>
         <i class="fa-solid fa-chevron-down accordion-caret"></i>
       </button>
       <div class="drawer-accordion-content" id="drawer-programs-panel" role="region"
         aria-labelledby="drawer-programs-btn">
-        <a href="programs.html?level=Foundation%20Level" class="drawer-iam-link" data-level="foundation">
+        <a href="for/fresh-vets/" class="drawer-iam-link" data-level="foundation">
           <span class="drawer-item-icon">
             <i class="fa-solid fa-user-graduate"></i>
           </span>
           <span>Fresh Vets &amp; Interns</span>
         </a>
 
-        <a href="programs.html?level=Intermediate%20Level" class="drawer-iam-link" data-level="intermediate">
+        <a href="for/practising-vets/" class="drawer-iam-link" data-level="intermediate">
           <span class="drawer-item-icon">
             <i class="fa-solid fa-user-doctor"></i>
           </span>
           <span>Practising Veterinarians</span>
         </a>
 
-        <a href="programs.html?level=Advanced%20Level" class="drawer-iam-link" data-level="advanced">
+        <a href="for/specialists/" class="drawer-iam-link" data-level="advanced">
           <span class="drawer-item-icon">
             <i class="fa-solid fa-award"></i>
           </span>
           <span>Specialists &amp; Experienced Vets</span>
         </a>
 
-        <a href="programs.html?category=Emergency%20%26%20Critical%20Care" class="drawer-iam-link" data-category="Emergency &amp; Critical Care">
+        <a href="pet-first-aid/" class="drawer-iam-link" data-category="Emergency &amp; Critical Care">
           <span class="drawer-item-icon">
             <i class="fa-solid fa-paw"></i>
           </span>
           <span>Pet Owners &amp; Rescuers</span>
         </a>
+
+        <a href="programs.html" class="drawer-iam-link" style="border-top: 1px solid #f1f5f9; font-weight: 700; color: var(--teal);">
+          <span class="drawer-item-icon"><i class="fa-solid fa-arrow-right"></i></span>
+          <span>View All Programs</span>
+        </a>
       </div>
     </div>
 
     <a class="drawer-link" data-nav="partnerships" href="partnerships.html"><i class="fa-solid fa-handshake"></i>
-      Partner
-      With Us</a>
+      Partner With Us</a>
 
 
     <a class="drawer-link" data-nav="blog" href="blog.html"><i class="fa-solid fa-newspaper"></i> Our Blogs</a>

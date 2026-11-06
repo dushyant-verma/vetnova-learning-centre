@@ -26,6 +26,7 @@ function runAllInitializers() {
   initSingleFocusJourney();
   initFacultyModal();
   initDesktopDropdowns();
+  initProgramsMegaMenu();
   initRolePickerModal();
   initConnectWidget();
   if (typeof window.initVetNovaChatbot === 'function') {
@@ -79,6 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.detail && e.detail.containerId === 'global-header') {
       if (typeof initDesktopDropdowns === 'function') {
         initDesktopDropdowns();
+      }
+      if (typeof initProgramsMegaMenu === 'function') {
+        initProgramsMegaMenu();
       }
     }
     if (e.detail && e.detail.containerId === 'global-footer') {
@@ -1009,25 +1013,25 @@ function initProgramFinder() {
     'fresh-vet': {
       name: 'fresh vet',
       levelName: 'Foundation',
-      levelBadge: 'Foundation level',
+      levelBadge: 'Foundation Level Program',
       defaultCategory: 'Beginner'
     },
     'practising-vet': {
       name: 'practising vet',
       levelName: 'Intermediate',
-      levelBadge: 'Intermediate level',
+      levelBadge: 'Intermediate Level Program',
       defaultCategory: 'Intermediate'
     },
     'specialist': {
       name: 'specialist',
       levelName: 'Advanced',
-      levelBadge: 'Advanced level',
+      levelBadge: 'Advanced Level Program',
       defaultCategory: 'Advanced'
     },
     'pet-owner': {
       name: 'pet owner',
       levelName: 'First aid',
-      levelBadge: 'First aid workshop',
+      levelBadge: 'First Aid Workshop Program',
       defaultCategory: 'First Aid'
     }
   };
@@ -1644,13 +1648,11 @@ function initProgramFinder() {
         <h3 class="match-card-title">${p.title}</h3>
         <div class="match-card-level">${p.level}</div>
         <div class="match-card-meta">
-          <strong>Duration:</strong> ${p.duration} · <strong>Course Length:</strong> ${p.courseLength}<br>
-          <span style="color: #0d9488; font-weight: 600;"><i class="fa-solid fa-calendar-check" style="font-size: 12px; margin-right: 4px;"></i> Next Batch: ${p.nextBatch || 'Available'}</span>
+          <div><strong>Duration:</strong> ${p.duration}</div>
+          <div><strong>Course Length:</strong> ${p.courseLength}</div>
         </div>
         <div class="match-card-actions">
-          <button type="button" class="finder-enquire-btn btn-book-counselling" data-action="book-counselling" data-program="${p.title}">Enquire</button>
-          <span class="action-divider">·</span>
-          <a href="${p.url}" class="finder-view-link">View program</a>
+          <a href="${p.url}" class="finder-view-link">View program <i class="fa-solid fa-arrow-right" style="font-size: 11px; margin-left: 3px;"></i></a>
         </div>
       </div>
     `).join('');
@@ -1990,10 +1992,21 @@ function initContactForm() {
     };
 
     try {
-      if (typeof submitEnquiry !== 'function') {
-        throw new Error('API client script (api.js) failed to load. Please refresh the page and try again.');
-      }
-      await submitEnquiry(payload);
+      const apiSubmitFn = (typeof submitEnquiry === 'function') ? submitEnquiry : async (data) => {
+        const base = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+          ? 'http://localhost:5001/api'
+          : 'https://vetnova-api-utnd.onrender.com/api';
+        const res = await fetch(`${base}/enquiries`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const resJson = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(resJson.message || 'Failed to submit enquiry');
+        return resJson;
+      };
+
+      await apiSubmitFn(payload);
 
       form.style.display = 'none';
       successState.style.display = 'flex';
@@ -2054,6 +2067,7 @@ function initSmoothScroll() {
     link.addEventListener('click', (e) => {
       const rawHref = link.getAttribute('href');
       if (!rawHref || rawHref === '#') return;
+      if (link.dataset.action === 'role-picker' || link.dataset.action === 'book-counselling' || link.id === 'btn-find-my-program' || link.classList.contains('btn-role-picker') || link.classList.contains('btn-book-counselling')) return;
 
       let linkPath = '';
       let hash = '';
@@ -2146,10 +2160,13 @@ function initEnquiryModal() {
       modalHead: modal.querySelector('.modal-head'),
       modalTitle: document.getElementById('modal-title'),
       modalDesc: document.getElementById('modal-desc'),
-      nameInput: document.getElementById('modal-name'),
+      firstNameInput: document.getElementById('modal-first-name'),
+      lastNameInput: document.getElementById('modal-last-name'),
+      nameInput: document.getElementById('modal-name') || document.getElementById('modal-first-name'),
       emailInput: document.getElementById('modal-email'),
       phoneInput: document.getElementById('modal-phone'),
       countryCodeSelect: document.getElementById('modal-country-code') || modal.querySelector('select[name="modal_country_code"]'),
+      roleSelect: document.getElementById('modal-role'),
       programSelect: document.getElementById('modal-program'),
       modeSelect: document.getElementById('modal-mode'),
       messageInput: document.getElementById('modal-message'),
@@ -2341,39 +2358,43 @@ function initEnquiryModal() {
 
     // Preselect Program if specified or detected
     if (els.programSelect && targetProgram) {
-      const lowerTarget = targetProgram.toLowerCase().trim();
-      let matchedIndex = -1;
+      if (els.programSelect.tagName === 'SELECT' && els.programSelect.options) {
+        const lowerTarget = targetProgram.toLowerCase().trim();
+        let matchedIndex = -1;
 
-      for (let i = 0; i < els.programSelect.options.length; i++) {
-        const opt = els.programSelect.options[i];
-        const val = (opt.value || '').toLowerCase().trim();
-        const txt = (opt.text || '').toLowerCase().trim();
-        if (val === lowerTarget || txt === lowerTarget || txt.replace(/^\d+[\.\s\-#]+\s*/, '') === lowerTarget) {
-          matchedIndex = i;
-          break;
-        }
-      }
-
-      if (matchedIndex === -1) {
         for (let i = 0; i < els.programSelect.options.length; i++) {
           const opt = els.programSelect.options[i];
           const val = (opt.value || '').toLowerCase().trim();
           const txt = (opt.text || '').toLowerCase().trim();
-          if (val && (lowerTarget.includes(val) || val.includes(lowerTarget))) {
+          if (val === lowerTarget || txt === lowerTarget || txt.replace(/^\d+[\.\s\-#]+\s*/, '') === lowerTarget) {
             matchedIndex = i;
             break;
           }
         }
-      }
 
-      if (matchedIndex !== -1) {
-        els.programSelect.selectedIndex = matchedIndex;
+        if (matchedIndex === -1) {
+          for (let i = 0; i < els.programSelect.options.length; i++) {
+            const opt = els.programSelect.options[i];
+            const val = (opt.value || '').toLowerCase().trim();
+            const txt = (opt.text || '').toLowerCase().trim();
+            if (val && (lowerTarget.includes(val) || val.includes(lowerTarget))) {
+              matchedIndex = i;
+              break;
+            }
+          }
+        }
+
+        if (matchedIndex !== -1) {
+          els.programSelect.selectedIndex = matchedIndex;
+        } else {
+          const newOpt = document.createElement('option');
+          newOpt.value = targetProgram;
+          newOpt.textContent = targetProgram;
+          newOpt.selected = true;
+          els.programSelect.appendChild(newOpt);
+          els.programSelect.value = targetProgram;
+        }
       } else {
-        const newOpt = document.createElement('option');
-        newOpt.value = targetProgram;
-        newOpt.textContent = targetProgram;
-        newOpt.selected = true;
-        els.programSelect.appendChild(newOpt);
         els.programSelect.value = targetProgram;
       }
 
@@ -2393,9 +2414,10 @@ function initEnquiryModal() {
     els.modal.classList.add('open', 'active');
     document.body.style.overflow = 'hidden';
 
-    // Set initial focus to Name field
+    // Set initial focus to Name / First Name field
     setTimeout(() => {
-      if (els.nameInput) els.nameInput.focus();
+      const firstInput = els.firstNameInput || els.nameInput;
+      if (firstInput) firstInput.focus();
     }, 120);
   }
 
@@ -2579,16 +2601,19 @@ function initEnquiryModal() {
 
       if (isSubmitting) return;
 
-      const nameVal = els.nameInput ? els.nameInput.value.trim() : '';
+      const firstNameVal = els.firstNameInput ? els.firstNameInput.value.trim() : '';
+      const lastNameVal = els.lastNameInput ? els.lastNameInput.value.trim() : '';
+      const legacyNameVal = els.nameInput ? els.nameInput.value.trim() : '';
+      const nameVal = (firstNameVal || lastNameVal) ? `${firstNameVal} ${lastNameVal}`.trim() : legacyNameVal;
+
       const emailVal = els.emailInput ? els.emailInput.value.trim() : '';
       const phoneVal = els.phoneInput ? els.phoneInput.value.trim() : '';
       const countryCode = els.countryCodeSelect ? els.countryCodeSelect.value.trim() : '+91';
+      const roleVal = els.roleSelect ? els.roleSelect.value.trim() : '';
       const programVal = els.programSelect ? els.programSelect.value.trim() : '';
-      const modeVal = els.modeSelect ? els.modeSelect.value.trim() : '';
-      const messageVal = els.messageInput ? els.messageInput.value.trim() : '';
 
       // Reset previous error classes
-      [els.nameInput, els.emailInput, els.phoneInput, els.programSelect, els.modeSelect].forEach(input => {
+      [els.firstNameInput, els.lastNameInput, els.nameInput, els.emailInput, els.phoneInput, els.roleSelect, els.programSelect].forEach(input => {
         if (input) input.classList.remove('input-error');
       });
       if (els.errorBanner) els.errorBanner.style.display = 'none';
@@ -2600,7 +2625,13 @@ function initEnquiryModal() {
       let errorMsg = '';
       let firstInvalid = null;
 
-      if (!nameVal || nameVal.length < 2) {
+      if (els.firstNameInput && !firstNameVal) {
+        errorMsg = 'Please enter your first name.';
+        firstInvalid = els.firstNameInput;
+      } else if (els.lastNameInput && !lastNameVal) {
+        errorMsg = 'Please enter your last name.';
+        firstInvalid = els.lastNameInput;
+      } else if (!els.firstNameInput && (!nameVal || nameVal.length < 2)) {
         errorMsg = 'Please enter your full name.';
         firstInvalid = els.nameInput;
       } else if (!emailVal || !emailRegex.test(emailVal)) {
@@ -2609,12 +2640,9 @@ function initEnquiryModal() {
       } else if (!phoneVal || phoneDigits.length < 7 || phoneDigits.length > 15) {
         errorMsg = 'Please enter a valid phone number (at least 7 to 10 digits).';
         firstInvalid = els.phoneInput;
-      } else if (!programVal) {
-        errorMsg = 'Please select an interested program.';
-        firstInvalid = els.programSelect;
-      } else if (!modeVal) {
-        errorMsg = 'Please choose your preferred counselling mode (Online or Phone Call).';
-        firstInvalid = els.modeSelect;
+      } else if (els.roleSelect && !roleVal) {
+        errorMsg = 'Please tell us who you are (select your role).';
+        firstInvalid = els.roleSelect;
       }
 
       if (errorMsg) {
@@ -2640,30 +2668,50 @@ function initEnquiryModal() {
       const pagePath = window.location.pathname || 'website';
       const sourceTag = form.dataset.source || 'Book Counselling Modal';
 
+      // Counselling session requests are routed as general leads with role saved in profile
       const payload = {
         name: nameVal,
+        firstName: firstNameVal,
+        lastName: lastNameVal,
         email: emailVal,
         phone: phoneVal,
         countryCode: countryCode,
-        course: programVal,
-        profile: 'Counselling Lead',
-        message: messageVal ? `${messageVal}\n[Preferred Counselling Mode: ${modeVal}]` : `[Preferred Counselling Mode: ${modeVal}]`,
+        course: programVal || 'General Counselling / Undecided',
+        profile: roleVal || 'Counselling Lead',
+        persona: 'general',
+        message: `[Counselling Request - Role: ${roleVal || 'General'}]`,
         formData: {
-          counsellingMode: modeVal,
-          preferredMode: modeVal,
-          interestedProgram: programVal,
-          rawMessage: messageVal
+          firstName: firstNameVal,
+          lastName: lastNameVal,
+          role: roleVal,
+          whoAreYou: roleVal,
+          interestedProgram: programVal || 'General Counselling / Undecided',
+          currentStage: roleVal,
+          yearsOfExperience: '1-5 years',
+          currentRole: roleVal,
+          areaToStrengthen: programVal || 'General Clinical Practice',
+          preferredTrainingLevel: 'Clinical Skills'
         },
         source: sourceTag,
         sourcePage: pagePath
       };
 
       try {
-        if (typeof submitEnquiry !== 'function') {
-          throw new Error('API client script (api.js) failed to load. Please check your connection and try again.');
-        }
+        const apiSubmitFn = (typeof submitEnquiry === 'function') ? submitEnquiry : async (data) => {
+          const base = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? 'http://localhost:5001/api'
+            : 'https://vetnova-api-utnd.onrender.com/api';
+          const res = await fetch(`${base}/enquiries`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const resJson = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(resJson.message || 'Failed to submit enquiry');
+          return resJson;
+        };
 
-        await submitEnquiry(payload);
+        await apiSubmitFn(payload);
 
         // On Success
         form.style.display = 'none';
@@ -5290,6 +5338,141 @@ function initDesktopDropdowns() {
 }
 
 /* ==========================================================================
+   Programs Mega Menu Role-Swapper Controller
+   ========================================================================== */
+function initProgramsMegaMenu() {
+  const megaMenu = document.querySelector('.programs-mega-menu');
+  if (!megaMenu) return;
+
+  const roleCards = megaMenu.querySelectorAll('.mega-role-card');
+  const titleEl = document.getElementById('mega-programs-title');
+  const subEl = document.getElementById('mega-programs-subtitle');
+  const gridEl = document.getElementById('mega-programs-grid');
+
+  if (!roleCards.length || !gridEl) return;
+
+  const roleProgramsData = {
+    'fresh-vets': {
+      title: 'Programs for fresh vets',
+      subtitle: 'Every program, at Foundation level',
+      programs: [
+        { name: 'Skill-up program', url: 'veterinary-skill-up.html', featured: true },
+        { name: 'Soft tissue surgery', url: 'soft-tissue-surgery.html' },
+        { name: 'Orthopaedics', url: 'orthopaedics.html' },
+        { name: 'Ultrasound, X-ray', url: 'radiology-ultrasound.html' },
+        { name: 'Emergency care', url: 'emergency-medicine.html' },
+        { name: 'General medicine', url: 'general-medicine.html' },
+        { name: 'Cardiology, ECG', url: 'veterinary-cardiology.html' },
+        { name: 'Dermatology', url: 'veterinary-dermatology.html' }
+      ]
+    },
+    'practising-vets': {
+      title: 'Programs for practising vets',
+      subtitle: 'Every program, at Intermediate level',
+      programs: [
+        { name: 'Soft tissue surgery', url: 'soft-tissue-surgery.html', featured: true },
+        { name: 'Orthopaedics', url: 'orthopaedics.html' },
+        { name: 'Ultrasound, X-ray', url: 'radiology-ultrasound.html' },
+        { name: 'Emergency care', url: 'emergency-medicine.html' },
+        { name: 'General medicine', url: 'general-medicine.html' },
+        { name: 'Cardiology, ECG', url: 'veterinary-cardiology.html' },
+        { name: 'Dermatology', url: 'veterinary-dermatology.html' },
+        { name: 'Dentistry & oral surgery', url: 'veterinary-dentistry.html' }
+      ]
+    },
+    'specialists': {
+      title: 'Programs for specialists',
+      subtitle: 'Every program, at Advanced level',
+      programs: [
+        { name: 'Advanced orthopaedics', url: 'orthopaedics.html', featured: true },
+        { name: 'Advanced soft tissue surgery', url: 'soft-tissue-surgery.html' },
+        { name: 'Ultrasound, Doppler & CT', url: 'diagnostic-imaging.html' },
+        { name: 'Emergency ICU & critical care', url: 'emergency-medicine.html' },
+        { name: 'Neurology & spine', url: 'veterinary-neurology.html' },
+        { name: 'Cardiology & echocardiography', url: 'veterinary-cardiology.html' },
+        { name: 'Oncology & surgical biopsy', url: 'oncology.html' },
+        { name: 'Ophthalmology & microsurgery', url: 'veterinary-ophthalmology.html' }
+      ]
+    },
+    'pet-owners': {
+      title: 'Programs for pet owners',
+      subtitle: 'Hands-on emergency triage, CPR & low-stress handling',
+      programs: [
+        {
+          name: 'Pet First Aid & CPR Workshop',
+          url: 'pet-first-aid/',
+          featured: true,
+          fullSpan: true,
+          description: 'Weekend hands-on certification in choking relief, emergency CPR, wound stabilization & poison response.'
+        }
+      ]
+    }
+  };
+
+  const roleUrls = {
+    'fresh-vets': 'for/fresh-vets/',
+    'practising-vets': 'for/practising-vets/',
+    'specialists': 'for/specialists/',
+    'pet-owners': 'pet-first-aid/'
+  };
+
+  let activeRoleId = 'fresh-vets';
+
+  const scriptTag = document.querySelector('script[src*="script.js"]');
+  let urlPrefix = '';
+  if (scriptTag) {
+    const src = scriptTag.getAttribute('src') || '';
+    const idx = src.indexOf('script.js');
+    if (idx > 0) {
+      urlPrefix = src.substring(0, idx);
+    }
+  }
+
+  function selectRole(roleId) {
+    if (activeRoleId === roleId && gridEl.children.length > 0) return;
+    const data = roleProgramsData[roleId];
+    if (!data) return;
+    activeRoleId = roleId;
+
+    roleCards.forEach(card => {
+      const isActive = card.dataset.roleId === roleId;
+      card.classList.toggle('active', isActive);
+      card.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+
+    if (titleEl) {
+      const targetUrl = urlPrefix + (roleUrls[roleId] || 'programs.html');
+      titleEl.innerHTML = `<a href="${targetUrl}" class="mega-title-link">${data.title} <i class="fa-solid fa-arrow-right" style="font-size:11px;margin-left:4px;"></i></a>`;
+    }
+    if (subEl) subEl.textContent = data.subtitle;
+
+    gridEl.innerHTML = data.programs.map(p => `
+      <a href="${urlPrefix + p.url}" class="mega-program-item ${p.featured ? 'featured-mint' : ''} ${p.fullSpan ? 'full-span' : ''}">
+        <span>${p.name}</span>
+        ${p.description ? `<small style="display:block;font-size:12px;font-weight:400;margin-top:4px;color:#065f46;">${p.description}</small>` : ''}
+      </a>
+    `).join('');
+  }
+
+  roleCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      selectRole(card.dataset.roleId);
+    });
+    card.addEventListener('click', (e) => {
+      if (activeRoleId === card.dataset.roleId) {
+        // Active role clicked -> navigate to its href
+        return;
+      }
+      e.preventDefault();
+      selectRole(card.dataset.roleId);
+    });
+    card.addEventListener('focus', () => {
+      selectRole(card.dataset.roleId);
+    });
+  });
+}
+
+/* ==========================================================================
    Global Floating Connect With Us Widget
    ========================================================================== */
 function initConnectWidget() {
@@ -5446,11 +5629,21 @@ function initPartnershipForm() {
     };
 
     try {
-      if (typeof submitEnquiry !== 'function') {
-        throw new Error('API client script (api.js) failed to load. Please refresh the page and try again.');
-      }
+      const apiSubmitFn = (typeof submitEnquiry === 'function') ? submitEnquiry : async (data) => {
+        const base = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+          ? 'http://localhost:5001/api'
+          : 'https://vetnova-api-utnd.onrender.com/api';
+        const res = await fetch(`${base}/enquiries`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const resJson = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(resJson.message || 'Failed to submit enquiry');
+        return resJson;
+      };
 
-      await submitEnquiry(payload);
+      await apiSubmitFn(payload);
 
       // On Success
       form.style.display = 'none';
@@ -5511,6 +5704,7 @@ function initRolePickerModal() {
     const trigger = e.target.closest('#btn-find-my-program, [data-action="role-picker"], .btn-find-program, .btn-role-picker');
     if (trigger) {
       e.preventDefault();
+      e.stopPropagation();
       openModal();
       return;
     }

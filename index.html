@@ -62,11 +62,10 @@
 
             <!-- Primary & Secondary CTA Buttons -->
             <div class="hero-cta-group">
-              <a href="#who-should-apply" class="btn btn-primary hero-btn-main" id="btn-find-my-program"
+              <button type="button" class="btn btn-primary hero-btn-main btn-role-picker" id="btn-find-my-program"
                 data-action="role-picker">
                 <span>Find My Program</span>
-                <!-- <i class="fa-solid fa-compass"></i> -->
-              </a>
+              </button>
               <button type="button" class="btn btn-outline hero-btn-sub btn-book-counselling" id="hero-book-counselling"
                 data-action="book-counselling">
                 <span>Book Free Counselling</span>
@@ -447,11 +446,8 @@
               <div class="finder-step-header step-3-header">
                 <div class="step-3-left">
                   <span class="finder-step-title" id="finder-step-3-title">Step 3 · Your matches</span>
-                  <span class="finder-level-pill" id="finder-level-pill">Foundation level</span>
+                  <span class="finder-level-pill" id="finder-level-pill">Foundation Level Program</span>
                 </div>
-                <button type="button" class="finder-change-role-btn" id="finder-change-role-btn">
-                  <i class="fa-solid fa-rotate-left"></i> Change role
-                </button>
               </div>
 
               <!-- Matching Programs Grid -->
@@ -475,7 +471,7 @@
               <div class="finder-counselling-wrap">
                 <button type="button" class="btn-finder-counselling btn-book-counselling" id="finder-book-counselling"
                   data-action="book-counselling">
-                  Not sure? Book counselling
+                  Not Sure? Book a Free Counselling Session
                 </button>
               </div>
             </div>
@@ -1736,6 +1732,7 @@
 
 
   <!-- Interactive JavaScript -->
+  <script src="components.js"></script>
   <script src="assets/js/programs-data.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/batches.js"></script>
@@ -1765,7 +1762,7 @@
 
       <div class="role-picker-grid">
         <!-- Role 1: Fresh Vets & Interns -->
-        <a href="programs.html?level=Foundation%20Level" class="role-picker-card">
+        <a href="for/fresh-vets/" class="role-picker-card">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
             <div
               style="width: 44px; height: 44px; border-radius: 10px; background: rgba(18, 199, 193, 0.12); color: var(--teal, #12c7c1); display: flex; align-items: center; justify-content: center; font-size: 20px;">
@@ -1789,7 +1786,7 @@
         </a>
 
         <!-- Role 2: Practising Veterinarians -->
-        <a href="programs.html?level=Intermediate%20Level" class="role-picker-card">
+        <a href="for/practising-vets/" class="role-picker-card">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
             <div
               style="width: 44px; height: 44px; border-radius: 10px; background: rgba(37, 99, 235, 0.12); color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 20px;">
@@ -1813,7 +1810,7 @@
         </a>
 
         <!-- Role 3: Specialists & Experienced Vets -->
-        <a href="programs.html?level=Intermediate%20Level" class="role-picker-card">
+        <a href="for/specialists/" class="role-picker-card">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
             <div
               style="width: 44px; height: 44px; border-radius: 10px; background: rgba(147, 51, 234, 0.12); color: #9333ea; display: flex; align-items: center; justify-content: center; font-size: 20px;">
@@ -1837,7 +1834,7 @@
         </a>
 
         <!-- Role 4: Pet Owners & Rescuers -->
-        <a href="programs.html?level=Advanced%20Level" class="role-picker-card">
+        <a href="pet-first-aid/" class="role-picker-card">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
             <div
               style="width: 44px; height: 44px; border-radius: 10px; background: rgba(234, 88, 12, 0.12); color: #ea580c; display: flex; align-items: center; justify-content: center; font-size: 20px;">

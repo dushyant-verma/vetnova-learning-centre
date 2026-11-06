@@ -14,18 +14,9 @@ let activeCategory = 'all';
 
 const CATEGORY_SLUG_MAP = {
   'GENERAL': 'general',
-  'VET NURSES': 'nurse',
-  'VET NURSE': 'nurse',
-  'ANIMAL WELFARE': 'welfare',
-  'PET CARE & WELLNESS': 'pet-care',
-  'PET CARE': 'pet-care',
   'CLINICAL SKILLS': 'clinical-skills',
-  'EMERGENCY CARE': 'emergency',
-  'EMERGENCY MEDICINE': 'emergency',
-  'RADIOLOGY & IMAGING': 'radiology',
-  'RADIOLOGY': 'radiology',
-  'SURGERY': 'surgery',
-  'SOFT TISSUE SURGERY': 'surgery',
+  'CONTINUING EDUCATION': 'continuing-education',
+  'TRAINING PHILOSOPHY': 'training-philosophy',
   'CAREER ADVICE': 'career'
 };
 
