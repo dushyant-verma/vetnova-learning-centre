@@ -2538,6 +2538,22 @@ function initEnquiryModal() {
       return;
     }
 
+    // 2.5 Submit Button Click inside Enquiry Modal
+    const modalSubmitBtn = e.target.closest('#modal-submit-btn');
+    if (modalSubmitBtn) {
+      e.preventDefault();
+      const form = document.getElementById('modal-enquiry-form');
+      if (form) {
+        submitCounsellingForm(form);
+      }
+      return;
+    }
+
+    // 2.6 Ignore any clicks originating inside enquiry modal content
+    if (e.target.closest('#enquiry-modal, .modal-box, #modal-enquiry-form')) {
+      return;
+    }
+
     // 3. Book Counselling triggers across all single program pages & site
     const candidateBtn = e.target.closest('a, button, [role="button"]');
     let triggerBtn = null;
@@ -2677,185 +2693,214 @@ function initEnquiryModal() {
     }
   });
 
-  // Delegated Form Submission Handler
-  document.addEventListener('submit', async (e) => {
-    if (e.target && e.target.id === 'modal-enquiry-form') {
-      e.preventDefault();
-      const form = e.target;
-      const els = getModalElements();
-      if (!els) return;
+  // Reusable Counselling Form Submission Handler
+  async function submitCounsellingForm(form) {
+    if (!form || isSubmitting) return;
 
-      if (isSubmitting) return;
+    const els = getModalElements();
+    if (!els) return;
 
-      const firstNameVal = els.firstNameInput ? els.firstNameInput.value.trim() : '';
-      const lastNameVal = els.lastNameInput ? els.lastNameInput.value.trim() : '';
-      const legacyNameVal = els.nameInput ? els.nameInput.value.trim() : '';
-      const nameVal = (firstNameVal || lastNameVal) ? `${firstNameVal} ${lastNameVal}`.trim() : legacyNameVal;
+    const firstNameVal = els.firstNameInput ? els.firstNameInput.value.trim() : '';
+    const lastNameVal = els.lastNameInput ? els.lastNameInput.value.trim() : '';
+    const legacyNameVal = els.nameInput ? els.nameInput.value.trim() : '';
+    const nameVal = (firstNameVal || lastNameVal) ? `${firstNameVal} ${lastNameVal}`.trim() : legacyNameVal;
 
-      const emailVal = els.emailInput ? els.emailInput.value.trim() : '';
-      const phoneVal = els.phoneInput ? els.phoneInput.value.trim() : '';
-      const countryCode = els.countryCodeSelect ? els.countryCodeSelect.value.trim() : '+91';
-      const roleVal = els.roleSelect ? els.roleSelect.value.trim() : '';
-      const programVal = els.programSelect ? els.programSelect.value.trim() : '';
+    const emailVal = els.emailInput ? els.emailInput.value.trim() : '';
+    const phoneVal = els.phoneInput ? els.phoneInput.value.trim() : '';
+    const countryCode = els.countryCodeSelect ? els.countryCodeSelect.value.trim() : '+91';
+    const roleVal = els.roleSelect ? els.roleSelect.value.trim() : '';
+    const programVal = els.programSelect ? els.programSelect.value.trim() : '';
 
-      // Reset previous error classes
-      [els.firstNameInput, els.lastNameInput, els.nameInput, els.emailInput, els.phoneInput, els.roleSelect, els.programSelect].forEach(input => {
-        if (input) input.classList.remove('input-error');
-      });
-      if (els.errorBanner) els.errorBanner.style.display = 'none';
+    // Reset previous error classes and inline error messages
+    [els.firstNameInput, els.lastNameInput, els.nameInput, els.emailInput, els.phoneInput, els.roleSelect, els.programSelect].forEach(input => {
+      if (input) input.classList.remove('input-error');
+    });
+    form.querySelectorAll('.field-error-msg').forEach(msg => {
+      msg.textContent = '';
+      msg.style.display = 'none';
+    });
+    if (els.errorBanner) els.errorBanner.style.display = 'none';
 
-      // Validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneDigits = phoneVal.replace(/\D/g, '');
-      let cleanPhone = phoneDigits;
-      if (countryCode === '+91') {
-        if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) {
-          cleanPhone = cleanPhone.substring(1);
-        } else if (cleanPhone.length === 12 && cleanPhone.startsWith('91')) {
-          cleanPhone = cleanPhone.substring(2);
-        }
+    // Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneDigits = phoneVal.replace(/\D/g, '');
+    let cleanPhone = phoneDigits;
+    if (countryCode === '+91') {
+      if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) {
+        cleanPhone = cleanPhone.substring(1);
+      } else if (cleanPhone.length === 12 && cleanPhone.startsWith('91')) {
+        cleanPhone = cleanPhone.substring(2);
       }
+    }
 
-      let errorMsg = '';
-      let firstInvalid = null;
+    let errorMsg = '';
+    let firstInvalid = null;
 
-      if (els.firstNameInput && !firstNameVal) {
-        errorMsg = 'Please enter your first name.';
-        firstInvalid = els.firstNameInput;
-      } else if (els.lastNameInput && !lastNameVal) {
-        errorMsg = 'Please enter your last name.';
-        firstInvalid = els.lastNameInput;
-      } else if (!els.firstNameInput && (!nameVal || nameVal.length < 2)) {
-        errorMsg = 'Please enter your full name.';
-        firstInvalid = els.nameInput;
-      } else if (!emailVal || !emailRegex.test(emailVal)) {
-        errorMsg = 'Please enter a valid email address.';
-        firstInvalid = els.emailInput;
-      } else if (!phoneVal || (countryCode === '+91' ? (cleanPhone.length !== 10 || !['6', '7', '8', '9'].includes(cleanPhone[0])) : (phoneDigits.length < 7 || phoneDigits.length > 15))) {
-        errorMsg = countryCode === '+91'
+    function markError(inputEl, errId, msg) {
+      if (inputEl) {
+        inputEl.classList.add('input-error');
+        if (!firstInvalid) firstInvalid = inputEl;
+      }
+      const errEl = document.getElementById(errId);
+      if (errEl) {
+        errEl.textContent = msg;
+        errEl.style.display = 'block';
+      }
+      if (!errorMsg) errorMsg = msg;
+    }
+
+    if (els.firstNameInput && !firstNameVal) {
+      markError(els.firstNameInput, 'err-modal-first-name', 'Please enter your first name.');
+    }
+    if (els.lastNameInput && !lastNameVal) {
+      markError(els.lastNameInput, 'err-modal-last-name', 'Please enter your last name.');
+    }
+    if (!emailVal || !emailRegex.test(emailVal)) {
+      markError(els.emailInput, 'err-modal-email', 'Please enter a valid email address.');
+    }
+    if (!phoneVal || (countryCode === '+91' ? (cleanPhone.length !== 10 || !['6', '7', '8', '9'].includes(cleanPhone[0])) : (phoneDigits.length < 7 || phoneDigits.length > 15))) {
+      markError(
+        els.phoneInput,
+        'err-modal-phone',
+        countryCode === '+91'
           ? 'Please enter a valid 10-digit Indian mobile number.'
-          : 'Please enter a valid phone number (7 to 15 digits).';
-        firstInvalid = els.phoneInput;
-      } else if (els.roleSelect && !roleVal) {
-        errorMsg = 'Please tell us who you are (select your role).';
-        firstInvalid = els.roleSelect;
+          : 'Please enter a valid phone number (7 to 15 digits).'
+      );
+    }
+    if (els.roleSelect && !roleVal) {
+      markError(els.roleSelect, 'err-modal-role', 'Please tell us who you are (select your role).');
+    }
+
+    if (errorMsg) {
+      if (els.errorBanner && els.errorText) {
+        els.errorText.textContent = errorMsg;
+        els.errorBanner.style.display = 'flex';
       }
-
-      if (errorMsg) {
-        if (els.errorBanner && els.errorText) {
-          els.errorText.textContent = errorMsg;
-          els.errorBanner.style.display = 'flex';
-        }
-        if (firstInvalid) {
-          firstInvalid.classList.add('input-error');
-          firstInvalid.focus();
-        }
-        return;
+      if (firstInvalid) {
+        firstInvalid.focus();
       }
+      return;
+    }
 
-      // Prepare UI for submission
-      isSubmitting = true;
-      const originalBtnHTML = els.submitBtn ? els.submitBtn.innerHTML : '<span>Request Counselling</span>';
-      if (els.submitBtn) {
-        els.submitBtn.disabled = true;
-        els.submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Submitting Request...</span>';
-      }
+    // Prepare UI for submission
+    isSubmitting = true;
+    const originalBtnHTML = els.submitBtn ? els.submitBtn.innerHTML : '<span>Request Counselling</span>';
+    if (els.submitBtn) {
+      els.submitBtn.disabled = true;
+      els.submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Submitting...</span>';
+    }
 
-      const pagePath = window.location.pathname || 'website';
-      const sourceTag = form.dataset.source || 'Counselling Form';
+    const pagePath = window.location.pathname || 'website';
 
-      // Counselling session requests are routed with audience, program, source and full details
-      const payload = {
-        name: nameVal,
+    const payload = {
+      name: `${firstNameVal} ${lastNameVal}`.trim(),
+      firstName: firstNameVal,
+      lastName: lastNameVal,
+      audience: roleVal,
+      role: roleVal,
+      whoAreYou: roleVal,
+      email: emailVal,
+      phone: cleanPhone || phoneVal,
+      countryCode: countryCode,
+      course: programVal || 'General Counselling / Undecided',
+      programName: programVal || 'General Counselling / Undecided',
+      profile: roleVal,
+      persona: 'general',
+      message: `[Counselling Request - Role: ${roleVal}]`,
+      formData: {
         firstName: firstNameVal,
         lastName: lastNameVal,
-        audience: roleVal || 'Practising Veterinarians',
+        role: roleVal,
+        whoAreYou: roleVal,
+        audience: roleVal,
         programName: programVal || 'General Counselling / Undecided',
-        email: emailVal,
-        phone: cleanPhone || phoneVal,
-        countryCode: countryCode,
-        course: programVal || 'General Counselling / Undecided',
-        profile: roleVal || 'Counselling Lead',
-        persona: 'general',
-        message: `[Counselling Request - Role: ${roleVal || 'General'}]`,
-        formData: {
-          firstName: firstNameVal,
-          lastName: lastNameVal,
-          role: roleVal,
-          whoAreYou: roleVal,
-          audience: roleVal,
-          programName: programVal || 'General Counselling / Undecided',
-          interestedProgram: programVal || 'General Counselling / Undecided',
-          currentStage: roleVal,
-          yearsOfExperience: '1-5 years',
-          currentRole: roleVal,
-          areaToStrengthen: programVal || 'General Clinical Practice',
-          preferredTrainingLevel: 'Clinical Skills'
+        interestedProgram: programVal || 'General Counselling / Undecided'
+      },
+      source: 'Counselling Form',
+      status: 'New',
+      sourcePage: pagePath
+    };
+
+    try {
+      const base = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:5001/api'
+        : 'https://vetnova-api-utnd.onrender.com/api';
+
+      const res = await fetch(`${base}/enquiries`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        source: 'Counselling Form',
-        sourcePage: pagePath
-      };
+        body: JSON.stringify(payload)
+      });
 
-      try {
-        const apiSubmitFn = (typeof submitEnquiry === 'function') ? submitEnquiry : async (data) => {
-          const base = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-            ? 'http://localhost:5001/api'
-            : 'https://vetnova-api-utnd.onrender.com/api';
-          const res = await fetch(`${base}/enquiries`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
-          const resJson = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(resJson.message || 'Failed to submit enquiry');
-          return resJson;
-        };
-
-        const submitResult = await apiSubmitFn(payload);
-        if (submitResult && submitResult.success === false) {
-          throw new Error(submitResult.message || 'Submission was not accepted. Please try again.');
-        }
-
-        // On Success
-        form.style.display = 'none';
-        if (els.modalHead) els.modalHead.style.display = 'none';
-        if (els.errorBanner) els.errorBanner.style.display = 'none';
-        if (els.successState) {
-          els.successState.style.display = 'flex';
-          const successBtn = els.successState.querySelector('button');
-          if (successBtn) successBtn.focus();
-        }
-        if (typeof form.reset === 'function') form.reset();
-      } catch (err) {
-        console.error('Counselling Submission Error:', err);
-        if (els.errorBanner && els.errorText) {
-          els.errorText.textContent = err.message || 'Unable to submit your counselling request. Please check your connection and try again.';
-          els.errorBanner.style.display = 'flex';
-        } else {
-          alert(err.message || 'Unable to submit enquiry. Please check your connection and try again.');
-        }
-      } finally {
-        isSubmitting = false;
-        if (els.submitBtn) {
-          els.submitBtn.disabled = false;
-          els.submitBtn.innerHTML = originalBtnHTML;
-        }
+      const resJson = await res.json().catch(() => ({}));
+      if (!res.ok || resJson.success === false) {
+        throw new Error(resJson.message || `Submission failed (${res.status}). Please try again.`);
       }
+
+      // On Confirmed Success
+      form.style.display = 'none';
+      if (els.modalHead) els.modalHead.style.display = 'none';
+      if (els.errorBanner) els.errorBanner.style.display = 'none';
+      if (els.successState) {
+        els.successState.style.display = 'flex';
+        const successBtn = els.successState.querySelector('button');
+        if (successBtn) successBtn.focus();
+      }
+      if (typeof form.reset === 'function') form.reset();
+      form.querySelectorAll('.field-error-msg').forEach(msg => {
+        msg.textContent = '';
+        msg.style.display = 'none';
+      });
+    } catch (err) {
+      console.error('Counselling Submission Error:', err);
+      if (els.errorBanner && els.errorText) {
+        els.errorText.textContent = err.message || 'Unable to submit your counselling request. Please check your connection and try again.';
+        els.errorBanner.style.display = 'flex';
+      } else {
+        alert(err.message || 'Unable to submit enquiry. Please check your connection and try again.');
+      }
+    } finally {
+      isSubmitting = false;
+      if (els.submitBtn) {
+        els.submitBtn.disabled = false;
+        els.submitBtn.innerHTML = originalBtnHTML;
+      }
+    }
+  }
+
+  // Delegated Form Submission Handler
+  document.addEventListener('submit', (e) => {
+    if (e.target && e.target.id === 'modal-enquiry-form') {
+      e.preventDefault();
+      submitCounsellingForm(e.target);
     }
   });
 
-  // Clear input-error on input/change
+  // Clear input-error and inline errors on input/change
   document.addEventListener('input', (e) => {
-    if (e.target && e.target.classList.contains('input-error')) {
+    if (e.target && e.target.closest('#modal-enquiry-form')) {
       e.target.classList.remove('input-error');
+      const errEl = document.getElementById(`err-${e.target.id}`);
+      if (errEl) {
+        errEl.textContent = '';
+        errEl.style.display = 'none';
+      }
       const banner = document.getElementById('modal-error-banner');
       if (banner) banner.style.display = 'none';
     }
   });
 
   document.addEventListener('change', (e) => {
-    if (e.target && e.target.classList.contains('input-error')) {
+    if (e.target && e.target.closest('#modal-enquiry-form')) {
       e.target.classList.remove('input-error');
+      const errEl = document.getElementById(`err-${e.target.id}`);
+      if (errEl) {
+        errEl.textContent = '';
+        errEl.style.display = 'none';
+      }
       const banner = document.getElementById('modal-error-banner');
       if (banner) banner.style.display = 'none';
     }

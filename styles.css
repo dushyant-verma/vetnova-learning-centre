@@ -10677,6 +10677,15 @@ section#related-posts {
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.14) !important;
 }
 
+.modal-form .field-error-msg {
+  color: #dc2626;
+  font-size: 11.5px;
+  font-weight: 500;
+  margin-top: 5px;
+  display: block;
+  line-height: 1.35;
+}
+
 /* ==========================================================================
    BLOG & KNOWLEDGE HUB STYLES
    ========================================================================== */
