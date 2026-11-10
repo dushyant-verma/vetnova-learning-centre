@@ -5569,10 +5569,10 @@ function initProgramsMegaMenu() {
   };
 
   const roleUrls = {
-    'fresh-vets': 'for/fresh-vets/',
-    'practising-vets': 'for/practising-vets/',
-    'specialists': 'for/specialists/',
-    'pet-owners': 'pet-first-aid/'
+    'fresh-vets': 'for/fresh-vets',
+    'practising-vets': 'for/practising-vets',
+    'specialists': 'for/specialists',
+    'pet-owners': 'for/pet-owners'
   };
 
   let activeRoleId = 'fresh-vets';
