@@ -47,7 +47,16 @@ async function initBlogSinglePage() {
   const urlParams = new URLSearchParams(window.location.search);
   let slug = urlParams.get('slug');
 
-  // Fallback to default featured slug if none supplied in query
+  // Check if pathname has a specific slug (e.g. /continuing-veterinary-education-india.html or /continuing-veterinary-education-india/)
+  if (!slug && typeof window !== 'undefined' && window.location.pathname) {
+    const rawPath = window.location.pathname.replace(/\/index\.html?$/i, '').replace(/\.html?$/i, '');
+    const pathSlug = rawPath.split('/').filter(Boolean).pop();
+    if (pathSlug && pathSlug !== 'blog-single' && pathSlug !== 'blog') {
+      slug = pathSlug;
+    }
+  }
+
+  // Fallback to default featured slug if still none supplied in query or path
   if (!slug) {
     slug = 'veterinary-graduate-to-confident-clinician';
   }
@@ -55,7 +64,11 @@ async function initBlogSinglePage() {
   const blog = await getBlog(slug);
 
   if (!blog) {
-    renderNotFoundState();
+    // Only render not-found if the page does not already have static article content
+    const existingBody = document.getElementById('article-body-content');
+    if (!existingBody || existingBody.children.length === 0) {
+      renderNotFoundState();
+    }
     return;
   }
 
