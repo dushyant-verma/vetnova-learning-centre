@@ -1637,8 +1637,7 @@ async function syncProgramsWithApi() {
               match.title = liveP.title || match.title;
               match.description = liveP.description || match.description;
               match.category = liveP.category || match.category;
-              match.duration = liveP.duration || match.duration || "3 Days";
-              match.duration = liveP.duration || match.duration || "3 Days";
+              match.duration = (liveP.duration && liveP.duration.toLowerCase().includes('day')) ? liveP.duration : "3 Days";
               match.courseLength = liveP.courseLength || "8 hours/ day";
               match.availability = liveP.availability || match.availability || "8 hours/ day";
               match.image = liveP.image || match.image;
@@ -1655,8 +1654,7 @@ async function syncProgramsWithApi() {
                 title: liveP.title,
                 slug: liveP.slug,
                 category: liveP.category || "Clinical Training",
-                duration: liveP.duration || "3 Days",
-                duration: liveP.duration || "3 Days",
+                duration: (liveP.duration && liveP.duration.toLowerCase().includes('day')) ? liveP.duration : "3 Days",
                 courseLength: liveP.courseLength || "8 hours/ day",
                 availability: liveP.availability || "8 hours/ day",
                 description: liveP.description || "",

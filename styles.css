@@ -25765,59 +25765,66 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
 
 /* Step 1: 4 Role Cards in Lavender */
 .finder-roles-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .finder-role-card {
-  background-color: #f1f3fd;
-  border: 1.5px solid #d0d7f9;
-  border-radius: 14px;
-  padding: 22px 14px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.165, 0.84, 0.44, 1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: inherit;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-color: #f1f3fd !important;
+  border: 1.5px solid #d0d7f9 !important;
+  border-radius: 14px !important;
+  padding: 22px 14px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.22s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: inherit !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  outline: none;
 }
 
 .finder-role-card:hover {
   transform: translateY(-2px);
-  border-color: #818cf8;
-  background-color: #e0e7ff;
+  border-color: #818cf8 !important;
+  background-color: #e0e7ff !important;
 }
 
 .finder-role-card.active {
-  background-color: #e0e7ff;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 2px #6366f1, 0 8px 20px rgba(99, 102, 241, 0.18);
+  background-color: #e0e7ff !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 2px #6366f1, 0 8px 20px rgba(99, 102, 241, 0.18) !important;
   transform: translateY(-2px);
 }
 
 .finder-role-card .role-name {
-  font-size: 16.5px;
-  font-weight: 800;
-  color: #1e1b4b;
-  margin-bottom: 5px;
-  display: block;
+  font-size: 16.5px !important;
+  font-weight: 800 !important;
+  color: #1e1b4b !important;
+  margin-bottom: 5px !important;
+  display: block !important;
 }
 
 .finder-role-card .role-level {
-  font-size: 13.5px;
-  font-weight: 600;
-  color: #4338ca;
-  margin-bottom: 4px;
-  display: block;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: #4338ca !important;
+  margin-bottom: 4px !important;
+  display: block !important;
 }
 
 .finder-role-card .role-meta {
-  font-size: 12.5px;
-  color: #64748b;
-  display: block;
+  font-size: 12.5px !important;
+  color: #64748b !important;
+  display: block !important;
 }
 
 /* Step 2: 6 Interest Cards in 3 Columns */
@@ -26031,7 +26038,7 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
 /* Responsive Media Queries */
 @media (max-width: 992px) {
   .finder-roles-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 
   .finder-interests-grid {
@@ -26067,16 +26074,16 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
   }
 
   .finder-roles-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
   }
 
   .finder-role-card {
-    padding: 16px 10px;
+    padding: 16px 10px !important;
   }
 
   .finder-role-card .role-name {
-    font-size: 15px;
+    font-size: 15px !important;
   }
 
   .finder-interests-grid {
@@ -26108,6 +26115,12 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
   .btn-finder-counselling {
     width: 100%;
     padding: 14px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .finder-roles-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 

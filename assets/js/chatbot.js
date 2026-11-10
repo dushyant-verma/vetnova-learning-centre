@@ -26,11 +26,11 @@
   // Structured Verified Knowledge Dataset
   const VETNOVA_KNOWLEDGE = {
     programs: [
-      { id: 'skill-up', name: 'Veterinary Skill-Up Program', duration: '4 Weeks', link: 'veterinary-skill-up.html' },
-      { id: 'soft-tissue', name: 'Soft Tissue Surgery Track', duration: '1 Week', link: 'soft-tissue-surgery.html' },
-      { id: 'radiology', name: 'Radiology & Ultrasound Masterclass', duration: '1 Week', link: 'radiology-ultrasound.html' },
+      { id: 'skill-up', name: 'Veterinary Skill-Up Program', duration: '3 Days', link: 'veterinary-skill-up.html' },
+      { id: 'soft-tissue', name: 'Soft Tissue Surgery Track', duration: '3 Days', link: 'soft-tissue-surgery.html' },
+      { id: 'radiology', name: 'Radiology & Ultrasound Masterclass', duration: '3 Days', link: 'radiology-ultrasound.html' },
       { id: 'emergency', name: 'Emergency & Critical Care Track', duration: '3 Days', link: 'emergency-medicine.html' },
-      { id: 'vet-nurse', name: 'Vet Nurse & Assistant Programme', duration: '2 Weeks', link: 'vet-nurse-programme.html' }
+      { id: 'vet-nurse', name: 'Vet Nurse & Assistant Programme', duration: '3 Days', link: 'vet-nurse-programme.html' }
     ],
     location: {
       address: 'Gawadewadi, Wagholi, Pune, MH 412207',
@@ -74,8 +74,8 @@
       query.includes('स्नातक') || query.includes('इंटर्न') || query.includes('छात्र') || query.includes('नया')) {
       return {
         reply: isHi
-          ? "आपके बैकग्राउंड के अनुसार, हम हमारे प्रमुख **पशु चिकित्सा स्किल-अप कार्यक्रम** (4 सप्ताह) की अनुशंसा करते हैं। यह विशेष रूप से नए स्नातकों और इंटर्न के लिए कॉलेज के सिद्धांत को वास्तविक क्लिनिकल अभ्यास से जोड़ने हेतु तैयार किया गया है।\n\nक्या आप कार्यक्रम विवरण देखना चाहेंगे या शैक्षणिक काउंसलर से बात करना चाहेंगे?"
-          : "Based on your background, we recommend our flagship **Veterinary Skill-Up Program** (4 Weeks). It is specifically engineered for fresh graduates and interns to bridge university theory with real-world small animal clinical practice.\n\nWould you like to explore the program details or speak with an academic counsellor?",
+          ? "आपके बैकग्राउंड के अनुसार, हम हमारे प्रमुख **पशु चिकित्सा स्किल-अप कार्यक्रम** (3 दिन) की अनुशंसा करते हैं। यह विशेष रूप से नए स्नातकों और इंटर्न के लिए कॉलेज के सिद्धांत को वास्तविक क्लिनिकल अभ्यास से जोड़ने हेतु तैयार किया गया है।\n\nक्या आप कार्यक्रम विवरण देखना चाहेंगे या शैक्षणिक काउंसलर से बात करना चाहेंगे?"
+          : "Based on your background, we recommend our flagship **Veterinary Skill-Up Program** (3 Days). It is specifically engineered for fresh graduates and interns to bridge university theory with real-world small animal clinical practice.\n\nWould you like to explore the program details or speak with an academic counsellor?",
         ctas: [
           { label: isHi ? 'पशु चिकित्सा स्किल-अप देखें' : 'View Veterinary Skill-Up', action: 'link', link: 'veterinary-skill-up.html' },
           ctaCounselling
@@ -88,8 +88,8 @@
       query.includes('अभ्यास') || query.includes('डॉक्टर') || query.includes('अनुभवी') || query.includes('क्लिनिक')) {
       return {
         reply: isHi
-          ? "अभ्यास करने वाले पशु चिकित्सकों के लिए, वेटनोवा 1-सप्ताह और 3-दिन के विशेष क्लिनिकल मॉड्यूल प्रदान करता है:\n\n• **सॉफ्ट टिश्यू सर्जरी ट्रैक** (1 सप्ताह)\n• **रेडियोलॉजी एवं अल्ट्रासाउंड मास्टरक्लास** (1 सप्ताह)\n• **आपातकालीन एवं गहन चिकित्सा** (3 दिन)\n\nआप किस क्लिनिकल क्षेत्र में महारत हासिल करना चाहते हैं?"
-          : "For practicing veterinarians, VetNova offers targeted 1-week and 3-day clinical specialization modules:\n\n• **Soft Tissue Surgery Track** (1 Week)\n• **Radiology & Ultrasound Masterclass** (1 Week)\n• **Emergency & Critical Care** (3 Days)\n\nWhich clinical area would you like to master?",
+          ? "अभ्यास करने वाले पशु चिकित्सकों के लिए, वेटनोवा 3-दिन के विशेष क्लिनिकल मॉड्यूल प्रदान करता है:\n\n• **सॉफ्ट टिश्यू सर्जरी ट्रैक** (3 दिन)\n• **रेडियोलॉजी एवं अल्ट्रासाउंड मास्टरक्लास** (3 दिन)\n• **आपातकालीन एवं गहन चिकित्सा** (3 दिन)\n\nआप किस क्लिनिकल क्षेत्र में महारत हासिल करना चाहते हैं?"
+          : "For practicing veterinarians, VetNova offers targeted 3-day clinical specialization modules:\n\n• **Soft Tissue Surgery Track** (3 Days)\n• **Radiology & Ultrasound Masterclass** (3 Days)\n• **Emergency & Critical Care** (3 Days)\n\nWhich clinical area would you like to master?",
         ctas: [
           { label: isHi ? 'सॉफ्ट टिश्यू सर्जरी' : 'Soft Tissue Surgery', action: 'link', link: 'soft-tissue-surgery.html' },
           { label: isHi ? 'रेडियोलॉजी एवं अल्ट्रासाउंड' : 'Radiology & Ultrasound', action: 'link', link: 'radiology-ultrasound.html' },
@@ -103,8 +103,8 @@
       query.includes('नर्स') || query.includes('पैरा-वेट') || query.includes('सहायक')) {
       return {
         reply: isHi
-          ? "वेटनोवा क्लिनिकल सहायकों और पैरा-वेट स्टाफ के लिए एक समर्पित **वेट नर्स एवं तकनीशियन व्यावहारिक कार्यक्रम** (2 सप्ताह) प्रदान करता है, जिसमें स्टेराइल तैयारी, आईवी एक्सेस, रोगी निगरानी और देखभाल सिखाई जाती है।"
-          : "VetNova offers a dedicated **Vet Nurse & Assistant Programme** (2 Weeks) designed for clinical assistants and paravet staff to master sterile prep, IV access, monitoring, and patient care.",
+          ? "वेटनोवा क्लिनिकल सहायकों और पैरा-वेट स्टाफ के लिए एक समर्पित **वेट नर्स एवं तकनीशियन व्यावहारिक कार्यक्रम** (3 दिन) प्रदान करता है, जिसमें स्टेराइल तैयारी, आईवी एक्सेस, रोगी निगरानी और देखभाल सिखाई जाती है।"
+          : "VetNova offers a dedicated **Vet Nurse & Assistant Programme** (3 Days) designed for clinical assistants and paravet staff to master sterile prep, IV access, monitoring, and patient care.",
         ctas: [
           { label: isHi ? 'वेट नर्स कार्यक्रम देखें' : 'View Vet Nurse Programme', action: 'link', link: 'vet-nurse-programme.html' },
           ctaCounselling
@@ -117,8 +117,8 @@
       query.includes('कार्यक्रम') || query.includes('पाठ्यक्रम') || query.includes('कोर्स') || query.includes('लिस्ट') || query.includes('सूची')) {
       return {
         reply: isHi
-          ? "वेटनोवा पुणे में 5 विशेष व्यावहारिक क्लिनिकल प्रशिक्षण ट्रैक प्रदान करता है:\n\n1. **पशु चिकित्सा स्किल-अप कार्यक्रम** (4 सप्ताह)\n2. **सॉफ्ट टिश्यू सर्जरी ट्रैक** (1 सप्ताह)\n3. **रेडियोलॉजी एवं अल्ट्रासाउंड मास्टरक्लास** (1 सप्ताह)\n4. **आपातकालीन एवं गहन चिकित्सा** (3 दिन)\n5. **वेट नर्स एवं सहायक कार्यक्रम** (2 सप्ताह)\n\nसभी पाठ्यक्रमों में हमारे वाघोली परिसर में 80%+ व्यावहारिक लैब अभ्यास शामिल है।"
-          : "VetNova offers 5 specialized practical clinical training tracks in Pune:\n\n1. **Veterinary Skill-Up Program** (4 Weeks)\n2. **Soft Tissue Surgery Track** (1 Week)\n3. **Radiology & Ultrasound Masterclass** (1 Week)\n4. **Emergency & Critical Care** (3 Days)\n5. **Vet Nurse & Assistant Programme** (2 Weeks)\n\nAll courses feature 80%+ tactile lab practice in our modern Wagholi facility.",
+          ? "वेटनोवा पुणे में 5 विशेष व्यावहारिक क्लिनिकल प्रशिक्षण ट्रैक प्रदान करता है:\n\n1. **पशु चिकित्सा स्किल-अप कार्यक्रम** (3 दिन)\n2. **सॉफ्ट टिश्यू सर्जरी ट्रैक** (3 दिन)\n3. **रेडियोलॉजी एवं अल्ट्रासाउंड मास्टरक्लास** (3 दिन)\n4. **आपातकालीन एवं गहन चिकित्सा** (3 दिन)\n5. **वेट नर्स एवं सहायक कार्यक्रम** (3 दिन)\n\nसभी पाठ्यक्रमों में हमारे वाघोली परिसर में 80%+ व्यावहारिक लैब अभ्यास शामिल है।"
+          : "VetNova offers 5 specialized practical clinical training tracks in Pune:\n\n1. **Veterinary Skill-Up Program** (3 Days)\n2. **Soft Tissue Surgery Track** (3 Days)\n3. **Radiology & Ultrasound Masterclass** (3 Days)\n4. **Emergency & Critical Care** (3 Days)\n5. **Vet Nurse & Assistant Programme** (3 Days)\n\nAll courses feature 80%+ tactile lab practice in our modern Wagholi facility.",
         ctas: [ctaPrograms, ctaCounselling]
       };
     }

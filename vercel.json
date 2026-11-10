@@ -1,0 +1,11 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/for/fresh-vets", "destination": "/for/fresh-vets/index.html" },
+    { "source": "/for/practising-vets", "destination": "/for/practising-vets/index.html" },
+    { "source": "/for/specialists", "destination": "/for/specialists/index.html" },
+    { "source": "/pet-first-aid", "destination": "/pet-first-aid/index.html" },
+    { "source": "/programs", "destination": "/programs.html" }
+  ]
+}
