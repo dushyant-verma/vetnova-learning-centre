@@ -10,6 +10,8 @@
     { "source": "/for/specialists/", "destination": "/for-specialists.html" },
     { "source": "/for/pet-owners", "destination": "/pet-first-aid.html" },
     { "source": "/for/pet-owners/", "destination": "/pet-first-aid.html" },
+    { "source": "/for-pet-owners", "destination": "/pet-first-aid.html" },
+    { "source": "/for-pet-owners/", "destination": "/pet-first-aid.html" },
     { "source": "/pet-first-aid", "destination": "/pet-first-aid.html" },
     { "source": "/pet-first-aid/", "destination": "/pet-first-aid.html" },
     { "source": "/programs", "destination": "/programs.html" },

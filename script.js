@@ -3994,8 +3994,12 @@ async function initProgramFilters() {
   // In-page menu item click filtering when on programs.html
   document.querySelectorAll('.programs-mega-card, .drawer-program-card, .iam-dropdown-menu .dropdown-item, .drawer-iam-link').forEach(card => {
     card.addEventListener('click', (e) => {
+      const href = card.getAttribute('href') || '';
+      if (href.startsWith('/for/') || href.startsWith('for/') || href.includes('for-') || href.includes('pet-first-aid')) {
+        return; // Allow natural navigation to audience pages
+      }
       const currentPath = window.location.pathname.split('/').pop().toLowerCase();
-      if (currentPath === 'programs.html' || currentPath === 'programs' || currentPath === '') {
+      if (currentPath === 'programs.html' || currentPath === 'programs') {
         const targetLevel = card.getAttribute('data-level');
         const targetCategory = card.getAttribute('data-category');
 
@@ -4294,6 +4298,7 @@ function initPopularCoursesFilter() {
   const cards = document.querySelectorAll('.popular-course-card:not(.v2-feature-program)');
 
   if (!pills.length || !cards.length) return;
+  const grid = document.querySelector('.popular-courses-grid') || (cards[0] ? cards[0].parentElement : null);
 
   const MAX_CARDS = 4;
 
@@ -4372,7 +4377,7 @@ function initPopularCoursesFilter() {
 
     // Dynamically append newly added published programs from CMS if not in HTML
     programs.forEach(liveP => {
-      if (!liveP.slug || liveP.status === 'Draft') return;
+      if (!grid || !liveP.slug || liveP.status === 'Draft') return;
       const existing = grid.querySelector(`[href*="${liveP.slug}"]`);
       if (!existing && liveP.status === 'Published') {
         const newCard = document.createElement('div');
@@ -5516,12 +5521,18 @@ function initDesktopDropdowns() {
       }
     });
 
-    // Close dropdown immediately when any link inside the panel is clicked
+    // Close dropdown gracefully when any link inside the panel is clicked
     if (menuPanel) {
       const menuLinks = menuPanel.querySelectorAll('a');
       menuLinks.forEach(link => {
         link.addEventListener('click', () => {
-          closeDropdownNow();
+          if (link.dataset.action === 'book-counselling' || link.classList.contains('btn-book-counselling')) {
+            closeDropdownNow();
+            return;
+          }
+          setTimeout(() => {
+            closeDropdownNow();
+          }, 150);
         });
       });
     }
