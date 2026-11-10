@@ -10,7 +10,7 @@
   // State
   let allBlogs = [];
   let availableCategories = [];
-  let currentCategory = 'all'; // category slug, id, or 'all'
+  let currentCategory = 'all'; // category _id, slug, or 'all'
   let currentSearch = '';
 
   document.addEventListener('DOMContentLoaded', initBlogPage);
@@ -53,7 +53,7 @@
       emptyResetBtn.addEventListener('click', resetAllFilters);
     }
 
-    // Read initial filters from URL query parameters (e.g. ?category=surgery or ?search=ultrasound)
+    // Read initial filters from URL query parameters (e.g. ?category=pet-care or ?search=ultrasound)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('category')) {
       currentCategory = urlParams.get('category').trim().toLowerCase();
@@ -84,7 +84,7 @@
     // 3. Render Blog Articles in the Grid
     renderArticlesGrid(allBlogs, gridContainer);
 
-    // 4. Render Dynamic Sidebar Categories (ONLY categories with >= 1 published article)
+    // 4. Render Dynamic Sidebar Categories (ONLY categories with >= 1 published article, each rendered ONCE)
     renderSidebarCategories(categoryFieldset);
 
     // 5. Apply active filters (Category + Search)
@@ -107,6 +107,20 @@
   }
 
   /**
+   * Helper: Canonical normalization key for strict category deduplication & matching
+   * Strips spaces, hyphens, underscores and symbols, normalizes & to and
+   */
+  function normalizeCatKey(text) {
+    if (!text || typeof text !== 'string') return '';
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/&+/g, 'and')
+      .replace(/[\s_\-]+/g, '')
+      .replace(/[^\w]/g, '');
+  }
+
+  /**
    * Helper: Format category display name cleanly
    * Title-cases ALL-CAPS names while preserving intentional capitalization
    */
@@ -126,20 +140,21 @@
   /**
    * Extract all matching identifier tokens for a given blog article
    */
-  function getBlogCategoryTokens(blog) {
-    const tokens = new Set();
+  function getBlogCategoryIdentifiers(blog) {
+    const keys = new Set();
     const rawList = [];
     if (Array.isArray(blog.categories)) rawList.push(...blog.categories);
     if (blog.category) rawList.push(blog.category);
 
-    rawList.forEach(c => {
-      if (!c || typeof c !== 'string') return;
-      const clean = c.trim();
+    rawList.forEach(item => {
+      if (!item || typeof item !== 'string') return;
+      const clean = item.trim();
       if (!clean) return;
-      tokens.add(clean.toLowerCase());
-      tokens.add(slugify(clean));
+      keys.add(clean.toLowerCase());
+      keys.add(slugify(clean));
+      keys.add(normalizeCatKey(clean));
     });
-    return tokens;
+    return keys;
   }
 
   /**
@@ -147,69 +162,71 @@
    */
   function categoryMatchesBlog(cat, blog) {
     if (!cat) return false;
-    const blogTokens = getBlogCategoryTokens(blog);
+    const blogKeys = getBlogCategoryIdentifiers(blog);
 
     const catName = (cat.name || '').trim().toLowerCase();
     const catSlug = (cat.slug || slugify(cat.name)).trim().toLowerCase();
     const catId = (cat._id || '').toString().toLowerCase();
+    const normName = normalizeCatKey(cat.name);
+    const normSlug = normalizeCatKey(cat.slug);
 
-    return blogTokens.has(catName) ||
-      blogTokens.has(catSlug) ||
-      (catId && blogTokens.has(catId)) ||
-      blogTokens.has(slugify(catName));
+    // Direct identifier matches
+    if (catId && blogKeys.has(catId)) return true;
+    if (catName && blogKeys.has(catName)) return true;
+    if (catSlug && blogKeys.has(catSlug)) return true;
+    if (normName && blogKeys.has(normName)) return true;
+    if (normSlug && blogKeys.has(normSlug)) return true;
+    if (slugify(cat.name) && blogKeys.has(slugify(cat.name))) return true;
+
+    // Stem matching for compound category names (e.g. "pet-care" vs "pet-care-and-wellness")
+    for (const bk of blogKeys) {
+      if (normSlug && (normSlug.startsWith(bk) || bk.startsWith(normSlug))) return true;
+      if (normName && (normName.startsWith(bk) || bk.startsWith(normName))) return true;
+    }
+
+    return false;
   }
 
   /**
-   * Extract ONLY categories with >= 1 published blog article assigned
-   * Excludes categories with zero articles, draft categories, deleted/duplicate categories
+   * Extract ONLY valid, active categories with >= 1 published blog article assigned.
+   * Guarantees each category appears EXACTLY ONCE by deduplicating by ID and normalized key.
    */
   function getRelevantCategories(categoriesList, blogs) {
+    if (!Array.isArray(categoriesList) || !Array.isArray(blogs)) return [];
+
     const relevantList = [];
-    const seenSlugs = new Set();
+    const seenIds = new Set();
+    const seenNormalized = new Set();
 
-    // 1. Process CMS-managed categories
-    if (Array.isArray(categoriesList)) {
-      categoriesList.forEach(cat => {
-        if (!cat || !cat.name || cat.status === 'Draft') return;
-        const slug = (cat.slug || slugify(cat.name)).trim().toLowerCase();
-        if (!slug || seenSlugs.has(slug)) return;
+    categoriesList.forEach(cat => {
+      if (!cat || !cat.name || cat.status === 'Draft') return;
 
-        const count = blogs.filter(b => categoryMatchesBlog(cat, b)).length;
-        if (count > 0) {
-          seenSlugs.add(slug);
-          relevantList.push({
-            _id: cat._id || '',
-            name: cat.name.trim(),
-            slug: slug,
-            articleCount: count
-          });
-        }
-      });
-    }
+      const catId = cat._id ? String(cat._id).trim() : '';
+      const catName = cat.name.trim();
+      const catSlug = (cat.slug || slugify(catName)).trim().toLowerCase();
+      const normName = normalizeCatKey(catName);
+      const normSlug = normalizeCatKey(catSlug);
 
-    // 2. Ensure any category assigned to a published blog is represented
-    blogs.forEach(blog => {
-      const rawList = [];
-      if (Array.isArray(blog.categories)) rawList.push(...blog.categories);
-      if (blog.category) rawList.push(blog.category);
+      // Strict Deduplication:
+      // Prevent duplicate rendering across identical IDs, names, or slugs
+      if (catId && seenIds.has(catId)) return;
+      if (normName && seenNormalized.has(normName)) return;
+      if (normSlug && seenNormalized.has(normSlug)) return;
 
-      rawList.forEach(rawCat => {
-        if (!rawCat || typeof rawCat !== 'string') return;
-        const slug = slugify(rawCat);
-        if (!slug || seenSlugs.has(slug)) return;
+      // Count published articles assigned to this category
+      const count = blogs.filter(b => categoryMatchesBlog(cat, b)).length;
+      if (count > 0) {
+        if (catId) seenIds.add(catId);
+        if (normName) seenNormalized.add(normName);
+        if (normSlug) seenNormalized.add(normSlug);
 
-        const syntheticCat = { name: rawCat.trim(), slug: slug };
-        const count = blogs.filter(b => categoryMatchesBlog(syntheticCat, b)).length;
-        if (count > 0) {
-          seenSlugs.add(slug);
-          relevantList.push({
-            _id: '',
-            name: rawCat.trim(),
-            slug: slug,
-            articleCount: count
-          });
-        }
-      });
+        relevantList.push({
+          _id: catId,
+          name: catName,
+          slug: catSlug,
+          articleCount: count
+        });
+      }
     });
 
     return relevantList;
@@ -223,9 +240,13 @@
 
     const relevantCategories = getRelevantCategories(availableCategories, allBlogs);
 
-    // If active category is no longer valid (e.g. its articles were unpublished), reset to 'all'
+    // If active category is no longer valid (e.g. its articles were unpublished or deleted), reset to 'all'
     if (currentCategory !== 'all') {
-      const stillExists = relevantCategories.some(c => c.slug === currentCategory || (c._id && c._id === currentCategory));
+      const stillExists = relevantCategories.some(c =>
+        (c._id && c._id === currentCategory) ||
+        (c.slug && c.slug === currentCategory) ||
+        (c.name && c.name.toLowerCase() === currentCategory)
+      );
       if (!stillExists) {
         currentCategory = 'all';
       }
@@ -240,13 +261,20 @@
     `;
 
     relevantCategories.forEach(cat => {
-      const isChecked = currentCategory === cat.slug || (cat._id && currentCategory === cat._id);
+      // Check if this category is currently selected
+      const isChecked = currentCategory === cat._id ||
+        currentCategory === cat.slug ||
+        (currentCategory && currentCategory.toLowerCase() === cat.name.toLowerCase());
+
       const displayName = formatCategoryDisplayName(cat.name);
+      // Use category ID as primary unique identifier; fallback to slug
+      const inputVal = cat._id || cat.slug;
+
       html += `
         <label class="blog-filter-option ${isChecked ? 'is-active' : ''}">
-          <input type="radio" name="blog-category" value="${escapeHtml(cat.slug)}"
-            data-category-slug="${escapeHtml(cat.slug)}"
+          <input type="radio" name="blog-category" value="${escapeHtml(inputVal)}"
             data-category-id="${escapeHtml(cat._id || '')}"
+            data-category-slug="${escapeHtml(cat.slug)}"
             data-category-name="${escapeHtml(cat.name)}"
             ${isChecked ? 'checked' : ''}>
           <span>${escapeHtml(displayName)}</span>
@@ -301,10 +329,9 @@
         : [blog.category || 'CLINICAL SKILLS'];
       const authorImg = blog.authorImage || 'assets/images/blog/blog-author-amit.webp';
       const coverImg = blog.image || 'assets/images/hero-veterinary-training.webp';
-      const tokens = Array.from(getBlogCategoryTokens(blog)).join(' ');
 
       return `
-        <div class="blog-card" data-category="${escapeHtml(tokens)}" data-id="${escapeHtml(blog._id || '')}" data-slug="${escapeHtml(blog.slug || '')}">
+        <div class="blog-card" data-id="${escapeHtml(blog._id || '')}" data-slug="${escapeHtml(blog.slug || '')}">
           <div class="blog-card-media">
             <img src="${escapeHtml(coverImg)}"
               onerror="this.onerror=null; this.src='assets/images/hero-veterinary-training.webp';"
@@ -344,38 +371,40 @@
     const term = currentSearch.toLowerCase().trim();
     let visibleCount = 0;
 
+    // Find the currently selected category object if a specific category is chosen
+    const relevantCategories = getRelevantCategories(availableCategories, allBlogs);
+    const selectedCat = currentCategory === 'all'
+      ? null
+      : relevantCategories.find(c =>
+          c._id === currentCategory ||
+          c.slug === currentCategory ||
+          c.name.toLowerCase() === currentCategory.toLowerCase()
+        );
+
     cards.forEach(card => {
-      // 1. Category Matching
-      const cardCatAttr = (card.dataset.category || '').toLowerCase();
-      const cardTokens = cardCatAttr.split(/\s+/).filter(Boolean);
       const cardSlug = (card.dataset.slug || '').toLowerCase();
       const cardId = (card.dataset.id || '').toLowerCase();
+      const blogObj = allBlogs.find(b =>
+        (b.slug && b.slug.toLowerCase() === cardSlug) ||
+        (b._id && String(b._id).toLowerCase() === cardId)
+      );
 
+      // 1. Category Matching using categoryMatchesBlog for 100% accuracy
       let matchesCategory = false;
       if (currentCategory === 'all') {
         matchesCategory = true;
-      } else {
-        const target = currentCategory.toLowerCase();
-        matchesCategory = cardTokens.includes(target) ||
-          cardTokens.includes(slugify(target)) ||
-          cardSlug === target ||
-          (cardId && cardId === target);
+      } else if (selectedCat && blogObj) {
+        matchesCategory = categoryMatchesBlog(selectedCat, blogObj);
       }
 
       // 2. Search Matching (title, excerpt, author, content text, tags)
       let matchesSearch = true;
       if (term) {
         const cardText = (card.textContent || '').toLowerCase();
-        const blogObj = allBlogs.find(b =>
-          (b.slug && b.slug.toLowerCase() === cardSlug) ||
-          (b._id && String(b._id).toLowerCase() === cardId)
-        );
-
         let contentText = '';
         if (blogObj) {
           contentText = `${blogObj.title || ''} ${blogObj.excerpt || ''} ${stripHtml(blogObj.content || '')} ${blogObj.author || ''} ${(Array.isArray(blogObj.tags) ? blogObj.tags.join(' ') : (blogObj.tags || ''))}`.toLowerCase();
         }
-
         matchesSearch = cardText.includes(term) || (contentText && contentText.includes(term));
       }
 
