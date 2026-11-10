@@ -101,8 +101,8 @@ async function initProgramSinglePage() {
       strong.textContent = program.duration || "3 Days";
     }
     if (small && strong && (small.textContent.trim().toLowerCase() === "availability" || small.textContent.trim().toLowerCase() === "course length")) {
-      small.textContent = "Course Length";
-      strong.textContent = program.courseLength || program.availability || "8 hours/ day";
+      small.textContent = "Daily Duration";
+      strong.textContent = program.dailyDuration || program.courseLength || program.availability || "8 Hours / Day";
     }
   });
 
