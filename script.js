@@ -2160,6 +2160,8 @@ function initSmoothScroll() {
    Popup Counselling / Enquiry Modal Controller
    ========================================================================== */
 function initEnquiryModal() {
+  if (window._vetnovaEnquiryModalInitialized) return;
+  window._vetnovaEnquiryModalInitialized = true;
   let lastFocusedElement = null;
   let isSubmitting = false;
 
@@ -2570,21 +2572,24 @@ function initEnquiryModal() {
 
         // Explicit classes / attributes
         const hasExplicitClass = candidateBtn.matches(
-          '.btn-counselling-pill, #header-counselling-btn, .header-counselling-btn, .btn-counselling-modal, .btn-book-counselling, [data-action="book-counselling"], .btn-show-counselling, .btn-enquire-card'
+          '.btn-counselling-pill, #header-counselling-btn, .header-counselling-btn, .btn-counselling-modal, .btn-book-counselling, [data-action="book-counselling"], .btn-show-counselling, .btn-enquire-card, .floating-apply-now, #floating-counselling-btn, [data-action="open-counselling"]'
         );
 
         // Counselling text anywhere in button (catches "Book Free Counselling", "Book Free Counselling", "Book Counselling", etc.)
         const hasCounsellingText = text.includes('counselling') || text.includes('counseling');
+
+        // Floating apply now side tab button
+        const isFloatingApplyNow = candidateBtn.matches('.floating-apply-now, #floating-counselling-btn');
 
         // On single program pages: catch .btn-apply-now or links to contact.html?program=
         const onProgPage = isSingleProgramPage();
         const hasProgramCtaClass = candidateBtn.classList.contains('btn-apply-now');
         const hasProgramContactLink = href.includes('contact.html') && (href.includes('program=') || onProgPage);
 
-        if (isPopularCourseEnquire || hasExplicitClass || hasCounsellingText || (onProgPage && (hasProgramCtaClass || hasProgramContactLink))) {
-          // If on contact.html itself and clicking an in-page anchor (#contact-form, #enquiry), allow natural in-page scrolling unless in header
+        if (isPopularCourseEnquire || hasExplicitClass || hasCounsellingText || isFloatingApplyNow || (onProgPage && (hasProgramCtaClass || hasProgramContactLink))) {
+          // If on contact.html itself and clicking an in-page anchor (#contact-form, #enquiry), allow natural in-page scrolling unless in header or floating button
           const isContactPage = window.location.pathname.endsWith('contact.html');
-          const isNavOrSticky = candidateBtn.closest('#global-header, .topbar, .drawer-menu, .mobile-stick');
+          const isNavOrSticky = candidateBtn.closest('#global-header, .topbar, .drawer-menu, .mobile-stick, .floating-apply-now, #floating-counselling-btn');
           if (!(isContactPage && (href === '#contact-form' || href === '#enquiry') && !isNavOrSticky)) {
             triggerBtn = candidateBtn;
           }
@@ -2596,6 +2601,7 @@ function initEnquiryModal() {
       e.preventDefault();
       e.stopPropagation();
 
+      const isFloating = triggerBtn.matches('.floating-apply-now, #floating-counselling-btn');
       const progName = detectProgramName(triggerBtn);
       const isEnquire = triggerBtn.textContent.toLowerCase().includes('enquire') || triggerBtn.dataset.action === 'enquire';
       openModal(e, {
@@ -2603,7 +2609,7 @@ function initEnquiryModal() {
         subtitle: progName
           ? `Speak with our admissions mentors regarding the ${progName} program.`
           : 'Speak with our team to find the right veterinary learning programme for your goals.',
-        source: triggerBtn.dataset.source || (progName ? (isEnquire ? `Popular Courses - ${progName}` : `Program Page - ${progName}`) : (isEnquire ? 'Enquire Button' : 'Book Free Counselling Button')),
+        source: triggerBtn.dataset.source || (isFloating ? (progName ? `Floating Apply Now - ${progName}` : 'Floating Apply Now Button') : (progName ? (isEnquire ? `Popular Courses - ${progName}` : `Program Page - ${progName}`) : (isEnquire ? 'Enquire Button' : 'Book Free Counselling Button'))),
         program: progName,
         isEnquiry: isEnquire,
         submitText: isEnquire ? 'Submit Enquiry' : 'Request Counselling',
