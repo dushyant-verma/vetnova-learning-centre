@@ -119,7 +119,14 @@
       color: #384541;
       font-size: .92rem;
       line-height: 1.4;
-      cursor: pointer
+      cursor: pointer;
+      transition: color 0.15s ease, font-weight 0.15s ease;
+    }
+
+    #latest-articles .blog-filter-option.is-active,
+    #latest-articles .blog-filter-option:has(input:checked) {
+      color: var(--primary, #176b56);
+      font-weight: 700;
     }
 
     #latest-articles .blog-filter-option input {
@@ -302,18 +309,10 @@
                 <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 <input id="blog-search" type="search" placeholder="Search blogs..." autocomplete="off">
               </div>
-              <fieldset class="blog-category-filters">
+              <fieldset class="blog-category-filters" id="blog-category-filters">
                 <legend>Categories</legend>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="all" checked>
+                <label class="blog-filter-option is-active"><input type="radio" name="blog-category" value="all" checked>
                   <span>All articles</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="clinical-skills">
-                  <span>Clinical Skills</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="continuing-education">
-                  <span>Continuing Education</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="training-philosophy">
-                  <span>Training Philosophy</span></label>
-                <label class="blog-filter-option"><input type="radio" name="blog-category" value="career"> <span>Career
-                    Advice</span></label>
               </fieldset>
             </aside>
 
@@ -444,82 +443,6 @@
   <script src="script.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/blog.js"></script>
-
-  <script>
-    (() => {
-      const section = document.getElementById('latest-articles');
-      if (!section) return;
-
-      const search = document.getElementById('blog-search');
-      const grid = document.getElementById('latest-articles-grid');
-      const count = document.getElementById('blog-results-count');
-      const empty = document.getElementById('blog-empty-state');
-      const categoryInputs = Array.from(section.querySelectorAll('input[name="blog-category"]'));
-      const sidebar = document.getElementById('blog-filter-sidebar');
-      const toggle = document.getElementById('blog-filter-toggle');
-
-      function applyFilters() {
-        // Query cards live each time, so re-rendered cards (blog.js / api.js) are still filtered
-        const cards = Array.from(grid.querySelectorAll('.blog-card'));
-        const term = (search.value || '').toLocaleLowerCase().trim();
-        const selected = categoryInputs.find(input => input.checked)?.value || 'all';
-        let visible = 0;
-
-        cards.forEach(card => {
-          const cardCat = (card.dataset.category || '').toLowerCase();
-          const tokens = cardCat.split(/\s+/).filter(Boolean);
-          const cardText = (card.textContent || '').toLowerCase();
-
-          // Robust category matching:
-          // 1. "all" matches every article
-          // 2. Direct token match
-          // 3. Substring match
-          // 4. Semantic category fallbacks
-          const matchesCategory = selected === 'all' ||
-            tokens.includes(selected) ||
-            cardCat.includes(selected) ||
-            (selected === 'clinical-skills' && (cardCat.includes('clinical') || cardText.includes('clinical') || cardText.includes('skills'))) ||
-            (selected === 'continuing-education' && (cardCat.includes('continuing') || cardText.includes('continuing') || cardText.includes('education') || cardText.includes('cve'))) ||
-            (selected === 'training-philosophy' && (cardCat.includes('philosophy') || cardText.includes('philosophy') || cardText.includes('hands-on') || cardText.includes('classroom'))) ||
-            (selected === 'career' && (cardCat.includes('career') || cardText.includes('career') || cardText.includes('advice')));
-
-          const matchesSearch = !term || cardText.includes(term);
-          const show = matchesCategory && matchesSearch;
-          card.hidden = !show;
-          if (show) visible++;
-        });
-
-        count.textContent = cards.length === 1
-          ? (visible === 1 ? 'Showing 1 article' : 'No articles found')
-          : `Showing ${visible} of ${cards.length} articles`;
-        empty.hidden = visible !== 0;
-        grid.hidden = visible === 0;
-      }
-
-      function clearFilters() {
-        search.value = '';
-        const all = categoryInputs.find(input => input.value === 'all');
-        if (all) all.checked = true;
-        applyFilters();
-      }
-
-      search.addEventListener('input', applyFilters);
-      categoryInputs.forEach(input => input.addEventListener('change', applyFilters));
-      document.getElementById('blog-clear-filters').addEventListener('click', clearFilters);
-      document.getElementById('blog-empty-reset').addEventListener('click', clearFilters);
-      toggle.addEventListener('click', () => {
-        const open = sidebar.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', String(open));
-      });
-
-      // FIX: re-apply filters whenever blog.js / api.js adds or replaces cards.
-      // childList only, so toggling the `hidden` attribute can't trigger a loop.
-      new MutationObserver(applyFilters).observe(grid, { childList: true });
-
-      applyFilters();
-    })();
-  </script>
-
 </body>
 
 </html>
