@@ -16,58 +16,63 @@ function getGlobalAssetPath(url) {
   return '/' + cleanUrl;
 }
 
+function runSafe(fnName, fn) {
+  try {
+    if (typeof fn === 'function') fn();
+  } catch (err) {
+    console.warn(`[runAllInitializers] ${fnName} error:`, err);
+  }
+}
+
 function runAllInitializers() {
-  initStickyHeader();
-  initMobileMenu();
-  initSmoothScroll();
-  initQuiz();
-  initFaqAccordion();
-  initCurriculumAccordion();
-  initConcernSelector();
-  initContactForm();
-  initEnquiryModal();
-  initCounterAnimations();
-  initTestimonialSlider();
-  initVideoModal();
-  initActiveNavigation();
-  initScrollSpy();
-  initReadingProgress();
-  initBlogCategoryFilter();
-  initProgramFilters();
-  initSingleProgramGradeRepresentation();
-  initFaqSearch();
-  initPopularCoursesFilter();
-  initFooterDynamicPrograms();
-  initBatchTabs();
-  initSingleFocusJourney();
-  initFacultyModal();
-  initDesktopDropdowns();
-  initProgramsMegaMenu();
-  initRolePickerModal();
-  initConnectWidget();
+  runSafe('initStickyHeader', initStickyHeader);
+  runSafe('initMobileMenu', initMobileMenu);
+  runSafe('initSmoothScroll', initSmoothScroll);
+  runSafe('initQuiz', initQuiz);
+  runSafe('initFaqAccordion', initFaqAccordion);
+  runSafe('initCurriculumAccordion', initCurriculumAccordion);
+  runSafe('initConcernSelector', initConcernSelector);
+  runSafe('initContactForm', initContactForm);
+  runSafe('initEnquiryModal', initEnquiryModal);
+  runSafe('initCounterAnimations', initCounterAnimations);
+  runSafe('initTestimonialSlider', initTestimonialSlider);
+  runSafe('initVideoModal', initVideoModal);
+  runSafe('initActiveNavigation', initActiveNavigation);
+  runSafe('initScrollSpy', initScrollSpy);
+  runSafe('initReadingProgress', initReadingProgress);
+  runSafe('initBlogCategoryFilter', initBlogCategoryFilter);
+  runSafe('initProgramFilters', initProgramFilters);
+  runSafe('initSingleProgramGradeRepresentation', initSingleProgramGradeRepresentation);
+  runSafe('initFaqSearch', initFaqSearch);
+  runSafe('initPopularCoursesFilter', initPopularCoursesFilter);
+  runSafe('initFooterDynamicPrograms', initFooterDynamicPrograms);
+  runSafe('initBatchTabs', initBatchTabs);
+  runSafe('initSingleFocusJourney', initSingleFocusJourney);
+  runSafe('initFacultyModal', initFacultyModal);
+  runSafe('initDesktopDropdowns', initDesktopDropdowns);
+  runSafe('initProgramsMegaMenu', initProgramsMegaMenu);
+  runSafe('initRolePickerModal', initRolePickerModal);
+  runSafe('initConnectWidget', initConnectWidget);
+  runSafe('initPartnershipForm', initPartnershipForm);
 
   if (typeof window.initVetNovaChatbot === 'function') {
-    window.initVetNovaChatbot();
-  } else {
+    runSafe('initVetNovaChatbot', window.initVetNovaChatbot);
+  } else if (!document.querySelector('script[src*="chatbot.js"]')) {
     const cbScript = document.createElement('script');
     cbScript.src = getGlobalAssetPath('assets/js/chatbot.js');
     cbScript.onload = () => {
-      if (typeof window.initVetNovaChatbot === 'function') {
-        window.initVetNovaChatbot();
-      }
+      runSafe('initVetNovaChatbotOnload', window.initVetNovaChatbot);
     };
     document.body.appendChild(cbScript);
   }
-  initPartnershipForm();
+
   if (typeof window.initVetNovaTranslator === 'function') {
-    window.initVetNovaTranslator();
-  } else {
+    runSafe('initVetNovaTranslator', window.initVetNovaTranslator);
+  } else if (!document.querySelector('script[src*="translator.js"]')) {
     const trScript = document.createElement('script');
     trScript.src = getGlobalAssetPath('assets/js/translator.js');
     trScript.onload = () => {
-      if (typeof window.initVetNovaTranslator === 'function') {
-        window.initVetNovaTranslator();
-      }
+      runSafe('initVetNovaTranslatorOnload', window.initVetNovaTranslator);
     };
     document.body.appendChild(trScript);
   }
@@ -94,23 +99,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.addEventListener('vetnova:componentLoaded', (e) => {
-    if (e.detail && e.detail.containerId === 'global-header') {
-      if (typeof initDesktopDropdowns === 'function') {
-        initDesktopDropdowns();
-      }
-      if (typeof initProgramsMegaMenu === 'function') {
-        initProgramsMegaMenu();
-      }
+    const cid = e.detail && e.detail.containerId;
+    if (cid === 'global-header') {
+      runSafe('initStickyHeader', initStickyHeader);
+      runSafe('initMobileMenu', initMobileMenu);
+      runSafe('initDesktopDropdowns', initDesktopDropdowns);
+      runSafe('initProgramsMegaMenu', initProgramsMegaMenu);
+      runSafe('initActiveNavigation', initActiveNavigation);
     }
-    if (e.detail && e.detail.containerId === 'global-footer') {
-      if (typeof initFooterDynamicPrograms === 'function') {
-        initFooterDynamicPrograms();
-      }
+    if (cid === 'global-footer') {
+      runSafe('initEnquiryModal', initEnquiryModal);
+      runSafe('initRolePickerModal', initRolePickerModal);
+      runSafe('initVideoModal', initVideoModal);
+      runSafe('initFooterDynamicPrograms', initFooterDynamicPrograms);
     }
   });
 });
 
 function loadComponent(id, url) {
+  const container = document.getElementById(id);
+  if (!container) return Promise.resolve();
+  if (container.children && container.children.length > 0) {
+    return Promise.resolve();
+  }
   const resolvedUrl = getGlobalAssetPath(url);
   return fetch(resolvedUrl)
     .then(response => {
@@ -120,9 +131,9 @@ function loadComponent(id, url) {
       return response.text();
     })
     .then(html => {
-      const container = document.getElementById(id);
       if (container && (!container.children || container.children.length === 0)) {
         container.innerHTML = html;
+        document.dispatchEvent(new CustomEvent('vetnova:componentLoaded', { detail: { containerId: id } }));
       }
     });
 }
@@ -416,14 +427,15 @@ function initStickyHeader() {
    Mobile Menu Navigation Drawer & Accordions
    ========================================================================== */
 function initMobileMenu() {
-  const menuToggle = document.getElementById('menu-toggle');
-  const drawerClose = document.getElementById('drawer-close');
-  const drawer = document.getElementById('mobile-drawer');
-  const overlay = document.getElementById('drawer-overlay');
-  const drawerLinks = document.querySelectorAll('.drawer-menu > a, .drawer-accordion-content a');
-  const accordionBtns = document.querySelectorAll('.drawer-accordion-btn');
+  function getElements() {
+    return {
+      drawer: document.getElementById('mobile-drawer'),
+      overlay: document.getElementById('drawer-overlay')
+    };
+  }
 
   function openDrawer() {
+    const { drawer, overlay } = getElements();
     if (drawer && overlay) {
       drawer.classList.add('open');
       overlay.classList.add('open');
@@ -432,6 +444,7 @@ function initMobileMenu() {
   }
 
   function closeDrawer() {
+    const { drawer, overlay } = getElements();
     if (drawer && overlay) {
       drawer.classList.remove('open');
       overlay.classList.remove('open');
@@ -439,19 +452,48 @@ function initMobileMenu() {
     }
   }
 
+  const menuToggle = document.getElementById('menu-toggle');
+  const drawerClose = document.getElementById('drawer-close');
+  const drawer = document.getElementById('mobile-drawer');
+  const overlay = document.getElementById('drawer-overlay');
+  const drawerLinks = document.querySelectorAll('.drawer-menu > a, .drawer-accordion-content a');
+  const accordionBtns = document.querySelectorAll('.drawer-accordion-btn');
+
   if (menuToggle) menuToggle.addEventListener('click', openDrawer);
   if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
   if (overlay) overlay.addEventListener('click', closeDrawer);
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
-      closeDrawer();
-    }
-  });
+  if (!window._vetnovaMobileMenuDelegated) {
+    window._vetnovaMobileMenuDelegated = true;
 
-  drawerLinks.forEach(link => {
-    link.addEventListener('click', closeDrawer);
-  });
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('#menu-toggle, .menu-toggle')) {
+        e.preventDefault();
+        openDrawer();
+        return;
+      }
+
+      if (e.target.closest('#drawer-close, .drawer-close, #drawer-overlay')) {
+        e.preventDefault();
+        closeDrawer();
+        return;
+      }
+
+      const link = e.target.closest('.drawer-menu > a, .drawer-accordion-content a');
+      if (link && !link.classList.contains('drawer-accordion-btn') && !link.classList.contains('drawer-sub-accordion-btn')) {
+        closeDrawer();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const { drawer } = getElements();
+        if (drawer && drawer.classList.contains('open')) {
+          closeDrawer();
+        }
+      }
+    });
+  }
 
   accordionBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -2581,12 +2623,15 @@ function initEnquiryModal() {
         // Floating apply now side tab button
         const isFloatingApplyNow = candidateBtn.matches('.floating-apply-now, #floating-counselling-btn');
 
+        // Apply now buttons across the site
+        const isApplyNow = candidateBtn.matches('.btn-apply-now, [data-action="apply-now"], .btn-apply') || text === 'apply now' || text.includes('apply now');
+
         // On single program pages: catch .btn-apply-now or links to contact.html?program=
         const onProgPage = isSingleProgramPage();
         const hasProgramCtaClass = candidateBtn.classList.contains('btn-apply-now');
         const hasProgramContactLink = href.includes('contact.html') && (href.includes('program=') || onProgPage);
 
-        if (isPopularCourseEnquire || hasExplicitClass || hasCounsellingText || isFloatingApplyNow || (onProgPage && (hasProgramCtaClass || hasProgramContactLink))) {
+        if (isPopularCourseEnquire || hasExplicitClass || hasCounsellingText || isFloatingApplyNow || isApplyNow || (onProgPage && (hasProgramCtaClass || hasProgramContactLink))) {
           // If on contact.html itself and clicking an in-page anchor (#contact-form, #enquiry), allow natural in-page scrolling unless in header or floating button
           const isContactPage = window.location.pathname.endsWith('contact.html');
           const isNavOrSticky = candidateBtn.closest('#global-header, .topbar, .drawer-menu, .mobile-stick, .floating-apply-now, #floating-counselling-btn');
@@ -3440,15 +3485,15 @@ const KNOWN_STATIC_PROGRAMS = new Set([
 ]);
 
 function resolveProgramUrl(p) {
-  if (!p) return 'programs.html';
+  if (!p) return '/programs';
   const slug = (p.slug || '').toLowerCase().trim();
   if (slug && KNOWN_STATIC_PROGRAMS.has(slug)) {
-    return `${slug}.html`;
+    return `/${slug}.html`;
   }
   if (slug) {
-    return `programs-single.html?slug=${encodeURIComponent(slug)}`;
+    return `/programs-single.html?slug=${encodeURIComponent(slug)}`;
   }
-  return 'programs.html';
+  return '/programs';
 }
 
 async function initProgramFilters() {
@@ -3661,6 +3706,21 @@ async function initProgramFilters() {
     // Render cards
     if (noResultsState && dynamicContainer) {
       if (matched.length === 0) {
+        if (!programsData || programsData.length === 0) {
+          noResultsState.innerHTML = `
+            <i class="fa-solid fa-triangle-exclamation empty-filter-icon" style="color: #f59e0b;"></i>
+            <h3>Programs Directory Temporarily Unavailable</h3>
+            <p>We are currently unable to reach the curriculum service. Please check your internet connection or refresh the page.</p>
+            <div class="empty-filter-actions">
+              <button onclick="window.location.reload()" class="btn btn-outline btn-sm">
+                <i class="fa-solid fa-rotate-right"></i> Refresh Page
+              </button>
+              <a href="/contact.html#contact-form" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-envelope"></i> Enquire with Admissions
+              </a>
+            </div>
+          `;
+        }
         noResultsState.style.display = 'block';
         dynamicContainer.style.display = 'none';
         dynamicContainer.innerHTML = '';
@@ -3718,7 +3778,6 @@ async function initProgramFilters() {
             <div class="card-level-badges">
               <span class="level-badge ${activeBadgeClass} active"><i class="fa-solid ${activeIcon}"></i> ${activeLevelName}</span>
             </div>
-          `;
           `;
 
           const exploreUrl = `${progUrl}#hero`;
@@ -5841,21 +5900,26 @@ function initPartnershipForm() {
    Role Picker Modal Controller
    ========================================================================== */
 function initRolePickerModal() {
-  const getModal = () => document.getElementById('role-picker-modal');
+  if (window._vetnovaRolePickerInitialized) return;
+  window._vetnovaRolePickerInitialized = true;
 
   function openModal() {
-    const modal = getModal();
-    if (!modal) return;
-    modal.classList.add('open', 'active');
-    modal.style.display = 'flex';
+    const modals = document.querySelectorAll('#role-picker-modal');
+    if (!modals.length) return;
+    modals.forEach(modal => {
+      modal.classList.add('open', 'active');
+      modal.style.display = 'flex';
+    });
     document.body.style.overflow = 'hidden';
   }
 
   function closeModal() {
-    const modal = getModal();
-    if (!modal) return;
-    modal.classList.remove('open', 'active');
-    modal.style.display = 'none';
+    const modals = document.querySelectorAll('#role-picker-modal');
+    if (!modals.length) return;
+    modals.forEach(modal => {
+      modal.classList.remove('open', 'active');
+      modal.style.display = 'none';
+    });
     document.body.style.overflow = '';
   }
 
@@ -5868,20 +5932,19 @@ function initRolePickerModal() {
       return;
     }
 
-    if (e.target.closest('#role-picker-close-btn')) {
+    if (e.target.closest('#role-picker-close-btn, .role-picker-close-btn')) {
       e.preventDefault();
       closeModal();
       return;
     }
 
-    const roleCard = e.target.closest('#role-picker-modal .role-picker-card');
+    const roleCard = e.target.closest('#role-picker-modal .role-picker-card, .role-picker-box .role-picker-card');
     if (roleCard) {
       closeModal();
       return;
     }
 
-    const modal = getModal();
-    if (modal && e.target === modal) {
+    if (e.target.matches('#role-picker-modal, .modal-overlay[id="role-picker-modal"]')) {
       closeModal();
       return;
     }
@@ -5889,8 +5952,8 @@ function initRolePickerModal() {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      const modal = getModal();
-      if (modal && (modal.classList.contains('active') || modal.classList.contains('open') || modal.style.display === 'flex')) {
+      const activeModal = document.querySelector('#role-picker-modal.open, #role-picker-modal.active');
+      if (activeModal) {
         closeModal();
       }
     }

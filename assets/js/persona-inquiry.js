@@ -115,7 +115,8 @@
     const rawProgram = urlParams.get('program') || urlParams.get('course') || urlParams.get('context') || '';
     const programName = formatProgramName(rawProgram);
     const paramPersona = urlParams.get('persona') || (window.location.hash ? window.location.hash.replace('#', '') : '');
-    let activePersona = PERSONA_CONFIGS[paramPersona] ? paramPersona : 'student';
+    const isPartnershipPage = (window.location.pathname || '').includes('partnership');
+    let activePersona = PERSONA_CONFIGS[paramPersona] ? paramPersona : (isPartnershipPage ? 'partner' : 'student');
 
     renderWidget(container, activePersona, programName);
   }
