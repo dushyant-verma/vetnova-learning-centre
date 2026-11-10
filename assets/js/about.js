@@ -535,6 +535,7 @@ function openAdvisorProfileModal(advisorId) {
 
   if (imgEl) {
     imgEl.src = member.image || 'assets/images/about/about-advisor-01.webp';
+    imgEl.onerror = function() { this.onerror = null; this.src = 'assets/images/about/about-advisor-01.webp'; };
     imgEl.alt = member.name || 'Advisory Board Member';
   }
 
@@ -683,6 +684,46 @@ async function loadAdvisoryBoardSection() {
   const loadMoreWrap = document.getElementById('advisor-load-more-wrap');
   if (!advisorGrid) return;
 
+  try {
+    const rawBoardList = await getAdvisoryBoard();
+    if (Array.isArray(rawBoardList) && rawBoardList.length > 0) {
+      // Sort by displayOrder ascending
+      rawBoardList.sort((a, b) => (a.displayOrder !== undefined ? a.displayOrder : 99) - (b.displayOrder !== undefined ? b.displayOrder : 99));
+
+      // Register each member into window.loadedAdvisorMap under id, _id and slug
+      rawBoardList.forEach(member => {
+        const base = findAdvisorProfile(member);
+        const merged = Object.assign({}, base || {}, member);
+        const idKey = member._id || member.id || slugify(member.name);
+        window.loadedAdvisorMap[idKey] = merged;
+        if (member._id) window.loadedAdvisorMap[member._id] = merged;
+        const slug = slugify(member.name);
+        window.loadedAdvisorMap[slug] = merged;
+      });
+
+      // Render all active advisory board members (initial 4 visible, remainder hidden behind Load More)
+      advisorGrid.innerHTML = rawBoardList
+        .map((member, idx) => {
+          const idKey = member._id || slugify(member.name);
+          const fullMember = window.loadedAdvisorMap[idKey] || member;
+          return renderAdvisorCard(fullMember, idx >= 4);
+        })
+        .join('');
+
+      if (loadMoreWrap) {
+        loadMoreWrap.style.display = rawBoardList.length > 4 ? 'block' : 'none';
+      }
+
+      bindAdvisorProfileButtons();
+      initAdvisorModalEvents();
+      initAdvisorLoadMore();
+      return;
+    }
+  } catch (err) {
+    console.warn('Advisory Board live fetch info:', err);
+  }
+
+  // Fallback if API fails: render canonical 6 members
   const defaultKeys = [
     'dr-purushottam-narute',
     'm-chandrasekar',
@@ -692,22 +733,6 @@ async function loadAdvisoryBoardSection() {
     'kallahalli-umesh'
   ];
 
-  try {
-    const rawBoardList = await getAdvisoryBoard();
-    if (Array.isArray(rawBoardList) && rawBoardList.length > 0) {
-      // Merge any matching live data into canonical profiles
-      rawBoardList.forEach(member => {
-        const base = findAdvisorProfile(member);
-        if (base && base.id) {
-          Object.assign(base, member);
-        }
-      });
-    }
-  } catch (err) {
-    console.warn('Advisory Board live fetch info:', err);
-  }
-
-  // Always render canonical 6 members with initial 4 visible and 2 hidden
   advisorGrid.innerHTML = defaultKeys
     .map((key, idx) => renderAdvisorCard(window.loadedAdvisorMap[key], idx >= 4))
     .join('');
