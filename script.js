@@ -5862,6 +5862,12 @@ function initRolePickerModal() {
       return;
     }
 
+    const roleCard = e.target.closest('#role-picker-modal .role-picker-card');
+    if (roleCard) {
+      closeModal();
+      return;
+    }
+
     const modal = getModal();
     if (modal && e.target === modal) {
       closeModal();
