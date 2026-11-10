@@ -108,7 +108,8 @@ async function initProgramSinglePage() {
 
   // Update Syllabus Container
   if (syllabusContainer && typeof window.renderThreeStageSyllabusHTML === "function") {
-    syllabusContainer.innerHTML = window.renderThreeStageSyllabusHTML(program);
+    const targetLevel = (urlParams.get("level") || "foundation").toLowerCase();
+    syllabusContainer.innerHTML = window.renderThreeStageSyllabusHTML(program, targetLevel);
     if (typeof window.initCurriculumAccordion === "function") {
       window.initCurriculumAccordion();
     }

@@ -1596,12 +1596,33 @@ window.getProgramBySlug = getProgramBySlug;
  * Generates the HTML markup for the Three-Stage Syllabus Accordion
  * matching the detailed modules accordion design specification
  */
-function renderThreeStageSyllabusHTML(program) {
+function renderThreeStageSyllabusHTML(program, preferredLevel) {
   if (!program) return "";
+
+  // Detect preferred level if not passed
+  let activeLvl = preferredLevel;
+  if (!activeLvl && typeof window !== "undefined" && window.location) {
+    const urlParams = new URLSearchParams(window.location.search);
+    activeLvl = (urlParams.get("level") || "foundation").toLowerCase().trim();
+  } else if (!activeLvl) {
+    activeLvl = "foundation";
+  }
 
   const foundation = program.syllabus?.foundation || [];
   const intermediate = program.syllabus?.intermediate || [];
   const advanced = program.syllabus?.advanced || [];
+
+  const getStageStatus = (stage) => {
+    if (program.syllabusStatusByLevel && program.syllabusStatusByLevel[stage]) {
+      return program.syllabusStatusByLevel[stage];
+    }
+    const topics = program.syllabus?.[stage];
+    return (Array.isArray(topics) && topics.length > 0) ? "Available" : "Pending";
+  };
+
+  const fStatus = getStageStatus("foundation");
+  const iStatus = getStageStatus("intermediate");
+  const aStatus = getStageStatus("advanced");
 
   const stageTitles = program.stageTitles || {
     foundation: "Core Clinical Principles & Diagnostic Fundamentals",
@@ -1617,56 +1638,81 @@ function renderThreeStageSyllabusHTML(program) {
 
   const slug = program.slug || 'program';
 
+  const isFoundationActive = activeLvl === "foundation" || activeLvl === "beginner" || (!activeLvl.includes("inter") && !activeLvl.includes("adv"));
+  const isIntermediateActive = activeLvl === "intermediate" || activeLvl.includes("inter");
+  const isAdvancedActive = activeLvl === "advanced" || activeLvl.includes("adv");
+
   return `
     <div class="curriculum-list">
-      <!-- Stage 1 — Foundation (Open by default) -->
-      <div class="curriculum-item active">
-        <button type="button" class="curriculum-header" aria-expanded="true" aria-controls="curriculum-stage-1-${slug}">
+      <!-- Stage 1 — Foundation -->
+      <div class="curriculum-item ${isFoundationActive ? 'active' : ''}">
+        <button type="button" class="curriculum-header" aria-expanded="${isFoundationActive ? 'true' : 'false'}" aria-controls="curriculum-stage-1-${slug}">
           <div class="curriculum-title-wrap">
             <span class="curriculum-mod-badge stage-foundation">STAGE 1 • FOUNDATION</span>
-            <h3>${stageTitles.foundation}</h3>
+            <h3>${stageTitles.foundation || "Core Clinical Principles & Diagnostic Fundamentals"}</h3>
           </div>
           <i class="fa-solid fa-chevron-down caret"></i>
         </button>
         <div class="curriculum-body" id="curriculum-stage-1-${slug}" role="region" aria-label="Stage 1 Foundation Details">
-          <p class="curriculum-stage-desc">${stageDescriptions.foundation}</p>
-          <ul class="curriculum-topics">
-            ${foundation.map(t => `<li>${t}</li>`).join("")}
-          </ul>
+          <p class="curriculum-stage-desc">${stageDescriptions.foundation || "Foundational clinical knowledge, core concepts, essential terminology, safety, and basic procedure preparation."}</p>
+          ${fStatus === "Available" && foundation.length > 0 ? `
+            <ul class="curriculum-topics">
+              ${foundation.map(t => `<li>${t}</li>`).join("")}
+            </ul>
+          ` : `
+            <div class="curriculum-stage-pending" style="padding: 10px 0; color: #64748b; font-style: italic;">
+              <i class="fa-solid fa-clock" style="color: #d97706; margin-right: 6px;"></i>
+              Detailed Foundation syllabus coming soon. Please contact VetNova for preliminary course outline.
+            </div>
+          `}
         </div>
       </div>
 
-      <!-- Stage 2 — Intermediate (Collapsed by default) -->
-      <div class="curriculum-item">
-        <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-2-${slug}">
+      <!-- Stage 2 — Intermediate -->
+      <div class="curriculum-item ${isIntermediateActive ? 'active' : ''}">
+        <button type="button" class="curriculum-header" aria-expanded="${isIntermediateActive ? 'true' : 'false'}" aria-controls="curriculum-stage-2-${slug}">
           <div class="curriculum-title-wrap">
             <span class="curriculum-mod-badge stage-intermediate">STAGE 2 • INTERMEDIATE</span>
-            <h3>${stageTitles.intermediate}</h3>
+            <h3>${stageTitles.intermediate || "Applied Clinical Procedures & Practical Diagnostics"}</h3>
           </div>
           <i class="fa-solid fa-chevron-down caret"></i>
         </button>
         <div class="curriculum-body" id="curriculum-stage-2-${slug}" role="region" aria-label="Stage 2 Intermediate Details">
-          <p class="curriculum-stage-desc">${stageDescriptions.intermediate}</p>
-          <ul class="curriculum-topics">
-            ${intermediate.map(t => `<li>${t}</li>`).join("")}
-          </ul>
+          <p class="curriculum-stage-desc">${stageDescriptions.intermediate || "Hands-on diagnostic approaches, guided demonstrations, case-based learning, and supervised procedural practice."}</p>
+          ${iStatus === "Available" && intermediate.length > 0 ? `
+            <ul class="curriculum-topics">
+              ${intermediate.map(t => `<li>${t}</li>`).join("")}
+            </ul>
+          ` : `
+            <div class="curriculum-stage-pending" style="padding: 10px 0; color: #64748b; font-style: italic;">
+              <i class="fa-solid fa-clock" style="color: #d97706; margin-right: 6px;"></i>
+              Detailed Intermediate syllabus coming soon. Please contact VetNova for preliminary course outline.
+            </div>
+          `}
         </div>
       </div>
 
-      <!-- Stage 3 — Advanced (Collapsed by default) -->
-      <div class="curriculum-item">
-        <button type="button" class="curriculum-header" aria-expanded="false" aria-controls="curriculum-stage-3-${slug}">
+      <!-- Stage 3 — Advanced -->
+      <div class="curriculum-item ${isAdvancedActive ? 'active' : ''}">
+        <button type="button" class="curriculum-header" aria-expanded="${isAdvancedActive ? 'true' : 'false'}" aria-controls="curriculum-stage-3-${slug}">
           <div class="curriculum-title-wrap">
             <span class="curriculum-mod-badge stage-advanced">STAGE 3 • ADVANCED</span>
-            <h3>${stageTitles.advanced}</h3>
+            <h3>${stageTitles.advanced || "Advanced Techniques & Clinical Decision-Making"}</h3>
           </div>
           <i class="fa-solid fa-chevron-down caret"></i>
         </button>
         <div class="curriculum-body" id="curriculum-stage-3-${slug}" role="region" aria-label="Stage 3 Advanced Details">
-          <p class="curriculum-stage-desc">${stageDescriptions.advanced}</p>
-          <ul class="curriculum-topics">
-            ${advanced.map(t => `<li>${t}</li>`).join("")}
-          </ul>
+          <p class="curriculum-stage-desc">${stageDescriptions.advanced || "Advanced procedural techniques, complex clinical scenario management, complication mitigation, and competency validation."}</p>
+          ${aStatus === "Available" && advanced.length > 0 ? `
+            <ul class="curriculum-topics">
+              ${advanced.map(t => `<li>${t}</li>`).join("")}
+            </ul>
+          ` : `
+            <div class="curriculum-stage-pending" style="padding: 10px 0; color: #64748b; font-style: italic;">
+              <i class="fa-solid fa-clock" style="color: #d97706; margin-right: 6px;"></i>
+              Detailed Advanced syllabus coming soon. Please contact VetNova for preliminary course outline.
+            </div>
+          `}
         </div>
       </div>
     </div>
@@ -1701,6 +1747,16 @@ async function syncProgramsWithApi() {
               match.image = liveP.image || match.image;
               match.status = liveP.status || match.status;
               match.syllabusStatus = liveP.syllabusStatus || match.syllabusStatus;
+              if (liveP.syllabusStatusByLevel) {
+                match.syllabusStatusByLevel = liveP.syllabusStatusByLevel;
+              }
+              if (liveP.stageTitles) {
+                match.stageTitles = liveP.stageTitles;
+              }
+              if (liveP.stageDescriptions) {
+                match.stageDescriptions = liveP.stageDescriptions;
+              }
+              match.levels = ["Foundation", "Intermediate", "Advanced"];
               if (liveP.syllabus && (liveP.syllabus.foundation?.length || liveP.syllabus.intermediate?.length || liveP.syllabus.advanced?.length)) {
                 match.syllabus = liveP.syllabus;
               }
@@ -1720,7 +1776,15 @@ async function syncProgramsWithApi() {
                 description: liveP.description || "",
                 image: liveP.image || "assets/images/programs/program-skill-up.webp",
                 status: liveP.status || "Published",
-                syllabusStatus: liveP.syllabusStatus || "Pending",
+                syllabusStatus: liveP.syllabusStatus || "Available",
+                syllabusStatusByLevel: liveP.syllabusStatusByLevel || {
+                  foundation: "Available",
+                  intermediate: "Available",
+                  advanced: "Available"
+                },
+                stageTitles: liveP.stageTitles,
+                stageDescriptions: liveP.stageDescriptions,
+                levels: ["Foundation", "Intermediate", "Advanced"],
                 syllabus: liveP.syllabus || { foundation: [], intermediate: [], advanced: [] },
                 learningOutcomes: liveP.learningOutcomes || []
               });

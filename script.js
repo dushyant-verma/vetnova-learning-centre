@@ -3614,12 +3614,26 @@ async function initProgramFilters() {
 
     // Filter matched programs from CMS master dataset
     const matched = programsData.filter(p => {
-      // 1. Text Search matching
+      // Collect stage topics for search matching based on active level
+      const stageTopics = (levelFilter === 'intermediate') 
+        ? (p.syllabus?.intermediate || [])
+        : (levelFilter === 'advanced')
+        ? (p.syllabus?.advanced || [])
+        : (levelFilter === 'foundation' || levelFilter === 'beginner')
+        ? (p.syllabus?.foundation || [])
+        : [
+            ...(p.syllabus?.foundation || []),
+            ...(p.syllabus?.intermediate || []),
+            ...(p.syllabus?.advanced || [])
+          ];
+
+      // 1. Text Search matching (Title, description, category, slug, outcomes, and level topics)
       const matchesQuery = query === '' ||
         (p.title && p.title.toLowerCase().includes(query)) ||
         (p.description && p.description.toLowerCase().includes(query)) ||
         (p.category && p.category.toLowerCase().includes(query)) ||
         (p.slug && p.slug.toLowerCase().includes(query)) ||
+        stageTopics.some(t => t && t.toLowerCase().includes(query)) ||
         (Array.isArray(p.learningOutcomes) && p.learningOutcomes.some(o => o.toLowerCase().includes(query)));
 
       // 2. Category matching
@@ -3630,18 +3644,9 @@ async function initProgramFilters() {
         matchesCategory = cat === sel || cat.includes(sel) || sel.includes(cat);
       }
 
-      // 3. Learning Level matching (Dynamic from CMS master dataset)
-      let matchesLevel = true;
-      if (levelFilter && levelFilter !== 'all') {
-        const progLevel = (p.learningLevel || p.level || '').toLowerCase().trim();
-        if (levelFilter === 'foundation' || levelFilter === 'beginner') {
-          matchesLevel = progLevel === 'beginner' || progLevel === 'foundation' || progLevel.includes('beginner') || progLevel.includes('foundation');
-        } else if (levelFilter === 'intermediate') {
-          matchesLevel = progLevel === 'intermediate' || progLevel.includes('intermediate');
-        } else if (levelFilter === 'advanced') {
-          matchesLevel = progLevel === 'advanced' || progLevel.includes('advanced');
-        }
-      }
+      // 3. Learning Level matching: All 28 programs are available at Foundation, Intermediate, and Advanced
+      // When a specific level is filtered, all 28 programs support that level with a dedicated syllabus.
+      const matchesLevel = true;
 
       return matchesQuery && matchesCategory && matchesLevel;
     });
@@ -3678,41 +3683,42 @@ async function initProgramFilters() {
           const durationVal = p.duration || '3 Days';
           const courseLengthVal = p.dailyDuration || p.courseLength || p.trainingSchedule || p.availability || '8 Hours / Day';
 
-          // Program link, syllabus URL & Level badge (show ONLY active level)
+          // Program link, syllabus URL & Level badge based on active level
           let viewSyllabusUrl = `${progUrl}#syllabus`;
           let viewSyllabusText = 'Syllabus';
 
-          const pLevel = (p.learningLevel || p.level || 'Beginner').trim();
-          const pLevelLower = pLevel.toLowerCase();
-
-          let activeLevelName = 'Beginner';
+          let activeLevelName = 'Foundation';
           let activeBadgeClass = 'badge-foundation';
           let activeIcon = 'fa-seedling';
 
-          if (levelFilter === 'intermediate' || (levelFilter === 'all' && (pLevelLower === 'intermediate' || pLevelLower.includes('inter')))) {
+          if (levelFilter === 'intermediate') {
             activeLevelName = 'Intermediate';
             activeBadgeClass = 'badge-intermediate';
             activeIcon = 'fa-chart-line';
             viewSyllabusUrl = `${progUrl}?level=intermediate#syllabus`;
-          } else if (levelFilter === 'advanced' || (levelFilter === 'all' && (pLevelLower === 'advanced' || pLevelLower.includes('adv')))) {
+          } else if (levelFilter === 'advanced') {
             activeLevelName = 'Advanced';
             activeBadgeClass = 'badge-advanced';
             activeIcon = 'fa-award';
             viewSyllabusUrl = `${progUrl}?level=advanced#syllabus`;
-          } else {
-            // Beginner / Foundation
-            activeLevelName = 'Beginner';
+          } else if (levelFilter === 'foundation' || levelFilter === 'beginner') {
+            activeLevelName = 'Foundation';
             activeBadgeClass = 'badge-foundation';
             activeIcon = 'fa-seedling';
-            if (levelFilter === 'beginner' || levelFilter === 'foundation') {
-              viewSyllabusUrl = `${progUrl}?level=foundation#syllabus`;
-            }
+            viewSyllabusUrl = `${progUrl}?level=foundation#syllabus`;
+          } else {
+            // "all" levels selected: show 3-level badge
+            activeLevelName = 'Foundation • Interm. • Adv.';
+            activeBadgeClass = 'badge-foundation';
+            activeIcon = 'fa-graduation-cap';
+            viewSyllabusUrl = `${progUrl}#syllabus`;
           }
 
           const levelBadgesHTML = `
             <div class="card-level-badges">
-              <span class="level-badge ${activeBadgeClass} active"><i class="fa-solid ${activeIcon}"></i> ${activeLevelName} Active</span>
+              <span class="level-badge ${activeBadgeClass} active"><i class="fa-solid ${activeIcon}"></i> ${activeLevelName}</span>
             </div>
+          `;
           `;
 
           const exploreUrl = `${progUrl}#hero`;
