@@ -32,18 +32,22 @@
 
   <style>
     .persona-hero {
-      background: linear-gradient(135deg, #134e4a 0%, #064e3b 100%);
+      background: #172860;
       color: #ffffff;
-      padding: 60px 0 50px;
+      padding: 90px 0 50px;
       position: relative;
     }
 
     .persona-hero .breadcrumb a {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .persona-hero .breadcrumb a:hover {
+      color: #ffffff;
     }
 
     .persona-hero .breadcrumb span {
-      color: #34d399;
+      color: #20CABF;
     }
 
     .persona-hero h1 {
@@ -57,10 +61,29 @@
 
     .persona-hero p {
       font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.85);
+      color: rgba(255, 255, 255, 0.9);
       max-width: 720px;
       line-height: 1.6;
       margin-bottom: 28px;
+    }
+
+    .persona-hero .btn,
+    .persona-hero a.btn {
+      background: #20CABF;
+      color: #FFFFFF;
+      border: 1px solid #20CABF;
+    }
+
+    .persona-hero .btn span,
+    .persona-hero .btn i {
+      color: #FFFFFF;
+    }
+
+    .persona-hero .btn:hover,
+    .persona-hero a.btn:hover {
+      background: #1cb2a8;
+      border-color: #1cb2a8;
+      color: #FFFFFF;
     }
 
     .persona-stats-bar {
@@ -179,7 +202,7 @@
             <span>Pet First Aid &amp; CPR Workshop</span>
           </nav>
 
-          <span class="eyebrow" style="color: #34d399; font-weight: 800; letter-spacing: 0.08em;">
+          <span class="eyebrow" style="color: #20CABF; font-weight: 800; letter-spacing: 0.08em;">
             <i class="fa-solid fa-paw"></i> FOR PET PARENTS, RESCUERS &amp; FOSTER CARERS
           </span>
           <h1>Hands-On Pet First Aid &amp; Emergency CPR Workshop</h1>
@@ -190,13 +213,13 @@
 
           <div style="display: flex; gap: 14px; flex-wrap: wrap;">
             <a href="#workshop-overview" class="btn btn-primary"
-              style="padding: 12px 26px; background: #059669; border-color: #059669;">
-              <span>Explore Workshop Details <i class="fa-solid fa-arrow-down" style="margin-left: 6px;"></i></span>
+              style="padding: 12px 26px; background: #20CABF; border-color: #20CABF; color: #FFFFFF;">
+              <span style="color: #FFFFFF;">Explore Workshop Details <i class="fa-solid fa-arrow-down" style="margin-left: 6px; color: #FFFFFF;"></i></span>
             </a>
             <a href="/contact.html#contact-form" class="btn btn-outline btn-book-counselling"
               data-action="book-counselling"
-              style="color: #ffffff; border-color: rgba(255,255,255,0.4); padding: 12px 24px;">
-              <span>Register / Enquire Now</span>
+              style="padding: 12px 24px; background: #20CABF; border-color: #20CABF; color: #FFFFFF;">
+              <span style="color: #FFFFFF;">Register / Enquire Now</span>
             </a>
           </div>
 

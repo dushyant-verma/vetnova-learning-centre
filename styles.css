@@ -26165,6 +26165,96 @@ a.btn.btn-outline.btn-book-counselling span {
   color: black;
 }
 
+/* ==========================================================================
+   Persona Individual Program Pages Hero Banner Theme (#172860 & #20CABF)
+   Scoped strictly to .persona-hero on individual audience/program pages
+   ========================================================================== */
 .persona-hero {
+  background: #172860 !important;
+  background-color: #172860 !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
   padding: 90px 0 50px !important;
+  position: relative;
+}
+
+.persona-hero h1 {
+  color: #FFFFFF !important;
+}
+
+.persona-hero p {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.persona-hero .breadcrumb a {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.persona-hero .breadcrumb a:hover {
+  color: #FFFFFF !important;
+}
+
+.persona-hero .breadcrumb i {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.persona-hero .breadcrumb span {
+  color: #20CABF !important;
+}
+
+.persona-hero .eyebrow {
+  color: #20CABF !important;
+}
+
+.persona-hero .btn,
+.persona-hero a.btn,
+.persona-hero button.btn {
+  background: #20CABF !important;
+  background-color: #20CABF !important;
+  color: #FFFFFF !important;
+  border: 1px solid #20CABF !important;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.persona-hero .btn span,
+.persona-hero .btn i,
+.persona-hero a.btn span,
+.persona-hero a.btn i {
+  color: #FFFFFF !important;
+}
+
+.persona-hero .btn:hover,
+.persona-hero a.btn:hover,
+.persona-hero button.btn:hover {
+  background: #1cb2a8 !important;
+  background-color: #1cb2a8 !important;
+  border-color: #1cb2a8 !important;
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(32, 202, 191, 0.35);
+}
+
+.persona-hero .btn:hover span,
+.persona-hero .btn:hover i,
+.persona-hero a.btn:hover span,
+.persona-hero a.btn:hover i {
+  color: #FFFFFF !important;
+}
+
+.persona-hero .btn:active,
+.persona-hero a.btn:active,
+.persona-hero button.btn:active {
+  background: #179e95 !important;
+  background-color: #179e95 !important;
+  border-color: #179e95 !important;
+  color: #FFFFFF !important;
+  transform: translateY(0);
+}
+
+.persona-hero .btn:active span,
+.persona-hero .btn:active i,
+.persona-hero a.btn:active span,
+.persona-hero a.btn:active i {
+  color: #FFFFFF !important;
 }
