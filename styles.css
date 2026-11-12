@@ -26060,6 +26060,11 @@ a.btn.btn-outline.btn-sm.footer-quick-btn,
   color: #0f766e;
 }
 
+
+.callout-box a.btn.btn-outline.btn-sm {
+  color: black !important;
+}
+
 /* Responsive Media Queries */
 @media (max-width: 992px) {
   .finder-roles-grid {
